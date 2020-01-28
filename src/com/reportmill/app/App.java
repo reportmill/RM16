@@ -59,11 +59,11 @@ public static void quitApp()
 {
     // Get open editor panes
     if(_quiting) return; _quiting = true;
-    RMEditorPane epanes[] = WindowView.getOpenWindowOwners(RMEditorPane.class);
+    EditorPane epanes[] = WindowView.getOpenWindowOwners(EditorPane.class);
 
     // Iterate over open Editors to see if any have unsaved changes
     int answer = 0;
-    for(int i=0, iMax=epanes.length; i<iMax && iMax>1; i++) { RMEditorPane epane = epanes[i];
+    for(int i=0, iMax=epanes.length; i<iMax && iMax>1; i++) { EditorPane epane = epanes[i];
         
         // Turn off editor preview
         epane.setEditing(true);
@@ -86,7 +86,7 @@ public static void quitApp()
 
     // If Review Unsaved, iterate through _editors to see if they should be saved or if user wants to cancel instead
     if(answer==0)
-        for(RMEditorPane epane : epanes)
+        for(EditorPane epane : epanes)
             if(!epane.close()) {
                 Welcome.getShared().setEnabled(old); _quiting = false; return; }
 

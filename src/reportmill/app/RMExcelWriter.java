@@ -461,9 +461,9 @@ private HSSFCellStyle getWorkbookStyle(RMTextShape aText, String aFormat)
 }
 
 /**
- * Returns an HSSFont for a given RMFont.
+ * Returns an HSSFont for a given Font.
  */
-private HSSFFont getWorkbookFont(RMFont aFont, Color aColor)
+private HSSFFont getWorkbookFont(Font aFont, Color aColor)
 {
     // Iterate over workbook fonts and return first matching entry
     for(WorkbookFont font : _fonts)
@@ -599,20 +599,20 @@ class WorkbookStyle {
 }
 
 /**
- * An inner class to map an RMFont/Color pair to a unique HSSFont.
+ * An inner class to map an Font/Color pair to a unique HSSFont.
  */
 class WorkbookFont {
 
     // base font, color, HSSFFont
-    RMFont    _font;
+    Font      _font;
     Color     _color;
     HSSFFont  _hssfFont;
     
     /** Creates a new workbook font. */
-    public WorkbookFont(RMFont aFont, Color aColor)  { _font = aFont; _color = aColor; }
+    public WorkbookFont(Font aFont, Color aColor)  { _font = aFont; _color = aColor; }
     
     /** Standard equals implementation. */
-    public boolean isMatch(RMFont aFont, Color aColor)
+    public boolean isMatch(Font aFont, Color aColor)
     {
         return SnapUtils.equals(aFont, _font) && SnapUtils.equals(aColor, _color);
     }

@@ -6,6 +6,8 @@ import rmdraw.base.*;
 import rmdraw.graphics.*;
 import rmdraw.shape.*;
 import java.util.*;
+
+import snap.gfx.Font;
 import snap.util.*;
 
 /**
@@ -68,8 +70,8 @@ public static void main(String args[])
             
         // Check for paginate
         if(arg.equals("-paginate"))
-            try { paginate = new Boolean(!args[++i].equals("false")); }
-            catch(Exception e) { paginate = new Boolean(true); }
+            try { paginate = !args[++i].equals("false"); }
+            catch(Exception e) { paginate = true; }
             
         // Check for test
         if(arg.equals("-test")) {
@@ -94,7 +96,7 @@ public static void main(String args[])
             
         // Check for fonts: Get list of fonts and print
         if(arg.startsWith("-fonts")) {
-            String fonts[] = arg.equals("-fonts")? RMFont.getFontNames() : RMFont.getFamilyNames();
+            String fonts[] = arg.equals("-fonts")? Font.getFontNames() : Font.getFamilyNames();
             for(int j=0, jMax=fonts.length; j<jMax; j++) System.err.println(fonts[j]);
         }
         
@@ -129,7 +131,7 @@ public static void main(String args[])
     
     // If paginate wasn't specified, get it from outfile
     if(paginate==null && outfile!=null)
-        paginate = new Boolean(StringUtils.endsWithIC(outfile, "pdf"));
+        paginate = StringUtils.endsWithIC(outfile, "pdf");
     
     // If we have rptfile, infile and outfile, generate report
     if(rptfile!=null && infile!=null && outfile!=null) {
@@ -137,7 +139,7 @@ public static void main(String args[])
         // Load fonts
         System.err.println("Loading Fonts... ");
         long time = System.currentTimeMillis();
-        RMFont.getFontNames();
+        Font.getFontNames();
         float seconds = (System.currentTimeMillis() - time)/1000f;
         System.err.println("Font Loading... (" + seconds + " seconds)");
     
@@ -187,9 +189,6 @@ public static void main(String args[])
             }
         }
         
-        // Null out template and data vars
-        template = null; map = null;
-        
         // Print done message
         seconds = (System.currentTimeMillis() - time)/1000f;
         System.err.println("Generated Reports (" + seconds + " seconds)");
@@ -237,11 +236,11 @@ static RMDocument getTableOfContentsTemplate()
     headerRow.setNumberOfColumns(1); headerRow.setHeight(205);
     headerRow.getColumn(0).setText("Hollywood Report\n\nTable of Contents");
     headerRow.getColumn(0).setAlignmentX(RMTypes.AlignX.Center);
-    headerRow.getColumn(0).getXString().setAttribute(RMFont.getFont("Times Bold", 72));
-    headerRow.getColumn(0).getXString().setAttribute(RMFont.getFont("Times", 18), 16, 35);
+    headerRow.getColumn(0).getXString().setAttribute(Font.getFont("Times Bold", 72));
+    headerRow.getColumn(0).getXString().setAttribute(Font.getFont("Times", 18), 16, 35);
     headerRow.setVersion("Reprint");
     headerRow.getColumn(0).setText("Table of Contents (Continued)");
-    headerRow.getColumn(0).getXString().setAttribute(RMFont.getFont("Times", 18));
+    headerRow.getColumn(0).getXString().setAttribute(Font.getFont("Times", 18));
     headerRow.setHeight(30);
     headerRow.layout();
     

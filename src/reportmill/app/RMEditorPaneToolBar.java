@@ -3,7 +3,6 @@ import rmdraw.app.*;
 import rmdraw.apptools.*;
 import rmdraw.base.RMFormat;
 import rmdraw.base.RMNumberFormat;
-import rmdraw.graphics.RMColor;
 import rmdraw.graphics.RMTypes;
 import rmdraw.shape.*;
 import snap.gfx.Color;
@@ -147,11 +146,11 @@ public class RMEditorPaneToolBar extends EditorPaneToolBar {
 
         // Handle FillColorButton, StrokeColorButton, TextColorButton
         if(anEvent.equals("FillColorButton"))
-            EditorUtils.setColor(editor, RMColor.get(anEvent.getView(ColorButton.class).getColor()));
+            EditorUtils.setColor(editor, anEvent.getView(ColorButton.class).getColor());
         if(anEvent.equals("StrokeColorButton"))
-            EditorUtils.setStrokeColor(editor, RMColor.get(anEvent.getView(ColorButton.class).getColor()));
+            EditorUtils.setStrokeColor(editor, anEvent.getView(ColorButton.class).getColor());
         if(anEvent.equals("TextColorButton"))
-            EditorUtils.setTextColor(editor, RMColor.get(anEvent.getView(ColorButton.class).getColor()));
+            EditorUtils.setTextColor(editor, anEvent.getView(ColorButton.class).getColor());
 
         // Handle MoneyButton: If currently selected format is number format, add or remove dollars
         RMFormat fmt = EditorUtils.getFormat(editor);

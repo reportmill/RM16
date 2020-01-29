@@ -250,7 +250,7 @@ private void append(RMExcelSheet rmSheet, HSSFShapeContainer aParent, RMShape aS
         Image img = imgShape.getImage(); if(img==null) return;
         
         String type = img.getType();
-        int poiType = 0;
+        int poiType;
         if (type.equalsIgnoreCase("png"))
             poiType = HSSFWorkbook.PICTURE_TYPE_PNG;
         else if (type.equalsIgnoreCase("jpg") || type.equalsIgnoreCase("jpeg")) 
@@ -430,14 +430,14 @@ public void setShapeFillAndStroke(HSSFShape hssfShape, RMShape aShape)
 {
     // Set fill color (solid fill only). Shape has both index or arbitrary rgb colors
     if(aShape.getFill()!=null) {
-        RMColor c = aShape.getFill().getColor();
+        Color c = aShape.getFill().getColor();
         hssfShape.setFillColor(c.getRedInt(), c.getGreenInt(), c.getBlueInt());
     }
     else hssfShape.setNoFill(true);
     
     // Set stroke color, line-style
     if(aShape.getStroke()!=null) {
-        RMColor c = aShape.getStroke().getColor();
+        Color c = aShape.getStroke().getColor();
         hssfShape.setLineStyle(HSSFShape.LINESTYLE_SOLID);
         hssfShape.setLineStyleColor(c.getRedInt(), c.getGreenInt(), c.getBlueInt());
     }
@@ -463,7 +463,7 @@ private HSSFCellStyle getWorkbookStyle(RMTextShape aText, String aFormat)
 /**
  * Returns an HSSFont for a given RMFont.
  */
-private HSSFFont getWorkbookFont(RMFont aFont, RMColor aColor)
+private HSSFFont getWorkbookFont(RMFont aFont, Color aColor)
 {
     // Iterate over workbook fonts and return first matching entry
     for(WorkbookFont font : _fonts)
@@ -573,8 +573,8 @@ class WorkbookStyle {
         
         // If there's a background fill and it's not solid white, set it
         if(_text.getFill() != null) {
-            RMColor color = _text.getFill().getColor();
-            if(!color.equals(RMColor.white)) {
+            Color color = _text.getFill().getColor();
+            if(!color.equals(Color.WHITE)) {
                 _style.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
                 _style.setFillForegroundColor(getWorkbookColorIndex(color));
             }
@@ -599,20 +599,20 @@ class WorkbookStyle {
 }
 
 /**
- * An inner class to map an RMFont/RMColor pair to a unique HSSFont.
+ * An inner class to map an RMFont/Color pair to a unique HSSFont.
  */
 class WorkbookFont {
 
     // base font, color, HSSFFont
     RMFont    _font;
-    RMColor   _color;
+    Color     _color;
     HSSFFont  _hssfFont;
     
     /** Creates a new workbook font. */
-    public WorkbookFont(RMFont aFont, RMColor aColor)  { _font = aFont; _color = aColor; }
+    public WorkbookFont(RMFont aFont, Color aColor)  { _font = aFont; _color = aColor; }
     
     /** Standard equals implementation. */
-    public boolean isMatch(RMFont aFont, RMColor aColor)
+    public boolean isMatch(RMFont aFont, Color aColor)
     {
         return SnapUtils.equals(aFont, _font) && SnapUtils.equals(aColor, _color);
     }
@@ -660,7 +660,7 @@ class WorkbookFont {
  * The custom palette crap doesn't work (http://issues.apache.org/bugzilla/show_bug.cgi?id=24519)
  * So this does a brute-force lookup through the fixed palette.  It just finds the closest color in Lab space.
  */
-public short getWorkbookColorIndex(RMColor aColor)
+public short getWorkbookColorIndex(Color aColor)
 {
     Map cols = HSSFColor.getIndexHash();
     float minDistance = Float.MAX_VALUE;

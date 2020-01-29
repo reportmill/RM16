@@ -1,4 +1,4 @@
-package com.reportmill.app;
+package reportmill.app;
 import com.reportmill.shape.RMDocument;
 import com.reportmill.shape.RMShape;
 import com.reportmill.shape.RMShapeUtils;
@@ -9,7 +9,6 @@ import snap.view.*;
 import snap.viewx.DialogBox;
 import snap.web.WebResponse;
 import snap.web.WebURL;
-
 import java.util.ArrayList;
 import java.util.List;
 

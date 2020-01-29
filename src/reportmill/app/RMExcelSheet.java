@@ -1,7 +1,8 @@
 /*
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
-package com.reportmill.app;
+package reportmill.app;
+import com.reportmill.app.*;
 import com.reportmill.shape.*;
 import org.apache.poi.hssf.usermodel.*;
 import snap.gfx.*;

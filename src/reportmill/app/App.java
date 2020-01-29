@@ -1,9 +1,11 @@
 /*
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
-package com.reportmill.app;
+package reportmill.app;
 import com.apple.eawt.*;
 import com.apple.eawt.AppEvent.*;
+import com.reportmill.app.EditorPane;
+import com.reportmill.app.PreferencesPanel;
 import com.reportmill.base.ReportMill;
 import javax.swing.SwingUtilities;
 import snap.util.*;

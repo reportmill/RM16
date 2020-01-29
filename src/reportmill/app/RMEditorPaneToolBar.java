@@ -1,4 +1,5 @@
-package com.reportmill.app;
+package reportmill.app;
+import com.reportmill.app.*;
 import com.reportmill.apptools.*;
 import com.reportmill.base.RMFormat;
 import com.reportmill.base.RMNumberFormat;

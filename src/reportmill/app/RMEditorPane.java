@@ -1,4 +1,5 @@
-package com.reportmill.app;
+package reportmill.app;
+import com.reportmill.app.*;
 import com.reportmill.base.RMDataSource;
 import com.reportmill.base.RMKey;
 import com.reportmill.base.RMKeyChain;
@@ -14,6 +15,9 @@ import snap.web.WebURL;
  * This EditorPane subclass provides for some RM specific things.
  */
 public class RMEditorPane extends EditorPane {
+
+    // The original editor, if in preview mode
+    Editor _realEditor;
 
     /**
      * Override to return as RMEditor.

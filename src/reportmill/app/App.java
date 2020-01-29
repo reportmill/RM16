@@ -5,7 +5,6 @@ package reportmill.app;
 import com.apple.eawt.*;
 import com.apple.eawt.AppEvent.*;
 import rmdraw.app.EditorPane;
-import rmdraw.app.PreferencesPanel;
 import rmdraw.base.ReportMill;
 import javax.swing.SwingUtilities;
 import snap.util.*;
@@ -112,7 +111,7 @@ private static class AppleAppHandler implements PreferencesHandler, QuitHandler,
     }
 
     /** Handle Preferences. */
-    public void handlePreferences(PreferencesEvent arg0)  { new PreferencesPanel().showPanel(null); }
+    public void handlePreferences(PreferencesEvent arg0)  { new PrefsPanel().showPanel(null); }
 
     /** Handle Preferences. */
     public void openFiles(OpenFilesEvent anEvent)

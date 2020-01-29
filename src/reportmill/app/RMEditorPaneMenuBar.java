@@ -1,5 +1,5 @@
 package reportmill.app;
-import com.reportmill.app.*;
+import rmdraw.app.*;
 
 /**
  * This EditorPaneMenuBar subclass provides some RM specific features.

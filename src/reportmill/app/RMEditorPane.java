@@ -1,9 +1,9 @@
 package reportmill.app;
-import com.reportmill.app.*;
-import com.reportmill.base.RMDataSource;
-import com.reportmill.base.RMKey;
-import com.reportmill.base.RMKeyChain;
-import com.reportmill.shape.RMDocument;
+import rmdraw.app.*;
+import rmdraw.base.RMDataSource;
+import rmdraw.base.RMKey;
+import rmdraw.base.RMKeyChain;
+import rmdraw.shape.RMDocument;
 import snap.gfx.Rect;
 import snap.util.StringUtils;
 import snap.view.ViewEvent;
@@ -17,7 +17,7 @@ import snap.web.WebURL;
 public class RMEditorPane extends EditorPane {
 
     // The original editor, if in preview mode
-    Editor _realEditor;
+    RMEditor _realEditor;
 
     /**
      * Override to return as RMEditor.
@@ -127,7 +127,7 @@ public class RMEditorPane extends EditorPane {
             RMDocument report = getDoc().generateReport(getEditor().getDataSourceDataset());
 
             // Create new editor, set editing to false and set report document
-            Editor editor = new Editor();
+            RMEditor editor = new RMEditor();
             editor.setEditing(false);
             editor.setDoc(report);
 

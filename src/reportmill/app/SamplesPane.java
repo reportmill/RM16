@@ -1,7 +1,7 @@
 package reportmill.app;
-import com.reportmill.shape.RMDocument;
-import com.reportmill.shape.RMShape;
-import com.reportmill.shape.RMShapeUtils;
+import rmdraw.shape.RMDocument;
+import rmdraw.shape.RMShape;
+import rmdraw.shape.RMShapeUtils;
 import snap.gfx.*;
 import snap.util.SnapUtils;
 import snap.util.StringUtils;

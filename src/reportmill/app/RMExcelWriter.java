@@ -2,11 +2,10 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.app;
-import com.reportmill.app.*;
-import com.reportmill.base.*;
-import com.reportmill.out.RMShapeTable;
-import com.reportmill.shape.*;
-import com.reportmill.graphics.*;
+import rmdraw.base.*;
+import rmdraw.out.RMShapeTable;
+import rmdraw.shape.*;
+import rmdraw.graphics.*;
 import java.io.*;
 import java.util.*;
 import org.apache.poi.hssf.usermodel.*;

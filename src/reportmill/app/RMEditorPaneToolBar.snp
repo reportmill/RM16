@@ -30,13 +30,13 @@
     <ToggleButton Name="PreviewEditButton" PrefWidth="84" PrefHeight="24" text="Preview" />
     <Separator PrefWidth="15" PrefHeight="18" Vertical="true" />
     <RowView Spacing="-1">
-      <ToggleButton Name="RMSelectToolButton" PrefWidth="24" PrefHeight="24" ToolTip="Selection Tool" image="/com/reportmill/apptools/RMSelect.png" Position="CENTER_LEFT" Selected="true" Group="bg1" />
-      <ToggleButton Name="RMLineShapeToolButton" PrefWidth="24" PrefHeight="24" ToolTip="Line Tool" image="/com/reportmill/apptools/RMLineShape.png" Position="CENTER" Group="bg1" />
-      <ToggleButton Name="RMRectShapeToolButton" PrefWidth="24" PrefHeight="24" ToolTip="Rectangle Tool" image="/com/reportmill/apptools/RMRectShape.png" Position="CENTER" Group="bg1" />
-      <ToggleButton Name="RMOvalShapeToolButton" PrefWidth="24" PrefHeight="24" ToolTip="Oval Tool" image="/com/reportmill/apptools/RMOvalShape.png" Position="CENTER" Group="bg1" />
-      <ToggleButton Name="RMTextToolButton" PrefWidth="24" PrefHeight="24" ToolTip="Text Tool" image="/com/reportmill/apptools/RMText.png" Position="CENTER" Group="bg1" />
-      <ToggleButton Name="RMPolygonShapeToolButton" PrefWidth="24" PrefHeight="24" ToolTip="Polygon Tool" image="/com/reportmill/apptools/RMPolygonShape.png" Position="CENTER" Group="bg1" />
-      <ToggleButton Name="PencilToolButton" PrefWidth="24" PrefHeight="24" ToolTip="Pencil Tool" image="/com/reportmill/apptools/RMPencilShape.png" Position="CENTER_RIGHT" Group="bg1" />
+      <ToggleButton Name="RMSelectToolButton" PrefWidth="24" PrefHeight="24" ToolTip="Selection Tool" image="/rmdraw/apptools/RMSelect.png" Position="CENTER_LEFT" Selected="true" Group="bg1" />
+      <ToggleButton Name="RMLineShapeToolButton" PrefWidth="24" PrefHeight="24" ToolTip="Line Tool" image="/rmdraw/apptools/RMLineShape.png" Position="CENTER" Group="bg1" />
+      <ToggleButton Name="RMRectShapeToolButton" PrefWidth="24" PrefHeight="24" ToolTip="Rectangle Tool" image="/rmdraw/apptools/RMRectShape.png" Position="CENTER" Group="bg1" />
+      <ToggleButton Name="RMOvalShapeToolButton" PrefWidth="24" PrefHeight="24" ToolTip="Oval Tool" image="/rmdraw/apptools/RMOvalShape.png" Position="CENTER" Group="bg1" />
+      <ToggleButton Name="RMTextToolButton" PrefWidth="24" PrefHeight="24" ToolTip="Text Tool" image="/rmdraw/apptools/RMText.png" Position="CENTER" Group="bg1" />
+      <ToggleButton Name="RMPolygonShapeToolButton" PrefWidth="24" PrefHeight="24" ToolTip="Polygon Tool" image="/rmdraw/apptools/RMPolygonShape.png" Position="CENTER" Group="bg1" />
+      <ToggleButton Name="PencilToolButton" PrefWidth="24" PrefHeight="24" ToolTip="Pencil Tool" image="/rmdraw/apptools/RMPencilShape.png" Position="CENTER_RIGHT" Group="bg1" />
     </RowView>
     <Separator PrefWidth="16" PrefHeight="18" Vertical="true" />
     <ComboBox Name="FontFaceComboBox" MinWidth="80" PrefHeight="22" ShowTextField="true" ShowButton="false" FilterList="true" />
@@ -47,12 +47,12 @@
     <ToggleButton Name="BoldButton" PrefWidth="22" PrefHeight="22" ToolTip="Make Bold" image="Format_Bold.png" ShowBorder="false" />
     <Separator PrefWidth="8" PrefHeight="18" Vertical="true" />
     <MenuButton Name="AddShapesMenuButton" PrefWidth="33" PrefHeight="24" ToolTip="Add Shapes" image="AddShapes.png" ShowBorder="false" ShowArrow="false">
-      <MenuItem Name="AddTableButton" text="Table" image="/com/reportmill/apptools/RMTable.png" />
-      <MenuItem Name="AddGraphButton" text="Graph" image="/com/reportmill/apptools/RMGraph.png" />
-      <MenuItem Name="AddLabelsButton" text="Labels" image="/com/reportmill/apptools/RMLabels.png" />
-      <MenuItem Name="AddCrossTabFrameButton" text="CrossTab" image="/com/reportmill/apptools/RMCrossTabFrame.png" />
-      <MenuItem Name="AddCrossTabButton" text="Simple Table" image="/com/reportmill/apptools/RMCrossTab.png" />
-      <MenuItem Name="AddImagePlaceHolderMenuItem" text="Image Placeholder" image="/com/reportmill/apptools/RMImage.png" />
+      <MenuItem Name="AddTableButton" text="Table" image="/rmdraw/apptools/RMTable.png" />
+      <MenuItem Name="AddGraphButton" text="Graph" image="/rmdraw/apptools/RMGraph.png" />
+      <MenuItem Name="AddLabelsButton" text="Labels" image="/rmdraw/apptools/RMLabels.png" />
+      <MenuItem Name="AddCrossTabFrameButton" text="CrossTab" image="/rmdraw/apptools/RMCrossTabFrame.png" />
+      <MenuItem Name="AddCrossTabButton" text="Simple Table" image="/rmdraw/apptools/RMCrossTab.png" />
+      <MenuItem Name="AddImagePlaceHolderMenuItem" text="Image Placeholder" image="/rmdraw/apptools/RMImage.png" />
     </MenuButton>
   </RowView>
 </ColView>

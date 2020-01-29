@@ -2,11 +2,11 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.app;
-import com.reportmill.app.*;
-import com.reportmill.base.RMDataSource;
-import com.reportmill.base.RMExtras;
-import com.reportmill.shape.RMArchiver;
-import com.reportmill.shape.RMDocument;
+import rmdraw.app.*;
+import rmdraw.base.RMDataSource;
+import rmdraw.base.RMExtras;
+import rmdraw.shape.RMArchiver;
+import rmdraw.shape.RMDocument;
 import snap.util.*;
 import snap.view.ViewUtils;
 import snap.viewx.DialogBox;
@@ -43,7 +43,7 @@ public static EditorPane openSample(String aTitle)
     }
     
     // If not url, append Jar:/com/reportmill prefix
-    if(!aTitle.startsWith("http:")) aTitle = "Jar:/com/reportmill/examples/" + aTitle + ".rpt";
+    if(!aTitle.startsWith("http:")) aTitle = "Jar:/reportmill/examples/" + aTitle + ".rpt";
         
     // Create new editor pane, open document and window, and return editor pane
     RMEditorPane editorPane = new RMEditorPane();

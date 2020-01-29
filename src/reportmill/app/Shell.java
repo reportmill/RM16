@@ -2,9 +2,9 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.app;
-import com.reportmill.base.*;
-import com.reportmill.graphics.*;
-import com.reportmill.shape.*;
+import rmdraw.base.*;
+import rmdraw.graphics.*;
+import rmdraw.shape.*;
 import java.util.*;
 import snap.util.*;
 
@@ -74,8 +74,8 @@ public static void main(String args[])
         // Check for test
         if(arg.equals("-test")) {
             count = i+1==args.length? 100 : StringUtils.intValue(args[++i]);
-            if(rptfile==null) rptfile = "Jar:/com/reportmill/examples/Movies.rpt";
-            if(infile==null) infile = "Jar:/com/reportmill/examples/HollywoodDB.xml";
+            if(rptfile==null) rptfile = "Jar:/reportmill/examples/Movies.rpt";
+            if(infile==null) infile = "Jar:/reportmill/examples/HollywoodDB.xml";
             if(outfile==null) outfile = "/tmp/Movies.pdf";
         }
         

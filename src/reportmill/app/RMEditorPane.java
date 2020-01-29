@@ -173,4 +173,10 @@ public class RMEditorPane extends EditorPane {
         }
     }
 
+    /**
+     * Overide to return RMAttributesPanel.
+     */
+    @Override
+    protected AttributesPanel createAttributesPanel()  { return new RMAttributesPanel(this); }
+
 }

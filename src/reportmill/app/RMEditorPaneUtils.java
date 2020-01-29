@@ -2,9 +2,9 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.app;
+import reportmill.util.RMExtras;
 import rmdraw.app.*;
 import rmdraw.base.RMDataSource;
-import rmdraw.base.RMExtras;
 import rmdraw.shape.RMArchiver;
 import rmdraw.shape.RMDocument;
 import snap.util.*;

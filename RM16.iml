@@ -12,5 +12,6 @@
     <orderEntry type="library" name="lib" level="project" />
     <orderEntry type="module" module-name="RMDraw" />
     <orderEntry type="module" module-name="SnapKit" />
+    <orderEntry type="module" module-name="SnapPDF" />
   </component>
 </module>

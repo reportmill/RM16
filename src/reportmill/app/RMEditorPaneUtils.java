@@ -31,7 +31,7 @@ public static void connectToDataSource(RMEditorPane anEP)
 /**
  * Opens the named sample file from the examples package.
  */
-public static EditorPane openSample(String aTitle)
+public static RMEditorPane openSample(String aTitle)
 {
     // If file is xml resource, get temp file, get XML bytes, write to file, open file and return null
     if(aTitle.endsWith(".xml")) {

@@ -104,7 +104,7 @@ public void respondUI(ViewEvent anEvent)
         EditorPane epane = newEditorPane().newDocument();
         
         // If alt is down, replace with movies sample
-        if(anEvent.isAltDown()) epane = EditorPaneUtils.openSample("Movies");
+        if(anEvent.isAltDown()) epane = RMEditorPaneUtils.openSample("Movies");
         
         // Make editor window visible, show doc inspector, and order front after delay to get focus back from inspector
         epane.setWindowVisible(true);

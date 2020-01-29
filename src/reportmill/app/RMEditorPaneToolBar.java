@@ -24,7 +24,7 @@ import java.util.List;
 public class RMEditorPaneToolBar extends EditorPaneToolBar {
 
     // The font face ComboBox
-    private ComboBox _fontFaceComboBox;
+    private ComboBox <String> _fontFaceComboBox;
 
     // The font size ComboBox
     private ComboBox _fontSizeComboBox;

@@ -147,7 +147,8 @@ public void open(String aPath)
     // Make editor window visible, show doc inspector, and order front after delay to get focus back from inspector
     epane.setWindowVisible(true);
     epane.getInspectorPanel().showDocumentInspector();
-    EditorPane ep = epane; runLater(() -> ep.getWindow().toFront());
+    EditorPane ep = epane;
+    runLater(() -> ep.getWindow().toFront());
     close();  // Close welcome panel
 }
 
@@ -160,7 +161,7 @@ public EditorPane newEditorPane()
     if(_preloadEdPane!=null) { EditorPane ep = _preloadEdPane; _preloadEdPane = null; return ep; }
     
     // Otherwise, return new pane with UI loaded
-    EditorPane ep = new EditorPane();
+    EditorPane ep = new RMEditorPane();
     if(SnapUtils.isTeaVM) ep.getUI().getWindow().setMaximized(true);
     return ep;
 }

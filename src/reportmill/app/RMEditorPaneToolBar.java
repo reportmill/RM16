@@ -1,4 +1,5 @@
 package reportmill.app;
+import reportmill.apptools.RMLabelsTool;
 import rmdraw.app.*;
 import rmdraw.apptools.*;
 import rmdraw.base.RMFormat;

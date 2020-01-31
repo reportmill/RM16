@@ -12,7 +12,7 @@ import snap.web.WebURL;
 /**
  * This class provides the welcome panel for RM. 
   */
-public class Welcome extends ViewOwner {
+public class Welcome extends rmdraw.app.Welcome {
 
     // Whether welcome panel is enabled
     boolean         _enabled;

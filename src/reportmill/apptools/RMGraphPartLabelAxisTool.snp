@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ColView Padding="4" FillWidth="true">
+  <RowView Padding="4" GrowWidth="true" Spacing="4">
+    <Label text="Item Text:" />
+    <TextField Name="ItemKeyText" GrowWidth="true" />
+  </RowView>
+  <RowView GrowWidth="true">
+    <ColView GrowHeight="true" Spacing="4">
+      <CheckBox Name="ShowLabelsCheckBox" Margin="2" text="Show Axis Labels" />
+      <CheckBox Name="ShowGridLinesCheckBox" Margin="2" text="Show Grid Lines" />
+      <RowView Padding="4" GrowWidth="true" Spacing="4">
+        <Label text="Rotation:" />
+        <Spinner Name="LabelRollSpinner" PrefWidth="70" Align="CENTER" Value="0" />
+      </RowView>
+    </ColView>
+  </RowView>
+</ColView>

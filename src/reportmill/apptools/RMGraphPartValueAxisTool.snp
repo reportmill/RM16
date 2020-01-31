@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ColView Padding="4" Spacing="4" FillWidth="true">
+  <RowView GrowWidth="true">
+    <ColView GrowHeight="true" Spacing="4">
+      <CheckBox Name="ShowLabelsCheckBox" text="Show Axis Labels" />
+      <CheckBox Name="ShowMajorGridCheckBox" text="Show Major Grid Lines" />
+      <CheckBox Name="ShowMinorGridCheckBox" text="Show Minor Grid Lines" />
+    </ColView>
+  </RowView>
+  <RowView Padding="2,2,0,2" GrowWidth="true">
+    <Label PrefWidth="60" text="Axis Min:" Spacing="0" />
+    <TextField Name="AxisMinText" PrefWidth="75" />
+  </RowView>
+  <RowView Padding="2,2,0,2" GrowWidth="true">
+    <Label PrefWidth="60" text="Axis Max:" Spacing="0" />
+    <TextField Name="AxisMaxText" PrefWidth="75" />
+  </RowView>
+  <RowView Padding="2,2,0,2" GrowWidth="true">
+    <Label PrefWidth="60" text="Count:" />
+    <Spinner Name="AxisCountSpinner" PrefWidth="75" Align="CENTER" Min="0" Value="0" />
+  </RowView>
+  <RowView Padding="2" GrowWidth="true">
+    <Label PrefWidth="60" text="Rotation:" />
+    <Spinner Name="LabelRollSpinner" PrefWidth="75" Align="CENTER" Padding="0" Value="0" />
+  </RowView>
+</ColView>

@@ -2,12 +2,18 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.app;
+import reportmill.shape.RMGraph;
+import reportmill.shape.RMGraphLegend;
+import reportmill.shape.RMLabel;
+import reportmill.shape.RMLabels;
 import rmdraw.app.*;
 import rmdraw.base.ReportMill;
+import rmdraw.shape.RMArchiver;
 import snap.util.SnapUtils;
 import snap.view.*;
 import snap.viewx.*;
 import snap.web.WebURL;
+import java.util.Map;
 
 /**
  * This class provides the welcome panel for RM. 
@@ -15,18 +21,35 @@ import snap.web.WebURL;
 public class Welcome extends rmdraw.app.Welcome {
 
     // Whether welcome panel is enabled
-    boolean         _enabled;
+    private boolean _enabled;
     
     // A preloaded editor to speed up first open
-    EditorPane _preloadEdPane;
+    private EditorPane _preloadEdPane;
     
     // Shared welcome panel
-    static Welcome  _shared;
+    private static Welcome  _shared;
     
 /**
  * Creates a new Welcome.
  */
-public Welcome()  { _shared = this; }
+public Welcome()
+{
+    _shared = this;
+
+    updateArchiverClassMapForRM();
+}
+
+/**
+ * Updates RMArchiver ClassMap.
+ */
+private void updateArchiverClassMapForRM()
+{
+    Map cmap = RMArchiver.getClassMapShared();
+    cmap.put("graph", RMGraph.class);
+    cmap.put("graph-legend", RMGraphLegend.class);
+    cmap.put("label", RMLabel.class);
+    cmap.put("labels", RMLabels.class);
+}
 
 /**
  * Returns the shared instance of the welcome panel.

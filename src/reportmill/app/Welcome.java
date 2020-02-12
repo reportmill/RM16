@@ -6,6 +6,8 @@ import reportmill.shape.*;
 import rmdraw.app.*;
 import rmdraw.base.ReportMill;
 import rmdraw.shape.RMArchiver;
+import reportmill.shape.RMCrossTab;
+import reportmill.shape.RMCrossTabFrame;
 import snap.util.SnapUtils;
 import snap.view.*;
 import snap.viewx.*;
@@ -42,6 +44,8 @@ public Welcome()
 private void updateArchiverClassMapForRM()
 {
     Map cmap = RMArchiver.getClassMapShared();
+    cmap.put("cell-table", RMCrossTab.class);
+    cmap.put("cell-table-frame", RMCrossTabFrame.class);
     cmap.put("graph", RMGraph.class);
     cmap.put("graph-legend", RMGraphLegend.class);
     cmap.put("label", RMLabel.class);

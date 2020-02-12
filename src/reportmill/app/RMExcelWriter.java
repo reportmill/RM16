@@ -2,6 +2,7 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.app;
+import reportmill.shape.RMCrossTab;
 import rmdraw.base.*;
 import rmdraw.out.RMShapeTable;
 import rmdraw.shape.*;

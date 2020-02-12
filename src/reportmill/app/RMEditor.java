@@ -4,6 +4,10 @@ import reportmill.shape.*;
 import rmdraw.app.Editor;
 import rmdraw.app.EditorDnD;
 import rmdraw.apptools.*;
+import reportmill.shape.RMCrossTab;
+import reportmill.shape.RMCrossTabCell;
+import reportmill.shape.RMCrossTabDivider;
+import reportmill.shape.RMCrossTabFrame;
 
 /**
  * This Editor subclass provides support for some RM specific things.
@@ -20,6 +24,10 @@ public class RMEditor extends Editor {
      */
     protected RMTool createTool(Class aClass)
     {
+        if(aClass== RMCrossTab.class) return new RMCrossTabTool();
+        if(aClass== RMCrossTabCell.class) return new RMCrossTabCellTool();
+        if(aClass== RMCrossTabDivider.class) return new RMCrossTabDividerTool();
+        if(aClass== RMCrossTabFrame.class) return new RMCrossTabFrameTool();
         if (aClass==RMGraph.class) return new RMGraphTool();
         if (aClass==RMGraphLegend.class) return new RMGraphLegendTool();
         if (aClass==RMGraphPartBars.class) return new RMGraphPartBarsTool();

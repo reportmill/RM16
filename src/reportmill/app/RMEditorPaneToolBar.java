@@ -1,4 +1,5 @@
 package reportmill.app;
+import reportmill.apptools.RMCrossTabTool;
 import reportmill.apptools.RMGraphTool;
 import reportmill.apptools.RMLabelsTool;
 import rmdraw.app.*;

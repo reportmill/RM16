@@ -50,8 +50,8 @@
       <MenuItem Name="AddTableButton" text="Table" image="/rmdraw/apptools/RMTable.png" />
       <MenuItem Name="AddGraphButton" text="Graph" image="/reportmill/apptools/RMGraph.png" />
       <MenuItem Name="AddLabelsButton" text="Labels" image="/reportmill/apptools/RMLabels.png" />
-      <MenuItem Name="AddCrossTabFrameButton" text="CrossTab" image="/rmdraw/apptools/RMCrossTabFrame.png" />
-      <MenuItem Name="AddCrossTabButton" text="Simple Table" image="/rmdraw/apptools/RMCrossTab.png" />
+      <MenuItem Name="AddCrossTabFrameButton" text="CrossTab" image="/reportmill/apptools/RMCrossTabFrame.png" />
+      <MenuItem Name="AddCrossTabButton" text="Simple Table" image="/reportmill/apptools/RMCrossTab.png" />
       <MenuItem Name="AddImagePlaceHolderMenuItem" text="Image Placeholder" image="/rmdraw/apptools/RMImage.png" />
     </MenuButton>
   </RowView>

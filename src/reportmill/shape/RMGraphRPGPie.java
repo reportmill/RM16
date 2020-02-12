@@ -3,12 +3,12 @@
  */
 package reportmill.shape;
 import rmdraw.base.*;
-import rmdraw.graphics.*;
 import java.util.*;
-
 import rmdraw.shape.*;
 import snap.gfx.Color;
 import snap.gfx.Rect;
+import snap.gfx.RichText;
+import snap.gfx.TextLineStyle;
 import snap.util.MathUtils;
 
 /**
@@ -64,11 +64,11 @@ protected void configure()
     RMGraphPartLabelAxis labelAxis = graph.getLabelAxis();
     
     // Get wedge label string
-    RMXString barLabelString = null;
+    RichText barLabelText = null;
     if(labelAxis.getShowAxisLabels()) {
         String itemKey = labelAxis.getItemKey();
-        barLabelString = new RMXString(itemKey, labelAxis.getFont());
-        barLabelString.setParagraph(RMParagraph.CENTERED, 0, barLabelString.length());
+        barLabelText = new RichText(itemKey, labelAxis.getFont());
+        barLabelText.setLineStyle(TextLineStyle.DEFAULT_CENTERED, 0, barLabelText.length());
     }
     
     // Get wedge prototype
@@ -90,7 +90,7 @@ protected void configure()
         Rect pieBounds = totalBounds.getInsetRect(5);
 
         // If there are wedge labels, reset pieBounds to totalBounds inset by 1/5 width
-        if(barLabelString!=null)
+        if(barLabelText!=null)
             pieBounds = totalBounds.getInsetRect(totalBounds.getWidth()/10, totalBounds.getHeight()/10);
         
         // if there are extruded pie wedges, pieBounds is totalBounds inset another 10%
@@ -164,7 +164,7 @@ protected void configure()
         }
 
         // Add Wedge Labels
-        if(barLabelString!=null) {
+        if(barLabelText!=null) {
             
             // Declare rect for last wedge label bounds
             Rect lastLabelBounds = null;
@@ -190,11 +190,11 @@ protected void configure()
                 
                 // Add group
                 _rptOwner.pushDataStack(sectionItem.getGroup());
-                RMXString string = barLabelString.rpgClone(_rptOwner, map, null, true);
+                RichText rtext = _rptOwner.rpgCloneRichText(barLabelText, map, null, true);
                 _rptOwner.popDataStack();
 
                 // Get new wedge label text
-                RMTextShape label = new RMTextShape(string);
+                RMTextShape label = new RMTextShape(rtext);
                 
                 // Set stroke and fill
                 if(labelAxis.getStroke()!=null) label.setStrokeColor(labelAxis.getStrokeColor());
@@ -280,7 +280,9 @@ private Rect getPieBounds(int anIndex, int aCount, Rect aRect)
     }
 
     // Calculate rect for index, assuming index traverses grid from left to right, top to bottom
-    return new Rect(aRect.x + (anIndex%x)*width/x, aRect.y + (y - 1 - anIndex/x)*height/y, width/x, height/y);
+    double rx = aRect.x + (anIndex%x)*width/x;
+    double ry = aRect.y + (y - 1 - anIndex/x)*height/y;
+    return new Rect(rx, ry, width/x, height/y);
 }
 
 /** Creates a rect representing the largest square inside rect. */

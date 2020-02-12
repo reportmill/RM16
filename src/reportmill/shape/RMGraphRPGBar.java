@@ -393,11 +393,11 @@ private void addValueAxisLabels()
 
         // Get string for intervalNumber
         String str = format.format(interval);
-        RMXString xstr = new RMXString(str, valueAxis.getFont(), valueAxis.getTextColor());
-        xstr.setParagraph(RMParagraph.CENTERED, 0, xstr.length());
+        RichText rtext = new RichText(str, valueAxis.getFont(), valueAxis.getTextColor());
+        rtext.setLineStyle(TextLineStyle.DEFAULT_CENTERED, 0, rtext.length());
         
         // Create new text for label, copy value axis text shape attributes and size to fit
-        RMTextShape label = new RMTextShape(xstr);
+        RMTextShape label = new RMTextShape(rtext);
         label.copyShape(valueAxis);
         label.setBestSize();
         

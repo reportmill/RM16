@@ -66,53 +66,70 @@ public class RMEditorPaneMenuBar extends EditorPaneMenuBar {
         Editor editor = getEditor();
 
         // Handle NewMenuItem, NewButton: Get new editor pane and make visible
-        if(anEvent.equals("NewMenuItem") || anEvent.equals("NewButton")) {
+        if (anEvent.equals("NewMenuItem") || anEvent.equals("NewButton")) {
             EditorPane editorPane = ClassUtils.newInstance(epane).newDocument();
             editorPane.setWindowVisible(true);
         }
 
         // Handle OpenMenuItem, OpenButton: Get new editor pane from open panel and make visible (if created)
-        if(anEvent.equals("OpenMenuItem") || anEvent.equals("OpenButton")) {
+        if (anEvent.equals("OpenMenuItem") || anEvent.equals("OpenButton")) {
             EditorPane editorPane = ClassUtils.newInstance(epane).open(epane.getUI());
             if(editorPane!=null)
                 editorPane.setWindowVisible(true);
         }
 
         // Handle OpenRecentMenuItem
-        if(anEvent.equals("OpenRecentMenuItem")) {
+        if (anEvent.equals("OpenRecentMenuItem")) {
             String path = RecentFiles.showPathsPanel(epane.getUI(), "RecentDocuments"); if(path==null) return;
             rmdraw.app.Welcome.getShared().open(path); //file.getAbsolutePath());
         }
 
         // Handle CloseMenuItem
-        if(anEvent.equals("CloseMenuItem")) epane.close();
+        if (anEvent.equals("CloseMenuItem")) epane.close();
 
         // Handle SaveMenuItem, SaveButton, SaveAsMenuItem, SaveAsPDFMenuItem, RevertMenuItem
-        if(anEvent.equals("SaveMenuItem") || anEvent.equals("SaveButton")) epane.save();
-        if(anEvent.equals("SaveAsMenuItem")) epane.saveAs();
-        if(anEvent.equals("SaveAsPDFMenuItem")) EditorPaneUtils.saveAsPDF(epane);
-        if(anEvent.equals("RevertMenuItem")) epane.revert();
+        if (anEvent.equals("SaveMenuItem") || anEvent.equals("SaveButton"))
+            epane.save();
+        if (anEvent.equals("SaveAsMenuItem"))
+            epane.saveAs();
+        if (anEvent.equals("SaveAsPDFMenuItem"))
+            RMEditorPaneUtils.saveAsPDF(epane);
+        if (anEvent.equals("RevertMenuItem"))
+            epane.revert();
 
         // Handle PrintMenuItem, QuitMenuItem
-        if(anEvent.equals("PrintMenuItem") || anEvent.equals("PrintButton")) editor.print(null, !anEvent.isAltDown());
-        if(anEvent.equals("QuitMenuItem")) epane.quit();
+        if (anEvent.equals("PrintMenuItem") || anEvent.equals("PrintButton"))
+            editor.print(null, !anEvent.isAltDown());
+        if (anEvent.equals("QuitMenuItem"))
+            epane.quit();
 
         // Handle File -> Preview Reports menu items
-        if(anEvent.equals("PreviewPDFMenuItem") || anEvent.equals("PreviewPDFButton")) EditorPaneUtils.previewPDF(epane);
-        if(anEvent.equals("PreviewHTMLMenuItem") || anEvent.equals("PreviewHTMLButton"))
-            EditorPaneUtils.previewHTML(epane);
-        if(anEvent.equals("PreviewCSVMenuItem")) EditorPaneUtils.previewCSV(epane);
-        if(anEvent.equals("PreviewExcelMenuItem")) EditorPaneUtils.previewXLS(epane);
-        if(anEvent.equals("PreviewRTFMenuItem")) EditorPaneUtils.previewRTF(epane);
-        if(anEvent.equals("PreviewJPEGMenuItem")) EditorPaneUtils.previewJPG(epane);
-        if(anEvent.equals("PreviewPNGMenuItem")) EditorPaneUtils.previewPNG(epane);
+        if (anEvent.equals("PreviewPDFMenuItem") || anEvent.equals("PreviewPDFButton"))
+            RMEditorPaneUtils.previewPDF(epane);
+        if (anEvent.equals("PreviewHTMLMenuItem") || anEvent.equals("PreviewHTMLButton"))
+            RMEditorPaneUtils.previewHTML(epane);
+        if (anEvent.equals("PreviewCSVMenuItem"))
+            RMEditorPaneUtils.previewCSV(epane);
+        if (anEvent.equals("PreviewExcelMenuItem"))
+            RMEditorPaneUtils.previewXLS(epane);
+        if (anEvent.equals("PreviewRTFMenuItem"))
+            RMEditorPaneUtils.previewRTF(epane);
+        if (anEvent.equals("PreviewJPEGMenuItem"))
+            RMEditorPaneUtils.previewJPG(epane);
+        if (anEvent.equals("PreviewPNGMenuItem"))
+            RMEditorPaneUtils.previewPNG(epane);
 
         // Handle File -> Samples menu items
-        if(anEvent.equals("MoviesMenuItem")) RMEditorPaneUtils.openSample("Movies");
-        if(anEvent.equals("MoviesGraphMenuItem")) RMEditorPaneUtils.openSample("MoviesGraph");
-        if(anEvent.equals("MoviesLabelsMenuItem")) RMEditorPaneUtils.openSample("MoviesLabels");
-        if(anEvent.equals("HollywoodMenuItem")) RMEditorPaneUtils.openSample("Jar:/reportmill/examples/HollywoodDB.xml");
-        if(anEvent.equals("SalesMenuItem")) RMEditorPaneUtils.openSample("Jar:/reportmill/examples/Sales.xml");
+        if (anEvent.equals("MoviesMenuItem"))
+            RMEditorPaneUtils.openSample("Movies");
+        if (anEvent.equals("MoviesGraphMenuItem"))
+            RMEditorPaneUtils.openSample("MoviesGraph");
+        if (anEvent.equals("MoviesLabelsMenuItem"))
+            RMEditorPaneUtils.openSample("MoviesLabels");
+        if (anEvent.equals("HollywoodMenuItem"))
+            RMEditorPaneUtils.openSample("Jar:/reportmill/examples/HollywoodDB.xml");
+        if (anEvent.equals("SalesMenuItem"))
+            RMEditorPaneUtils.openSample("Jar:/reportmill/examples/Sales.xml");
 
         // Handle Edit menu items
         if(anEvent.equals("UndoMenuItem") || anEvent.equals("UndoButton")) editor.undo();

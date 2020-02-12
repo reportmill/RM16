@@ -2,10 +2,7 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.app;
-import reportmill.shape.RMGraph;
-import reportmill.shape.RMGraphLegend;
-import reportmill.shape.RMLabel;
-import reportmill.shape.RMLabels;
+import reportmill.shape.*;
 import rmdraw.app.*;
 import rmdraw.base.ReportMill;
 import rmdraw.shape.RMArchiver;
@@ -49,6 +46,7 @@ private void updateArchiverClassMapForRM()
     cmap.put("graph-legend", RMGraphLegend.class);
     cmap.put("label", RMLabel.class);
     cmap.put("labels", RMLabels.class);
+    cmap.put("PDFShape", RMPDFShape.class);
 }
 
 /**

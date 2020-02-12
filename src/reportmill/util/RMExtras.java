@@ -7,7 +7,7 @@ import rmdraw.base.*;
 import rmdraw.graphics.RMTextStyle;
 import rmdraw.graphics.RMXString;
 import rmdraw.graphics.RMXStringRun;
-import rmdraw.out.RMPDFWriter;
+import reportmill.out.RMPDFWriter;
 import rmdraw.shape.*;
 import snap.gfx.Rect;
 import snap.util.FileUtils;

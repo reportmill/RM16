@@ -20,15 +20,16 @@ public class RMEditor extends Editor {
      */
     protected RMTool createTool(Class aClass)
     {
-        if(aClass==RMGraph.class) return new RMGraphTool();
-        if(aClass==RMGraphLegend.class) return new RMGraphLegendTool();
-        if(aClass==RMGraphPartBars.class) return new RMGraphPartBarsTool();
-        if(aClass==RMGraphPartLabelAxis.class) return new RMGraphPartLabelAxisTool();
-        if(aClass==RMGraphPartPie.class) return new RMGraphPartPieTool();
-        if(aClass==RMGraphPartSeries.class) return new RMGraphPartSeriesTool();
-        if(aClass==RMGraphPartValueAxis.class) return new RMGraphPartValueAxisTool();
-        if (aClass == RMLabel.class) return new RMLabelTool();
-        if (aClass == RMLabels.class) return new RMLabelsTool();
+        if (aClass==RMGraph.class) return new RMGraphTool();
+        if (aClass==RMGraphLegend.class) return new RMGraphLegendTool();
+        if (aClass==RMGraphPartBars.class) return new RMGraphPartBarsTool();
+        if (aClass==RMGraphPartLabelAxis.class) return new RMGraphPartLabelAxisTool();
+        if (aClass==RMGraphPartPie.class) return new RMGraphPartPieTool();
+        if (aClass==RMGraphPartSeries.class) return new RMGraphPartSeriesTool();
+        if (aClass==RMGraphPartValueAxis.class) return new RMGraphPartValueAxisTool();
+        if (aClass==RMLabel.class) return new RMLabelTool();
+        if (aClass==RMLabels.class) return new RMLabelsTool();
+        if (aClass==RMPDFShape.class) return new RMPDFShapeTool();
         return super.createTool(aClass);
     }
 }

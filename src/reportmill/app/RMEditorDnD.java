@@ -1,7 +1,7 @@
 package reportmill.app;
 import rmdraw.app.Editor;
 import rmdraw.app.EditorDnD;
-import rmdraw.shape.RMPDFShape;
+import reportmill.shape.RMPDFShape;
 import rmdraw.shape.RMParentShape;
 import rmdraw.shape.RMShape;
 import snap.gfx.Point;

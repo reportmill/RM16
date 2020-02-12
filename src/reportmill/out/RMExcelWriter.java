@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
-package reportmill.app;
+package reportmill.out;
 import reportmill.shape.RMCrossTab;
 import rmdraw.base.*;
 import rmdraw.out.RMShapeTable;

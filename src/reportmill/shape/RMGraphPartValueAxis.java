@@ -141,9 +141,9 @@ public void setFont(Font aFont)
 /**
  * Returns the format for the shape.
  */
-public RMFormat getFormat()
+public TextFormat getFormat()
 {
-    RMFormat format = super.getFormat();
+    TextFormat format = super.getFormat();
     return format!=null? format : RMNumberFormat.BASIC;
 }
 

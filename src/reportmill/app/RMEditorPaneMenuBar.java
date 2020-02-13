@@ -2,7 +2,7 @@ package reportmill.app;
 import rmdraw.app.*;
 import rmdraw.apptools.RMTableRowTool;
 import rmdraw.graphics.RMTextEditor;
-import rmdraw.graphics.RMTypes;
+import snap.gfx.HPos;
 import snap.util.ClassUtils;
 import snap.util.Prefs;
 import snap.util.URLUtils;
@@ -154,24 +154,28 @@ public class RMEditorPaneMenuBar extends EditorPaneMenuBar {
         }
 
         // Handle Format menu items (use name because anObj may come from popup menu)
-        if(anEvent.equals("FontPanelMenuItem")) epane.getAttributesPanel().setVisibleName(AttributesPanel.FONT);
-        if(anEvent.equals("BoldMenuItem") || anEvent.equals("BoldButton"))
+        if (anEvent.equals("FontPanelMenuItem"))
+            epane.getAttributesPanel().setVisibleName(AttributesPanel.FONT);
+        if (anEvent.equals("BoldMenuItem") || anEvent.equals("BoldButton"))
             EditorUtils.setFontBold(editor, !EditorUtils.getFont(editor).isBold());
-        if(anEvent.equals("ItalicMenuItem") || anEvent.equals("ItalicButton"))
+        if (anEvent.equals("ItalicMenuItem") || anEvent.equals("ItalicButton"))
             EditorUtils.setFontItalic(editor, !EditorUtils.getFont(editor).isItalic());
-        if(anEvent.equals("UnderlineMenuItem") || anEvent.equals("UnderlineButton"))
+        if (anEvent.equals("UnderlineMenuItem") || anEvent.equals("UnderlineButton"))
             EditorUtils.setUnderlined(editor);
-        if(anEvent.equals("OutlineMenuItem")) EditorUtils.setTextBorder(editor);
-        if(anEvent.equals("AlignLeftMenuItem") || anEvent.equals("AlignLeftButton"))
-            EditorUtils.setAlignmentX(editor, RMTypes.AlignX.Left);
-        if(anEvent.equals("AlignCenterMenuItem") || anEvent.equals("AlignCenterButton"))
-            EditorUtils.setAlignmentX(editor, RMTypes.AlignX.Center);
-        if(anEvent.equals("AlignRightMenuItem") || anEvent.equals("AlignRightButton"))
-            EditorUtils.setAlignmentX(editor, RMTypes.AlignX.Right);
-        if(anEvent.equals("AlignFullMenuItem") || anEvent.equals("AlignFullButton"))
-            EditorUtils.setAlignmentX(editor, RMTypes.AlignX.Full);
-        if(anEvent.equals("SuperscriptMenuItem")) EditorUtils.setSuperscript(editor);
-        if(anEvent.equals("SubscriptMenuItem")) EditorUtils.setSubscript(editor);
+        if (anEvent.equals("OutlineMenuItem"))
+            EditorUtils.setTextBorder(editor);
+        if (anEvent.equals("AlignLeftMenuItem") || anEvent.equals("AlignLeftButton"))
+            EditorUtils.setAlignmentX(editor, HPos.LEFT);
+        if (anEvent.equals("AlignCenterMenuItem") || anEvent.equals("AlignCenterButton"))
+            EditorUtils.setAlignmentX(editor, HPos.CENTER);
+        if (anEvent.equals("AlignRightMenuItem") || anEvent.equals("AlignRightButton"))
+            EditorUtils.setAlignmentX(editor, HPos.RIGHT);
+        if (anEvent.equals("AlignFullMenuItem") || anEvent.equals("AlignFullButton"))
+            EditorUtils.setJustify(editor, true);
+        if (anEvent.equals("SuperscriptMenuItem"))
+            EditorUtils.setSuperscript(editor);
+        if (anEvent.equals("SubscriptMenuItem"))
+            EditorUtils.setSubscript(editor);
 
         // Handle Pages menu items
         if(anEvent.equals("AddPageMenuItem")) editor.addPage();

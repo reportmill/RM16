@@ -2,18 +2,13 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.util;
-
 import rmdraw.base.*;
-import rmdraw.graphics.RMTextStyle;
-import rmdraw.graphics.RMXString;
-import rmdraw.graphics.RMXStringRun;
 import reportmill.out.RMPDFWriter;
 import rmdraw.shape.*;
-import snap.gfx.Rect;
+import snap.gfx.*;
 import snap.util.FileUtils;
 import snap.util.MapUtils;
 import snap.web.WebURL;
-
 import java.util.*;
 
 /**
@@ -41,11 +36,11 @@ public static void replaceText(RMShape aShape, String aString1, String aString2)
 {
     // Handle RMTextShape
     if(aShape instanceof RMTextShape) { RMTextShape text = (RMTextShape)aShape;
-        RMXString xstring = text.getXString();
-        String string = xstring.getText();
+        RichText richText = text.getRichText();
+        String string = richText.getString();
         for(int i=string.indexOf(aString1); i>=0; i=string.indexOf(aString1, i)) {
-            xstring.replaceChars(aString2, i, i+aString1.length());
-            string = xstring.getText(); i += aString1.length();
+            richText.replaceChars(aString2, i, i+aString1.length());
+            string = richText.getString(); i += aString1.length();
         }
     }
     
@@ -163,11 +158,11 @@ public static void replaceFormat(RMShape aShape, RMFormat aFormat)
     
     // Handle Text
     else if(aShape instanceof RMTextShape) { RMTextShape text = (RMTextShape)aShape;
-        RMXString xstring = text.getXString();
-        for(int i=0, iMax=xstring.getRunCount(); i<iMax; i++) { RMXStringRun run = xstring.getRun(i);
-            if(run.getFormat()!=null && run.getFormat().getClass()==aFormat.getClass())
-                xstring.setAttribute(RMTextStyle.FORMAT_KEY, aFormat, run.start(), run.end());
-        }
+        RichText richText = text.getRichText();
+        for (RichTextLine line : richText.getLines())
+            for (RichTextRun run : line.getRuns())
+                if (run.getFormat()!=null && run.getFormat().getClass()==aFormat.getClass())
+                    richText.setStyleValue(TextStyle.FORMAT_KEY, aFormat, run.getStart(), run.getEnd());
     }
     
     // Handle anything else
@@ -234,7 +229,7 @@ public static void printNames(RMShape aShape)
 public static void printNames(RMTableGroup aTableGroup, RMTable aTable)
 {
     // Get table or table group
-    RMShape tableOrTableGroup = aTable==null? (RMShape)aTableGroup : aTable;
+    RMShape tableOrTableGroup = aTable==null ? aTableGroup : aTable;
     
     // Print table (or tableGroup) name
     System.out.println(tableOrTableGroup.getClass().getName() + ": " + tableOrTableGroup.getName());
@@ -313,10 +308,11 @@ public static void setTimeZone(RMShape aShape, TimeZone aTimeZone)
     
     // Handle RMText - iterate over xstring runs and reset date format time zones
     else if(aShape instanceof RMTextShape) { RMTextShape text = (RMTextShape)aShape;
-        RMXString xstring = text.getXString();
-        for(int i=0, iMax=xstring.getRunCount(); i<iMax; i++) { RMXStringRun run = xstring.getRun(i);
-            if(run.getFormat() instanceof RMDateFormat)
-                ((RMDateFormat)run.getFormat()).setTimeZone(aTimeZone); }
+        RichText richText = text.getRichText();
+        for (RichTextLine line : richText.getLines())
+            for (RichTextRun run : line.getRuns())
+                if (run.getFormat() instanceof RMDateFormat)
+                    ((RMDateFormat)run.getFormat()).setTimeZone(aTimeZone);
     }
     
     // Handle anything else

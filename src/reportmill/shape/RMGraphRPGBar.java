@@ -365,7 +365,7 @@ private void addValueAxisLabels()
     double height = _graph.getHeight();
     
     // Get format from value axis (defaults to basic)
-    RMFormat format = valueAxis.getFormat();
+    TextFormat format = valueAxis.getFormat();
 
     // Create shape for value axis and configure
     RMPolygonShape axis = new RMPolygonShape(); axis.copyShape(_graph);

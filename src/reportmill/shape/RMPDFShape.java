@@ -104,22 +104,22 @@ public void setPadding(int aPadding)
 /**
  * Returns the horizontal alignment.
  */
-public AlignX getAlignmentX()  { return _alignX; } AlignX _alignX = AlignX.Center;
+public HPos getAlignmentX()  { return _alignX; } HPos _alignX = HPos.CENTER;
 
 /**
  * Sets the horizontal alignment.
  */
-public void setAlignmentX(AlignX anAlignX)  { _alignX = anAlignX; }
+public void setAlignmentX(HPos anAlignX)  { _alignX = anAlignX; }
 
 /**
  * Returns the vertical alignment.
  */
-public AlignY getAlignmentY()  { return _alignY; } AlignY _alignY = AlignY.Middle;
+public VPos getAlignmentY()  { return _alignY; } VPos _alignY = VPos.CENTER;
 
 /**
  * Sets the vertical alignment.
  */
-public void setAlignmentY(AlignY anAlignY)  { _alignY = anAlignY; }
+public void setAlignmentY(VPos anAlignY)  { _alignY = anAlignY; }
 
 /**
  * Returns whether to grow page to fit available area if shape larger than page.
@@ -238,9 +238,10 @@ public Rect getImageBounds()
     if(h>ph) { h = ph; if(getPreserveRatio()) w = iw*h/ih; }
     
     // Get image bounds x/y for width/height and return rect
-    AlignX ax = getAlignmentX(); AlignY ay = getAlignmentY();
-    double x = ax==AlignX.Center? (sw - w)/2 : ax==AlignX.Left? pd : (sw - w);
-    double y = ay==AlignY.Middle? (sh - h)/2 : ay==AlignY.Top? pd : (sh - h);
+    HPos ax = getAlignmentX();
+    VPos ay = getAlignmentY();
+    double x = ax==HPos.CENTER ? (sw - w)/2 : ax==HPos.LEFT ? pd : (sw - w);
+    double y = ay==VPos.CENTER ? (sh - h)/2 : ay==VPos.TOP ? pd : (sh - h);
     return new Rect(x, y, w, h);
 }
 

@@ -289,8 +289,8 @@ public void appendTable(RMShapeTable table, PrintStream ps)
             // Vertical alignment
             ps.print("\\clvertal");
             switch(rmcell.getAlignmentY()) {
-                case Top : ps.print("t"); break;
-                case Middle : ps.print("c"); break;
+                case TOP : ps.print("t"); break;
+                case CENTER: ps.print("c"); break;
                 default : ps.print("b");
             }
             

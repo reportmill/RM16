@@ -8,9 +8,7 @@ import java.util.*;
 
 import rmdraw.shape.RMShape;
 import rmdraw.shape.RMTextShape;
-import snap.gfx.Color;
-import snap.gfx.Effect;
-import snap.gfx.Font;
+import snap.gfx.*;
 import snap.util.*;
 
 /**
@@ -30,9 +28,6 @@ public class RMGraphPartSeries extends RMShape {
     // The map of label shapes for label positions
     Map <LabelPos, RMTextShape>  _labelShapes = new HashMap();
     
-    // Default cell paragraph (aligned center)
-    static RMParagraph          _defaultParagraph = RMParagraph.DEFAULT.deriveAligned(RMTypes.AlignX.Center);
-
     // Constants for value label positions
     public enum LabelPos { Top, Middle, Bottom, Above, Below }
 
@@ -188,7 +183,7 @@ public void setUnderlined(boolean aFlag)
 }
 
 /** Override to handle proxy. */
-public RMFormat getFormat()  { return getProxy().getFormat(); }
+public TextFormat getFormat()  { return getProxy().getFormat(); }
 
 /** Override to handle proxy. */
 public void setFormat(RMFormat aFormat)

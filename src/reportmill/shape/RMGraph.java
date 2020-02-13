@@ -736,7 +736,7 @@ public void setOpacity(double aValue)
 /**
  * Override to allow for ProxyShape.
  */
-public RMFormat getFormat()  { return useProxy()? _proxyShape.getFormat() : super.getFormat(); }
+public TextFormat getFormat()  { return useProxy()? _proxyShape.getFormat() : super.getFormat(); }
 
 /**
  * Override to allow for ProxyShape and trigger relayout.

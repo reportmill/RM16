@@ -360,7 +360,7 @@ public void fillCell(HSSFCell aCell, RMTextShape aText)
     string = StringUtils.replace(string, "\t", " ");
 
     // Get text format, if available and declare local variable for format string
-    RMFormat format = aText.getFormat();
+    TextFormat format = aText.getFormat();
     String formatString = null;
     
     // Handle numeric cells (number formatted)
@@ -551,16 +551,16 @@ class WorkbookStyle {
         
         // Set style horizontal alignment
         switch(_text.getAlignmentX()) {
-            case Left: _style.setAlignment(HSSFCellStyle.ALIGN_LEFT); break;
-            case Center: _style.setAlignment(HSSFCellStyle.ALIGN_CENTER); break;
-            case Right: _style.setAlignment(HSSFCellStyle.ALIGN_RIGHT); break;
+            case LEFT: _style.setAlignment(HSSFCellStyle.ALIGN_LEFT); break;
+            case CENTER: _style.setAlignment(HSSFCellStyle.ALIGN_CENTER); break;
+            case RIGHT: _style.setAlignment(HSSFCellStyle.ALIGN_RIGHT); break;
         }
         
         // Set vertical alignment
         switch(_text.getAlignmentY()) {
-            case Top: _style.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP); break;
-            case Bottom: _style.setVerticalAlignment(HSSFCellStyle.VERTICAL_BOTTOM); break;
-            case Middle: _style.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER); break;
+            case TOP: _style.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP); break;
+            case BOTTOM: _style.setVerticalAlignment(HSSFCellStyle.VERTICAL_BOTTOM); break;
+            case CENTER: _style.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER); break;
         }
         
         // If format is provided, set style format

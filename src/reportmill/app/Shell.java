@@ -8,6 +8,7 @@ import rmdraw.shape.*;
 import java.util.*;
 
 import snap.gfx.Font;
+import snap.gfx.HPos;
 import snap.util.*;
 
 /**
@@ -235,7 +236,7 @@ static RMDocument getTableOfContentsTemplate()
     RMTableRow headerRow = (RMTableRow)table.getChildWithTitle("Objects Header");
     headerRow.setNumberOfColumns(1); headerRow.setHeight(205);
     headerRow.getColumn(0).setText("Hollywood Report\n\nTable of Contents");
-    headerRow.getColumn(0).setAlignmentX(RMTypes.AlignX.Center);
+    headerRow.getColumn(0).setAlignmentX(HPos.CENTER);
     headerRow.getColumn(0).getXString().setAttribute(Font.getFont("Times Bold", 72));
     headerRow.getColumn(0).getXString().setAttribute(Font.getFont("Times", 18), 16, 35);
     headerRow.setVersion("Reprint");
@@ -248,7 +249,7 @@ static RMDocument getTableOfContentsTemplate()
     RMTableRow tableRow = (RMTableRow)table.getChildWithTitle("Objects Details");
     tableRow.getColumn(1).setText("@row@. @getStudio.getName@");
     tableRow.getColumn(2).setText("........................ @page@");
-    tableRow.getColumn(2).setAlignmentX(RMTypes.AlignX.Right);
+    tableRow.getColumn(2).setAlignmentX(HPos.RIGHT);
     tableRow.getColumn(0).setWidth(.5f);
     tableRow.getColumn(1).setWidth(2);
     tableRow.getColumn(2).setWidth(2);

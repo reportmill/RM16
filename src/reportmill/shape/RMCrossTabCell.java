@@ -52,7 +52,7 @@ public class RMCrossTabCell extends RMTextShape {
  */
 public RMCrossTabCell()
 {
-    setAlignmentY(AlignY.Middle);
+    setAlignmentY(VPos.CENTER);
     getRichText().setDefaultLineStyle(TextLineStyle.DEFAULT_CENTERED);
 }
 
@@ -298,10 +298,10 @@ public XMLElement toXML(XMLArchiver anArchiver)
     e.removeAttribute("width"); e.removeAttribute("height");
     
     // Override RMText vertical alignment: if is RMCell's default, ALIGN_MIDDLE, remove attribute
-    if(getAlignmentY()==AlignY.Middle) e.removeAttribute("valign");
+    if(getAlignmentY()==VPos.CENTER) e.removeAttribute("valign");
         
     // Override RMText vertical alignment: if is RMText's default, ALIGN_TOP, add attribute
-    else if(getAlignmentY()==AlignY.Top)
+    else if(getAlignmentY()==VPos.TOP)
         e.add("valign", getAlignmentY().toString().toLowerCase());
     
     // Return element

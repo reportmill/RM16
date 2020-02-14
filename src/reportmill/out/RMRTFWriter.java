@@ -464,8 +464,8 @@ public void appendImageBytesForShape(RMShape s, PrintStream ps)
 }
 
 /**
- * Creates and RMParagraph object whose values are set to the defaults assigned by the RTF spec.
- * The RMParagraph defaultParagraph is very similar to the rtf defaults:
+ * Creates and TextLineStyle object whose values are set to the defaults assigned by the RTF spec.
+ * The TextLineStyle DEFAULT is very similar to the rtf defaults:
  * tabs every 36 points (720 twips) align = left, leftIndent = rightIndent=0, lineSpacing=1
  */
 TextLineStyle getRTFParagraphDefaults()  { return new TextLineStyle(); }

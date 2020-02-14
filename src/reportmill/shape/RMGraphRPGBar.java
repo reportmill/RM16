@@ -2,11 +2,9 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.shape;
-import rmdraw.base.RMFormat;
 import rmdraw.base.RMGroup;
-import rmdraw.graphics.*;
+import rmdraw.graphics.RMStroke;
 import java.util.*;
-
 import rmdraw.shape.*;
 import snap.gfx.*;
 import snap.util.MathUtils;
@@ -452,9 +450,11 @@ private void addLabelAxisLabel(Rect aRect, RMGroup aGroup)
     // Create label for group: Get label axis, get label (a clone), set text, do RPG and set best size
     RMGraphPartLabelAxis labelAxis = _graph.getLabelAxis();
     RMTextShape label = new RMTextShape(labelAxis.getItemKey()); // Create new RMText with attributes of label axis
-    label.copyShape(labelAxis); label.setFont(labelAxis.getFont());
-    label.getXString().setParagraph(RMParagraph.CENTERED, 0, label.length());
-    label.getXString().rpgClone(_rptOwner, aGroup, null, false); // Do rpg on label string
+    label.copyShape(labelAxis);
+    label.setFont(labelAxis.getFont());
+    RichText rtext = label.getRichText();
+    rtext.setLineStyle(TextLineStyle.DEFAULT_CENTERED, 0, label.length());
+    _rptOwner.rpgCloneRichText(rtext, aGroup, null, false); // Do rpg on label string
     label.setBestSize();  // Resize label to best size
 
     // If label width greater than available width for bar, grow height
@@ -521,7 +521,8 @@ public void addLabel(RMTextShape aLabel, RMGraphPartSeries.LabelPos aPosition, R
     RMTextShape label = (RMTextShape)aLabel.cloneDeep();
     
     // Do rpg on new label string
-    label.getXString().rpgClone(_rptOwner, group, null, false);
+    RichText rtext = label.getRichText();
+    _rptOwner.rpgCloneRichText(rtext, group, null, false);
     
     // Resize label to best size
     label.setBestSize();

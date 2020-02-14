@@ -132,8 +132,8 @@ public void setAxisCount(int aValue)
  */
 public void setFont(Font aFont)
 {
-    if(getXString().length()==0 && !_unarchiving)
-        getXString().addChars(" ");
+    if (getRichText().length()==0 && !_unarchiving)
+        getRichText().addChars(" ");
     super.setFont(aFont);
     relayoutParent();
 }
@@ -152,8 +152,8 @@ public TextFormat getFormat()
  */
 public void setFormat(RMFormat aFormat)
 {
-    if(getXString().length()==0)
-        getXString().addChars(" ");
+    if (getRichText().length()==0)
+        getRichText().addChars(" ");
     super.setFormat(aFormat);
     relayoutParent();
 }
@@ -163,8 +163,8 @@ public void setFormat(RMFormat aFormat)
  */
 public void setTextColor(Color aColor)
 {
-    if(getXString().length()==0)
-        getXString().addChars(" ");
+    if (getRichText().length()==0)
+        getRichText().addChars(" ");
     super.setTextColor(aColor);
     relayoutParent();
 }

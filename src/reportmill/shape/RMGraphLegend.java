@@ -9,6 +9,7 @@ import java.util.*;
 import rmdraw.shape.*;
 import snap.gfx.Font;
 import snap.gfx.Rect;
+import snap.gfx.RichText;
 import snap.util.*;
 
 /**
@@ -113,7 +114,7 @@ public RMShape rpgAll(ReportOwner anRptOwner, RMShape aParent)
 protected void configureRPG(RMGraphRPG graphRPG, boolean doRPG)
 {
     // Make sure there is a graphRPG
-    if(graphRPG==null) { System.err.println("RMGraphLegend.confiureRPG: Graph RPG not found"); return; }
+    if(graphRPG==null) { System.err.println("RMGraphLegend.configureRPG: Graph RPG not found"); return; }
     
     // Get Graph
     RMGraph graph = getGraph(); if(graph==null) graph = graphRPG._graph;
@@ -158,7 +159,8 @@ protected void configureRPG(RMGraphRPG graphRPG, boolean doRPG)
         // If text is a key, evaluate it
         if(doRPG && text.contains("@")) {
             RMGroup group = groups.get(i);
-            label.getXString().rpgClone(graphRPG._rptOwner, group, null, false);
+            RichText rtext = label.getRichText();
+            graphRPG._rptOwner.rpgCloneRichText(rtext, group, null, false);
         }
         
         // Reset label to appropriate size

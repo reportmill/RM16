@@ -5,7 +5,7 @@ package reportmill.out;
 import reportmill.shape.RMCrossTabCell;
 import rmdraw.out.RMShapeTable;
 import rmdraw.shape.*;
-import rmdraw.graphics.*;
+import rmdraw.graphics.RMFill;
 import java.io.*;
 import java.util.*;
 import snap.gfx.*;
@@ -21,7 +21,7 @@ public class RMRTFWriter {
     List <Color>       _colorTable;
     
     // settings that persist across shapes
-    RMParagraph          _currentParagraph;
+    TextLineStyle _lastLineStyle;
     Font                 _currentFont;
     Color                _currentColor;
     
@@ -45,7 +45,7 @@ public byte[] getBytes(RMDocument aDoc)
     _colorTable = new ArrayList(); _colorTable.add(Color.BLACK); // Init with black
     
     // Set the current color & paragraph styles to the defaults
-    _currentColor = Color.BLACK; _currentParagraph = getRTFParagraphDefaults();
+    _currentColor = Color.BLACK; _lastLineStyle = getRTFParagraphDefaults();
     _currentFont = null; _isBold = _isItalic = _isUnderline = false;
     
     // Create print stream and write the header
@@ -232,7 +232,7 @@ public void appendRTF(RMShape aShape, PrintStream ps)
             aShape = ((RMShapeTable.Cell)aShape).getCellShape();
         
         // Append text or image for shape
-        if(aShape instanceof RMTextShape) appendText(((RMTextShape)aShape).getXString(), ps);
+        if(aShape instanceof RMTextShape) appendText(((RMTextShape)aShape).getRichText(), ps);
         else appendImageBytesForShape(aShape, ps);
     }
 }
@@ -334,50 +334,52 @@ public void appendTable(RMShapeTable table, PrintStream ps)
     --_tableLevel;
 }
 
-public void appendText(RMXString s, PrintStream ps)
+public void appendText(RichText aRichText, PrintStream ps)
 {
-    String text = s.toString();
+    String text = aRichText.getString();
     boolean newParagraph = true;
     
     // Iterate over runs
-    for(int i=0, n=s.getRunCount(); i<n; ++i) { RMXStringRun run = s.getRun(i);
-        
+    for (RichTextLine line : aRichText.getLines()) for (RichTextRun run : line.getRuns()) {
+
         // new paragraph at the start and then at each carriage return (when is \par used?)
-        if (newParagraph || !run.getParagraph().equals(_currentParagraph)) {
+        TextLineStyle lineStyle = line.getLineStyle();
+        if (newParagraph || !lineStyle.equals(_lastLineStyle)) {
             ps.print("\\pard");
             // we just reset the paragraph defaults above, so reset the currentParagraph
-            _currentParagraph = getRTFParagraphDefaults();
+            _lastLineStyle = getRTFParagraphDefaults();
             
             // we're always somewhere inside a table
             ps.print("\\intbl\\itap"+_tableLevel);
-            RMParagraph par = run.getParagraph();
             //if any of the paragraph settings have changed, set them
-            if (!par.equals(_currentParagraph)) {
+            if (!lineStyle.equals(_lastLineStyle)) {
+
                 // paragraph alignment
-                if (par.getAlignmentX() != _currentParagraph.getAlignmentX()) {
-                    switch(par.getAlignmentX()) {
-                        case Center : ps.print("\\qc"); break;
-                        case Full : ps.print("\\qj"); break;
-                        case Left : ps.print("\\ql"); break;
-                        case Right : ps.print("\\qr"); break;
+                if (lineStyle.isJustify()!= _lastLineStyle.isJustify())
+                    ps.print("\\qj");
+                else if (lineStyle.getAlign() != _lastLineStyle.getAlign()) {
+                    switch(lineStyle.getAlign()) {
+                        case CENTER : ps.print("\\qc"); break;
+                        case LEFT : ps.print("\\ql"); break;
+                        case RIGHT : ps.print("\\qr"); break;
                     }
                 }
                 // tabs
-                if (!Arrays.equals(par.getTabs(), _currentParagraph.getTabs()) ||
-                    !Arrays.equals(par.getTabTypes(), _currentParagraph.getTabTypes())) {
-                    for(int j=0, ntabs=par.getTabCount(); j<ntabs; ++j) {
-                        switch(par.getTabType(j)) {
-                        case RMParagraph.TAB_LEFT: break; // the default
-                        case RMParagraph.TAB_RIGHT: ps.print("\\tqr"); break;
-                        case RMParagraph.TAB_CENTER: ps.print("\\tqc"); break;
-                        case RMParagraph.TAB_DECIMAL: ps.print("\\tqdec"); break;
+                if (!Arrays.equals(lineStyle.getTabs(), _lastLineStyle.getTabs()) ||
+                    !Arrays.equals(lineStyle.getTabTypes(), _lastLineStyle.getTabTypes())) {
+                    for(int j=0, ntabs=lineStyle.getTabCount(); j<ntabs; ++j) {
+                        switch(lineStyle.getTabType(j)) {
+                        case TextLineStyle.TAB_LEFT: break; // the default
+                        case TextLineStyle.TAB_RIGHT: ps.print("\\tqr"); break;
+                        case TextLineStyle.TAB_CENTER: ps.print("\\tqc"); break;
+                        case TextLineStyle.TAB_DECIMAL: ps.print("\\tqdec"); break;
                         }
-                        ps.print("\\tx"+twip(par.getTab(j)));
+                        ps.print("\\tx"+twip(lineStyle.getTab(j)));
                     }
                 }
                 
                 // left indent, right indent, line spacing, etc. goes here
-                _currentParagraph = par;
+                _lastLineStyle = lineStyle;
             }
             newParagraph = false;
         }
@@ -411,7 +413,7 @@ public void appendText(RMXString s, PrintStream ps)
         ps.println();
        
         // Iterate over run characters and write them
-        for(int cp = run.start(), cend = run.end(); cp<cend; ++cp) { char c = text.charAt(cp);
+        for(int cp = run.getStart(), cend = run.getEnd(); cp<cend; ++cp) { char c = text.charAt(cp);
         
             // A note about unicode escapes: The spec says that if you are emitting "\ u" unicode chars,
             // you should emit characters after it from the non-unicode codepage of the document which could be
@@ -466,6 +468,6 @@ public void appendImageBytesForShape(RMShape s, PrintStream ps)
  * The RMParagraph defaultParagraph is very similar to the rtf defaults:
  * tabs every 36 points (720 twips) align = left, leftIndent = rightIndent=0, lineSpacing=1
  */
-RMParagraph getRTFParagraphDefaults()  { return new RMParagraph(); }
+TextLineStyle getRTFParagraphDefaults()  { return new TextLineStyle(); }
 
 }

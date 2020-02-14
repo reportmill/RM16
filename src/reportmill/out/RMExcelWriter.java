@@ -6,7 +6,6 @@ import reportmill.shape.RMCrossTab;
 import rmdraw.base.*;
 import rmdraw.out.RMShapeTable;
 import rmdraw.shape.*;
-import rmdraw.graphics.*;
 import java.io.*;
 import java.util.*;
 import org.apache.poi.hssf.usermodel.*;
@@ -273,7 +272,7 @@ private void append(RMExcelSheet rmSheet, HSSFShapeContainer aParent, RMShape aS
         // POI does something weird with empty rich texts, so toss it
         if(text.length()>0) {
             newShape = rmSheet.addNewShape(text, aParent);
-            ((HSSFTextbox)newShape).setString(createRichText(text.getXString()));
+            ((HSSFTextbox)newShape).setString(createRichText(text.getRichText()));
         }
         
         // Unless it had a fill or stroke, in which case just turn it into a rectangle
@@ -480,19 +479,19 @@ private HSSFFont getWorkbookFont(Font aFont, Color aColor)
 /** 
  * Converts an XString, as much as possible, to an excel rich text string
  */
-public HSSFRichTextString createRichText(RMXString anXString)
+public HSSFRichTextString createRichText(RichText aRichText)
 {
     // If null or empty xstring, just return empty poi rich text string)
-    if(anXString==null || anXString.length()==0)
+    if(aRichText==null || aRichText.length()==0)
         return new HSSFRichTextString();
     
     // Create poi RichTextString
-    HSSFRichTextString hstr = new HSSFRichTextString(anXString.getText());
-    for(int i=0, n=anXString.getRunCount(); i<n; i++) {
-        RMXStringRun run = anXString.getRun(i);
-        HSSFFont hfont = getWorkbookFont(run.getFont(), run.getColor());
-        hstr.applyFont(run.start(), run.end(), hfont);
-    }
+    HSSFRichTextString hstr = new HSSFRichTextString(aRichText.getString());
+    for (RichTextLine line : aRichText.getLines())
+        for (RichTextRun run : line.getRuns()) {
+            HSSFFont hfont = getWorkbookFont(run.getFont(), run.getColor());
+            hstr.applyFont(run.getStart(), run.getEnd(), hfont);
+        }
 
     // Return poi string
     return hstr;

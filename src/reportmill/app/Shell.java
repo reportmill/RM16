@@ -237,11 +237,11 @@ static RMDocument getTableOfContentsTemplate()
     headerRow.setNumberOfColumns(1); headerRow.setHeight(205);
     headerRow.getColumn(0).setText("Hollywood Report\n\nTable of Contents");
     headerRow.getColumn(0).setAlignmentX(HPos.CENTER);
-    headerRow.getColumn(0).getXString().setAttribute(Font.getFont("Times Bold", 72));
-    headerRow.getColumn(0).getXString().setAttribute(Font.getFont("Times", 18), 16, 35);
+    headerRow.getColumn(0).getRichText().setStyleValue(Font.getFont("Times Bold", 72));
+    headerRow.getColumn(0).getRichText().setStyleValue(Font.getFont("Times", 18), 16, 35);
     headerRow.setVersion("Reprint");
     headerRow.getColumn(0).setText("Table of Contents (Continued)");
-    headerRow.getColumn(0).getXString().setAttribute(Font.getFont("Times", 18));
+    headerRow.getColumn(0).getRichText().setStyleValue(Font.getFont("Times", 18));
     headerRow.setHeight(30);
     headerRow.layout();
     

@@ -1,4 +1,5 @@
 package reportmill.app;
+import reportmill.shape.RMDocument2;
 import rmdraw.app.*;
 import rmdraw.base.RMDataSource;
 import rmdraw.base.RMKey;
@@ -23,6 +24,11 @@ public class RMEditorPane extends EditorPane {
      * Override to return as RMEditor.
      */
     public RMEditor getEditor()  { return (RMEditor)getViewer(); }
+
+    /**
+     * Override to return RMDocument.
+     */
+    public RMDocument2 getDoc()  { return (RMDocument2)super.getDoc(); }
 
     /**
      * Override to return an RMEditor.

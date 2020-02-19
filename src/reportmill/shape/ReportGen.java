@@ -19,6 +19,35 @@ public class ReportGen <T extends RMShape> {
     private T _shape;
 
     /**
+     * Interface for shapes that do their own RPG.
+     */
+    public interface RPG <T extends RMShape> {
+
+        /**
+         * Generate report with report owner.
+         */
+        RMShape rpgAll(ReportOwner anRptOwner, RMShape aParent);
+
+        /**
+         * Generate report with report owner.
+         */
+        T rpgShape(ReportOwner anRptOwner, RMShape aParent);
+
+        /**
+         * Replaces all @Page@ style keys with their actual values for this shape and it's children.
+         */
+        void resolvePageReferences(ReportOwner aRptOwner, Object userInfo);
+    }
+
+    /**
+     * Returns the shape.
+     */
+    public T getShape()
+    {
+        return _shape;
+    }
+
+    /**
      * Generate report with report owner.
      */
     public RMShape rpgAll(ReportOwner anRptOwner, RMShape aParent)
@@ -31,9 +60,9 @@ public class ReportGen <T extends RMShape> {
     /**
      * Generate report with report owner.
      */
-    protected T rpgShape(ReportOwner anRptOwner, RMShape aParent)
+    protected RMShape rpgShape(ReportOwner anRptOwner, RMShape aParent)
     {
-        return (T)_shape.clone();
+        return _shape.clone();
     }
 
     /**
@@ -114,6 +143,4 @@ public class ReportGen <T extends RMShape> {
             _shape.setURL(url.getString());
         }
     }
-
-
 }

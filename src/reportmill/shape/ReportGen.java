@@ -1,8 +1,7 @@
 package reportmill.shape;
 import rmdraw.base.RMKey;
 import rmdraw.base.RMKeyChain;
-import rmdraw.shape.RMShape;
-import rmdraw.shape.ReportOwner;
+import rmdraw.shape.*;
 import snap.gfx.Color;
 import snap.gfx.Font;
 import snap.gfx.RichText;
@@ -142,5 +141,20 @@ public class ReportGen <T extends RMShape> {
             RichText url = aRptOwner.rpgCloneRichText(rtext, userInfo, null, false);
             _shape.setURL(url.getString());
         }
+    }
+
+    /**
+     * Returns the appropriate ReportGen for given cell.
+     */
+    public static ReportGen getRPG(RMShape aCell)
+    {
+        ReportGen rpg = null;
+        if (aCell instanceof RMImageShape) rpg = new ReportGens.ImageCellRPG();
+        else if (aCell instanceof RMPage) rpg = new ReportGens.PageCellRPG();
+        else if (aCell instanceof RMTextShape) rpg = new ReportGens.TextCellRPG();
+        else if (aCell instanceof RMParentShape) rpg = new ReportGens.ParentCellRPG();
+        else rpg = new ReportGen();
+        rpg._shape = aCell;
+        return rpg;
     }
 }

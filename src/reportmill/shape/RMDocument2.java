@@ -1,8 +1,5 @@
 package reportmill.shape;
-import rmdraw.base.RMTableOfContents;
 import rmdraw.shape.*;
-
-import java.util.HashMap;
 
 /**
  * An RMDoc subclass for ReportMill stuff.
@@ -65,35 +62,6 @@ public class RMDocument2 extends RMDocument {
             _reportOwner.getPageReferenceShapes().addAll(doc._reportOwner.getPageReferenceShapes());
             doc._reportOwner.getPageReferenceShapes().clear();
         }
-    }
-
-    /**
-     * Override to handle ShapeLists special.
-     */
-    protected RMShape rpgChildren(ReportOwner anRptOwner, RMParentShape aParent)
-    {
-        // Declare local variable for whether table of contents page was encountered
-        RMPage tableOfContentsPage = null; int tocPageIndex = 0;
-
-        RMDocument doc = (RMDocument)aParent;
-        for(int i=0, iMax=getChildCount(); i<iMax; i++) { RMPage page = getPage(i);
-
-            // Check for table of contents table
-            if(RMTableOfContents.checkForTableOfContents(page)) {
-                tableOfContentsPage = page; tocPageIndex = aParent.getChildCount(); continue; }
-
-            // Generate report and add results
-            RMParentShape crpg = (RMParentShape)anRptOwner.rpg(page, doc);
-            if(crpg instanceof ReportOwner.ShapeList) {
-                for(RMShape pg : crpg.getChildArray()) doc.addPage((RMPage)pg); }
-            else doc.addPage((RMPage)crpg);
-        }
-
-        // Do RPG for TableOfContentsPage
-        if(tableOfContentsPage!=null) RMTableOfContents.rpgPage(anRptOwner, doc, tableOfContentsPage, tocPageIndex);
-
-        // Report report
-        return aParent;
     }
 
     /**

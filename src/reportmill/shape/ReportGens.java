@@ -1,5 +1,6 @@
 package reportmill.shape;
 import rmdraw.base.RMKeyChain;
+import rmdraw.base.RMTableOfContents;
 import rmdraw.shape.*;
 import snap.gfx.RichText;
 import snap.gfx.VPos;
@@ -230,13 +231,6 @@ public class ReportGens {
     }
 
     /**
-     * A ReportGen subclass for DocCell.
-     */
-    public static class DocCellRPG<T extends RMDocument> extends ParentCellRPG<T> {
-
-    }
-
-    /**
      * A ReportGen subclass for PageCell.
      */
     public static class PageCellRPG<T extends RMPage> extends ParentCellRPG<T> {
@@ -249,17 +243,18 @@ public class ReportGens {
             // Get page objects - if none, do normal version and return
             RMPage pageCell = getShape();
             String datasetKey = pageCell.getDatasetKey();
-            List objects = datasetKey!=null ? anRptOwner.getKeyChainListValue(datasetKey) : null;
-            if (objects==null)
+            List objects = datasetKey != null ? anRptOwner.getKeyChainListValue(datasetKey) : null;
+            if (objects == null)
                 return super.rpgAll(anRptOwner, aParent);
 
             // Create parts list
             ReportOwner.ShapeList pagesShape = new ReportOwner.ShapeList();
 
             // Generate parts reports
-            for (int i=0, iMax=objects.size(); i<iMax; i++) { Object obj = objects.get(i);
+            for (int i = 0, iMax = objects.size(); i < iMax; i++) {
+                Object obj = objects.get(i);
                 anRptOwner.pushDataStack(obj);
-                RMParentShape prpg = (RMParentShape)super.rpgAll(anRptOwner, aParent);
+                RMParentShape prpg = (RMParentShape) super.rpgAll(anRptOwner, aParent);
                 anRptOwner.popDataStack();
                 if (prpg instanceof ReportOwner.ShapeList)
                     for (RMShape c : prpg.getChildArray())
@@ -295,6 +290,42 @@ public class ReportGens {
                 aParent.addChild(child);
 
             // Return given parent
+            return aParent;
+        }
+    }
+
+    /**
+     * A ReportGen subclass for PageCell.
+     */
+    public static class DocCellRPG<T extends RMDocument> extends ParentCellRPG<T> {
+
+        /**
+         * Override to handle ShapeLists special.
+         */
+        protected RMShape rpgChildren(ReportOwner anRptOwner, RMParentShape aParent)
+        {
+            // Declare local variable for whether table of contents page was encountered
+            RMPage tableOfContentsPage = null; int tocPageIndex = 0;
+
+            RMDocument docCell = getShape();
+            RMDocument doc = (RMDocument)aParent;
+            for(int i=0, iMax=docCell.getChildCount(); i<iMax; i++) { RMPage page = docCell.getPage(i);
+
+                // Check for table of contents table
+                if(RMTableOfContents.checkForTableOfContents(page)) {
+                    tableOfContentsPage = page; tocPageIndex = aParent.getChildCount(); continue; }
+
+                // Generate report and add results
+                RMParentShape crpg = (RMParentShape)anRptOwner.rpg(page, doc);
+                if(crpg instanceof ReportOwner.ShapeList) {
+                    for(RMShape pg : crpg.getChildArray()) doc.addPage((RMPage)pg); }
+                else doc.addPage((RMPage)crpg);
+            }
+
+            // Do RPG for TableOfContentsPage
+            if(tableOfContentsPage!=null) RMTableOfContents.rpgPage(anRptOwner, doc, tableOfContentsPage, tocPageIndex);
+
+            // Report report
             return aParent;
         }
     }

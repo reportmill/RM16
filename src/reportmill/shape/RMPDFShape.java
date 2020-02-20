@@ -174,6 +174,7 @@ protected double getPrefHeightImpl(double aWidth)
 /**
  * Report generation method.
  */
+@Override
 public RMShape rpgShape(ReportOwner aRptOwner, RMShape aParent)
 {
     // Do normal version

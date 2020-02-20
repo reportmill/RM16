@@ -50,6 +50,7 @@ public void setReprintHeaderRows(boolean aFlag)  { _reprintHeaderRows = aFlag; }
 /**
  * Override to constrain child crosstab to frame.
  */
+@Override
 public RMShape rpgAll(ReportOwner anRptOwner, RMShape aParent)
 {
     // Get frame clone and CrossTab clone and add

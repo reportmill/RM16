@@ -379,7 +379,11 @@ protected void layoutImpl()
 /**
  * Report generation for table.
  */
-public RMShape rpgAll(ReportOwner anOwner, RMShape aParent)  { return new RMTableRPG(anOwner, this).rpgAll(); }
+@Override
+public RMShape rpgAll(ReportOwner anOwner, RMShape aParent)
+{
+    return new RMTableRPG(anOwner, this).rpgAll();
+}
 
 /**
  * Paints a table shape.

@@ -210,6 +210,7 @@ protected void paintShape(Painter aPntr)
 /**
  * Report generation.
  */
+@Override
 public RMShape rpgAll(ReportOwner anRptOwner, RMShape aParent)
 {
     // Get version

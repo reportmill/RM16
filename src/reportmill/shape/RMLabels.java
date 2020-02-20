@@ -170,6 +170,7 @@ public void fixSize()
 /**
  * Report Generation.
  */
+@Override
 public RMShape rpgAll(ReportOwner anRptOwner, RMShape aParent)
 {
     // Get objects for labels, group and sort

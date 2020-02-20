@@ -445,6 +445,7 @@ int _ci, _ri;
 /**
  * Sets a reportmill for this crosstab (which really gets the dataset and calls setObjects).
  */
+@Override
 public RMShape rpgAll(ReportOwner anRptOwner, RMShape aParent)
 {
     return new RMCrossTabRPG().rpgCrossTab(anRptOwner, aParent, this);

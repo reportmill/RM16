@@ -305,6 +305,7 @@ protected void layoutImpl()
 /**
  * Override to set main table to first child table.
  */
+@Override
 public RMShape rpgAll(ReportOwner anRptOwner, RMShape aParent)
 {
     return new RMTableGroupRPG(anRptOwner, this, null).rpgAll();

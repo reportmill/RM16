@@ -134,6 +134,7 @@ public class ReportGens {
         /**
          * Re-does the RPG clone to resolve any @Page@ keys (assumed to be present in userInfo).
          */
+        @Override
         protected void resolvePageReferences(ReportOwner aRptOwner, Object userInfo)
         {
             // Do normal shape resolve page references

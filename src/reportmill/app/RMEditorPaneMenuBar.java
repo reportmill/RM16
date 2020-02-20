@@ -206,7 +206,7 @@ public class RMEditorPaneMenuBar extends EditorPaneMenuBar {
         if(name.equals("SizeToFitMenuItem")) EditorUtils.setSizeToFit(editor);
         if(name.equals("EquallySpaceRowMenuItem")) EditorUtils.equallySpaceRow(editor);
         if(name.equals("EquallySpaceColumnMenuItem")) EditorUtils.equallySpaceColumn(editor);
-        if(name.equals("GroupInSwitchShapeMenuItem")) EditorUtils.groupInSwitchShape(editor);
+        if(name.equals("GroupInSwitchShapeMenuItem")) RMEditorUtils.groupInSwitchShape(editor);
         if(name.equals("GroupInScene3DMenuItem")) EditorUtils.groupInScene3D(editor);
         if(name.equals("MoveToNewLayerMenuItem")) EditorUtils.moveToNewLayer(editor);
         if(name.equals("CombinePathsMenuItem")) EditorUtils.combinePaths(editor);

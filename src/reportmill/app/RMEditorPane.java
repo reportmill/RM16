@@ -21,6 +21,14 @@ public class RMEditorPane extends EditorPane {
     RMEditor _realEditor;
 
     /**
+     * Override to create new doc.
+     */
+    public EditorPane newDocument()
+    {
+        return open(new RMDocument2(612, 792));
+    }
+
+    /**
      * Override to return as RMEditor.
      */
     public RMEditor getEditor()  { return (RMEditor)getViewer(); }

@@ -1,4 +1,5 @@
 package reportmill.app;
+import reportmill.shape.RMDocument2;
 import rmdraw.shape.RMDocument;
 import rmdraw.shape.RMShape;
 import rmdraw.shape.RMShapeUtils;
@@ -56,9 +57,12 @@ public void showSamples(RMEditorPane anEP)
  */
 void dialogBoxClosed()
 {
+    // If cancelled, just return
     if(_dbox._cancelled) return;
-    if(_selIndex==0 && _epane.getDoc().getPage(0).getChildCount()==0) return;
-    _epane.getEditor().setDoc(getDoc(_selIndex));
+
+    // Set new doc
+    RMDocument2 doc = getDoc(_selIndex);
+    _epane.getEditor().setDoc(doc);
     _epane.getEditor().requestFocus();
 }
 
@@ -146,7 +150,7 @@ private void indexFileLoaded(WebResponse aResp)
     }
     
     // Get DocNames from list
-    _docNames = docNamesList.toArray(new String[docNamesList.size()]);
+    _docNames = docNamesList.toArray(new String[0]);
     _docImages = new Image[_docNames.length];
     
     // Rebuild UI
@@ -190,7 +194,7 @@ private void buildUI()
         
         // Create ImageViewX for sample
         ImageView iview = new ImageView(); iview.setPrefSize(getDocSize(i)); iview.setFill(Color.WHITE);
-        iview.setName("ImageView" + String.valueOf(i)); iview.setEffect(i==0? SHADOW_SEL : SHADOW);
+        iview.setName("ImageView" + i); iview.setEffect(i==0? SHADOW_SEL : SHADOW);
         
         // Create label for sample
         Label label = new Label(name); label.setFont(Font.Arial13); label.setPadding(3,4,3,4);
@@ -199,7 +203,7 @@ private void buildUI()
         // Create/add ItemBox for Sample and add ImageView + Label
         ColView ibox = new ColView(); ibox.setPrefSize(175,175); ibox.setAlign(Pos.TOP_CENTER);
         ibox.setChildren(iview, label); ibox.setPadding(0,0,8,0);
-        ibox.setName("ItemBox" + String.valueOf(i));
+        ibox.setName("ItemBox" + i);
         ibox.addEventHandler(e -> itemBoxWasPressed(ibox, e), MousePress);
         rowView.addChild(ibox);
     }
@@ -266,7 +270,7 @@ private static String getDocName(int anIndex)  { return _docNames[anIndex]; }
 /**
  * Returns the doc at given index.
  */
-private static RMDocument getDoc(int anIndex)
+private static RMDocument2 getDoc(int anIndex)
 {
     // Get document name, URL string and URL
     String name = getDocName(anIndex);
@@ -278,7 +282,7 @@ private static RMDocument getDoc(int anIndex)
     if(bytes==null) { System.err.println("SamplesPane.getDoc: Couldn't load " + url); return null; }
     
     // Return document
-    RMDocument doc = RMDocument.getDoc(bytes);
+    RMDocument2 doc = RMDocument2.getDoc(bytes);
     return doc;
 }
 
@@ -329,7 +333,7 @@ private void loadImages()
 /** Called after an image is loaded to set in ImageView in app thread. */
 private void setImage(Image anImg, int anIndex)
 {
-    String name = "ImageView" + String.valueOf(anIndex);
+    String name = "ImageView" + anIndex;
     ImageView iview = getView(name, ImageView.class);
     iview.setImage(anImg);
 }

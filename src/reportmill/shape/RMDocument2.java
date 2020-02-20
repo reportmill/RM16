@@ -10,6 +10,29 @@ public class RMDocument2 extends RMDocument {
     private ReportOwner       _reportOwner;
 
     /**
+     * Creates a plain empty document. It's really only used by the archiver.
+     */
+    public RMDocument2() { super(); }
+
+    /**
+     * Creates a document with the given width and height (in printer points).
+     */
+    public RMDocument2(double aWidth, double aHeight)
+    {
+        super(aWidth, aHeight);
+    }
+
+    /**
+     * Creates a new document from the given source.
+     */
+    public RMDocument2(Object aSource)  { new RMArchiver().getDoc(aSource, this); }
+
+    /**
+     * Creates a new document from aSource using RMArchiver.
+     */
+    public static RMDocument2 getDoc(Object aSource)  { return (RMDocument2)new RMArchiver().getDoc(aSource); }
+
+    /**
      * Returns a generated report from this template evaluated against the given object.
      */
     public RMDocument generateReport()

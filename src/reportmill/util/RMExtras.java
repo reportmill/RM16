@@ -2,6 +2,8 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.util;
+import reportmill.shape.RMTable;
+import reportmill.shape.RMTableGroup;
 import rmdraw.base.*;
 import reportmill.out.RMPDFWriter;
 import rmdraw.shape.*;

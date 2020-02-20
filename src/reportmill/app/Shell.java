@@ -2,8 +2,10 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.app;
+import reportmill.shape.RMTable;
+import reportmill.shape.RMTableRow;
+import reportmill.util.RMTableOfContents;
 import rmdraw.base.*;
-import rmdraw.graphics.*;
 import rmdraw.shape.*;
 import java.util.*;
 

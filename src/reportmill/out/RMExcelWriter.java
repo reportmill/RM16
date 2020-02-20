@@ -3,6 +3,8 @@
  */
 package reportmill.out;
 import reportmill.shape.RMCrossTab;
+import reportmill.shape.RMTableRPG;
+import reportmill.shape.RMTableRowRPG;
 import rmdraw.base.*;
 import rmdraw.out.RMShapeTable;
 import rmdraw.shape.*;

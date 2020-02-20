@@ -8,6 +8,9 @@ import reportmill.shape.RMCrossTab;
 import reportmill.shape.RMCrossTabCell;
 import reportmill.shape.RMCrossTabDivider;
 import reportmill.shape.RMCrossTabFrame;
+import reportmill.shape.RMTable;
+import reportmill.shape.RMTableGroup;
+import reportmill.shape.RMTableRow;
 
 /**
  * This Editor subclass provides support for some RM specific things.
@@ -37,6 +40,9 @@ public class RMEditor extends Editor {
         if (aClass==RMGraphPartValueAxis.class) return new RMGraphPartValueAxisTool();
         if (aClass==RMLabel.class) return new RMLabelTool();
         if (aClass==RMLabels.class) return new RMLabelsTool();
+        if(aClass== RMTable.class) return new RMTableTool();
+        if(aClass== RMTableGroup.class) return new RMTableGroupTool();
+        if(aClass== RMTableRow.class) return new RMTableRowTool();
         if (aClass==RMPDFShape.class) return new RMPDFShapeTool();
         return super.createTool(aClass);
     }

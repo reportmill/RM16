@@ -47,7 +47,7 @@
     <ToggleButton Name="BoldButton" PrefWidth="22" PrefHeight="22" ToolTip="Make Bold" image="Format_Bold.png" ShowBorder="false" />
     <Separator PrefWidth="8" PrefHeight="18" Vertical="true" />
     <MenuButton Name="AddShapesMenuButton" PrefWidth="33" PrefHeight="24" ToolTip="Add Shapes" image="AddShapes.png" ShowBorder="false" ShowArrow="false">
-      <MenuItem Name="AddTableButton" text="Table" image="/rmdraw/apptools/RMTable.png" />
+      <MenuItem Name="AddTableButton" text="Table" image="/reportmill/apptools/RMTable.png" />
       <MenuItem Name="AddGraphButton" text="Graph" image="/reportmill/apptools/RMGraph.png" />
       <MenuItem Name="AddLabelsButton" text="Labels" image="/reportmill/apptools/RMLabels.png" />
       <MenuItem Name="AddCrossTabFrameButton" text="CrossTab" image="/reportmill/apptools/RMCrossTabFrame.png" />

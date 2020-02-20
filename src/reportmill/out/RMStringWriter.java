@@ -5,6 +5,7 @@ package reportmill.out;
 import reportmill.shape.RMCrossTab;
 import reportmill.shape.RMCrossTabCell;
 import reportmill.shape.RMCrossTabRow;
+import reportmill.shape.RMTableRowRPG;
 import rmdraw.shape.*;
 import snap.gfx.RichText;
 

@@ -1,6 +1,6 @@
 package reportmill.app;
 import rmdraw.app.*;
-import rmdraw.apptools.RMTableRowTool;
+import reportmill.apptools.RMTableRowTool;
 import rmdraw.graphics.RMTextEditor;
 import snap.gfx.HPos;
 import snap.util.ClassUtils;

@@ -1,6 +1,6 @@
 package reportmill.shape;
 import rmdraw.base.RMKeyChain;
-import rmdraw.base.RMTableOfContents;
+import reportmill.util.RMTableOfContents;
 import rmdraw.shape.*;
 import snap.gfx.RichText;
 import snap.gfx.VPos;

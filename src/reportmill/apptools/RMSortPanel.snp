@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ColView Name="SortingPanel" PrefWidth="270" FillWidth="true" >
+  <font name="Arial" size="11" />
+  <Label Name="SortingLabel" PrefHeight="14" text="Sorting:" />
+  <ColView PrefHeight="80" GrowHeight="true" FillWidth="true">
+    <RowView Padding="2,2,2,2" PrefHeight="24">
+      <ToggleButton Name="SortButton" PrefWidth="70" PrefHeight="20" text="Sort" Position="CENTER_LEFT" Selected="true" ToggleGroup="bgsort" />
+      <ToggleButton Name="TopNButton" PrefWidth="70" PrefHeight="20" text="TopN" Position="CENTER" ToggleGroup="bgsort" />
+      <ToggleButton Name="ValuesButton" PrefWidth="70" PrefHeight="20" text="Values" Position="CENTER_RIGHT" ToggleGroup="bgsort" />
+      <MenuButton Name="SortKeysMenuButton" PrefWidth="22" PrefHeight="20" LeanX="RIGHT">
+        <MenuItem Name="AddSortMenuItem" text="Add Key..." />
+        <MenuItem Name="RemoveSortMenuItem" text="Remove Key" />
+        <MenuItem Name="MoveSortUpMenuItem" text="Move Sort Up" />
+        <MenuItem Name="MoveSortDownMenuItem" text="Move Sort Down" />
+      </MenuButton>
+    </RowView>
+    <SwitchView Name="SortPanel" GrowHeight="true">
+      <BoxView Name="Sort" FillWidth="true" FillHeight="true">
+        <TableView Name="SortsTable" ShowHeader="false" RowHeight="20">
+          <TableCol GrowWidth="true" />
+          <TableCol PrefWidth="28" />
+        </TableView>
+      </BoxView>
+      <ColView Name="TopN" Padding="5" Spacing="2" FillWidth="true">
+        <RowView Spacing="4">
+          <Label PrefWidth="46" text="Key Path:" />
+          <TextField Name="TopNKeyText" PrefHeight="22" GrowWidth="true" />
+        </RowView>
+        <RowView Spacing="4">
+          <Label PrefWidth="46" text="Count:" />
+          <TextField Name="TopNCountText" PrefWidth="40" PrefHeight="22" Align="CENTER" />
+          <Label Name="TopNSortButton" PrefWidth="22" PrefHeight="22" />
+          <CheckBox Name="TopNInclCheckBox" text="Incl Othrs">
+            <font name="Arial" size="10" />
+          </CheckBox>
+          <CheckBox Name="TopNPadCheckBox" LeanX="RIGHT" text="Pad">
+            <font name="Arial" size="10" />
+          </CheckBox>
+        </RowView>
+      </ColView>
+      <RowView Name="Values" FillHeight="true">
+        <TextView Name="ValuesText" GrowWidth="true" />
+        <ColView Align="CENTER_LEFT">
+          <CheckBox Name="SortOnValuesCheckBox" text="Sort" />
+          <CheckBox Name="IncludeValuesCheckBox" LeanX="RIGHT" text="Include" />
+        </ColView>
+      </RowView>
+    </SwitchView>
+  </ColView>
+</ColView>

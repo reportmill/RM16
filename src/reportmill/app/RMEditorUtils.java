@@ -2,8 +2,8 @@ package reportmill.app;
 import reportmill.apptools.RMCrossTabTool;
 import reportmill.apptools.RMGraphTool;
 import reportmill.apptools.RMLabelsTool;
+import reportmill.apptools.RMTableTool;
 import rmdraw.app.*;
-import rmdraw.apptools.*;
 
 /**
  * Utility methods for editor specific to ReportMill.

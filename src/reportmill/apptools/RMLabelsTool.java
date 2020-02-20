@@ -4,7 +4,6 @@
 package reportmill.apptools;
 import reportmill.shape.*;
 import rmdraw.app.Editor;
-import rmdraw.apptools.RMSortPanel;
 import rmdraw.apptools.RMTool;
 import rmdraw.base.RMGrouping;
 import rmdraw.shape.*;

@@ -13,7 +13,7 @@ import snap.util.MathUtils;
 /**
  * Report generation shape for RMTableRow.
  */
-public class RMTableRowRPG extends RMSpringShape {
+public class RMTableRowRPG extends RMSpringShape implements ReportGen.RPG {
 
     // The TableRow used to do RPG (and potentially an alternate)
     RMTableRow            _row, _row2;
@@ -45,8 +45,10 @@ public void rpgAll(ReportOwner anRptOwner, RMTableRow aRow, RMGroup aGroup, Stri
     _row = aRow; _row2 = row; _group = aGroup; // Set ivars
     copyShape(row); // Copy attributes
     if(_row2.isStructured()) setSpringsDisabled(true); // If structured, disable springs
-    row.rpgChildren(anRptOwner, this); // RPG children
-    
+
+    // Call rpgChildren
+    row.rpgChildren(anRptOwner, this);
+
     // Set best height
     setBestHeight(); // Set best height
     layoutDeep();

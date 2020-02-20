@@ -11,7 +11,6 @@ import java.util.List;
 import rmdraw.shape.RMParentShape;
 import rmdraw.shape.RMScene3D;
 import rmdraw.shape.RMShape;
-import rmdraw.shape.ReportOwner;
 import snap.gfx.*;
 import snap.util.*;
 
@@ -28,7 +27,7 @@ import snap.util.*;
  *  graph.setType(RMGraph.TYPE_PIE);
  *  </pre></blockquote>
  */
-public class RMGraph extends RMParentShape {
+public class RMGraph extends RMParentShape implements ReportGen.RPG {
     
     // The dataset key used to get graph objects
     String                    _datasetKey;

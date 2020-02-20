@@ -10,7 +10,7 @@ import snap.util.*;
  * This class wraps a shape around a crosstab to constrain the crosstab's bounds to a region on the page. It
  * also provides support for paginating to multiple pages.
  */
-public class RMCrossTabFrame extends RMParentShape {
+public class RMCrossTabFrame extends RMParentShape implements ReportGen.RPG {
 
     // Whether a paginating table will reprint header rows
     boolean            _reprintHeaderRows = true;

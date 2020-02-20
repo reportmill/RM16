@@ -4,7 +4,6 @@
 package reportmill.shape;
 import rmdraw.base.*;
 import rmdraw.shape.RMShape;
-import rmdraw.shape.ReportOwner;
 
 import java.util.List;
 

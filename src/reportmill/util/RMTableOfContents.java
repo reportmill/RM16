@@ -2,10 +2,7 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.util;
-import reportmill.shape.RMTable;
-import reportmill.shape.RMTableRPG;
-import reportmill.shape.RMTableRow;
-import reportmill.shape.RMTableRowRPG;
+import reportmill.shape.*;
 import rmdraw.base.RMGroup;
 import rmdraw.base.RMKey;
 import rmdraw.base.RMKeyChain;

@@ -7,7 +7,6 @@ import java.util.*;
 
 import rmdraw.shape.RMParentShape;
 import rmdraw.shape.RMShape;
-import rmdraw.shape.ReportOwner;
 import snap.util.ListUtils;
 
 /**

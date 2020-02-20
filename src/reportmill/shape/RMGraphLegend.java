@@ -15,7 +15,7 @@ import snap.util.*;
 /**
  * An inner class for Legend.
  */
-public class RMGraphLegend extends RMParentShape {
+public class RMGraphLegend extends RMParentShape implements ReportGen.RPG {
 
     // The legend text
     String          _legendText;

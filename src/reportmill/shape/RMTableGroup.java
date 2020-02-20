@@ -7,7 +7,6 @@ import java.util.*;
 import rmdraw.shape.RMParentShape;
 import rmdraw.shape.RMShape;
 import rmdraw.shape.RMShapePaintProps;
-import rmdraw.shape.ReportOwner;
 import snap.gfx.*;
 import snap.util.*;
 
@@ -15,7 +14,7 @@ import snap.util.*;
  * This class manages a hierarchy of tables so that multiple tables can be configured to display in the same area
  * of a given page. Each table will pick up exactly where the previous table ended.
  */
-public class RMTableGroup extends RMParentShape {
+public class RMTableGroup extends RMParentShape implements ReportGen.RPG {
     
     // The currently selected table in the hierarchy
     RMTable                     _mainTable;

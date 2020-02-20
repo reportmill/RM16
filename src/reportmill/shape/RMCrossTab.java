@@ -7,14 +7,13 @@ import java.util.*;
 
 import rmdraw.shape.RMParentShape;
 import rmdraw.shape.RMShape;
-import rmdraw.shape.ReportOwner;
 import snap.gfx.Color;
 import snap.util.*;
 
 /**
  * Manages a table of RMCells, which is really a stack of RMCellRows.
  */
-public class RMCrossTab extends RMParentShape {
+public class RMCrossTab extends RMParentShape implements ReportGen.RPG {
 
     // The dataset key for this table
     String                   _datasetKey;

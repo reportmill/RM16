@@ -9,7 +9,6 @@ import java.util.List;
 import rmdraw.shape.RMParentShape;
 import rmdraw.shape.RMShape;
 import rmdraw.shape.RMShapePaintProps;
-import rmdraw.shape.ReportOwner;
 import snap.gfx.*;
 import snap.util.*;
 
@@ -17,7 +16,7 @@ import snap.util.*;
  * This class represents a sophisticated shape that can maintain multiple versions of itself. For example, a shape can
  * have a "Standard" version and an "Alternate" version (for alternating TableRows).
  */
-public class RMSwitchShape extends RMParentShape {
+public class RMSwitchShape extends RMParentShape implements ReportGen.RPG {
     
     // Current version name
     String          _version = getDefaultVersionName();
@@ -225,13 +224,9 @@ public RMShape rpgAll(ReportOwner anRptOwner, RMShape aParent)
     
     // Forward to alternate, if appropriate
     RMSwitchShape alternate = getVersion(version);
-    return alternate.rpgAllSuper(anRptOwner, aParent);
+    ReportGen rgen = ReportGen.getRPG(alternate);
+    return rgen.rpgAll(anRptOwner, aParent);
 }
-
-/**
- * Report generation.
- */
-protected RMShape rpgAllSuper(ReportOwner anRptOwner, RMShape aParent)  { return super.rpgAll(anRptOwner, aParent); }
 
 /**
  * Standard clone implementation.

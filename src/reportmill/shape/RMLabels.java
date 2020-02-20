@@ -7,14 +7,13 @@ import java.util.List;
 
 import rmdraw.shape.RMParentShape;
 import rmdraw.shape.RMShape;
-import rmdraw.shape.ReportOwner;
 import snap.gfx.*;
 import snap.util.*;
 
 /**
  * This class represents a block of labels.
  */
-public class RMLabels extends RMParentShape {
+public class RMLabels extends RMParentShape implements ReportGen.RPG {
     
     // Dataset key used to get objects during RPG
     String           _datasetKey;

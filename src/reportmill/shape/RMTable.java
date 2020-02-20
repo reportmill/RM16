@@ -9,7 +9,6 @@ import java.util.*;
 import rmdraw.shape.RMParentShape;
 import rmdraw.shape.RMShape;
 import rmdraw.shape.RMShapePaintProps;
-import rmdraw.shape.ReportOwner;
 import snap.gfx.*;
 import snap.util.*;
 
@@ -17,7 +16,7 @@ import snap.util.*;
  * This RMShape subclass provides functionality to graphically represent a list of data in a ReportMill report.
  * It also supports data manipulation such as grouping and sorting.
  */
-public class RMTable extends RMParentShape {
+public class RMTable extends RMParentShape implements ReportGen.RPG {
     
     // The key chain used to get a list of objects from document's datasource
     String          _datasetKey;

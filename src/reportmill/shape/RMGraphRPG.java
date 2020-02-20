@@ -6,7 +6,6 @@ import rmdraw.base.*;
 import reportmill.shape.RMGraph.*;
 import rmdraw.shape.RMParentShape;
 import rmdraw.shape.RMShape;
-import rmdraw.shape.ReportOwner;
 import snap.gfx.Color;
 import java.util.*;
 

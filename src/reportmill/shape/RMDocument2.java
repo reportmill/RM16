@@ -7,7 +7,7 @@ import rmdraw.shape.*;
 public class RMDocument2 extends RMDocument {
 
     // The ReportOwner that created this document (if from RPG)
-    private ReportOwner       _reportOwner;
+    ReportOwner       _reportOwner;
 
     /**
      * Creates a plain empty document. It's really only used by the archiver.
@@ -63,8 +63,10 @@ public class RMDocument2 extends RMDocument {
         // Create and configure reportmill with objects, userinfo, pagination and null-string
         ReportOwner ro = new ReportOwner();
         ro.setTemplate(this);
-        if(theObjects!=null) ro.addModelObject(theObjects);
-        if(theUserInfo!=null) ro.addModelObject(theUserInfo);
+        if (theObjects!=null)
+            ro.addModelObject(theObjects);
+        if (theUserInfo!=null)
+            ro.addModelObject(theUserInfo);
         ro.setPaginate(aPaginateFlag && isPaginate());
         ro.setNullString(getNullString());
         RMDocument rpt = ro.generateReport();
@@ -81,7 +83,7 @@ public class RMDocument2 extends RMDocument {
 
         // Add page reference shapes from given document and clear from old document
         RMDocument2 doc = aDoc instanceof RMDocument2 ? (RMDocument2)aDoc : null;
-        if(doc!=null && _reportOwner!=null && doc._reportOwner!=null) {
+        if (doc!=null && _reportOwner!=null && doc._reportOwner!=null) {
             _reportOwner.getPageReferenceShapes().addAll(doc._reportOwner.getPageReferenceShapes());
             doc._reportOwner.getPageReferenceShapes().clear();
         }
@@ -90,7 +92,11 @@ public class RMDocument2 extends RMDocument {
     /**
      * Performs page substitutions on any text fields that were identified as containing @Page@ keys.
      */
-    public void resolvePageReferences()  { if(_reportOwner!=null) _reportOwner.resolvePageReferences(); }
+    public void resolvePageReferences()
+    {
+        if (_reportOwner!=null)
+            _reportOwner.resolvePageReferences();
+    }
 
     /**
      * Override for RMDocument.

@@ -10,7 +10,7 @@ import snap.util.*;
 /**
  * This class is a shape representation of a PDF page.
  */
-public class RMPDFShape extends RMRectShape {
+public class RMPDFShape extends RMRectShape implements ReportGen.RPG {
     
     // The key used to get pdf data during RPG
     String             _key;
@@ -177,7 +177,8 @@ protected double getPrefHeightImpl(double aWidth)
 public RMShape rpgShape(ReportOwner aRptOwner, RMShape aParent)
 {
     // Do normal version
-    RMPDFShape clone = (RMPDFShape)super.rpgShape(aRptOwner, aParent);
+    ReportGen rgen = ReportGen.getRPG(this);
+    RMPDFShape clone = (RMPDFShape)rgen.rpgShape(aRptOwner, aParent);
     
     // If key: Evaluate key for PDF data and set
     String key = getKey();

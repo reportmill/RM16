@@ -8,6 +8,8 @@ import rmdraw.app.*;
 import rmdraw.base.RMDataSource;
 import rmdraw.shape.RMArchiver;
 import rmdraw.shape.RMDocument;
+import rmdraw.shape.RMShape;
+import snap.gfx.TextFormat;
 import snap.util.*;
 import snap.view.ViewUtils;
 import snap.viewx.DialogBox;

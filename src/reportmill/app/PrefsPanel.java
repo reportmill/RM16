@@ -3,7 +3,6 @@
  */
 package reportmill.app;
 
-import rmdraw.app.FormatPanel;
 import rmdraw.base.ReportMill;
 import snap.util.Prefs;
 import snap.util.StringUtils;

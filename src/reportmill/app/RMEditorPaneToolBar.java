@@ -86,7 +86,7 @@ public class RMEditorPaneToolBar extends EditorPaneToolBar {
         setViewEnabled("RedoButton", undoer!=null && undoer.getRedoSetLast()!=null);
 
         // Update MoneyButton, PercentButton, CommaButton
-        TextFormat fmt = EditorUtils.getFormat(editor);
+        TextFormat fmt = RMEditorUtils.getFormat(editor);
         RMNumberFormat nfmt = fmt instanceof RMNumberFormat? (RMNumberFormat)fmt : null;
         setViewValue("MoneyButton", nfmt!=null && nfmt.isLocalCurrencySymbolUsed());
         setViewValue("PercentButton", nfmt!=null && nfmt.isPercentSymbolUsed());
@@ -152,29 +152,33 @@ public class RMEditorPaneToolBar extends EditorPaneToolBar {
             EditorUtils.setTextColor(editor, anEvent.getView(ColorButton.class).getColor());
 
         // Handle MoneyButton: If currently selected format is number format, add or remove dollars
-        TextFormat fmt = EditorUtils.getFormat(editor);
+        TextFormat fmt = RMEditorUtils.getFormat(editor);
         RMNumberFormat nfmt = fmt instanceof RMNumberFormat? (RMNumberFormat)fmt : null;
         if (anEvent.equals("MoneyButton")) {
-            if(nfmt==null) EditorUtils.setFormat(editor, RMNumberFormat.CURRENCY);
-            else { nfmt = nfmt.clone(); // Clone it
+            if (nfmt==null) RMEditorUtils.setFormat(editor, RMNumberFormat.CURRENCY);
+            else {
+                nfmt = nfmt.clone(); // Clone it
                 nfmt.setLocalCurrencySymbolUsed(!nfmt.isLocalCurrencySymbolUsed()); // Toggle whether $ is used
-                EditorUtils.setFormat(editor, nfmt); }
+                RMEditorUtils.setFormat(editor, nfmt);
+            }
         }
 
         // Handle PercentButton: If currently selected format is number format, add or remove percent symbol
         if (anEvent.equals("PercentButton")) {
-            if(nfmt==null) EditorUtils.setFormat(editor, new RMNumberFormat("#,##0.00 %"));
-            else { nfmt = nfmt.clone(); // Clone it
+            if (nfmt==null) RMEditorUtils.setFormat(editor, new RMNumberFormat("#,##0.00 %"));
+            else {
+                nfmt = nfmt.clone(); // Clone it
                 nfmt.setPercentSymbolUsed(!nfmt.isPercentSymbolUsed()); // Toggle whether percent symbol is used
-                EditorUtils.setFormat(editor, nfmt); }
+                RMEditorUtils.setFormat(editor, nfmt);
+            }
         }
 
         // Handle CommaButton: If currently selected format is number format, add or remove grouping
         if (anEvent.equals("CommaButton")) {
-            if(nfmt==null) EditorUtils.setFormat(editor, new RMNumberFormat("#,##0.00"));
+            if(nfmt==null) RMEditorUtils.setFormat(editor, new RMNumberFormat("#,##0.00"));
             else { nfmt = nfmt.clone();
                 nfmt.setGroupingUsed(!nfmt.isGroupingUsed()); // Toggle whether grouping is used
-                EditorUtils.setFormat(editor, nfmt); }
+                RMEditorUtils.setFormat(editor, nfmt); }
         }
 
         // Handle DecimalAddButton: If currently selected format is number format, add decimal
@@ -182,7 +186,7 @@ public class RMEditorPaneToolBar extends EditorPaneToolBar {
             nfmt = nfmt.clone();
             nfmt.setMinimumFractionDigits(nfmt.getMinimumFractionDigits()+1);
             nfmt.setMaximumFractionDigits(nfmt.getMinimumFractionDigits());
-            EditorUtils.setFormat(editor, nfmt);
+            RMEditorUtils.setFormat(editor, nfmt);
         }
 
         // Handle DecimalRemoveButton: If currently selected format is number format, remove decimal digits
@@ -190,7 +194,7 @@ public class RMEditorPaneToolBar extends EditorPaneToolBar {
             nfmt = nfmt.clone();
             nfmt.setMinimumFractionDigits(nfmt.getMinimumFractionDigits()-1);
             nfmt.setMaximumFractionDigits(nfmt.getMinimumFractionDigits());
-            EditorUtils.setFormat(editor, nfmt);
+            RMEditorUtils.setFormat(editor, nfmt);
         }
 
         // Handle SamplesButton
@@ -224,7 +228,8 @@ public class RMEditorPaneToolBar extends EditorPaneToolBar {
         // Handle FontFaceComboBox
         if (anEvent.equals("FontFaceComboBox")) {
             String familyName = anEvent.getText();
-            String fontNames[] = Font.getFontNames(familyName); if(fontNames==null || fontNames.length==0) return;
+            String fontNames[] = Font.getFontNames(familyName);
+            if(fontNames==null || fontNames.length==0) return;
             String fontName = fontNames[0];
             Font font = Font.get(fontName, 12);
             EditorUtils.setFontFamily(editor, font);
@@ -259,21 +264,21 @@ public class RMEditorPaneToolBar extends EditorPaneToolBar {
             EditorUtils.setJustify(editor, true);
 
         // Handle AddTableButton, AddGraphButton, AddLabelsButton, AddCrossTabFrameButton
-        if(anEvent.equals("AddTableButton")) RMTableTool.addTable(getEditor(), null);
-        if(anEvent.equals("AddGraphButton")) RMGraphTool.addGraph(getEditor(), null);
-        if(anEvent.equals("AddLabelsButton")) RMLabelsTool.addLabels(getEditor(), null);
-        if(anEvent.equals("AddCrossTabFrameButton")) RMCrossTabTool.addCrossTab(getEditor(), null);
+        if (anEvent.equals("AddTableButton")) RMTableTool.addTable(getEditor(), null);
+        if (anEvent.equals("AddGraphButton")) RMGraphTool.addGraph(getEditor(), null);
+        if (anEvent.equals("AddLabelsButton")) RMLabelsTool.addLabels(getEditor(), null);
+        if (anEvent.equals("AddCrossTabFrameButton")) RMCrossTabTool.addCrossTab(getEditor(), null);
 
         // Handle AddCrossTabButton, AddImagePlaceHolderMenuItem
-        if(anEvent.equals("AddCrossTabButton")) RMCrossTabTool.addCrossTab(getEditor());
-        if(anEvent.equals("AddImagePlaceHolderMenuItem")) EditorUtils.addImagePlaceholder(getEditor());
+        if (anEvent.equals("AddCrossTabButton")) RMCrossTabTool.addCrossTab(getEditor());
+        if (anEvent.equals("AddImagePlaceHolderMenuItem")) EditorUtils.addImagePlaceholder(getEditor());
 
         // Handle ConnectToDataSourceMenuItem
-        if(anEvent.equals("ConnectToDataSourceMenuItem") || anEvent.equals("ConnectToDataSourceButton"))
+        if (anEvent.equals("ConnectToDataSourceMenuItem") || anEvent.equals("ConnectToDataSourceButton"))
             RMEditorPaneUtils.connectToDataSource(epane);
 
         // Handle ColorWell
-        if(anEvent.equals("ColorWell"))
+        if (anEvent.equals("ColorWell"))
             EditorUtils.setSelectedColor(editor, _colorWell.getColor());
     }
 

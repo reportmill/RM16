@@ -7,6 +7,7 @@ import reportmill.shape.RMSwitchShape;
 import rmdraw.app.*;
 import rmdraw.shape.RMShape;
 import rmdraw.shape.RMShapeUtils;
+import snap.gfx.TextFormat;
 
 import java.util.List;
 
@@ -56,5 +57,22 @@ public class RMEditorUtils extends EditorUtils {
         // Add shapes to group shape (with undo title)
         anEditor.undoerSetUndoTitle("Group in Switch Shape");
         groupShapes(anEditor, shapes, groupShape);
+    }
+
+    /**
+     * Returns the format of the editor's selected shape.
+     */
+    public static TextFormat getFormat(Editor anEditor)
+    {
+        return anEditor.getSelectedOrSuperSelectedShape().getFormat();
+    }
+
+    /**
+     * Sets the format of editor's selected shape(s).
+     */
+    public static void setFormat(Editor anEditor, TextFormat aFormat)
+    {
+        for (RMShape shape : anEditor.getSelectedOrSuperSelectedShapes())
+            shape.setFormat(aFormat);
     }
 }

@@ -3,7 +3,6 @@
  */
 package reportmill.out;
 import reportmill.shape.RMCrossTabCell;
-import rmdraw.out.RMShapeTable;
 import rmdraw.shape.*;
 import rmdraw.graphics.RMFill;
 import java.io.*;

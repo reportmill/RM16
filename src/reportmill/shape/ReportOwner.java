@@ -2,6 +2,7 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.shape;
+import reportmill.util.RMSQLUtils;
 import rmdraw.base.*;
 import java.util.*;
 import rmdraw.graphics.RMHTMLParser;

@@ -150,7 +150,7 @@ public TextFormat getFormat()
 /**
  * Sets the format for the shape.
  */
-public void setFormat(RMFormat aFormat)
+public void setFormat(TextFormat aFormat)
 {
     if (getRichText().length()==0)
         getRichText().addChars(" ");

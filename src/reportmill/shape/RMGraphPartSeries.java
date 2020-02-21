@@ -2,7 +2,6 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.shape;
-import rmdraw.base.RMFormat;
 import rmdraw.graphics.*;
 import java.util.*;
 
@@ -186,7 +185,7 @@ public void setUnderlined(boolean aFlag)
 public TextFormat getFormat()  { return getProxy().getFormat(); }
 
 /** Override to handle proxy. */
-public void setFormat(RMFormat aFormat)
+public void setFormat(TextFormat aFormat)
 {
     getProxy().setFormat(aFormat);
 }

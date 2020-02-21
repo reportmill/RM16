@@ -2,7 +2,6 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.shape;
-import rmdraw.base.RMFormat;
 import rmdraw.base.RMGrouping;
 import rmdraw.graphics.*;
 import java.util.*;
@@ -740,7 +739,7 @@ public TextFormat getFormat()  { return useProxy()? _proxyShape.getFormat() : su
 /**
  * Override to allow for ProxyShape and trigger relayout.
  */
-public void setFormat(RMFormat aFormat)
+public void setFormat(TextFormat aFormat)
 {
     if(_proxyShape!=null)
         _proxyShape.setFormat(aFormat);

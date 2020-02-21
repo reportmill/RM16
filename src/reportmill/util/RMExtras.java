@@ -147,7 +147,7 @@ public static void replaceSort(RMShape aShape, String aSort1, String aSort2)
 /**
  * Replaces a format.
  */
-public static void replaceFormat(RMShape aShape, RMFormat aFormat)
+public static void replaceFormat(RMShape aShape, TextFormat aFormat)
 {
     // Handle document
     if(aShape instanceof RMDocument) { RMDocument document = (RMDocument)aShape;
@@ -179,29 +179,29 @@ public static void replaceFormat(RMShape aShape, RMFormat aFormat)
 public static StringBuffer getImageMap(RMShape aShape, StringBuffer aSB)
 {
     // Get string buffer (create if missing)
-    StringBuffer buffer = aSB!=null? aSB : new StringBuffer("<MAP>");
+    StringBuffer sb = aSB!=null? aSB : new StringBuffer("<MAP>");
 
     // If URL, add map area
     if(aShape.getURL()!=null) {
         Rect bounds = aShape.localToParent(aShape.getBoundsInside(), aShape.getPageShape()).getBounds();
-        buffer.append("<AREA SHAPE=RECT COORDS=\"");
-        buffer.append((int)bounds.x + "," + (int)bounds.y + "," + (int)bounds.width + "," + (int)bounds.height + "\" ");
-        buffer.append("HREF=\"" + aShape.getURL() + "\" ");
-        buffer.append(">\n");
+        sb.append("<AREA SHAPE=RECT COORDS=\"");
+        sb.append(String.format("%d,%d,%d,%d\" ", (int)bounds.x, (int)bounds.y, (int)bounds.width, (int)bounds.height));
+        sb.append(String.format("HREF=\"%s\" ", aShape.getURL()));
+        sb.append(">\n");
     }
 
     // Recurse into children
     for(int i=0; i<aShape.getChildCount(); i++)
-        getImageMap(aShape.getChild(i), buffer);
+        getImageMap(aShape.getChild(i), sb);
 
     // If top-level, close map
     if(aSB==null) {
-        buffer.append("</MAP>");
-        System.out.println(buffer);
+        sb.append("</MAP>");
+        System.out.println(sb);
     }
 
     // Return buffer
-    return buffer;
+    return sb;
 }
 
 /**

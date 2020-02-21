@@ -177,9 +177,12 @@ public class ReportGens {
          */
         public RMShape rpgAll(ReportOwner anRptOwner, RMShape aParent)
         {
-            RMParentShape clone = (RMParentShape) rpgShape(anRptOwner, aParent);
-            rpgBindings(anRptOwner, clone);
-            clone = (RMParentShape) rpgChildren(anRptOwner, clone);
+            // Do normal version
+            RMParentShape clone = (RMParentShape) super.rpgAll(anRptOwner, aParent);
+
+            // Call rpgChildren and return
+            T cell = getShape();
+            clone = (RMParentShape) ReportGen.rpgChildrenFor(cell, anRptOwner, clone);
             return clone;
         }
 

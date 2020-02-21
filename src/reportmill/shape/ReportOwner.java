@@ -48,7 +48,10 @@ public class ReportOwner implements RMKeyChain.Get {
 /**
  * Returns the template.
  */
-public RMDocument getTemplate()  { return _template!=null? _template : (_template=createTemplate()); }
+public RMDocument getTemplate()
+{
+    return _template!=null? _template : (_template=createTemplate());
+}
 
 /**
  * Creates the template.
@@ -62,7 +65,10 @@ protected RMDocument createTemplate()
 /**
  * Sets the template.
  */
-public void setTemplate(RMDocument aDoc)  { _template = aDoc; }
+public void setTemplate(RMDocument aDoc)
+{
+    _template = aDoc;
+}
 
 /**
  * Returns the string used to represent null values.
@@ -137,7 +143,7 @@ public Object peekDataStack()  { return ListUtils.getLast(_dataStack); }
 /**
  * Generates the report.
  */
-public RMDocument generateReport()
+public RMDocument2 generateReport()
 {
     // If objects and user info is null, add a bogus object so keychain assignments will work (probably silly)
     if(_dataStack.size()==0) addModelObject(new Object());

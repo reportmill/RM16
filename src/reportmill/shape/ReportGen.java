@@ -76,8 +76,9 @@ public class ReportGen <T extends RMShape> {
      */
     public RMShape rpgAll(ReportOwner anRptOwner, RMShape aParent)
     {
-        RMShape clone = rpgShape(anRptOwner, aParent);
-        rpgBindings(anRptOwner, clone);
+        T cell = getShape();
+        RMShape clone = rpgShapeFor(cell, anRptOwner, aParent);
+        rpgBindingsFor(cell, anRptOwner, clone);
         return clone;
     }
 

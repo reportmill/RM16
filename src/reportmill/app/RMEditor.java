@@ -12,12 +12,18 @@ import reportmill.shape.RMTable;
 import reportmill.shape.RMTableGroup;
 import reportmill.shape.RMTableRow;
 import reportmill.shape.RMSwitchShape;
+import rmdraw.shape.RMDocument;
 import rmdraw.shape.RMTextShape;
 
 /**
  * This Editor subclass provides support for some RM specific things.
  */
 public class RMEditor extends Editor {
+
+    /**
+     * Returns the document associated with this viewer.
+     */
+    public RMDocument2 getDoc()  { return (RMDocument2)super.getDoc(); }
 
     /**
      * Creates the shapes helper.

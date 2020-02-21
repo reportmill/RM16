@@ -2,6 +2,7 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.util;
+import reportmill.shape.RMDocument2;
 import reportmill.shape.RMTable;
 import reportmill.shape.RMTableGroup;
 import rmdraw.base.*;
@@ -273,7 +274,7 @@ public static void addToPage(RMDocument aDoc1, RMDocument aDoc2)
 public static void addPageBetweenPages()
 {
     // Get template
-    RMDocument template = new RMDocument(getMoviesURL());
+    RMDocument2 template = new RMDocument2(getMoviesURL());
     
     // Get objects
     Map map = new RMXMLReader().readObject(getHollywoodURL(), template.getDataSourceSchema());
@@ -336,12 +337,15 @@ public static void setTimeZone(RMShape aShape, TimeZone aTimeZone)
 public static void passwordReport()
 {
     Map dset = new RMXMLReader().readObject(getHollywoodURL());
-    RMDocument template = new RMDocument(getMoviesURL());
-    RMDocument report = template.generateReport(dset);
+    RMDocument2 template = new RMDocument2(getMoviesURL());
+    RMDocument2 report = template.generateReport(dset);
     
     RMPDFWriter rm = new RMPDFWriter(); //rm.setUnmodifiable("Test");
     rm.setAccessPermissions("fluffy", "bunny", 2052);  // PDFEncryptor.PRINTING_ALLOWED, MAXIMUM_RESOLUTION_PRINTING
-    try { FileUtils.writeBytes(new java.io.File("/Users/jeff/Desktop/Test2.pdf"), rm.getBytes(report)); }
+    try {
+        byte bytes[] = rm.getBytes(report);
+        FileUtils.writeBytes(new java.io.File("/Users/jeff/Desktop/Test2.pdf"), bytes);
+    }
     catch(java.io.IOException e) { throw new RuntimeException(e); }
 }
 
@@ -403,7 +407,10 @@ public static List <Movie> getMovies()
 static void writeMoviesDataset() { new RMXMLWriter().writeObject(getMovies(), "/tmp/Dataset.xml"); }
 
 /** Generates a report. */
-static void genReport()  { new RMDocument("/tmp/junk.rpt").generateReport(getMovies()).write("/tmp/junk.pdf"); }
+static void genReport()
+{
+    new RMDocument2("/tmp/junk.rpt").generateReport(getMovies()).write("/tmp/junk.pdf");
+}
 
 /** Writes a movie dataset to file. */
 public static void main(String args[])

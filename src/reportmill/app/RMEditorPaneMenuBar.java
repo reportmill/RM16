@@ -62,7 +62,7 @@ public class RMEditorPaneMenuBar extends EditorPaneMenuBar {
     protected void respondUI(ViewEvent anEvent)
     {
         // Get editor pane
-        EditorPane epane = getEditorPane();
+        RMEditorPane epane = (RMEditorPane)getEditorPane();
         Editor editor = getEditor();
 
         // Handle NewMenuItem, NewButton: Get new editor pane and make visible

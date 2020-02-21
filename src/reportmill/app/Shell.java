@@ -2,6 +2,7 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.app;
+import reportmill.shape.RMDocument2;
 import reportmill.shape.RMTable;
 import reportmill.shape.RMTableRow;
 import reportmill.util.RMTableOfContents;
@@ -149,7 +150,7 @@ public static void main(String args[])
         // Load template
         System.err.print("Reading template: " + rptfile); System.err.flush();
         time = System.currentTimeMillis();
-        RMDocument template = RMDocument.getDoc(rptfile);
+        RMDocument2 template = RMDocument2.getDoc(rptfile);
         template.setCompress(compress);
         seconds = (System.currentTimeMillis() - time)/1000f;
         System.err.println(" (" + seconds + " seconds)");
@@ -178,7 +179,7 @@ public static void main(String args[])
             // If table of contents is requested, generate toc report and append
             if(toc) {
                 RMTableOfContents toco = new RMTableOfContents(report);
-                RMDocument toct = getTableOfContentsTemplate();
+                RMDocument2 toct = getTableOfContentsTemplate();
                 RMDocument tocr = toct.generateReport(toco);
                 tocr.addPages(report);
                 report = tocr;
@@ -206,14 +207,17 @@ public static void main(String args[])
 
 // An inner class to simply generate 'count' reports from a separate thread
 static class RPGThread extends Thread {
-    RMDocument template;
+    RMDocument2 template;
     Object     data;
     String     outfile;
     Boolean    paginate;
     int        id, count;
-    public RPGThread(RMDocument t, Object d, String o, Boolean p, int i, int c) {
-        template = t; data = d; outfile = o; paginate = p; id = i; count = c; }
-    public void run() {
+    public RPGThread(RMDocument2 t, Object d, String o, Boolean p, int i, int c)
+    {
+        template = t; data = d; outfile = o; paginate = p; id = i; count = c;
+    }
+    public void run()
+    {
         for(int i=1; i<=count; i++) {
             RMDocument report = template.generateReport(data, paginate.booleanValue());
             String out = StringUtils.replace(outfile, ".", "_" + id + "_" + (i<10?"0":"") + i + ".");
@@ -223,10 +227,10 @@ static class RPGThread extends Thread {
     }
 }
 
-static RMDocument getTableOfContentsTemplate()
+static RMDocument2 getTableOfContentsTemplate()
 {
     // Create template
-    RMDocument template = new RMDocument(612, 792);
+    RMDocument2 template = new RMDocument2(612, 792);
     
     // Create table, size it and add it to first template page
     RMTable table = new RMTable("Objects");

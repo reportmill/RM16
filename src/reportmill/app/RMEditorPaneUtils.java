@@ -8,8 +8,6 @@ import rmdraw.app.*;
 import rmdraw.base.RMDataSource;
 import rmdraw.shape.RMArchiver;
 import rmdraw.shape.RMDocument;
-import rmdraw.shape.RMShape;
-import snap.gfx.TextFormat;
 import snap.util.*;
 import snap.view.ViewUtils;
 import snap.viewx.DialogBox;
@@ -78,7 +76,7 @@ public static void previewPDF(RMEditorPane anEP)
 public static RMDocument2 generateReport(RMEditorPane anEP, boolean doPaginate)
 {
     // Get editor - if editing, flush changes, otherwise, set Editing
-    Editor editor = anEP.getEditor();
+    RMEditor editor = anEP.getEditor();
     if(anEP.isEditing())
         editor.flushEditingChanges();
     else anEP.setEditing(true);

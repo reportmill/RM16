@@ -4,7 +4,6 @@
 package reportmill.app;
 import rmdraw.app.Editor;
 import rmdraw.app.EditorPane;
-import rmdraw.app.EditorUtils;
 import rmdraw.base.*;
 import snap.gfx.TextFormat;
 import snap.util.*;

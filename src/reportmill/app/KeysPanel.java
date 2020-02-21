@@ -114,7 +114,7 @@ public List getKeyPathItems(String aKey)
     String key = kprfx!=null? (kprfx + '.' + ksfx) : ksfx;
     
     // Get Editor.Datasource dataset (just return if null)
-    Editor editor = getEditor();
+    RMEditor editor = (RMEditor) getEditor();
     RMDataSource dsrc = editor.getDataSource(); if(dsrc==null) return null;
     Map dset = dsrc.getDataset();
     

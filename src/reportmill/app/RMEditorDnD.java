@@ -2,6 +2,7 @@ package reportmill.app;
 import rmdraw.app.Editor;
 import rmdraw.app.EditorDnD;
 import reportmill.shape.RMPDFShape;
+import rmdraw.app.EditorPane;
 import rmdraw.shape.RMParentShape;
 import rmdraw.shape.RMShape;
 import snap.gfx.Point;
@@ -32,6 +33,16 @@ public class RMEditorDnD extends EditorDnD {
 
         // Otherwise do normal version
         else super.dropForView(aView, anEvent);
+    }
+
+    /**
+     * Called to handle drop XML file.
+     */
+    protected void dropXMLFile(ClipboardData aFile, Point aPoint)
+    {
+        Editor editor = getEditor();
+        RMEditorPane epane = (RMEditorPane) editor.getEditorPane();
+        epane.setDataSource(aFile.getSourceURL(), aPoint.getX(), aPoint.getY());
     }
 
     /**

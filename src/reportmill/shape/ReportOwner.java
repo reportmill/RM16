@@ -5,8 +5,8 @@ package reportmill.shape;
 import reportmill.util.*;
 
 import java.util.*;
-import rmdraw.graphics.RMHTMLParser;
-import rmdraw.graphics.RMRTFParser;
+import reportmill.util.RMHTMLParser;
+import reportmill.util.RMRTFParser;
 import rmdraw.shape.RMDocument;
 import rmdraw.shape.RMParentShape;
 import rmdraw.shape.RMShape;

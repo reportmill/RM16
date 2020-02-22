@@ -2,7 +2,6 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.util;
-import rmdraw.graphics.*;
 import java.lang.reflect.*;
 import java.util.*;
 

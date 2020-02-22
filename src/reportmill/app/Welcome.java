@@ -5,18 +5,10 @@ package reportmill.app;
 import reportmill.shape.*;
 import rmdraw.app.*;
 import rmdraw.base.ReportMill;
-import rmdraw.shape.RMArchiver;
-import reportmill.shape.RMCrossTab;
-import reportmill.shape.RMCrossTabFrame;
-import reportmill.shape.RMTable;
-import reportmill.shape.RMTableGroup;
-import reportmill.shape.RMTableRow;
-import reportmill.shape.RMSwitchShape;
 import snap.util.SnapUtils;
 import snap.view.*;
 import snap.viewx.*;
 import snap.web.WebURL;
-import java.util.Map;
 
 /**
  * This class provides the welcome panel for RM. 
@@ -39,27 +31,8 @@ public Welcome()
 {
     _shared = this;
 
-    updateArchiverClassMapForRM();
-}
-
-/**
- * Updates RMArchiver ClassMap.
- */
-private void updateArchiverClassMapForRM()
-{
-    Map cmap = RMArchiver.getClassMapShared();
-    cmap.put("cell-table", RMCrossTab.class);
-    cmap.put("cell-table-frame", RMCrossTabFrame.class);
-    cmap.put("document", RMDocument2.class);
-    cmap.put("graph", RMGraph.class);
-    cmap.put("graph-legend", RMGraphLegend.class);
-    cmap.put("label", RMLabel.class);
-    cmap.put("labels", RMLabels.class);
-    cmap.put("switchshape", RMSwitchShape.class);
-    cmap.put("table", RMTable.class);
-    cmap.put("table-group", RMTableGroup.class);
-    cmap.put("tablerow", RMTableRow.class);
-    cmap.put("PDFShape", RMPDFShape.class);
+    // Create ReportMill RMArchiver so items get added to classmap
+    new RMArchiver2();
 }
 
 /**

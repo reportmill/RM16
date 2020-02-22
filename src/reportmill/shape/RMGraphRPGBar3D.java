@@ -3,7 +3,7 @@
  */
 package reportmill.shape;
 import rmdraw.gfx3d.*;
-import rmdraw.graphics.*;
+import rmdraw.gfx.*;
 import java.util.*;
 
 import rmdraw.shape.RMLineShape;

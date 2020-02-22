@@ -3,7 +3,7 @@
  */
 package reportmill.out;
 import reportmill.shape.RMPDFShape;
-import rmdraw.graphics.*;
+import rmdraw.gfx.*;
 import rmdraw.shape.*;
 import snap.gfx.*;
 import snappdf.write.*;

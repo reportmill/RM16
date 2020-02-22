@@ -3,7 +3,7 @@
  */
 package reportmill.shape;
 import reportmill.util.RMGrouping;
-import rmdraw.graphics.*;
+import rmdraw.gfx.*;
 import java.util.*;
 import java.util.List;
 

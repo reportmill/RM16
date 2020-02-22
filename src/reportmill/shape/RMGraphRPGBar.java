@@ -3,7 +3,7 @@
  */
 package reportmill.shape;
 import reportmill.util.RMGroup;
-import rmdraw.graphics.RMStroke;
+import rmdraw.gfx.RMStroke;
 import java.util.*;
 import rmdraw.shape.*;
 import snap.gfx.*;

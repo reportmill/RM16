@@ -2,7 +2,7 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.out;
-import rmdraw.graphics.*;
+import rmdraw.gfx.*;
 import rmdraw.shape.*;
 import java.io.File;
 import java.text.DecimalFormat;

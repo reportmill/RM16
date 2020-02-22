@@ -8,7 +8,7 @@ import rmdraw.app.Editor;
 import rmdraw.apptools.RMScene3DTool;
 import rmdraw.apptools.RMTool;
 import reportmill.util.RMGrouping;
-import rmdraw.graphics.RMStroke;
+import rmdraw.gfx.RMStroke;
 import rmdraw.shape.*;
 import java.util.*;
 import snap.gfx.Color;

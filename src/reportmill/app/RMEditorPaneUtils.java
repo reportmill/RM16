@@ -12,6 +12,7 @@ import snap.util.*;
 import snap.view.ViewUtils;
 import snap.viewx.DialogBox;
 import snap.viewx.FilePanel;
+import snap.web.WebURL;
 
 import java.io.File;
 
@@ -25,7 +26,8 @@ public class RMEditorPaneUtils {
  */
 public static void connectToDataSource(RMEditorPane anEP)
 {
-    RMDataSource ds = new RMDataSource(RMExtras.getHollywoodURL());
+    WebURL url = RMExtras.getHollywoodURL();
+    RMDataSource ds = new RMDataSource(url);
     if(ds!=null) anEP.setDataSource(ds, 350, 0);
 }
 

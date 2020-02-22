@@ -2,6 +2,7 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.app;
+import reportmill.util.RMDataSourceUtils;
 import rmdraw.app.Editor;
 import rmdraw.app.EditorClipboard;
 import rmdraw.app.EditorPane;
@@ -161,13 +162,13 @@ protected void initUI()
  */
 public void resetUI()
 {
-    // Get selected shape and shape tool
+    // Get selected shape and entity
     RMShape selShape = getSelectedShape();
-    RMTool tool = getEditor().getTool(selShape);
-    
-    // Get entity from tool/shape and set in browser
-    Entity entity = !_showBuiltIn? tool.getDatasetEntity(selShape) : null;
-    if(entity!=_entity) { _entity = entity;
+    Entity entity = !_showBuiltIn? RMDataSourceUtils.getDatasetEntity(selShape) : null;
+
+    // If found, set in browser
+    if (entity!=_entity) {
+        _entity = entity;
         _rootItems = entity!=null? new KeyNode("Root").getChildren() : _builtInKeyNodes;
         _keysBrowser.setItems(_rootItems);
     }
@@ -176,7 +177,7 @@ public void resetUI()
     setViewValue("BuiltInKeysButton", _showBuiltIn);
     
     // Update KeysTableKey
-    if(isShowKeysTable())
+    if (isShowKeysTable())
         setKeysTableKey(getKeyPath());
 }
 

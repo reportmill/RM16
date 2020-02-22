@@ -158,7 +158,9 @@ public static void main(String args[])
         // Load XML data
         System.err.print("Reading infile: " + infile); System.err.flush();
         time = System.currentTimeMillis();
-        Map map = new RMXMLReader().readObject(infile, template.getDataSourceSchema());
+        RMDataSource dataSource = template.getDataSource();
+        Schema schema = dataSource!=null ? dataSource.getSchema() : null;
+        Map map = new RMXMLReader().readObject(infile, schema);
         seconds = (System.currentTimeMillis() - time)/1000f;
         System.err.println(" (" + seconds + " seconds)");
         

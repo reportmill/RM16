@@ -6,7 +6,6 @@ import reportmill.shape.RMTable;
 import reportmill.shape.RMTableGroup;
 import rmdraw.app.*;
 import rmdraw.apptools.RMParentShapeTool;
-import rmdraw.base.Entity;
 import rmdraw.shape.*;
 import snap.util.StringUtils;
 import snap.view.*;
@@ -211,21 +210,6 @@ public boolean isSuperSelectable(RMShape aShape)  { return true; }
  * Overridden to make graph not ungroupable.
  */
 public boolean isUngroupable(RMShape aShape)  { return false; }
-
-/**
- * Returns the given shape's dataset entity.
- */
-public Entity getDatasetEntity(RMShape aShape)
-{
-    // Get the table group's main table
-    RMTableGroup tableGroup = (RMTableGroup)aShape;
-    RMTable table = tableGroup.getMainTable();
-    if(table==null)
-        return tableGroup.getDatasetEntity();
-    
-    // Return the main table's dataset entity
-    return table.getDatasetEntity();
-}
 
 /**
  * Returns the main table for the current table group.

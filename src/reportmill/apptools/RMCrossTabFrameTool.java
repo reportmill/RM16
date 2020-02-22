@@ -6,7 +6,6 @@ import reportmill.shape.RMCrossTab;
 import reportmill.shape.RMCrossTabFrame;
 import rmdraw.app.Editor;
 import rmdraw.apptools.RMTool;
-import rmdraw.base.Entity;
 import rmdraw.shape.*;
 import snap.gfx.Point;
 import snap.util.StringUtils;
@@ -96,14 +95,5 @@ public String getWindowTitle()  { return "CrossTab Frame Inspector"; }
  * Overridden to make crosstab frame super-selectable.
  */
 public boolean isSuperSelectable(RMShape aShape)  { return true; }
-
-/**
- * Overrides default implementation to get entity from table.
- */
-public Entity getDatasetEntity(RMShape aShape)
-{
-    RMCrossTabFrame tframe = (RMCrossTabFrame)aShape; // Get crosstab frame
-    return tframe.getTable().getDatasetEntity(); // Return entity of crosstab frame's table
-}
 
 }

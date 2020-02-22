@@ -24,13 +24,16 @@ public class RMExtras {
  */
 public static WebURL getHollywoodURL()
 {
-    return WebURL.getURL(RMExtras.class, "/rmdraw/examples/HollywoodDB.xml");
+    return WebURL.getURL(RMExtras.class, "/reportmill/examples/HollywoodDB.xml");
 }
 
 /**
  * Returns the Movies Rpt URL.
  */
-public static WebURL getMoviesURL()  { return WebURL.getURL(RMExtras.class, "/rmdraw/examples/Movies.rpt"); }
+public static WebURL getMoviesURL()
+{
+    return WebURL.getURL(RMExtras.class, "/reportmill/examples/Movies.rpt");
+}
 
 /**
  * Iterates over all document (or shape) text and replaces occurrences of the first string with the second.
@@ -277,7 +280,9 @@ public static void addPageBetweenPages()
     RMDocument2 template = new RMDocument2(getMoviesURL());
     
     // Get objects
-    Map map = new RMXMLReader().readObject(getHollywoodURL(), template.getDataSourceSchema());
+    RMDataSource dataSource = template.getDataSource();
+    Schema schema = dataSource!=null ? dataSource.getSchema() : null;
+    Map map = new RMXMLReader().readObject(getHollywoodURL(), schema);
     
     // Generate report
     RMDocument report = template.generateReport(map);

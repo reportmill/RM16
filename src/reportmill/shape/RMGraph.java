@@ -627,7 +627,7 @@ private boolean useProxy()
 /**
  * Override to allow for ProxyShape.
  */
-public RMFill getFill()
+public Paint getFill()
 {
     return useProxy()? _proxyShape.getFill() : super.getFill();
 }
@@ -635,7 +635,7 @@ public RMFill getFill()
 /**
  * Override to allow for ProxyShape and trigger relayout.
  */
-public void setFill(RMFill aFill)
+public void setFill(Paint aFill)
 {
     if(_proxyShape!=null)
         _proxyShape.setFill(aFill);

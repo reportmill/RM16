@@ -176,7 +176,7 @@ private static class RMShapeHpr <T extends RMShape> extends RMHtmlHelper<T> {
     protected void writeShape(T aShape, RMHtmlFile aFile, XMLElement anXML)
     {
         // Get Fill/Stroke/Effect
-        RMFill fill = aShape.getFill();
+        Paint fill = aShape.getFill();
         RMStroke stroke = aShape.getStroke();
         Effect effect = aShape.getEffect();
         
@@ -223,10 +223,10 @@ private static class RMShapeHpr <T extends RMShape> extends RMHtmlHelper<T> {
     }
     
     /** Writes a fill. */
-    protected String writeFill(T aShape, RMFill aFill, RMHtmlFile aFile, XMLElement anXML)
+    protected String writeFill(T aShape, Paint aFill, RMHtmlFile aFile, XMLElement anXML)
     {
-        // Handle RMImageFill
-        if(aFill instanceof RMImageFill) { RMImageFill ifill = (RMImageFill)aFill;
+        // Handle ImagePaint
+        if(aFill instanceof ImagePaint) { ImagePaint ifill = (ImagePaint)aFill;
             Image img = ifill.getImage();
             String id = imageName(aFile, aShape, img);
             XMLElement fxml = new XMLElement("pattern");
@@ -244,8 +244,8 @@ private static class RMShapeHpr <T extends RMShape> extends RMHtmlHelper<T> {
             return "url(#" + id + ")";
         }
         
-        // Handle RMGradientFill
-        if(aFill instanceof RMGradientFill) { RMGradientFill gfill = (RMGradientFill)aFill;
+        // Handle GradientPaint
+        if(aFill instanceof GradientPaint) { GradientPaint gfill = (GradientPaint)aFill;
             XMLElement gxml = new XMLElement("linearGradient");
             gxml.add("id", "grad");
             gxml.add("x1", "0%"); gxml.add("y1", "0%"); gxml.add("x2", "100%"); gxml.add("y2", "0%");

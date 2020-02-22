@@ -129,10 +129,10 @@ public void setStroke(RMStroke aStroke)
 }
 
 /** Override to handle proxy. */
-public RMFill getFill()  { return getProxy().getFill(); }
+public Paint getFill()  { return getProxy().getFill(); }
 
 /** Override to handle proxy. */
-public void setFill(RMFill aFill)
+public void setFill(Paint aFill)
 {
     getProxy().setFill(aFill);
 }

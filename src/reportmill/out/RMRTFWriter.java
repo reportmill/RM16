@@ -4,7 +4,6 @@
 package reportmill.out;
 import reportmill.shape.RMCrossTabCell;
 import rmdraw.shape.*;
-import rmdraw.graphics.RMFill;
 import java.io.*;
 import java.util.*;
 import snap.gfx.*;
@@ -285,7 +284,7 @@ public void appendTable(RMShapeTable table, PrintStream ps)
             }
             
             // Cell shading
-            RMFill fill = rmcell.getFill();
+            Paint fill = rmcell.getFill();
             if(fill != null) ps.print("\\clcbpat" + getColorIndex(fill.getColor()));
             else ps.print("\\clshdrawnil");
 

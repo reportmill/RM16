@@ -23,7 +23,7 @@ class RMGraphRPGBar3D extends RMScene3D implements RMGraphRPGBar.BarGraphShape {
     boolean           _vertical;
 
     // The background color for the grid
-    RMFill            _backFill;
+    Paint             _backFill;
     
     // The background stroke for the grid
     RMStroke          _backStroke;

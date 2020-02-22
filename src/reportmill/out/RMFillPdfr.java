@@ -2,7 +2,6 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.out;
-import rmdraw.graphics.*;
 import rmdraw.shape.RMShape;
 import java.util.*;
 import snap.gfx.*;
@@ -18,11 +17,11 @@ public class RMFillPdfr {
 /**
  * Writes a given shape fill.
  */
-public static void writeShapeFill(RMShape aShape, RMFill aFill, RMPDFWriter aWriter)
+public static void writeShapeFill(RMShape aShape, Paint aFill, RMPDFWriter aWriter)
 {
-    // Handle RMGradientFill and RMImageFill
-    if(aFill instanceof RMGradientFill) writeGradientFill(aShape, (RMGradientFill)aFill, aWriter);
-    else if(aFill instanceof RMImageFill) writeImageFill(aShape, (RMImageFill)aFill, aWriter);
+    // Handle GradientPaint and ImagePaint
+    if(aFill instanceof GradientPaint) writeGradientFill(aShape, (GradientPaint)aFill, aWriter);
+    else if(aFill instanceof ImagePaint) writeImageFill(aShape, (ImagePaint)aFill, aWriter);
     
     // Handle color fill
     else {
@@ -34,7 +33,7 @@ public static void writeShapeFill(RMShape aShape, RMFill aFill, RMPDFWriter aWri
 /** 
  * Writes pdf for the path filled with a shading pattern defined by the RMGradientFill
  */
-public static void writeGradientFill(RMShape aShape, RMGradientFill aFill, PDFWriter aWriter)
+public static void writeGradientFill(RMShape aShape, GradientPaint aFill, PDFWriter aWriter)
 {
     // Get shape path and PDF page and write path
     Shape path = aShape.getPath();
@@ -96,7 +95,7 @@ public static void writeGradientFill(RMShape aShape, RMGradientFill aFill, PDFWr
     shading.put("Function", xref.addObject(function));
     
     // Get gradient paint and start/end
-    GradientPaint gpnt = aFill.snap().copyFor(aShape.getBoundsInside());
+    GradientPaint gpnt = aFill.copyForRect(aShape.getBoundsInside());
     Point startPt = new Point(gpnt.getStartX(), gpnt.getStartY()), endPt = new Point(gpnt.getEndX(), gpnt.getEndY());
     
     // In pdf, coordinates of the gradient axis are defined in pattern space.  Pattern space is the same as the
@@ -149,15 +148,15 @@ public static void writeGradientFill(RMShape aShape, RMGradientFill aFill, PDFWr
 /**
  * Writes given RMImageFill to a PDF file.
  */
-public static void writeImageFill(RMShape aShape, RMImageFill anImageFill, RMPDFWriter aWriter)
+public static void writeImageFill(RMShape aShape, ImagePaint anImageFill, RMPDFWriter aWriter)
 {
     writeImageFill(anImageFill, aShape.getPath(), aShape.getBoundsInside(), aWriter);
 }
 
 /**
- * Writes given RMImageFill to a PDF file.
+ * Writes given ImagePaint to a PDF file.
  */
-public static void writeImageFill(RMImageFill anImageFill, Shape aPath, Rect bounds, RMPDFWriter aWriter)
+public static void writeImageFill(ImagePaint anImageFill, Shape aPath, Rect bounds, RMPDFWriter aWriter)
 {
     // Get image (just return if missing) and image name and add image to writer
     Image img = anImageFill.getImage(); if(img==null) return;

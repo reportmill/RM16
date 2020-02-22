@@ -32,9 +32,9 @@ public RMTableGroupRPG(ReportOwner anRptOwner, RMTableGroup aTableGroup, RMTable
     
     // Legacy: RM13 used to base attributes on first table instead of table group
     RMTable table = _tgroup.getChildTableCount()>0? _tgroup.getChildTable(0) : null;
-    if(table!=null && (table.getStroke()!=null || table.getFill()!=null)) {
-        if(table.getStroke()!=null) setStroke(table.getStroke().clone());
-        if(table.getFill()!=null) setFill(table.getFill().clone()); }
+    if (table!=null && (table.getStroke()!=null || table.getFill()!=null)) {
+        if (table.getStroke()!=null) setStroke(table.getStroke().clone());
+        if (table.getFill()!=null) setFill(table.getFill()); }
 }
 
 /**

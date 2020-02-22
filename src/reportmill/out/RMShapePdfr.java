@@ -80,7 +80,7 @@ protected void writeShape(T aShape, RMPDFWriter aWriter)
     //pwriter.print(aShape.getBoundsInside()); pageBuffer.println(" re W n"));
         
     // Get fill and write pdf if not null
-    RMFill fill = aShape.getFill();
+    Paint fill = aShape.getFill();
     if(fill!=null)
         RMFillPdfr.writeShapeFill(aShape, fill, aWriter);
     

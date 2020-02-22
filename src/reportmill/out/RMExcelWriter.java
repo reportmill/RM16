@@ -14,6 +14,10 @@ import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.hssf.util.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import snap.gfx.*;
+import snap.text.RichText;
+import snap.text.RichTextLine;
+import snap.text.RichTextRun;
+import snap.text.TextFormat;
 import snap.util.*;
 
 /**

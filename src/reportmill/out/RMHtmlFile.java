@@ -8,6 +8,9 @@ import java.io.File;
 import java.text.DecimalFormat;
 import java.util.*;
 import snap.gfx.*;
+import snap.text.TextBox;
+import snap.text.TextBoxLine;
+import snap.text.TextBoxRun;
 import snap.util.*;
 
 /**

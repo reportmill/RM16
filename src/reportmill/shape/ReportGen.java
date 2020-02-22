@@ -4,7 +4,7 @@ import reportmill.util.RMKeyChain;
 import rmdraw.shape.*;
 import snap.gfx.Color;
 import snap.gfx.Font;
-import snap.gfx.RichText;
+import snap.text.RichText;
 import snap.util.SnapUtils;
 import snap.util.StringUtils;
 import snap.view.Binding;

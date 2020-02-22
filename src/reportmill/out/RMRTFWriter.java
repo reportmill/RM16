@@ -8,6 +8,10 @@ import rmdraw.graphics.RMFill;
 import java.io.*;
 import java.util.*;
 import snap.gfx.*;
+import snap.text.RichText;
+import snap.text.RichTextLine;
+import snap.text.RichTextRun;
+import snap.text.TextLineStyle;
 import snap.util.ASCIICodec;
 
 /**

@@ -7,7 +7,7 @@ import reportmill.shape.RMSwitchShape;
 import rmdraw.app.*;
 import rmdraw.shape.RMShape;
 import rmdraw.shape.RMShapeUtils;
-import snap.gfx.TextFormat;
+import snap.text.TextFormat;
 
 import java.util.List;
 

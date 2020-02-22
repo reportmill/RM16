@@ -7,7 +7,7 @@ import java.util.*;
 import snap.gfx.Color;
 import snap.gfx.Font;
 import snap.gfx.GFXUtils;
-import snap.gfx.RichText;
+import snap.text.RichText;
 import snap.util.*;
 
 /**

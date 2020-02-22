@@ -5,8 +5,8 @@ package reportmill.util;
 import java.text.*;
 import java.util.Locale;
 import snap.gfx.Color;
-import snap.gfx.TextFormat;
-import snap.gfx.TextStyle;
+import snap.text.TextFormat;
+import snap.text.TextStyle;
 import snap.util.*;
 
 /**

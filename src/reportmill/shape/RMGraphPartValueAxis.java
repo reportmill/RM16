@@ -5,6 +5,8 @@ package reportmill.shape;
 import reportmill.util.RMNumberFormat;
 import rmdraw.shape.RMTextShape;
 import snap.gfx.*;
+import snap.text.TextFormat;
+import snap.text.TextStyle;
 import snap.util.*;
 
 /**

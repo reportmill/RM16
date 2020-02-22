@@ -7,6 +7,9 @@ import rmdraw.graphics.RMStroke;
 import java.util.*;
 import rmdraw.shape.*;
 import snap.gfx.*;
+import snap.text.RichText;
+import snap.text.TextFormat;
+import snap.text.TextLineStyle;
 import snap.util.MathUtils;
 
 /**

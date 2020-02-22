@@ -7,7 +7,7 @@ import reportmill.shape.RMCrossTabCell;
 import reportmill.shape.RMCrossTabRow;
 import reportmill.shape.RMTableRowRPG;
 import rmdraw.shape.*;
-import snap.gfx.RichText;
+import snap.text.RichText;
 
 import java.util.*;
 

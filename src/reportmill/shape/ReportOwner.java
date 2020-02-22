@@ -10,10 +10,7 @@ import reportmill.util.RMRTFParser;
 import rmdraw.shape.RMDocument;
 import rmdraw.shape.RMParentShape;
 import rmdraw.shape.RMShape;
-import snap.gfx.RichText;
-import snap.gfx.RichTextLine;
-import snap.gfx.RichTextRun;
-import snap.gfx.TextFormat;
+import snap.text.*;
 import snap.util.*;
 import snap.web.WebURL;
 
@@ -376,7 +373,7 @@ public RichText rpgCloneRichText(RichText aRichText, ReportOwner anRptOwner, Obj
                 if (!(format instanceof RMNumberFormat))
                     format = RMNumberFormat.PLAIN;
                 valString = format.format(val);
-                snap.gfx.TextStyle style = format.formatStyle(val);
+                TextStyle style = format.formatStyle(val);
                 if (style!=null)
                     valString = new RichText((String)valString, style.getColor());
             }

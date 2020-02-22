@@ -6,9 +6,9 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import snap.gfx.Font;
-import snap.gfx.RichText;
-import snap.gfx.TextFormat;
-import snap.gfx.TextLineStyle;
+import snap.text.RichText;
+import snap.text.TextFormat;
+import snap.text.TextLineStyle;
 import snap.util.*;
 
 /**

@@ -8,6 +8,7 @@ import reportmill.shape.RMTableGroup;
 import reportmill.out.RMPDFWriter;
 import rmdraw.shape.*;
 import snap.gfx.*;
+import snap.text.*;
 import snap.util.FileUtils;
 import snap.util.MapUtils;
 import snap.web.WebURL;

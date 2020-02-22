@@ -3,7 +3,7 @@
  */
 package reportmill.util;
 import snap.gfx.Font;
-import snap.gfx.RichText;
+import snap.text.RichText;
 
 import java.awt.Color;
 import java.io.*;

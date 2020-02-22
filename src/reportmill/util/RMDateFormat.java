@@ -6,8 +6,8 @@ import rmdraw.shape.RMDocument;
 import java.util.*;
 import java.text.*;
 
-import snap.gfx.TextFormat;
-import snap.gfx.TextStyle;
+import snap.text.TextFormat;
+import snap.text.TextStyle;
 import snap.util.*;
 
 /**

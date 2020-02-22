@@ -2,7 +2,7 @@ package reportmill.shape;
 import reportmill.util.RMKeyChain;
 import reportmill.util.RMTableOfContents;
 import rmdraw.shape.*;
-import snap.gfx.RichText;
+import snap.text.RichText;
 import snap.gfx.VPos;
 import snap.util.ListUtils;
 import snap.util.StringUtils;

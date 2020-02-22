@@ -6,7 +6,7 @@ import reportmill.util.RMDateFormat;
 import reportmill.util.RMNumberFormat;
 import rmdraw.app.Editor;
 import rmdraw.app.EditorPane;
-import snap.gfx.TextFormat;
+import snap.text.TextFormat;
 import snap.util.*;
 import snap.view.*;
 import snap.viewx.DialogBox;

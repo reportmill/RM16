@@ -8,6 +8,7 @@ import rmdraw.apptools.*;
 import reportmill.util.RMNumberFormat;
 import rmdraw.shape.*;
 import snap.gfx.*;
+import snap.text.TextFormat;
 import snap.util.SnapUtils;
 import snap.util.Undoer;
 import snap.view.*;

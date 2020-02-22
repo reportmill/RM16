@@ -9,8 +9,8 @@ import java.util.*;
 import rmdraw.shape.*;
 import snap.gfx.Color;
 import snap.gfx.Rect;
-import snap.gfx.RichText;
-import snap.gfx.TextLineStyle;
+import snap.text.RichText;
+import snap.text.TextLineStyle;
 import snap.util.MathUtils;
 
 /**

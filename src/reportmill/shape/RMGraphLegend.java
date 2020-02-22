@@ -9,7 +9,7 @@ import java.util.*;
 import rmdraw.shape.*;
 import snap.gfx.Font;
 import snap.gfx.Rect;
-import snap.gfx.RichText;
+import snap.text.RichText;
 import snap.util.*;
 
 /**

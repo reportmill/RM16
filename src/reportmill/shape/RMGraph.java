@@ -11,6 +11,7 @@ import rmdraw.shape.RMParentShape;
 import rmdraw.shape.RMScene3D;
 import rmdraw.shape.RMShape;
 import snap.gfx.*;
+import snap.text.TextFormat;
 import snap.util.*;
 
 /**

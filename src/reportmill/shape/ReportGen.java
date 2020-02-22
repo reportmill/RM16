@@ -1,6 +1,6 @@
 package reportmill.shape;
-import rmdraw.base.RMKey;
-import rmdraw.base.RMKeyChain;
+import reportmill.util.RMKey;
+import reportmill.util.RMKeyChain;
 import rmdraw.shape.*;
 import snap.gfx.Color;
 import snap.gfx.Font;

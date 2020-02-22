@@ -2,8 +2,8 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.shape;
-import rmdraw.base.RMGrouper;
-import rmdraw.base.RMGrouping;
+import reportmill.util.RMGrouper;
+import reportmill.util.RMGrouping;
 import java.util.*;
 
 import rmdraw.shape.RMParentShape;

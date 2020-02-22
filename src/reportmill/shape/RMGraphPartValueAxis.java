@@ -2,7 +2,7 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.shape;
-import rmdraw.base.*;
+import reportmill.util.RMNumberFormat;
 import rmdraw.shape.RMTextShape;
 import snap.gfx.*;
 import snap.util.*;

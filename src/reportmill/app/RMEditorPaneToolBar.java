@@ -5,7 +5,7 @@ import reportmill.apptools.RMLabelsTool;
 import reportmill.apptools.RMTableTool;
 import rmdraw.app.*;
 import rmdraw.apptools.*;
-import rmdraw.base.RMNumberFormat;
+import reportmill.util.RMNumberFormat;
 import rmdraw.shape.*;
 import snap.gfx.*;
 import snap.util.SnapUtils;

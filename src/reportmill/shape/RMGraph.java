@@ -2,7 +2,7 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.shape;
-import rmdraw.base.RMGrouping;
+import reportmill.util.RMGrouping;
 import rmdraw.graphics.*;
 import java.util.*;
 import java.util.List;

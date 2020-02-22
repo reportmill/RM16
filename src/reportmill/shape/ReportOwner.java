@@ -2,8 +2,8 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.shape;
-import reportmill.util.RMSQLUtils;
-import rmdraw.base.*;
+import reportmill.util.*;
+
 import java.util.*;
 import rmdraw.graphics.RMHTMLParser;
 import rmdraw.graphics.RMRTFParser;
@@ -198,7 +198,7 @@ public Object getKeyChainValue(Object aRoot, RMKeyChain aKeyChain)
         }
         
         // Check for "Root" key (evaluates key remainder on DataStack root)
-        if(op==RMKeyChain.Op.Chain) { String key = aKeyChain.getChildString(0);
+        if(op== RMKeyChain.Op.Chain) { String key = aKeyChain.getChildString(0);
             if(key.equals("Root")) {
                 Object dso = _dataStack.get(0), val = RMKeyChain.getValue(aRoot, dso, aKeyChain.subchain(1));
                 if(val!=null)

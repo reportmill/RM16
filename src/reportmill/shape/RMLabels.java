@@ -2,7 +2,10 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.shape;
-import rmdraw.base.*;
+import reportmill.util.RMGroup;
+import reportmill.util.RMGrouping;
+import reportmill.util.RMSort;
+
 import java.util.List;
 
 import rmdraw.shape.RMParentShape;
@@ -19,7 +22,7 @@ public class RMLabels extends RMParentShape implements ReportGen.RPG {
     String           _datasetKey;
     
     // The grouping for labels
-    RMGrouping       _grouping = new RMGrouping();
+    RMGrouping _grouping = new RMGrouping();
     
     // Number of rows/columns of labels
     int              _numberOfRows = 5, _numberOfColumns = 3;

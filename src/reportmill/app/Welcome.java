@@ -4,7 +4,7 @@
 package reportmill.app;
 import reportmill.shape.*;
 import rmdraw.app.*;
-import rmdraw.base.ReportMill;
+import reportmill.util.ReportMill;
 import snap.util.SnapUtils;
 import snap.view.*;
 import snap.viewx.*;

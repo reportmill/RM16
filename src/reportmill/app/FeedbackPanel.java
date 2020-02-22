@@ -2,7 +2,7 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.app;
-import rmdraw.base.ReportMill;
+import reportmill.util.ReportMill;
 import snap.util.*;
 import snap.view.*;
 import snap.viewx.DialogBox;

@@ -3,7 +3,7 @@
  */
 package reportmill.app;
 
-import rmdraw.base.ReportMill;
+import reportmill.util.ReportMill;
 import snap.util.Prefs;
 import snap.util.StringUtils;
 import snap.view.View;

@@ -7,7 +7,7 @@ import rmdraw.app.AttributesPanel;
 import rmdraw.app.Editor;
 import rmdraw.apptools.RMScene3DTool;
 import rmdraw.apptools.RMTool;
-import rmdraw.base.RMGrouping;
+import reportmill.util.RMGrouping;
 import rmdraw.graphics.RMStroke;
 import rmdraw.shape.*;
 import java.util.*;

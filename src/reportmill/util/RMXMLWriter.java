@@ -4,7 +4,6 @@
 package reportmill.util;
 import java.util.*;
 
-import rmdraw.base.*;
 import snap.util.*;
 
 /**

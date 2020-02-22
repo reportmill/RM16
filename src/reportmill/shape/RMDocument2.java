@@ -5,7 +5,7 @@ import reportmill.out.RMStringWriter;
 import reportmill.util.RMTableOfContents;
 import reportmill.out.RMHtmlFile;
 import reportmill.util.RMDataSource;
-import rmdraw.base.ReportMill;
+import reportmill.util.ReportMill;
 import rmdraw.shape.*;
 import snap.util.SnapUtils;
 import snap.util.XMLArchiver;

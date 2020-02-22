@@ -3,9 +3,6 @@
  */
 package reportmill.util;
 import reportmill.shape.*;
-import rmdraw.base.RMGroup;
-import rmdraw.base.RMKey;
-import rmdraw.base.RMKeyChain;
 import rmdraw.shape.*;
 import java.util.*;
 import snap.util.*;

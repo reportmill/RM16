@@ -2,9 +2,10 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.app;
+import reportmill.util.RMDateFormat;
+import reportmill.util.RMNumberFormat;
 import rmdraw.app.Editor;
 import rmdraw.app.EditorPane;
-import rmdraw.base.*;
 import snap.gfx.TextFormat;
 import snap.util.*;
 import snap.view.*;

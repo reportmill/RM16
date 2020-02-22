@@ -1,6 +1,8 @@
 package reportmill.shape;
-import rmdraw.base.RMDateFormat;
-import rmdraw.base.RMNumberFormat;
+import reportmill.util.RMDateFormat;
+import reportmill.util.RMGrouper;
+import reportmill.util.RMGrouping;
+import reportmill.util.RMNumberFormat;
 import rmdraw.shape.RMArchiver;
 import snap.util.XMLArchiver;
 import snap.util.XMLElement;
@@ -41,6 +43,13 @@ public class RMArchiver2 extends RMArchiver {
         cmap.put("table-group", RMTableGroup.class);
         cmap.put("tablerow", RMTableRow.class);
         cmap.put("PDFShape", RMPDFShape.class);
+
+        // Sorts, Grouping
+        cmap.put("sort", "reportmill.util.RMSort");
+        cmap.put("top-n-sort", "reportmill.util.RMTopNSort");
+        cmap.put("value-sort", "reportmill.util.RMValueSort");
+        cmap.put("grouper", RMGrouper.class);
+        cmap.put("grouping", RMGrouping.class);
 
         // Formats
         cmap.put("format", TextFormatStub.class);

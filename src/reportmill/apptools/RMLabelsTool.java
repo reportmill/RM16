@@ -5,7 +5,7 @@ package reportmill.apptools;
 import reportmill.shape.*;
 import rmdraw.app.Editor;
 import rmdraw.apptools.RMTool;
-import rmdraw.base.RMGrouping;
+import reportmill.util.RMGrouping;
 import rmdraw.shape.*;
 import java.util.*;
 import snap.util.SnapUtils;

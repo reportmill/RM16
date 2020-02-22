@@ -2,8 +2,8 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.shape;
-import rmdraw.base.RMGroup;
-import rmdraw.base.RMGrouping;
+import reportmill.util.RMGroup;
+import reportmill.util.RMGrouping;
 import rmdraw.shape.RMShapePaintProps;
 import rmdraw.shape.RMTextShape;
 import snap.gfx.*;

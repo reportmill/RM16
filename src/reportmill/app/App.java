@@ -5,7 +5,7 @@ package reportmill.app;
 import com.apple.eawt.*;
 import com.apple.eawt.AppEvent.*;
 import rmdraw.app.EditorPane;
-import rmdraw.base.ReportMill;
+import reportmill.util.ReportMill;
 import javax.swing.SwingUtilities;
 import snap.util.*;
 import snap.view.WindowView;

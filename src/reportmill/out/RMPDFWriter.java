@@ -4,7 +4,7 @@
 package reportmill.out;
 import reportmill.shape.RMDocument2;
 import reportmill.shape.RMPDFData;
-import rmdraw.base.ReportMill;
+import reportmill.util.ReportMill;
 import rmdraw.shape.*;
 import java.text.SimpleDateFormat;
 import java.util.*;

@@ -2,7 +2,7 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.shape;
-import rmdraw.base.RMKeyChain;
+import reportmill.util.RMKeyChain;
 import java.util.*;
 import java.util.List;
 

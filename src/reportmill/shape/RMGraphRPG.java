@@ -2,7 +2,10 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.shape;
-import rmdraw.base.*;
+import reportmill.util.DataUtils;
+import reportmill.util.RMGroup;
+import reportmill.util.RMGrouping;
+import reportmill.util.RMKeyChain;
 import reportmill.shape.RMGraph.*;
 import rmdraw.shape.RMParentShape;
 import rmdraw.shape.RMShape;

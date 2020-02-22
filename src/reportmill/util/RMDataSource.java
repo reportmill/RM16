@@ -4,9 +4,6 @@
 package reportmill.util;
 import java.util.*;
 
-import rmdraw.base.Entity;
-import rmdraw.base.RMXMLReader;
-import rmdraw.base.Schema;
 import snap.util.*;
 import snap.web.*;
 

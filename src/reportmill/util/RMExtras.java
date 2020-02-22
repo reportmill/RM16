@@ -5,7 +5,6 @@ package reportmill.util;
 import reportmill.shape.RMDocument2;
 import reportmill.shape.RMTable;
 import reportmill.shape.RMTableGroup;
-import rmdraw.base.*;
 import reportmill.out.RMPDFWriter;
 import rmdraw.shape.*;
 import snap.gfx.*;

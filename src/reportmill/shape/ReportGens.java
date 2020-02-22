@@ -1,5 +1,5 @@
 package reportmill.shape;
-import rmdraw.base.RMKeyChain;
+import reportmill.util.RMKeyChain;
 import reportmill.util.RMTableOfContents;
 import rmdraw.shape.*;
 import snap.gfx.RichText;

@@ -3,8 +3,11 @@
  */
 package reportmill.app;
 import reportmill.shape.RMDocument2;
+import reportmill.util.Entity;
+import reportmill.util.Property;
 import reportmill.util.RMDataSource;
-import rmdraw.base.*;
+import reportmill.util.Schema;
+
 import java.util.*;
 import snap.view.*;
 

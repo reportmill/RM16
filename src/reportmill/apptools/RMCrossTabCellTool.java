@@ -7,7 +7,7 @@ import reportmill.shape.RMCrossTabCell;
 import rmdraw.app.*;
 import rmdraw.apptools.RMTextTool;
 import rmdraw.apptools.RMTool;
-import rmdraw.base.RMGrouping;
+import reportmill.util.RMGrouping;
 import rmdraw.shape.*;
 import java.util.List;
 import snap.gfx.*;

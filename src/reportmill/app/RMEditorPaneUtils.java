@@ -5,7 +5,7 @@ package reportmill.app;
 import reportmill.shape.RMDocument2;
 import reportmill.util.RMExtras;
 import rmdraw.app.*;
-import rmdraw.base.RMDataSource;
+import reportmill.util.RMDataSource;
 import rmdraw.shape.RMArchiver;
 import rmdraw.shape.RMDocument;
 import snap.util.*;

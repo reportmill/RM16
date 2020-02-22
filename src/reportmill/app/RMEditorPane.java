@@ -1,7 +1,7 @@
 package reportmill.app;
 import reportmill.shape.RMDocument2;
 import rmdraw.app.*;
-import rmdraw.base.RMDataSource;
+import reportmill.util.RMDataSource;
 import rmdraw.base.RMKey;
 import rmdraw.base.RMKeyChain;
 import rmdraw.shape.RMDocument;
@@ -62,6 +62,27 @@ public class RMEditorPane extends EditorPane {
      * Creates the EditorPaneMenuBar for the menu bar.
      */
     protected EditorPaneMenuBar createMenuBar()  { return new RMEditorPaneMenuBar(this); }
+
+    /**
+     * Override to check version and return as RMEditorPane.
+     */
+    public RMEditorPane open(Object aSource)
+    {
+        // Do normal version
+        RMEditorPane epane = (RMEditorPane) super.open(aSource);
+
+        // If old version, warn user that saving document will make it unreadable by RM7
+        RMDocument2 doc = getDoc();
+        if(doc.getVersion()<7.0) {
+            String msg = "This document has been upgraded from an older version.\n" +
+                    "If saved, it will not open in earlier versions.";
+            DialogBox dbox = new DialogBox("Warning: Document Upgrade"); dbox.setWarningMessage(msg);
+            dbox.showMessageDialog(getUI());
+        }
+
+        // Return
+        return epane;
+    }
 
     /**
      * Returns the datasource associated with the editor's document.
@@ -192,5 +213,20 @@ public class RMEditorPane extends EditorPane {
      */
     @Override
     protected AttributesPanel createAttributesPanel()  { return new RMAttributesPanel(this); }
+
+    /**
+     * A class for any editor pane support panes.
+     */
+    public static class RMSupportPane extends SupportPane {
+
+        /** Creates a new SupportPane with given editor pane. */
+        public RMSupportPane(RMEditorPane anEP)  { super(anEP); }
+
+        /** Returns the EditorPane. */
+        public RMEditorPane getEditorPane()  { return (RMEditorPane) super.getEditorPane(); }
+
+        /** Returns the editor. */
+        public RMEditor getEditor()  { return (RMEditor) super.getEditor(); }
+    }
 
 }

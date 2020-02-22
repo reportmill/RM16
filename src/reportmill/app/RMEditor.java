@@ -12,8 +12,7 @@ import reportmill.shape.RMTable;
 import reportmill.shape.RMTableGroup;
 import reportmill.shape.RMTableRow;
 import reportmill.shape.RMSwitchShape;
-import rmdraw.base.RMDataSource;
-import rmdraw.shape.RMDocument;
+import reportmill.util.RMDataSource;
 import rmdraw.shape.RMTextShape;
 import snap.gfx.Image;
 import snap.gfx.Painter;
@@ -45,7 +44,11 @@ public class RMEditor extends Editor {
     /**
      * Returns the datasource associated with the editor's document.
      */
-    public RMDataSource getDataSource()  { RMDocument d = getDoc(); return d!=null? d.getDataSource() : null; }
+    public RMDataSource getDataSource()
+    {
+        RMDocument2 d = getDoc();
+        return d!=null ? d.getDataSource() : null;
+    }
 
     /**
      * Sets the datasource associated with the editor's document.

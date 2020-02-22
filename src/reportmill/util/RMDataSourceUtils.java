@@ -2,7 +2,6 @@ package reportmill.util;
 import reportmill.shape.*;
 import rmdraw.base.Entity;
 import rmdraw.base.Property;
-import rmdraw.base.RMDataSource;
 import rmdraw.base.Schema;
 import rmdraw.shape.RMShape;
 

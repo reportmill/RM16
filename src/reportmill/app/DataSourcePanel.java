@@ -2,16 +2,16 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.app;
-import rmdraw.app.EditorPane;
+import reportmill.shape.RMDocument2;
+import reportmill.util.RMDataSource;
 import rmdraw.base.*;
-import rmdraw.shape.*;
 import java.util.*;
 import snap.view.*;
 
 /**
  * This class manages UI display and editing of editor's datasource.
  */
-public class DataSourcePanel extends EditorPane.SupportPane {
+public class DataSourcePanel extends RMEditorPane.RMSupportPane {
     
     // The index of the selected entity in the current datasource
     int        _selectedEntityIndex = -1;
@@ -25,7 +25,7 @@ public class DataSourcePanel extends EditorPane.SupportPane {
 /**
  * Creates a new DataSourcePanel.
  */
-public DataSourcePanel(EditorPane anEP)  { super(anEP); }
+public DataSourcePanel(RMEditorPane anEP)  { super(anEP); }
 
 /**
  * Initialize UI panel for the datasource inspector.
@@ -104,8 +104,8 @@ public void respondUI(ViewEvent anEvent)
  */
 private RMDataSource getDataSource()
 {
-    RMDocument doc = getEditor().getDoc();
-    return doc!=null? doc.getDataSource() : null;
+    RMDocument2 doc = getEditor().getDoc();
+    return doc!=null ? doc.getDataSource() : null;
 }
 
 /**

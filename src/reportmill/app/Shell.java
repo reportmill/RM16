@@ -5,6 +5,7 @@ package reportmill.app;
 import reportmill.shape.RMDocument2;
 import reportmill.shape.RMTable;
 import reportmill.shape.RMTableRow;
+import reportmill.util.RMDataSource;
 import reportmill.util.RMTableOfContents;
 import rmdraw.base.*;
 import rmdraw.shape.*;

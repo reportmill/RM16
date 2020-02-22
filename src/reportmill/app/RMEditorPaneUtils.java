@@ -176,7 +176,7 @@ public static void previewRTF(RMEditorPane anEP)
 public static void previewXML(RMEditorPane anEP)
 {
     Editor editor = anEP.getEditor();
-    XMLElement xml = new RMArchiver().writeObject(editor.getDoc());
+    XMLElement xml = new RMArchiver().writeToXML(editor.getDoc());
     File file = FileUtils.getTempFile("RMXMLFile.xml");
     try { FileUtils.writeBytes(file, xml.getBytes()); }
     catch(Exception e) { throw new RuntimeException(e); }

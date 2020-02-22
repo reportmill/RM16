@@ -3,7 +3,7 @@ import reportmill.out.RMExcelWriter;
 import reportmill.out.RMRTFWriter;
 import reportmill.out.RMStringWriter;
 import reportmill.util.RMTableOfContents;
-import rmdraw.out.RMHtmlFile;
+import reportmill.out.RMHtmlFile;
 import rmdraw.shape.*;
 import snap.util.SnapUtils;
 import java.util.Collections;
@@ -57,6 +57,14 @@ public class RMDocument2 extends RMDocument implements ReportGen.RPG {
     public byte[] getBytesPDF()
     {
         return new reportmill.out.RMPDFWriter().getBytes(this);
+    }
+
+    /**
+     * Returns the document as a byte array of an HTML file.
+     */
+    public byte[] getBytesHTML()
+    {
+        return new RMHtmlFile(this).getBytes();
     }
 
     /**

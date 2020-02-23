@@ -9,6 +9,9 @@ import java.util.*;
 import rmdraw.shape.RMParentShape;
 import rmdraw.shape.RMShape;
 import rmdraw.shape.RMShapePaintProps;
+import snap.geom.Path;
+import snap.geom.Point;
+import snap.geom.Rect;
 import snap.gfx.*;
 import snap.util.*;
 

@@ -7,6 +7,8 @@ import rmdraw.app.*;
 import rmdraw.apptools.*;
 import reportmill.util.RMNumberFormat;
 import rmdraw.shape.*;
+import snap.geom.HPos;
+import snap.geom.Pos;
 import snap.gfx.*;
 import snap.text.TextFormat;
 import snap.util.SnapUtils;

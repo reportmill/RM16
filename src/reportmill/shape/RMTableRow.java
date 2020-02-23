@@ -6,6 +6,8 @@ import java.util.*;
 import java.util.List;
 
 import rmdraw.shape.*;
+import snap.geom.Rect;
+import snap.geom.Shape;
 import snap.gfx.*;
 import snap.util.*;
 

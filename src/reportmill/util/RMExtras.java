@@ -7,7 +7,7 @@ import reportmill.shape.RMTable;
 import reportmill.shape.RMTableGroup;
 import reportmill.out.RMPDFWriter;
 import rmdraw.shape.*;
-import snap.gfx.*;
+import snap.geom.Rect;
 import snap.text.*;
 import snap.util.FileUtils;
 import snap.util.MapUtils;

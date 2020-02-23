@@ -6,6 +6,8 @@ import reportmill.shape.RMCrossTabCell;
 import rmdraw.shape.*;
 import java.io.*;
 import java.util.*;
+
+import snap.geom.Rect;
 import snap.gfx.*;
 import snap.text.RichText;
 import snap.text.RichTextLine;

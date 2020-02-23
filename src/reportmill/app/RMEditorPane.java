@@ -5,7 +5,7 @@ import reportmill.util.RMDataSource;
 import reportmill.util.RMKey;
 import reportmill.util.RMKeyChain;
 import rmdraw.shape.RMDocument;
-import snap.gfx.Rect;
+import snap.geom.Rect;
 import snap.util.StringUtils;
 import snap.view.ViewEvent;
 import snap.view.ViewOwner;

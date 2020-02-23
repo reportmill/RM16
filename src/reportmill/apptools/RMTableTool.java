@@ -10,6 +10,7 @@ import rmdraw.apptools.RMParentShapeTool;
 import reportmill.util.RMGrouper;
 import reportmill.util.RMGrouping;
 import rmdraw.shape.*;
+import snap.geom.Point;
 import snap.gfx.*;
 import snap.util.*;
 import snap.view.*;
@@ -27,7 +28,7 @@ public class RMTableTool <T extends RMTable> extends RMParentShapeTool<T> implem
     RMSortPanel             _sortPanel;
     
     // Used for splitshape editing in shape editing mouse loop
-    Point                   _lastMousePoint;
+    Point _lastMousePoint;
 
     // Used for splitshape editing in shape editing mouse loop
     int                     _resizeBarIndex;

@@ -2,10 +2,9 @@ package reportmill.app;
 import rmdraw.app.Editor;
 import rmdraw.app.EditorDnD;
 import reportmill.shape.RMPDFShape;
-import rmdraw.app.EditorPane;
 import rmdraw.shape.RMParentShape;
 import rmdraw.shape.RMShape;
-import snap.gfx.Point;
+import snap.geom.Point;
 import snap.view.ClipboardData;
 import snap.view.ViewEvent;
 

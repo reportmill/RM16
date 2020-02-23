@@ -9,6 +9,8 @@ import java.util.*;
 import rmdraw.shape.RMLineShape;
 import rmdraw.shape.RMScene3D;
 import rmdraw.shape.RMShape;
+import snap.geom.Path;
+import snap.geom.Rect;
 import snap.gfx.*;
 
 /**
@@ -29,7 +31,7 @@ class RMGraphRPGBar3D extends RMScene3D implements RMGraphRPGBar.BarGraphShape {
     RMStroke          _backStroke;
     
     // Shapes for grid
-    Path              _grid = new Path();
+    Path _grid = new Path();
     
     // Shapes for the minor grid
     Path              _gridMinor = new Path();

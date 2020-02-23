@@ -4,6 +4,10 @@
 package reportmill.shape;
 import reportmill.util.RMKeyChain;
 import rmdraw.shape.*;
+import snap.geom.HPos;
+import snap.geom.Pos;
+import snap.geom.Rect;
+import snap.geom.VPos;
 import snap.gfx.*;
 import snap.util.*;
 
@@ -265,7 +269,7 @@ public XMLElement toXML(XMLArchiver anArchiver)
     if(_pageIndex>0) e.add("PageIndex", _pageIndex);
     if(_key!=null && _key.length()>0) e.add("key", _key);
     if(_padding>0) e.add("Padding", _padding);
-    if(getAlignment()!=Pos.CENTER) e.add("Alignment", getAlignment());
+    if(getAlignment()!= Pos.CENTER) e.add("Alignment", getAlignment());
     if(!isGrowToFit()) e.add("GrowToFit", isGrowToFit());
     if(!getPreserveRatio()) e.add("PreserveRatio", getPreserveRatio());
     

@@ -3,6 +3,7 @@ import reportmill.shape.RMDocument2;
 import rmdraw.shape.RMDocument;
 import rmdraw.shape.RMShape;
 import rmdraw.shape.RMShapeUtils;
+import snap.geom.*;
 import snap.gfx.*;
 import snap.util.SnapUtils;
 import snap.util.StringUtils;

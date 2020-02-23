@@ -10,6 +10,8 @@ import rmdraw.apptools.RMTool;
 import reportmill.util.RMGrouping;
 import rmdraw.shape.*;
 import java.util.List;
+
+import snap.geom.Point;
 import snap.gfx.*;
 import snap.util.*;
 import snap.view.*;

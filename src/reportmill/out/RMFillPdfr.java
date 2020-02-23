@@ -4,6 +4,11 @@
 package reportmill.out;
 import rmdraw.shape.RMShape;
 import java.util.*;
+
+import snap.geom.Point;
+import snap.geom.Rect;
+import snap.geom.Shape;
+import snap.geom.Transform;
 import snap.gfx.*;
 import snappdf.*;
 import snappdf.write.PDFPageWriter;

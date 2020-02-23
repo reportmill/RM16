@@ -7,6 +7,8 @@ import java.util.*;
 import javax.swing.text.*;
 import javax.swing.text.html.*;
 import javax.swing.text.html.parser.*;
+
+import snap.geom.HPos;
 import snap.gfx.*;
 import snap.text.RichText;
 import snap.text.TextLineStyle;

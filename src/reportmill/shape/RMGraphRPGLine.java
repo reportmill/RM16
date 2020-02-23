@@ -5,6 +5,8 @@ package reportmill.shape;
 import rmdraw.shape.RMPolygonShape;
 import rmdraw.shape.RMRectShape;
 import rmdraw.shape.RMShape;
+import snap.geom.Path;
+import snap.geom.Rect;
 import snap.gfx.*;
 
 /**

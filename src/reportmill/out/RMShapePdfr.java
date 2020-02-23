@@ -5,6 +5,8 @@ package reportmill.out;
 import reportmill.shape.RMPDFShape;
 import rmdraw.gfx.*;
 import rmdraw.shape.*;
+import snap.geom.Rect;
+import snap.geom.Shape;
 import snap.gfx.*;
 import snappdf.write.*;
 

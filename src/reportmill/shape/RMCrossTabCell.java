@@ -6,6 +6,8 @@ import reportmill.util.RMGroup;
 import reportmill.util.RMGrouping;
 import rmdraw.shape.RMShapePaintProps;
 import rmdraw.shape.RMTextShape;
+import snap.geom.Insets;
+import snap.geom.VPos;
 import snap.gfx.*;
 import snap.text.TextLineStyle;
 import snap.util.*;

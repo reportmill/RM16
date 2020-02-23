@@ -3,7 +3,7 @@ import reportmill.util.RMKeyChain;
 import reportmill.util.RMTableOfContents;
 import rmdraw.shape.*;
 import snap.text.RichText;
-import snap.gfx.VPos;
+import snap.geom.VPos;
 import snap.util.ListUtils;
 import snap.util.StringUtils;
 import snap.web.WebURL;

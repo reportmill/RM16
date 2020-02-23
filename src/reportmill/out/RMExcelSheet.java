@@ -4,7 +4,8 @@
 package reportmill.out;
 import rmdraw.shape.*;
 import org.apache.poi.hssf.usermodel.*;
-import snap.gfx.*;
+import snap.geom.Point;
+import snap.geom.Rect;
 
 /** 
  * This class is used to associate a HSSFSheet with other HSSF objects that are specific to the sheet, but that
@@ -21,7 +22,7 @@ class RMExcelSheet {
     HSSFPatriarch        _patriarch;
   
     // The point in shape space which corresponds to 0,0 in the patriarch
-    Point                _sheetOrigin;
+    Point _sheetOrigin;
 
 /**
  * Create new excel sheet.

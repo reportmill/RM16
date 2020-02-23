@@ -2,7 +2,7 @@ package reportmill.app;
 import rmdraw.app.*;
 import reportmill.apptools.RMTableRowTool;
 import snap.text.TextEditor;
-import snap.gfx.HPos;
+import snap.geom.HPos;
 import snap.util.ClassUtils;
 import snap.util.Prefs;
 import snap.util.URLUtils;

@@ -3,6 +3,8 @@
  */
 package reportmill.shape;
 import rmdraw.shape.*;
+import snap.geom.Path;
+import snap.geom.Rect;
 import snap.gfx.*;
 import snap.util.*;
 

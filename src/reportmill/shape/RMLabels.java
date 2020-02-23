@@ -10,6 +10,7 @@ import java.util.List;
 
 import rmdraw.shape.RMParentShape;
 import rmdraw.shape.RMShape;
+import snap.geom.Rect;
 import snap.gfx.*;
 import snap.util.*;
 

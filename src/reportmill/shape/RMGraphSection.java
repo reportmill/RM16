@@ -6,7 +6,7 @@ import reportmill.util.RMGroup;
 import java.util.*;
 
 import rmdraw.shape.RMShape;
-import snap.gfx.Rect;
+import snap.geom.Rect;
 import snap.util.ListUtils;
 
 /**

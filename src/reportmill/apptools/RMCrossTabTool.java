@@ -7,6 +7,10 @@ import rmdraw.app.Editor;
 import rmdraw.apptools.RMTool;
 import rmdraw.shape.*;
 import java.util.*;
+
+import snap.geom.Point;
+import snap.geom.Rect;
+import snap.geom.Shape;
 import snap.gfx.*;
 import snap.util.*;
 import snap.view.*;

@@ -4,6 +4,7 @@
 package reportmill.shape;
 import rmdraw.shape.RMParentShape;
 import rmdraw.shape.RMShapePaintProps;
+import snap.geom.Rect;
 import snap.gfx.*;
 import snap.util.*;
 

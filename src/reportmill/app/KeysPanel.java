@@ -14,6 +14,8 @@ import reportmill.util.RMKeyChain;
 import rmdraw.shape.RMParentShape;
 import rmdraw.shape.RMShape;
 import reportmill.shape.RMTable;
+import snap.geom.Insets;
+import snap.geom.Polygon;
 import snap.gfx.*;
 import snap.util.ArrayUtils;
 import snap.util.StringUtils;

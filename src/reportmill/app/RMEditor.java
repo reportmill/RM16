@@ -16,7 +16,7 @@ import reportmill.util.RMDataSource;
 import rmdraw.shape.RMTextShape;
 import snap.gfx.Image;
 import snap.gfx.Painter;
-import snap.gfx.Rect;
+import snap.geom.Rect;
 import snap.util.SnapUtils;
 import snap.view.ViewAnim;
 

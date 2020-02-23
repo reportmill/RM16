@@ -7,7 +7,7 @@ import reportmill.util.RMKeyChain;
 import java.util.*;
 
 import rmdraw.shape.*;
-import snap.gfx.Rect;
+import snap.geom.Rect;
 import snap.util.MathUtils;
 
 /**

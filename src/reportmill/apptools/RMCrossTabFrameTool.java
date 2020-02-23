@@ -7,7 +7,7 @@ import reportmill.shape.RMCrossTabFrame;
 import rmdraw.app.Editor;
 import rmdraw.apptools.RMTool;
 import rmdraw.shape.*;
-import snap.gfx.Point;
+import snap.geom.Point;
 import snap.util.StringUtils;
 import snap.view.ViewEvent;
 

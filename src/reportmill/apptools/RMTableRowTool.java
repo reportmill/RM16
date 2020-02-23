@@ -7,7 +7,7 @@ import rmdraw.app.Editor;
 import rmdraw.apptools.RMParentShapeTool;
 import rmdraw.shape.*;
 import java.util.*;
-import snap.gfx.Point;
+import snap.geom.Point;
 import snap.util.StringUtils;
 import snap.view.*;
 import snap.viewx.DialogBox;

@@ -10,7 +10,7 @@ import rmdraw.shape.*;
 import java.util.*;
 
 import snap.gfx.Font;
-import snap.gfx.HPos;
+import snap.geom.HPos;
 import snap.util.*;
 
 /**

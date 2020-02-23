@@ -199,7 +199,7 @@ public void respondUI(ViewEvent anEvent)
 
         // If leaf click for RMText, add key
         else if(isSelectedLeaf() && editor.getTextEditor()!=null)
-            editor.getTextEditor().replace(getKeyPath());
+            editor.getTextEditor().replaceChars(getKeyPath());
     }
     
     // Handle DragGesture

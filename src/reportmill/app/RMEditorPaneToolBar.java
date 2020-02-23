@@ -223,9 +223,14 @@ public class RMEditorPaneToolBar extends EditorPaneToolBar {
 
         // Handle ToolButton(s)
         if (anEvent.getName().endsWith("ToolButton")) {
-            for(RMTool tool : getToolBarTools())
-                if(anEvent.getName().startsWith(tool.getClass().getSimpleName())) {
-                    getEditor().setCurrentTool(tool); break; }
+            String name = anEvent.getName().replace("Button", "");
+            for(RMTool tool : getToolBarTools()) {
+                String toolName = tool.getClass().getSimpleName();
+                if (toolName.startsWith(name)) {
+                    getEditor().setCurrentTool(tool);
+                    break;
+                }
+            }
         }
 
         // Handle FontFaceComboBox

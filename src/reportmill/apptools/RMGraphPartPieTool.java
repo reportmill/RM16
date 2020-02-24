@@ -3,7 +3,7 @@
  */
 package reportmill.apptools;
 import reportmill.shape.*;
-import rmdraw.app.RMTool;
+import rmdraw.app.Tool;
 import rmdraw.shape.*;
 import snap.view.*;
 import snap.viewx.DialogBox;
@@ -11,7 +11,7 @@ import snap.viewx.DialogBox;
 /**
  * Provides UI inspection for GraphPartBars.
  */
-public class RMGraphPartPieTool extends RMTool {
+public class RMGraphPartPieTool extends Tool {
 
 /**
  * Initialize UI panel.

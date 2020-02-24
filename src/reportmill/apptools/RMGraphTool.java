@@ -6,7 +6,7 @@ import reportmill.shape.*;
 import rmdraw.app.AttributesPanel;
 import rmdraw.app.Editor;
 import rmdraw.apptools.RMScene3DTool;
-import rmdraw.app.RMTool;
+import rmdraw.app.Tool;
 import reportmill.util.RMGrouping;
 import rmdraw.gfx.RMStroke;
 import rmdraw.shape.*;
@@ -19,7 +19,7 @@ import snap.viewx.ColorDock;
 /**
  * This class provides Editor inspector support for RMGraph.
  */
-public class RMGraphTool <T extends RMGraph> extends RMTool<T> implements RMSortPanel.Owner {
+public class RMGraphTool <T extends RMGraph> extends Tool<T> implements RMSortPanel.Owner {
     
     // The sort panel
     RMSortPanel               _sortPanel;

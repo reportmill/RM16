@@ -3,7 +3,7 @@
  */
 package reportmill.apptools;
 import rmdraw.app.*;
-import rmdraw.app.RMTool;
+import rmdraw.app.Tool;
 import rmdraw.shape.RMImageShape;
 import reportmill.shape.*;
 import java.util.List;
@@ -14,7 +14,7 @@ import snap.viewx.FilePanel;
 /**
  * Provides UI for RMPDFShape editing.
  */
-public class RMPDFShapeTool <T extends RMPDFShape> extends RMTool<T> {
+public class RMPDFShapeTool <T extends RMPDFShape> extends Tool<T> {
     
 /**
  * Returns the class that this tool is responsible for.

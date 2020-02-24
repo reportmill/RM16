@@ -3,13 +3,13 @@
  */
 package reportmill.apptools;
 import reportmill.shape.RMLabel;
-import rmdraw.app.RMTool;
+import rmdraw.app.Tool;
 import snap.view.*;
 
 /**
  * Tool for editing a Label.
  */
-public class RMLabelTool <T extends RMLabel> extends RMTool<T> {
+public class RMLabelTool <T extends RMLabel> extends Tool<T> {
 
     /**
      * Override.

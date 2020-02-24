@@ -4,7 +4,7 @@
 package reportmill.apptools;
 import reportmill.shape.*;
 import rmdraw.app.Editor;
-import rmdraw.app.RMTool;
+import rmdraw.app.Tool;
 import rmdraw.shape.*;
 import java.util.*;
 
@@ -18,7 +18,7 @@ import snap.view.*;
 /**
  * This class provides support for UI editing of RMCrossTab.
  */
-public class RMCrossTabTool <T extends RMCrossTab> extends RMTool<T> {
+public class RMCrossTabTool <T extends RMCrossTab> extends Tool<T> {
 
     // The currently selected divider
     RMCrossTabDivider _divider;

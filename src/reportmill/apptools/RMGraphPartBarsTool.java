@@ -3,14 +3,14 @@
  */
 package reportmill.apptools;
 import reportmill.shape.*;
-import rmdraw.app.RMTool;
+import rmdraw.app.Tool;
 import snap.util.ClassUtils;
 import snap.view.ViewEvent;
 
 /**
  * Provides UI inspection for GraphPartBars.
  */
-public class RMGraphPartBarsTool extends RMTool {
+public class RMGraphPartBarsTool extends Tool {
 
 /**
  * Resets UI panel controls.

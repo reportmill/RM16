@@ -6,7 +6,7 @@ import reportmill.shape.RMCrossTab;
 import reportmill.shape.RMCrossTabCell;
 import rmdraw.app.*;
 import rmdraw.apptools.RMTextTool;
-import rmdraw.app.RMTool;
+import rmdraw.app.Tool;
 import reportmill.util.RMGrouping;
 import rmdraw.shape.*;
 import java.util.List;
@@ -175,7 +175,7 @@ public void processEvent(T aCell, ViewEvent anEvent)
 {
     // Get cell table and tool
     RMCrossTab table = aCell.getTable();
-    RMTool tableTool = getTool(table);
+    Tool tableTool = getTool(table);
     
     // If event is popup trigger, run crosstab popup
     if(anEvent.isPopupTrigger()) {

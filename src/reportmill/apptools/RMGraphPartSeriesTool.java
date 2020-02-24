@@ -5,7 +5,7 @@ package reportmill.apptools;
 import reportmill.shape.*;
 import reportmill.shape.RMGraphPartSeries.LabelPos;
 import rmdraw.app.Editor;
-import rmdraw.app.RMTool;
+import rmdraw.app.Tool;
 import rmdraw.shape.*;
 import snap.util.StringUtils;
 import snap.view.*;
@@ -13,7 +13,7 @@ import snap.view.*;
 /**
  * RMTool subclass to provide UI editing for RMGraphPartSeries.
  */
-public class RMGraphPartSeriesTool <T extends RMGraphPartSeries> extends RMTool<T> {
+public class RMGraphPartSeriesTool <T extends RMGraphPartSeries> extends Tool<T> {
 
     // The selected series index
     int      _selIndex;

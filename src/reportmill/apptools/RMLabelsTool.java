@@ -4,7 +4,7 @@
 package reportmill.apptools;
 import reportmill.shape.*;
 import rmdraw.app.Editor;
-import rmdraw.app.RMTool;
+import rmdraw.app.Tool;
 import reportmill.util.RMGrouping;
 import rmdraw.shape.*;
 import java.util.*;
@@ -15,7 +15,7 @@ import snap.view.*;
 /**
  * A tool for UI editing of labels shape. 
  */
-public class RMLabelsTool extends RMTool implements RMSortPanel.Owner {
+public class RMLabelsTool extends Tool implements RMSortPanel.Owner {
 
     // The sort panel
     RMSortPanel        _sortPanel;

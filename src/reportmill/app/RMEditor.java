@@ -3,7 +3,7 @@ import reportmill.apptools.*;
 import reportmill.shape.*;
 import rmdraw.app.Editor;
 import rmdraw.app.EditorDnD;
-import rmdraw.app.RMTool;
+import rmdraw.app.Tool;
 import rmdraw.apptools.*;
 import reportmill.shape.RMCrossTab;
 import reportmill.shape.RMCrossTabCell;
@@ -113,7 +113,7 @@ public class RMEditor extends Editor {
     /**
      * Returns the specific tool for a given shape.
      */
-    protected RMTool createTool(Class aClass)
+    protected Tool createTool(Class aClass)
     {
         if (aClass== RMCrossTab.class) return new RMCrossTabTool();
         if (aClass== RMCrossTabCell.class) return new RMCrossTabCellTool();

@@ -225,7 +225,7 @@ public class RMEditorPaneToolBar extends EditorPaneToolBar {
         // Handle ToolButton(s)
         if (anEvent.getName().endsWith("ToolButton")) {
             String name = anEvent.getName().replace("Button", "");
-            for(RMTool tool : getToolBarTools()) {
+            for(Tool tool : getToolBarTools()) {
                 String toolName = tool.getClass().getSimpleName();
                 if (toolName.startsWith(name)) {
                     getEditor().setCurrentTool(tool);
@@ -335,9 +335,9 @@ public class RMEditorPaneToolBar extends EditorPaneToolBar {
     /**
      * Creates the list of tool instances for tool bar.
      */
-    protected RMTool[] createToolBarTools()
+    protected Tool[] createToolBarTools()
     {
-        List<RMTool> tools = new ArrayList();
+        List<Tool> tools = new ArrayList();
         Editor editor = getEditor();
         tools.add(editor.getSelectTool());
         tools.add(editor.getTool(RMLineShape.class));
@@ -346,6 +346,6 @@ public class RMEditorPaneToolBar extends EditorPaneToolBar {
         tools.add(editor.getTool(RMTextShape.class));
         tools.add(editor.getTool(RMPolygonShape.class));
         tools.add(new RMPolygonShapeTool.PencilTool(editor));
-        return tools.toArray(new RMTool[0]);
+        return tools.toArray(new Tool[0]);
     }
 }

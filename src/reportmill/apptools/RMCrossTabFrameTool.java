@@ -5,7 +5,7 @@ package reportmill.apptools;
 import reportmill.shape.RMCrossTab;
 import reportmill.shape.RMCrossTabFrame;
 import rmdraw.app.Editor;
-import rmdraw.app.RMTool;
+import rmdraw.app.Tool;
 import rmdraw.shape.*;
 import snap.geom.Point;
 import snap.util.StringUtils;
@@ -14,7 +14,7 @@ import snap.view.ViewEvent;
 /**
  * Provides UI inspector for crosstab frame.
  */
-public class RMCrossTabFrameTool <T extends RMCrossTabFrame> extends RMTool<T> {
+public class RMCrossTabFrameTool <T extends RMCrossTabFrame> extends Tool<T> {
 
 /**
  * Called to initialize UI.

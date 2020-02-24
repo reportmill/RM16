@@ -4,14 +4,14 @@
 package reportmill.apptools;
 import reportmill.shape.*;
 import rmdraw.app.Editor;
-import rmdraw.app.RMTool;
+import rmdraw.app.Tool;
 import rmdraw.shape.*;
 import snap.view.*;
 
 /**
  * RMTool subclass to provide UI editing for RMGraphPartValueAxis.
  */
-public class RMGraphPartValueAxisTool <T extends RMGraphPartValueAxis> extends RMTool<T> {
+public class RMGraphPartValueAxisTool <T extends RMGraphPartValueAxis> extends Tool<T> {
     
 /**
  * Resets UI panel controls.

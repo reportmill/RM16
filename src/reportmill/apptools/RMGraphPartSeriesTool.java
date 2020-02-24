@@ -5,7 +5,7 @@ package reportmill.apptools;
 import reportmill.shape.*;
 import reportmill.shape.RMGraphPartSeries.LabelPos;
 import rmdraw.app.Editor;
-import rmdraw.apptools.RMTool;
+import rmdraw.app.RMTool;
 import rmdraw.shape.*;
 import snap.util.StringUtils;
 import snap.view.*;

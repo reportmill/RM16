@@ -6,7 +6,7 @@ import reportmill.shape.*;
 import rmdraw.app.AttributesPanel;
 import rmdraw.app.Editor;
 import rmdraw.apptools.RMScene3DTool;
-import rmdraw.apptools.RMTool;
+import rmdraw.app.RMTool;
 import reportmill.util.RMGrouping;
 import rmdraw.gfx.RMStroke;
 import rmdraw.shape.*;

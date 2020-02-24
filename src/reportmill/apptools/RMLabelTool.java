@@ -3,7 +3,7 @@
  */
 package reportmill.apptools;
 import reportmill.shape.RMLabel;
-import rmdraw.apptools.RMTool;
+import rmdraw.app.RMTool;
 import snap.view.*;
 
 /**

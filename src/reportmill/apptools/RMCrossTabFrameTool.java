@@ -5,7 +5,7 @@ package reportmill.apptools;
 import reportmill.shape.RMCrossTab;
 import reportmill.shape.RMCrossTabFrame;
 import rmdraw.app.Editor;
-import rmdraw.apptools.RMTool;
+import rmdraw.app.RMTool;
 import rmdraw.shape.*;
 import snap.geom.Point;
 import snap.util.StringUtils;

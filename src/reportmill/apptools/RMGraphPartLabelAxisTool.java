@@ -4,7 +4,7 @@
 package reportmill.apptools;
 import reportmill.shape.*;
 import rmdraw.app.Editor;
-import rmdraw.apptools.RMTool;
+import rmdraw.app.RMTool;
 import snap.view.ViewEvent;
 import rmdraw.shape.*;
 

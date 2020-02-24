@@ -2,7 +2,7 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.apptools;
-import rmdraw.apptools.RMTool;
+import rmdraw.app.RMTool;
 import reportmill.shape.RMCrossTabDivider;
 import snap.view.*;
 

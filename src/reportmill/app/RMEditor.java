@@ -3,6 +3,7 @@ import reportmill.apptools.*;
 import reportmill.shape.*;
 import rmdraw.app.Editor;
 import rmdraw.app.EditorDnD;
+import rmdraw.app.RMTool;
 import rmdraw.apptools.*;
 import reportmill.shape.RMCrossTab;
 import reportmill.shape.RMCrossTabCell;

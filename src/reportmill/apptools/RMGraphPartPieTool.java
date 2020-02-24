@@ -3,7 +3,7 @@
  */
 package reportmill.apptools;
 import reportmill.shape.*;
-import rmdraw.apptools.RMTool;
+import rmdraw.app.RMTool;
 import rmdraw.shape.*;
 import snap.view.*;
 import snap.viewx.DialogBox;

@@ -3,7 +3,7 @@
  */
 package reportmill.apptools;
 import rmdraw.app.*;
-import rmdraw.apptools.RMTool;
+import rmdraw.app.RMTool;
 import rmdraw.shape.RMImageShape;
 import reportmill.shape.*;
 import java.util.List;

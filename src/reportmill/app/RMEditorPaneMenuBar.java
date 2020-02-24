@@ -138,7 +138,7 @@ public class RMEditorPaneMenuBar extends EditorPaneMenuBar {
         if (anEvent.equals("CopyMenuItem") || anEvent.equals("CopyButton")) editor.copy();
         if (anEvent.equals("PasteMenuItem") || anEvent.equals("PasteButton")) editor.paste();
         if (anEvent.equals("SelectAllMenuItem")) editor.selectAll();
-        if (anEvent.equals("CheckSpellingMenuItem")) EditorUtils.checkSpelling(editor);;
+        if (anEvent.equals("CheckSpellingMenuItem")) EditorUtils.checkSpelling(editor);
 
         // Edit -> CheckSpellingAsYouTypeMenuItem
         if (anEvent.equals("CheckSpellingAsYouTypeMenuItem")) {
@@ -157,25 +157,25 @@ public class RMEditorPaneMenuBar extends EditorPaneMenuBar {
         if (anEvent.equals("FontPanelMenuItem"))
             epane.getAttributesPanel().setVisibleName(AttributesPanel.FONT);
         if (anEvent.equals("BoldMenuItem") || anEvent.equals("BoldButton"))
-            EditorUtils.setFontBold(editor, !EditorUtils.getFont(editor).isBold());
+            editor.getStyler().setFontBold(!editor.getStyler().getFont().isBold());
         if (anEvent.equals("ItalicMenuItem") || anEvent.equals("ItalicButton"))
-            EditorUtils.setFontItalic(editor, !EditorUtils.getFont(editor).isItalic());
+            editor.getStyler().setFontItalic(!editor.getStyler().getFont().isItalic());
         if (anEvent.equals("UnderlineMenuItem") || anEvent.equals("UnderlineButton"))
-            EditorUtils.setUnderlined(editor);
+            editor.getStyler().setUnderlined();
         if (anEvent.equals("OutlineMenuItem"))
-            EditorUtils.setTextBorder(editor);
+            editor.getStyler().setTextBorder();
         if (anEvent.equals("AlignLeftMenuItem") || anEvent.equals("AlignLeftButton"))
-            EditorUtils.setAlignmentX(editor, HPos.LEFT);
+            editor.getStyler().setAlignX(HPos.LEFT);
         if (anEvent.equals("AlignCenterMenuItem") || anEvent.equals("AlignCenterButton"))
-            EditorUtils.setAlignmentX(editor, HPos.CENTER);
+            editor.getStyler().setAlignX(HPos.CENTER);
         if (anEvent.equals("AlignRightMenuItem") || anEvent.equals("AlignRightButton"))
-            EditorUtils.setAlignmentX(editor, HPos.RIGHT);
+            editor.getStyler().setAlignX(HPos.RIGHT);
         if (anEvent.equals("AlignFullMenuItem") || anEvent.equals("AlignFullButton"))
-            EditorUtils.setJustify(editor, true);
+            editor.getStyler().setJustify(true);
         if (anEvent.equals("SuperscriptMenuItem"))
-            EditorUtils.setSuperscript(editor);
+            editor.getStyler().setSuperscript();
         if (anEvent.equals("SubscriptMenuItem"))
-            EditorUtils.setSubscript(editor);
+            editor.getStyler().setSubscript();
 
         // Handle Pages menu items
         if (anEvent.equals("AddPageMenuItem")) editor.addPage();

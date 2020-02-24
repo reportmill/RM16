@@ -81,7 +81,7 @@ public class RMEditorPaneToolBar extends EditorPaneToolBar {
     {
         // Get the editor
         Editor editor = getEditor();
-        Font font = EditorUtils.getFont(editor);
+        Font font = editor.getStyler().getFont();
 
         // Update UndoButton, RedoButton
         Undoer undoer = editor.getUndoer();
@@ -89,7 +89,7 @@ public class RMEditorPaneToolBar extends EditorPaneToolBar {
         setViewEnabled("RedoButton", undoer!=null && undoer.getRedoSetLast()!=null);
 
         // Update MoneyButton, PercentButton, CommaButton
-        TextFormat fmt = RMEditorUtils.getFormat(editor);
+        TextFormat fmt = editor.getStyler().getFormat();
         RMNumberFormat nfmt = fmt instanceof RMNumberFormat? (RMNumberFormat)fmt : null;
         setViewValue("MoneyButton", nfmt!=null && nfmt.isLocalCurrencySymbolUsed());
         setViewValue("PercentButton", nfmt!=null && nfmt.isPercentSymbolUsed());
@@ -115,7 +115,7 @@ public class RMEditorPaneToolBar extends EditorPaneToolBar {
         setViewEnabled("BoldButton", font.getBold()!=null);
 
         // Update ColorWell
-        Color color = EditorUtils.getSelectedColor(editor);
+        Color color = editor.getStyler().getFillColor();
         _colorWell.setColor(color);
     }
 
@@ -148,40 +148,41 @@ public class RMEditorPaneToolBar extends EditorPaneToolBar {
 
         // Handle FillColorButton, StrokeColorButton, TextColorButton
         if (anEvent.equals("FillColorButton"))
-            EditorUtils.setColor(editor, anEvent.getView(ColorButton.class).getColor());
+            editor.getStyler().setFillColor(anEvent.getView(ColorButton.class).getColor());
         if (anEvent.equals("StrokeColorButton"))
-            EditorUtils.setStrokeColor(editor, anEvent.getView(ColorButton.class).getColor());
+            editor.getStyler().setStrokeColor(anEvent.getView(ColorButton.class).getColor());
         if (anEvent.equals("TextColorButton"))
-            EditorUtils.setTextColor(editor, anEvent.getView(ColorButton.class).getColor());
+            editor.getStyler().setTextColor(anEvent.getView(ColorButton.class).getColor());
 
         // Handle MoneyButton: If currently selected format is number format, add or remove dollars
-        TextFormat fmt = RMEditorUtils.getFormat(editor);
+        EditorStyler styler = editor.getStyler();
+        TextFormat fmt = styler.getFormat();
         RMNumberFormat nfmt = fmt instanceof RMNumberFormat? (RMNumberFormat)fmt : null;
         if (anEvent.equals("MoneyButton")) {
-            if (nfmt==null) RMEditorUtils.setFormat(editor, RMNumberFormat.CURRENCY);
+            if (nfmt==null) styler.setFormat(RMNumberFormat.CURRENCY);
             else {
                 nfmt = nfmt.clone(); // Clone it
                 nfmt.setLocalCurrencySymbolUsed(!nfmt.isLocalCurrencySymbolUsed()); // Toggle whether $ is used
-                RMEditorUtils.setFormat(editor, nfmt);
+                styler.setFormat(nfmt);
             }
         }
 
         // Handle PercentButton: If currently selected format is number format, add or remove percent symbol
         if (anEvent.equals("PercentButton")) {
-            if (nfmt==null) RMEditorUtils.setFormat(editor, new RMNumberFormat("#,##0.00 %"));
+            if (nfmt==null) styler.setFormat(new RMNumberFormat("#,##0.00 %"));
             else {
                 nfmt = nfmt.clone(); // Clone it
                 nfmt.setPercentSymbolUsed(!nfmt.isPercentSymbolUsed()); // Toggle whether percent symbol is used
-                RMEditorUtils.setFormat(editor, nfmt);
+                styler.setFormat(nfmt);
             }
         }
 
         // Handle CommaButton: If currently selected format is number format, add or remove grouping
         if (anEvent.equals("CommaButton")) {
-            if(nfmt==null) RMEditorUtils.setFormat(editor, new RMNumberFormat("#,##0.00"));
+            if(nfmt==null) styler.setFormat(new RMNumberFormat("#,##0.00"));
             else { nfmt = nfmt.clone();
                 nfmt.setGroupingUsed(!nfmt.isGroupingUsed()); // Toggle whether grouping is used
-                RMEditorUtils.setFormat(editor, nfmt); }
+                styler.setFormat(nfmt); }
         }
 
         // Handle DecimalAddButton: If currently selected format is number format, add decimal
@@ -189,7 +190,7 @@ public class RMEditorPaneToolBar extends EditorPaneToolBar {
             nfmt = nfmt.clone();
             nfmt.setMinimumFractionDigits(nfmt.getMinimumFractionDigits()+1);
             nfmt.setMaximumFractionDigits(nfmt.getMinimumFractionDigits());
-            RMEditorUtils.setFormat(editor, nfmt);
+            styler.setFormat(nfmt);
         }
 
         // Handle DecimalRemoveButton: If currently selected format is number format, remove decimal digits
@@ -197,7 +198,7 @@ public class RMEditorPaneToolBar extends EditorPaneToolBar {
             nfmt = nfmt.clone();
             nfmt.setMinimumFractionDigits(nfmt.getMinimumFractionDigits()-1);
             nfmt.setMaximumFractionDigits(nfmt.getMinimumFractionDigits());
-            RMEditorUtils.setFormat(editor, nfmt);
+            styler.setFormat(nfmt);
         }
 
         // Handle SamplesButton
@@ -240,36 +241,36 @@ public class RMEditorPaneToolBar extends EditorPaneToolBar {
             if(fontNames==null || fontNames.length==0) return;
             String fontName = fontNames[0];
             Font font = Font.get(fontName, 12);
-            EditorUtils.setFontFamily(editor, font);
+            styler.setFontFamily(font);
             editor.requestFocus();
         }
 
         // Handle FontSizeComboBox
         if (anEvent.equals("FontSizeComboBox")) {
-            EditorUtils.setFontSize(editor, anEvent.getFloatValue(), false);
+            styler.setFontSize(anEvent.getFloatValue(), false);
             editor.requestFocus();
         }
 
         // Handle FontSizeUpButton, FontSizeDownButton
-        if (anEvent.equals("FontSizeUpButton")) { Font font = EditorUtils.getFont(editor);
-            EditorUtils.setFontSize(editor, font.getSize()<16? 1 : 2, true); }
-        if (anEvent.equals("FontSizeDownButton")) { Font font = EditorUtils.getFont(editor);
-            EditorUtils.setFontSize(editor, font.getSize()<16? -1 : -2, true); }
+        if (anEvent.equals("FontSizeUpButton")) { Font font = styler.getFont();
+            styler.setFontSize(font.getSize()<16? 1 : 2, true); }
+        if (anEvent.equals("FontSizeDownButton")) { Font font = styler.getFont();
+            styler.setFontSize(font.getSize()<16? -1 : -2, true); }
 
         // Handle BoldButton, ItalicButton, UnderlineButton
-        if (anEvent.equals("BoldButton")) EditorUtils.setFontBold(editor, anEvent.getBoolValue());
-        if (anEvent.equals("ItalicButton")) EditorUtils.setFontItalic(editor, anEvent.getBoolValue());
-        if (anEvent.equals("UnderlineButton")) EditorUtils.setUnderlined(editor);
+        if (anEvent.equals("BoldButton")) styler.setFontBold(anEvent.getBoolValue());
+        if (anEvent.equals("ItalicButton")) styler.setFontItalic(anEvent.getBoolValue());
+        if (anEvent.equals("UnderlineButton")) styler.setUnderlined();
 
         // Handle AlignLeftButton, AlignCenterButton, AlignRightButton, AlignFullButton
         if (anEvent.equals("AlignLeftButton"))
-            EditorUtils.setAlignmentX(editor, HPos.LEFT);
+            styler.setAlignX(HPos.LEFT);
         if (anEvent.equals("AlignCenterButton"))
-            EditorUtils.setAlignmentX(editor, HPos.CENTER);
+            styler.setAlignX(HPos.CENTER);
         if (anEvent.equals("AlignRightButton"))
-            EditorUtils.setAlignmentX(editor, HPos.RIGHT);
+            styler.setAlignX(HPos.RIGHT);
         if (anEvent.equals("AlignFullButton"))
-            EditorUtils.setJustify(editor, true);
+            styler.setJustify(true);
 
         // Handle AddTableButton, AddGraphButton, AddLabelsButton, AddCrossTabFrameButton
         if (anEvent.equals("AddTableButton")) RMTableTool.addTable(getEditor(), null);
@@ -287,7 +288,7 @@ public class RMEditorPaneToolBar extends EditorPaneToolBar {
 
         // Handle ColorWell
         if (anEvent.equals("ColorWell"))
-            EditorUtils.setSelectedColor(editor, _colorWell.getColor());
+            editor.getStyler().setFillColor(_colorWell.getColor());
     }
 
     /**

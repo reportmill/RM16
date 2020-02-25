@@ -400,15 +400,6 @@ public boolean getAcceptsChildren(RMShape aShape)  { return true; }
 public boolean isUngroupable(RMShape aShape)  { return false; }
 
 /**
- * Override to suppress setting font on sample graph.
- */
-@Override
-public void setFontKeyDeep(Editor anEditor, RMShape aShape, String aKey, Object aVal)
-{
-    setFontKey(anEditor, aShape, aKey, aVal);
-}
-
-/**
  * Adds a new graph instance to the given editor with the given dataset key.
  */
 public static void addGraph(Editor anEditor, String aKeyPath)

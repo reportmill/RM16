@@ -81,7 +81,7 @@ public void resetDividers()  { _divPool.addAll(_dividers); _dividers.clear(); }
 protected RMCrossTabDivider getDividerFromPool()
 {
     RMCrossTabDivider div = _divPool.size()>0? _divPool.remove(0) : new RMCrossTabDivider(this);
-    if(_table.getStroke()!=null) div.setStroke(_table.getStroke());
+    if(_table.getBorder()!=null) div.setBorder(_table.getBorder());
     return div;
 }
 

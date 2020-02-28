@@ -283,7 +283,7 @@ private void append(RMExcelSheet rmSheet, HSSFShapeContainer aParent, RMShape aS
         }
         
         // Unless it had a fill or stroke, in which case just turn it into a rectangle
-        else if(text.getFill()!= null || text.getStroke()!=null)
+        else if(text.getFill()!= null || text.getBorder()!=null)
             newShape = rmSheet.addRect(aShape, aParent);
     }
     
@@ -443,8 +443,8 @@ public void setShapeFillAndStroke(HSSFShape hssfShape, RMShape aShape)
     else hssfShape.setNoFill(true);
     
     // Set stroke color, line-style
-    if(aShape.getStroke()!=null) {
-        Color c = aShape.getStroke().getColor();
+    if(aShape.getBorder()!=null) {
+        Color c = aShape.getBorder().getColor();
         hssfShape.setLineStyle(HSSFShape.LINESTYLE_SOLID);
         hssfShape.setLineStyleColor(c.getRedInt(), c.getGreenInt(), c.getBlueInt());
     }
@@ -532,7 +532,7 @@ class WorkbookStyle {
         if(aText.getAlignmentX()!=_text.getAlignmentX()) return false;
         if(aText.getAlignmentY()!=_text.getAlignmentY()) return false;
         if(!SnapUtils.equals(aText.getFill(), _text.getFill())) return false;
-        if(!SnapUtils.equals(aText.getStroke(), _text.getStroke())) return false;
+        if(!SnapUtils.equals(aText.getBorder(), _text.getBorder())) return false;
         if(!SnapUtils.equals(aText.getTextColor(), _text.getTextColor())) return false;
         if(!SnapUtils.equals(aFormat, _format)) return false;
         return true;
@@ -588,8 +588,8 @@ class WorkbookStyle {
         }
         
         // If text has stroke, configure stroke info
-        if(_text.getStroke()!=null) {
-            short color = getWorkbookColorIndex(_text.getStroke().getColor());
+        if(_text.getBorder()!=null) {
+            short color = getWorkbookColorIndex(_text.getBorder().getColor());
             _style.setTopBorderColor(color);
             _style.setLeftBorderColor(color);
             _style.setRightBorderColor(color);

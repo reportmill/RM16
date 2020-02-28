@@ -87,7 +87,7 @@ protected void writeShape(T aShape, RMPDFWriter aWriter)
         RMFillPdfr.writeShapeFill(aShape, fill, aWriter);
     
     // Get stroke and write pdf if not null
-    if(aShape.getStroke()!=null && !aShape.isStrokeOnTop())
+    if(aShape.getBorder()!=null && !aShape.isStrokeOnTop())
         writeShapeStroke(aShape, aWriter);
 }
 
@@ -109,7 +109,7 @@ protected void writeShapeChildren(RMShape aShape, RMPDFWriter aWriter)
 protected void writeShapeAfter(T aShape, RMPDFWriter aWriter)
 {
     // Get stroke and write pdf if not null
-    if(aShape.getStroke()!=null && aShape.isStrokeOnTop())
+    if(aShape.getBorder()!=null && aShape.isStrokeOnTop())
         writeShapeStroke(aShape, aWriter);
         
     // Get pdf page
@@ -135,9 +135,11 @@ protected void writeShapeAfter(T aShape, RMPDFWriter aWriter)
  */
 protected void writeShapeStroke(RMShape aShape, RMPDFWriter aWriter)
 {
-    RMStroke stroke = aShape.getStroke();
-    Shape path = aShape.getPath(), spath = stroke.getStrokePath(path);
-    SnapPaintPdfr.writeShapeStroke(spath, stroke.snap(), stroke.getColor(), aWriter);
+    Border border = aShape.getBorder();
+    Stroke stroke = border instanceof RMStroke ? ((RMStroke)border).getStroke() : Stroke.getStroke(border.getWidth());
+    Shape path = aShape.getPath();
+    Shape spath = border instanceof RMBorderStroke ? ((RMBorderStroke)border).getStrokePath(path) : null;
+    SnapPaintPdfr.writeShapeStroke(spath, stroke, border.getColor(), aWriter);
 }
 
 /**

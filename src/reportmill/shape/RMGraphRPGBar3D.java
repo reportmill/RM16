@@ -3,9 +3,7 @@
  */
 package reportmill.shape;
 import rmdraw.gfx3d.*;
-import rmdraw.gfx.*;
 import java.util.*;
-
 import rmdraw.shape.RMLineShape;
 import rmdraw.shape.RMScene3D;
 import rmdraw.shape.RMShape;
@@ -28,7 +26,7 @@ class RMGraphRPGBar3D extends RMScene3D implements RMGraphRPGBar.BarGraphShape {
     Paint             _backFill;
     
     // The background stroke for the grid
-    RMStroke          _backStroke;
+    Border            _backStroke;
     
     // Shapes for grid
     Path _grid = new Path();
@@ -64,7 +62,8 @@ public RMGraphRPGBar3D(RMGraph aGraph)
 {
     // Set attributes
     _graph = aGraph; _vertical = _graph.isVertical();
-    _backFill = _graph.getFill(); _backStroke = _graph.getStroke();
+    _backFill = _graph.getFill();
+    _backStroke = _graph.getBorder();
     setBounds(_graph.getBounds());
     setOpacity(_graph.getOpacity());
     copy3D(_graph.get3D());

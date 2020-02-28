@@ -2,11 +2,10 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.shape;
-import rmdraw.gfx.*;
 import java.util.*;
-
 import rmdraw.shape.RMParentShape;
 import rmdraw.shape.RMShape;
+import snap.gfx.Border;
 import snap.gfx.Color;
 import snap.util.*;
 
@@ -501,7 +500,8 @@ public RMShape divideShapeFromTop(double anAmount)
 /**
  * Override to trigger layout.
  */
-public void setStroke(RMStroke aStroke)  { super.setStroke(aStroke); relayout(); }
+@Override
+public void setBorder(Border aBorder)  { super.setBorder(aBorder); relayout(); }
 
 /**
  * Standard clone implementation.

@@ -2,12 +2,10 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.out;
-import rmdraw.gfx.*;
 import rmdraw.shape.*;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.util.*;
-
 import snap.geom.PathIter;
 import snap.geom.Rect;
 import snap.geom.Shape;
@@ -181,7 +179,7 @@ private static class RMShapeHpr <T extends RMShape> extends RMHtmlHelper<T> {
     {
         // Get Fill/Stroke/Effect
         Paint fill = aShape.getFill();
-        RMStroke stroke = aShape.getStroke();
+        Border border = aShape.getBorder();
         Effect effect = aShape.getEffect();
         
         // Write fill and effect
@@ -207,7 +205,7 @@ private static class RMShapeHpr <T extends RMShape> extends RMHtmlHelper<T> {
         
         // Add path
         XMLElement pathXML;
-        if(fill!=null || stroke!=null || effect!=null) {
+        if(fill!=null || border!=null || effect!=null) {
             pathXML = new XMLElement("path");
             pathXML.add("d", new SVGPathMaker().append(aShape.getPath()).toString());
             anXML.addElement(pathXML);
@@ -216,9 +214,9 @@ private static class RMShapeHpr <T extends RMShape> extends RMHtmlHelper<T> {
             pathXML.add("fill", fillString);
         
             // Do stroke
-            if(stroke!=null) {
-                pathXML.add("stroke", '#' + stroke.getColor().toHexString());
-                pathXML.add("stroke-width", stroke.getWidth());
+            if(border!=null) {
+                pathXML.add("stroke", '#' + border.getColor().toHexString());
+                pathXML.add("stroke-width", border.getWidth());
             }
             
             // Do filter

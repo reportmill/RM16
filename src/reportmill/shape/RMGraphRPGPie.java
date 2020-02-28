@@ -199,7 +199,7 @@ protected void configure()
                 RMTextShape label = new RMTextShape(rtext);
                 
                 // Set stroke and fill
-                if(labelAxis.getStroke()!=null) label.setStrokeColor(labelAxis.getStrokeColor());
+                if(labelAxis.getBorder()!=null) label.setStrokeColor(labelAxis.getStrokeColor());
                 if(labelAxis.getFill()!=null) label.setColor(labelAxis.getColor());
                 
                 // Have wedge label set size to fit

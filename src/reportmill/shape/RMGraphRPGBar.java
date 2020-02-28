@@ -379,7 +379,7 @@ private void addValueAxisLabels()
     double axisW = isVertical()? 5 : width;
     double axisH = isVertical()? height : 5;
     axis.setFrame(axisX, axisY, axisW, axisH);
-    axis.setStroke(new RMStroke());
+    axis.setBorder(new RMStroke());
 
     // Create path for axis labels line: Iterate over graph intervals to add ticks to axis path
     Path path = new Path();
@@ -610,7 +610,7 @@ public RMShape getBarPrototype()  { return _barProtype!=null? _barProtype : (_ba
 /**
  * Returns the shape used to represent the basic attributes of bars & wedges.
  */
-private RMShape createBarPrototype()  { RMShape bp = new RMRectShape(); bp.setStroke(new RMStroke()); return bp; }
+private RMShape createBarPrototype()  { RMShape bp = new RMRectShape(); bp.setBorder(new RMStroke()); return bp; }
 
 /**
  * An interface for a shape that renders a bar graph from bar graph pieces.

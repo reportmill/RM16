@@ -2,7 +2,6 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.shape;
-import rmdraw.gfx.*;
 import java.util.*;
 
 import rmdraw.shape.RMShape;
@@ -120,12 +119,13 @@ public RMTextShape getProxy()
 }
 
 /** Override to handle proxy. */
-public RMStroke getStroke()  { return getProxy().getStroke(); }
+public Border getBorder()  { return getProxy().getBorder(); }
 
 /** Override to handle proxy. */
-public void setStroke(RMStroke aStroke)
+@Override
+public void setBorder(Border aBorder)
 {
-    getProxy().setStroke(aStroke);
+    getProxy().setBorder(aBorder);
 }
 
 /** Override to handle proxy. */

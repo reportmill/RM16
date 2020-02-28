@@ -199,7 +199,7 @@ public void setWidth(double aWidth)
 protected void paintShape(Painter aPntr)
 {
     // If switch shape doesn't draw a stroke, draw a light one to indicate its bounds
-    if(getClass()==RMSwitchShape.class && getStroke()==null && RMShapePaintProps.isEditing(aPntr)) {
+    if(getClass()==RMSwitchShape.class && getBorder()==null && RMShapePaintProps.isEditing(aPntr)) {
         aPntr.setColor(Color.LIGHTGRAY); aPntr.setStroke(Stroke.Stroke1);
         aPntr.draw(getBoundsInside());
     }

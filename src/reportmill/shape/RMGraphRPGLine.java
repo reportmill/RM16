@@ -71,7 +71,7 @@ public void addBars()
         }
         
         // If 2D line, set stroke color and line width
-        else { lineShape.setColor(null); lineShape.setStroke(color, 2); }
+        else { lineShape.setColor(null); lineShape.setBorder(color, 2); }
         
         // Set line bounds
         lineShape.setBounds(path.getBounds());

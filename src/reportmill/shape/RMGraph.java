@@ -3,10 +3,8 @@
  */
 package reportmill.shape;
 import reportmill.util.RMGrouping;
-import rmdraw.gfx.*;
 import java.util.*;
 import java.util.List;
-
 import rmdraw.shape.RMParentShape;
 import rmdraw.shape.RMScene3D;
 import rmdraw.shape.RMShape;
@@ -637,7 +635,7 @@ public Paint getFill()
  */
 public void setFill(Paint aFill)
 {
-    if(_proxyShape!=null)
+    if (_proxyShape!=null)
         _proxyShape.setFill(aFill);
     else super.setFill(aFill);
     relayout();
@@ -646,16 +644,20 @@ public void setFill(Paint aFill)
 /**
  * Override to allow for ProxyShape.
  */
-public RMStroke getStroke()  { return useProxy()? _proxyShape.getStroke() : super.getStroke(); }
+public Border getBorder()
+{
+    return useProxy()? _proxyShape.getBorder() : super.getBorder();
+}
 
 /**
  * Override to allow for ProxyShape and trigger relayout.
  */
-public void setStroke(RMStroke aStroke)
+@Override
+public void setBorder(Border aBorder)
 {
-    if(_proxyShape!=null)
-        _proxyShape.setStroke(aStroke);
-    else super.setStroke(aStroke);
+    if (_proxyShape!=null)
+        _proxyShape.setBorder(aBorder);
+    else super.setBorder(aBorder);
     relayout();
 }
 

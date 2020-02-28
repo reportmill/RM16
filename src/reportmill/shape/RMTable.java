@@ -495,7 +495,7 @@ protected void paintShapeOver(Painter aPntr)
     super.paintShapeOver(aPntr);
     
     // If table already draws stroke or if not editing, just return
-    if(getStroke()!=null || !RMShapePaintProps.isEditing(aPntr)) return;
+    if(getBorder()!=null || !RMShapePaintProps.isEditing(aPntr)) return;
         
     // Draw rect with antialiasing off
     aPntr.setColor(Color.DARKGRAY); aPntr.setStroke(Stroke.Stroke1);

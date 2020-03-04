@@ -3,7 +3,7 @@
  */
 package reportmill.shape;
 import reportmill.util.RMGroup;
-import rmdraw.gfx.RMStroke;
+
 import java.util.*;
 import rmdraw.shape.*;
 import snap.geom.Path;
@@ -379,7 +379,7 @@ private void addValueAxisLabels()
     double axisW = isVertical()? 5 : width;
     double axisH = isVertical()? height : 5;
     axis.setFrame(axisX, axisY, axisW, axisH);
-    axis.setBorder(new RMStroke());
+    axis.setBorder(Border.blackBorder());
 
     // Create path for axis labels line: Iterate over graph intervals to add ticks to axis path
     Path path = new Path();
@@ -610,7 +610,12 @@ public RMShape getBarPrototype()  { return _barProtype!=null? _barProtype : (_ba
 /**
  * Returns the shape used to represent the basic attributes of bars & wedges.
  */
-private RMShape createBarPrototype()  { RMShape bp = new RMRectShape(); bp.setBorder(new RMStroke()); return bp; }
+private RMShape createBarPrototype()
+{
+    RMShape bp = new RMRectShape();
+    bp.setBorder(Border.blackBorder());
+    return bp;
+}
 
 /**
  * An interface for a shape that renders a bar graph from bar graph pieces.

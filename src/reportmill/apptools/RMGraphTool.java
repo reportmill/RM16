@@ -8,9 +8,9 @@ import rmdraw.app.Editor;
 import rmdraw.apptools.RMScene3DTool;
 import rmdraw.app.Tool;
 import reportmill.util.RMGrouping;
-import rmdraw.gfx.RMStroke;
 import rmdraw.shape.*;
 import java.util.*;
+import snap.gfx.Border;
 import snap.gfx.Color;
 import snap.util.*;
 import snap.view.*;
@@ -429,7 +429,7 @@ private static RMGraph createSampleGraph()
 {
     // Create new 320x240(*90%) graph
     RMGraph graph = new RMGraph(); graph.setSize(288, 216);
-    graph.setBorder(new RMStroke()); //setFill(newRMGradientFill(newColor(.85f,.88f,1),newColor(.58f,.65f,1),90));
+    graph.setBorder(Border.blackBorder()); //setFill(newRMGradientFill(newColor(.85f,.88f,1),newColor(.58f,.65f,1),90));
     graph.setColor(Color.WHITE);
     return graph;
 }

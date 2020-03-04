@@ -136,10 +136,11 @@ protected void writeShapeAfter(T aShape, RMPDFWriter aWriter)
 protected void writeShapeStroke(RMShape aShape, RMPDFWriter aWriter)
 {
     Border border = aShape.getBorder();
-    Stroke stroke = border instanceof RMStroke ? ((RMStroke)border).getStroke() : Stroke.getStroke(border.getWidth());
+    Color color = border.getColor();
+    Stroke stroke = border.getStroke();
     Shape path = aShape.getPath();
-    Shape spath = border instanceof RMBorderStroke ? ((RMBorderStroke)border).getStrokePath(path) : null;
-    SnapPaintPdfr.writeShapeStroke(spath, stroke, border.getColor(), aWriter);
+    //Shape spath = border instanceof RMBorderStroke ? ((RMBorderStroke)border).getStrokePath(path) : null;
+    SnapPaintPdfr.writeShapeStroke(path, stroke, color, aWriter);
 }
 
 /**

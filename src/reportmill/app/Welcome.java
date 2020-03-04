@@ -5,6 +5,7 @@ package reportmill.app;
 import reportmill.shape.*;
 import rmdraw.app.*;
 import reportmill.util.ReportMill;
+import snap.gfx.ImageUtils;
 import snap.util.SnapUtils;
 import snap.view.*;
 import snap.viewx.*;
@@ -30,9 +31,20 @@ public class Welcome extends rmdraw.app.Welcome {
 public Welcome()
 {
     _shared = this;
+    initRMStudio();
+}
 
-    // Create ReportMill RMArchiver so items get added to classmap
+/**
+ * Initilize RMStudio.
+ */
+private void initRMStudio()
+{
+    // Set Archiver
     new RMArchiver2();
+
+    // Set EmptyImage
+    WebURL url = WebURL.getURL(Welcome.class, "DefaultImage.png");
+    ImageUtils.setEmptyImageURL(url);
 }
 
 /**

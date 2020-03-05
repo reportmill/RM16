@@ -251,16 +251,13 @@ public class RMEditorPaneToolBar extends EditorPaneToolBar {
             editor.requestFocus();
         }
 
-        // Handle FontSizeUpButton, FontSizeDownButton
+        // Handle FontSizeUpButton, FontSizeDownButton, BoldButton
         if (anEvent.equals("FontSizeUpButton")) { Font font = styler.getFont();
             styler.setFontSize(font.getSize()<16? 1 : 2, true); }
         if (anEvent.equals("FontSizeDownButton")) { Font font = styler.getFont();
             styler.setFontSize(font.getSize()<16? -1 : -2, true); }
-
-        // Handle BoldButton, ItalicButton, UnderlineButton
-        if (anEvent.equals("BoldButton")) styler.setFontBold(anEvent.getBoolValue());
-        if (anEvent.equals("ItalicButton")) styler.setFontItalic(anEvent.getBoolValue());
-        if (anEvent.equals("UnderlineButton")) styler.setUnderlined();
+        if (anEvent.equals("BoldButton"))
+            styler.setFontBold(anEvent.getBoolValue());
 
         // Handle AlignLeftButton, AlignCenterButton, AlignRightButton, AlignFullButton
         if (anEvent.equals("AlignLeftButton"))

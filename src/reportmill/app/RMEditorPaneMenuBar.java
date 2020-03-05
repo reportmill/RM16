@@ -161,7 +161,7 @@ public class RMEditorPaneMenuBar extends EditorPaneMenuBar {
         if (anEvent.equals("ItalicMenuItem") || anEvent.equals("ItalicButton"))
             editor.getStyler().setFontItalic(!editor.getStyler().getFont().isItalic());
         if (anEvent.equals("UnderlineMenuItem") || anEvent.equals("UnderlineButton"))
-            editor.getStyler().setUnderlined();
+            editor.getStyler().setUnderlined(editor.getStyler().isUnderlined());
         if (anEvent.equals("OutlineMenuItem"))
             editor.getStyler().setTextBorder();
         if (anEvent.equals("AlignLeftMenuItem") || anEvent.equals("AlignLeftButton"))

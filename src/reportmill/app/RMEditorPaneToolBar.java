@@ -59,9 +59,12 @@ public class RMEditorPaneToolBar extends EditorPaneToolBar {
         _fontSizeComboBox.setItemTextFunction(i -> SnapUtils.stringValue(i) + " pt");
 
         // Create/configure hidden ColorWell
-        _colorWell = new ColorWell(); _colorWell.setName("ColorWell");
-        ColorPanel.getShared().setDefaultColorWell(_colorWell);
+        _colorWell = new ColorWell();
+        _colorWell.setName("ColorWell");
         _colorWell.setOwner(this);
+
+        // Register ColorWell as ColorPanel.DefaultColorWell (after delay so we get Editor ColorPanel, not system)
+        runLater(() -> ColorPanel.getShared().setDefaultColorWell(_colorWell));
 
         // Install InspectorPanel.TitleLabel
         RowView rowView = (RowView)getUI(ColView.class).getChild(1);

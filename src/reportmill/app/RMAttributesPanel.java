@@ -3,6 +3,7 @@
  */
 package reportmill.app;
 import rmdraw.app.*;
+import rmdraw.gfx.FontPanel;
 import snap.view.*;
 
 /**
@@ -27,7 +28,7 @@ public ViewOwner[] createInspectors()
 {
     KeysPanel keys = new KeysPanel(getEditorPane());
     APColorPanel color = new APColorPanel();
-    FontPanel font = new FontPanel(getEditorPane());
+    FontPanel font = new FontPanel(getEditor().getStyler());
     FormatPanel format = new FormatPanel(getEditorPane());
     return new ViewOwner[] { keys, color, font, format };
 }

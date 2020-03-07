@@ -270,14 +270,14 @@ public void paintBoundsRect(RMTextShape aText, Painter aPntr) { }
 /**
  * Override normal implementation to handle KeysPanel drop.
  */
-public void drop(T aCell, ViewEvent anEvent)
+public void dragDrop(T aCell, ViewEvent anEvent)
 {
     // If KeysPanel is dragging, add key to text
     Clipboard cb = anEvent.getClipboard();
     if(cb.hasString()) {
     
         // Do normal text version to add drop string to text
-        super.drop(aCell, anEvent);
+        super.dragDrop(aCell, anEvent);
     
         // Get the string
         String string = cb.getString(); //ClipboardUtils.getString(anEvent.getTransferable());
@@ -290,7 +290,7 @@ public void drop(T aCell, ViewEvent anEvent)
     }
     
     // Otherwise do normal version
-    else super.drop(aCell, anEvent);
+    else super.dragDrop(aCell, anEvent);
 }
 
 }

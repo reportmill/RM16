@@ -2,7 +2,7 @@ package reportmill.app;
 import reportmill.apptools.*;
 import reportmill.shape.*;
 import rmdraw.app.Editor;
-import rmdraw.app.EditorDnD;
+import rmdraw.app.EditorDragDropper;
 import rmdraw.app.Tool;
 import rmdraw.apptools.*;
 import reportmill.shape.RMCrossTab;
@@ -40,7 +40,7 @@ public class RMEditor extends Editor {
     /**
      * Creates the shapes helper.
      */
-    protected EditorDnD createDragHelper()  { return new RMEditorDnD(this); }
+    protected EditorDragDropper createDragDropper()  { return new RMEditorDragDropper(this); }
 
     /**
      * Returns the datasource associated with the editor's document.

@@ -1,6 +1,6 @@
 package reportmill.app;
 import rmdraw.app.Editor;
-import rmdraw.app.EditorDnD;
+import rmdraw.app.EditorDragDropper;
 import reportmill.shape.RMPDFShape;
 import rmdraw.shape.RMParentShape;
 import rmdraw.shape.RMShape;
@@ -9,14 +9,14 @@ import snap.view.ClipboardData;
 import snap.view.ViewEvent;
 
 /**
- * Subclass of EditorDnD to add ReportMill specific features.
+ * Subclass of EditorDragDropper to add ReportMill specific features.
  */
-public class RMEditorDnD extends EditorDnD {
+public class RMEditorDragDropper extends EditorDragDropper {
 
     /**
      * Creates a new editor drop target listener.
      */
-    public RMEditorDnD(Editor anEditor)
+    public RMEditorDragDropper(Editor anEditor)
     {
         super(anEditor);
     }

@@ -92,7 +92,7 @@ public void respondUI(ViewEvent anEvent)
     
     // Handle PasteTableMenuItem
     if(anEvent.equals("PasteTableMenuItem")) {
-        Object pasteShape = EditorClipboard.getShapeFromClipboard(getEditor());
+        Object pasteShape = getEditor().getCopyPasterDefault().getShapeFromClipboard();
         if(pasteShape instanceof RMTable) {
             tableGroup.undoerSetUndoTitle("Paste Table");
             tableGroup.addPeerTable((RMTable)pasteShape);

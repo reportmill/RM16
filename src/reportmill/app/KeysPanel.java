@@ -4,7 +4,6 @@
 package reportmill.app;
 import reportmill.util.RMDataSourceUtils;
 import rmdraw.app.Editor;
-import rmdraw.app.EditorClipboard;
 import rmdraw.app.EditorPane;
 import reportmill.apptools.RMTableTool;
 import reportmill.util.Entity;
@@ -108,11 +107,12 @@ public Entity getKeyPathEntity(String aKey)
 /**
  * Returns the items for key path entity.
  */
-public List getKeyPathItems(String aKey)
+public List getKeyPathItems()
 {
     // Get full list key from selected shape and browser
     RMShape selShape = getSelectedShape();
-    String kprfx = selShape.getDatasetKey(), ksfx = _keysBrowser.getPath();
+    String kprfx = selShape.getDatasetKey();
+    String ksfx = _keysBrowser.getPath();
     String key = kprfx!=null? (kprfx + '.' + ksfx) : ksfx;
     
     // Get Editor.Datasource dataset (just return if null)
@@ -125,14 +125,9 @@ public List getKeyPathItems(String aKey)
     return items;
 }
   
-/**
- * Returns whether selected item is to-many.
- */
-public boolean isSelectedLeaf()
-{
-    KeyNode node = (KeyNode)_keysBrowser.getSelItem();
-    return node!=null && !node.isParent();
-}
+/** Returns whether selected item is to-many. */
+//public boolean isSelectedLeaf() { KeyNode node = (KeyNode)_keysBrowser.getSelItem();
+// return node!=null && !node.isParent(); }
 
 /**
  * Returns whether selected item is to-many.
@@ -198,8 +193,7 @@ public void respondUI(ViewEvent anEvent)
         }
 
         // If leaf click for RMText, add key
-        else if(isSelectedLeaf() && editor.getTextEditor()!=null)
-            editor.getTextEditor().replaceChars(getKeyPath());
+        //else if(isSelectedLeaf() && editor.getTextEditor()!=null) editor.getTextEditor().replaceChars(getKeyPath());
     }
     
     // Handle DragGesture
@@ -306,19 +300,19 @@ public void setKeysTableKey(String aKey)
 {
     // If already set, just return
     String key = aKey.replace("@", "");
-    if(key.equals(_keysTableKey)) return;
+    if (key.equals(_keysTableKey)) return;
     _keysTableKey = key;
     
     // Set columns
-    while(_keysTable.getColCount()>0) _keysTable.removeCol(0);
+    while (_keysTable.getColCount()>0) _keysTable.removeCol(0);
     
     // Get entity for key
-    Entity entity = getKeyPathEntity(key); if(entity==null) return;
+    Entity entity = getKeyPathEntity(key); if (entity==null) return;
     
     // Iterate over entity properties and add column for each
     List <Property> attrs = entity.getAttributes();
-    for(Property prop : attrs) {
-        if(prop.isRelation()) continue;
+    for (Property prop : attrs) {
+        if (prop.isRelation()) continue;
         TableCol col = new TableCol();
         col.setHeaderText(prop.getName());
         col.setItemKey(prop.getName());
@@ -326,7 +320,7 @@ public void setKeysTableKey(String aKey)
     }
     
     // Get/set items
-    List items = getKeyPathItems(key);
+    List items = getKeyPathItems();
     _keysTable.setItems(items);
 }
 
@@ -368,7 +362,7 @@ public static void dropDragKey(RMShape aShape, ViewEvent anEvent)
         aShape.repaint();
         editor.undoerSetUndoTitle("Drag and Drop Key");
         Clipboard cb = anEvent.getClipboard();
-        EditorClipboard.paste(editor, cb, (RMParentShape)aShape, anEvent.getPoint());
+        editor.getCopyPasterDefault().paste(cb, (RMParentShape)aShape, anEvent.getPoint());
     }
 }
 

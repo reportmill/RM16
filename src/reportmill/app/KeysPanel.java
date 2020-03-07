@@ -188,7 +188,7 @@ public void respondUI(ViewEvent anEvent)
         // If double-click on RMTable, add grouping
         Editor editor = getEditor();
         if(getSelectedShape() instanceof RMTable) {
-            RMTableTool tool = (RMTableTool)editor.getTool(getSelectedShape());
+            RMTableTool tool = (RMTableTool)editor.getToolForView(getSelectedShape());
             tool.addGroupingKey(_keysBrowser.getPath());
         }
 

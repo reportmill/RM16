@@ -5,7 +5,7 @@ package reportmill.apptools;
 import reportmill.shape.RMCrossTab;
 import reportmill.shape.RMCrossTabCell;
 import rmdraw.app.*;
-import rmdraw.apptools.RMTextTool;
+import rmdraw.apptools.TextTool;
 import rmdraw.app.Tool;
 import reportmill.util.RMGrouping;
 import rmdraw.shape.*;
@@ -19,7 +19,7 @@ import snap.view.*;
 /**
  * Provides UI editing for RMCell shapes.
  */
-public class RMCrossTabCellTool <T extends RMCrossTabCell> extends RMTextTool<T> implements RMSortPanel.Owner {
+public class RMCrossTabCellTool <T extends RMCrossTabCell> extends TextTool<T> implements RMSortPanel.Owner {
 
     // The sort panel
     RMSortPanel     _sortPanel;
@@ -28,7 +28,7 @@ public class RMCrossTabCellTool <T extends RMCrossTabCell> extends RMTextTool<T>
     ViewEvent       _mousePressedEvent;
 
 /**
- * Creates UI panel - base panel is RMTextTool version.
+ * Creates UI panel - base panel is TextTool version.
  */
 protected View createUI()
 {
@@ -41,7 +41,7 @@ protected View createUI()
     cellUI.addChild(_sortPanel.getUI(), 1);
     
     // Get super UI (TextTool UI - a ColView) and add UI for this tool
-    ColView colView = (ColView)createUI(RMTextTool.class);
+    ColView colView = (ColView)createUI(TextTool.class);
     colView.setGrowHeight(false); // So inspector will scroll
     colView.addChild(cellUI, 0);
     return colView;

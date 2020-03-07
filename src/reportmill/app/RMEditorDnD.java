@@ -55,7 +55,7 @@ public class RMEditorDnD extends EditorDnD {
         // If image hit a real shape, see if user wants it to be a texture
         Editor editor = getEditor();
         RMShape shape = aShape;
-        while(!editor.getTool(shape).getAcceptsChildren(shape))
+        while(!editor.getToolForView(shape).getAcceptsChildren(shape))
             shape = shape.getParent();
 
         // Get parent to add image shape to and drop point in parent coords

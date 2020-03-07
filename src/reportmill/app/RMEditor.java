@@ -133,7 +133,7 @@ public class RMEditor extends Editor {
         if (aClass== RMTable.class) return new RMTableTool();
         if (aClass== RMTableGroup.class) return new RMTableGroupTool();
         if (aClass== RMTableRow.class) return new RMTableRowTool();
-        if (aClass== RMTextShape.class) return new RMTextTool2();
+        if (aClass== RMTextShape.class) return new TextTool2();
         if (aClass==RMPDFShape.class) return new RMPDFShapeTool();
         return super.createTool(aClass);
     }

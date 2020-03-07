@@ -30,11 +30,11 @@
     <ToggleButton Name="PreviewEditButton" PrefWidth="84" PrefHeight="24" text="Preview" />
     <Separator PrefWidth="15" PrefHeight="18" Vertical="true" />
     <RowView Spacing="-1">
-      <ToggleButton Name="RMSelectToolButton" PrefWidth="24" PrefHeight="24" ToolTip="Selection Tool" image="/rmdraw/apptools/RMSelect.png" Position="CENTER_LEFT" Selected="true" Group="bg1" />
+      <ToggleButton Name="SelectToolButton" PrefWidth="24" PrefHeight="24" ToolTip="Selection Tool" image="SelectTool.png" Position="CENTER_LEFT" Selected="true" Group="bg1" />
       <ToggleButton Name="RMLineShapeToolButton" PrefWidth="24" PrefHeight="24" ToolTip="Line Tool" image="/rmdraw/apptools/RMLineShape.png" Position="CENTER" Group="bg1" />
       <ToggleButton Name="RMRectShapeToolButton" PrefWidth="24" PrefHeight="24" ToolTip="Rectangle Tool" image="/rmdraw/apptools/RMRectShape.png" Position="CENTER" Group="bg1" />
       <ToggleButton Name="RMOvalShapeToolButton" PrefWidth="24" PrefHeight="24" ToolTip="Oval Tool" image="/rmdraw/apptools/RMOvalShape.png" Position="CENTER" Group="bg1" />
-      <ToggleButton Name="RMTextToolButton" PrefWidth="24" PrefHeight="24" ToolTip="Text Tool" image="/rmdraw/apptools/RMText.png" Position="CENTER" Group="bg1" />
+      <ToggleButton Name="TextToolButton" PrefWidth="24" PrefHeight="24" ToolTip="Text Tool" image="/rmdraw/apptools/TextTool.png" Position="CENTER" Group="bg1" />
       <ToggleButton Name="RMPolygonShapeToolButton" PrefWidth="24" PrefHeight="24" ToolTip="Polygon Tool" image="/rmdraw/apptools/RMPolygonShape.png" Position="CENTER" Group="bg1" />
       <ToggleButton Name="PencilToolButton" PrefWidth="24" PrefHeight="24" ToolTip="Pencil Tool" image="/rmdraw/apptools/RMPencilShape.png" Position="CENTER_RIGHT" Group="bg1" />
     </RowView>

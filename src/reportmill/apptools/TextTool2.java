@@ -3,13 +3,13 @@
  */
 package reportmill.apptools;
 import reportmill.shape.RMTableRow;
-import rmdraw.apptools.RMTextTool;
+import rmdraw.apptools.TextTool;
 import rmdraw.shape.*;
 
 /**
  * This class provides UI editing for text shapes.
  */
-public class RMTextTool2<T extends RMTextShape> extends RMTextTool<T> {
+public class TextTool2<T extends RMTextShape> extends TextTool<T> {
 
     /**
      * Returns whether to paint text link indicator.

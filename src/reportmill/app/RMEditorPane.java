@@ -154,9 +154,8 @@ public class RMEditorPane extends EditorPane {
         // If not yet previewing, store current template then generate report and swap it in
         if(!aFlag) {
 
-            // Cache current editor and flush any current editing
+            // Cache current editor
             _realEditor = getEditor();
-            _realEditor.flushEditingChanges();
 
             // Generate report and restore filename
             RMDocument report = getDoc().generateReport(getEditor().getDataSourceDataset());

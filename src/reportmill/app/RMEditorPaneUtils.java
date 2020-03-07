@@ -77,11 +77,9 @@ public static void previewPDF(RMEditorPane anEP)
  */
 public static RMDocument2 generateReport(RMEditorPane anEP, boolean doPaginate)
 {
-    // Get editor - if editing, flush changes, otherwise, set Editing
+    // Get editor (make sure it's in editing mode)
     RMEditor editor = anEP.getEditor();
-    if(anEP.isEditing())
-        editor.flushEditingChanges();
-    else anEP.setEditing(true);
+    anEP.setEditing(true);
     
     // Get document and return report
     RMDocument2 document = anEP.getDoc();
@@ -190,7 +188,6 @@ public static void saveAsPDF(RMEditorPane anEP)
 {
     RMEditor editor = anEP.getEditor();
     String path = FilePanel.showOpenPanel(editor, "PDF file (.pdf)", "pdf"); if(path==null) return;
-    editor.flushEditingChanges();
     editor.getDoc().writePDF(path);
 }
 

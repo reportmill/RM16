@@ -57,7 +57,7 @@ public RMDocument getTemplate()
 protected RMDocument createTemplate()
 {
     WebURL url = WebURL.getURL(getClass(), getClass().getSimpleName() + ".rpt");
-    return RMDocument.getDoc(url);
+    return RMDocument.getDocFromSource(url);
 }
 
 /**

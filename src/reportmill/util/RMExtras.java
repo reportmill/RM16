@@ -277,7 +277,7 @@ public static void addToPage(RMDocument aDoc1, RMDocument aDoc2)
 public static void addPageBetweenPages()
 {
     // Get template
-    RMDocument2 template = new RMDocument2(getMoviesURL());
+    RMDocument2 template = RMDocument2.getDocFromSource(getMoviesURL());
     
     // Get objects
     RMDataSource dataSource = template.getDataSource();
@@ -342,7 +342,7 @@ public static void setTimeZone(RMShape aShape, TimeZone aTimeZone)
 public static void passwordReport()
 {
     Map dset = new RMXMLReader().readObject(getHollywoodURL());
-    RMDocument2 template = new RMDocument2(getMoviesURL());
+    RMDocument2 template = RMDocument2.getDocFromSource(getMoviesURL());
     RMDocument2 report = template.generateReport(dset);
     
     RMPDFWriter rm = new RMPDFWriter(); //rm.setUnmodifiable("Test");
@@ -414,7 +414,9 @@ static void writeMoviesDataset() { new RMXMLWriter().writeObject(getMovies(), "/
 /** Generates a report. */
 static void genReport()
 {
-    new RMDocument2("/tmp/junk.rpt").generateReport(getMovies()).write("/tmp/junk.pdf");
+    RMDocument2 doc = RMDocument2.getDocFromSource("/tmp/junk.rpt");
+    RMDocument2 rep = doc.generateReport(getMovies());
+    rep.write("/tmp/junk.pdf");
 }
 
 /** Writes a movie dataset to file. */

@@ -1,6 +1,5 @@
 package reportmill.app;
 import reportmill.shape.RMDocument2;
-import rmdraw.shape.RMDocument;
 import rmdraw.shape.RMShape;
 import rmdraw.shape.RMShapeUtils;
 import snap.geom.*;
@@ -283,7 +282,7 @@ private static RMDocument2 getDoc(int anIndex)
     if(bytes==null) { System.err.println("SamplesPane.getDoc: Couldn't load " + url); return null; }
     
     // Return document
-    RMDocument2 doc = RMDocument2.getDoc(bytes);
+    RMDocument2 doc = RMDocument2.getDocFromSource(bytes);
     return doc;
 }
 

@@ -58,19 +58,12 @@ public class RMDocument2 extends RMDocument implements ReportGen.RPG {
     }
 
     /**
-     * Creates a new document from the given source.
-     */
-    public RMDocument2(Object aSource)
-    {
-        new RMArchiver().getDoc(aSource, this);
-    }
-
-    /**
      * Creates a new document from aSource using RMArchiver.
      */
-    public static RMDocument2 getDoc(Object aSource)
+    public static RMDocument2 getDocFromSource(Object aSource)
     {
-        return (RMDocument2) new RMArchiver().getDoc(aSource);
+        RMArchiver arch = new RMArchiver();
+        return (RMDocument2) arch.getDocFromSource(aSource);
     }
 
     /**

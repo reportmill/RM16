@@ -109,7 +109,7 @@ public static void main(String args[])
             // Iterate over remaining args (assuming they are all template paths)
             for(int j=i+1; j<args.length; j++) {
                 System.err.println("Resaving " + args[j]);
-                RMDocument doc = new RMDocument(args[j]);
+                RMDocument doc = RMDocument.getDocFromSource(args[j]);
                 doc.write(args[j]);
             }
             
@@ -149,7 +149,7 @@ public static void main(String args[])
         // Load template
         System.err.print("Reading template: " + rptfile); System.err.flush();
         time = System.currentTimeMillis();
-        RMDocument2 template = RMDocument2.getDoc(rptfile);
+        RMDocument2 template = RMDocument2.getDocFromSource(rptfile);
         template.setCompress(compress);
         seconds = (System.currentTimeMillis() - time)/1000f;
         System.err.println(" (" + seconds + " seconds)");

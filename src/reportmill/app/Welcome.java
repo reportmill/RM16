@@ -89,7 +89,7 @@ protected void initUI()
 {
     // Install WelcomeAnim.Viewer
     WebURL url = WebURL.getURL(getClass(), "WelcomeAnim.rpt");
-    Viewer viewer = new Viewer(); viewer.setDoc(url);
+    Viewer viewer = new Viewer(); viewer.setDocFromSource(url);
     View wlabel = getView("WelcomeAnimLabel");
     viewer.setSize(wlabel.getWidth(), wlabel.getHeight());
     getUI(ChildView.class).addChild(viewer, 1);

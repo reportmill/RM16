@@ -4,8 +4,8 @@
 package reportmill.shape;
 import reportmill.util.RMGroup;
 import reportmill.util.RMGrouping;
-import rmdraw.shape.RMShapePaintProps;
 import rmdraw.shape.RMTextShape;
+import rmdraw.shape.SceneGraph;
 import snap.geom.Insets;
 import snap.geom.VPos;
 import snap.gfx.*;
@@ -257,8 +257,7 @@ protected void paintShape(Painter aPntr)
     super.paintShape(aPntr);
     
     // If cell has grouping, paint corner grouping indicator
-    RMShapePaintProps props = RMShapePaintProps.get(aPntr);
-    if(props.isEditing() && (isRowHeader() || isColHeader())) {
+    if(SceneGraph.isEditing(this) && (isRowHeader() || isColHeader())) {
         double x = Math.round(getMaxX()) - getX();
         double y = Math.round(getY()) - getY();
         aPntr.setColor(Color.BLACK);

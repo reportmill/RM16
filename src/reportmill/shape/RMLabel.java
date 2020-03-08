@@ -3,7 +3,7 @@
  */
 package reportmill.shape;
 import rmdraw.shape.RMParentShape;
-import rmdraw.shape.RMShapePaintProps;
+import rmdraw.shape.SceneGraph;
 import snap.geom.Rect;
 import snap.gfx.*;
 import snap.util.*;
@@ -27,10 +27,12 @@ protected void paintShape(Painter aPntr)
     super.paintShape(aPntr);
     
     // Table bands should draw a red band around thier perimeter when it is selected
-    RMShapePaintProps props = RMShapePaintProps.get(aPntr);
-    if(props.isSelected(this) || props.isSuperSelected(this)) {
-        Rect bounds = getBoundsInside(); bounds.inset(2, 2);
-        aPntr.setColor(Color.RED); aPntr.setStroke(Stroke.Stroke1);
+    boolean selected = SceneGraph.isSelected(this) || SceneGraph.isSuperSelected(this);
+    if (selected) {
+        Rect bounds = getBoundsInside();
+        bounds.inset(2, 2);
+        aPntr.setColor(Color.RED);
+        aPntr.setStroke(Stroke.Stroke1);
         aPntr.draw(bounds);
     }
 }

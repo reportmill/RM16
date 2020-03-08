@@ -6,7 +6,7 @@ import java.util.*;
 
 import rmdraw.shape.RMParentShape;
 import rmdraw.shape.RMShape;
-import rmdraw.shape.RMShapePaintProps;
+import rmdraw.shape.SceneGraph;
 import snap.gfx.*;
 import snap.util.*;
 
@@ -269,7 +269,7 @@ public void removeTable(RMTable aTable)
 protected void paintShapeOver(Painter aPntr)
 {
     // Do normal version (just return if not editing)
-    super.paintShapeOver(aPntr); if(!RMShapePaintProps.isEditing(aPntr)) return;
+    super.paintShapeOver(aPntr); if(!SceneGraph.isEditing(this)) return;
     
     // Draw TableGroup button
     aPntr.drawButton(1, getHeight() - 18, 100, 18, false);

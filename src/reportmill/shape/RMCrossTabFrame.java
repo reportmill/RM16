@@ -117,8 +117,7 @@ protected void paintShape(Painter aPntr)
     super.paintShape(aPntr);
     
     // If not editing, just return
-    RMShapePaintProps props = RMShapePaintProps.get(aPntr);
-    if(!props.isEditing()) return;
+    if(!SceneGraph.isEditing(this)) return;
     
     // Get path for CrossTab: Iterate over columns to define horizontal corner piece
     RMCrossTab ctab = getTable();

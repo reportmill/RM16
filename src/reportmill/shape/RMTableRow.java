@@ -413,13 +413,15 @@ public boolean childrenSuperSelectImmediately()  { return _structured; }
 protected void paintShape(Painter aPntr)
 {
     // Do normal version (just return if not editing)
-    super.paintShape(aPntr); if(!RMShapePaintProps.isEditing(aPntr) || !isStructured()) return;
+    super.paintShape(aPntr); if (!SceneGraph.isEditing(this) || !isStructured()) return;
     
     // Iterate over children sorted by X and draw divider lines
-    aPntr.setColor(Color.DARKGRAY); aPntr.setStroke(Stroke.Stroke1); aPntr.setAntialiasing(false);    
+    aPntr.setColor(Color.DARKGRAY);
+    aPntr.setStroke(Stroke.Stroke1);
+    aPntr.setAntialiasing(false);
     Rect bounds = getBoundsInside();
     List <RMShape> children = RMShapeUtils.getShapesSortedByFrameX(getChildren());
-    for(RMShape child : children)
+    for (RMShape child : children)
         aPntr.drawLine(child.getX(), bounds.y, child.getX(), bounds.getMaxY());
     aPntr.setAntialiasing(true);
 }
@@ -439,7 +441,7 @@ protected void layoutImpl()
     
     // Layout children edge to edge by iterating over children and setting successive x values
     List <RMShape> children = getChildren(); double width = 0;
-    for(RMShape child : children) {
+    for (RMShape child : children) {
         child.setBounds(width, 0, child.getWidth(), getHeight());
         width += child.getWidth();
     }

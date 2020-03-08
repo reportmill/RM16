@@ -8,7 +8,7 @@ import java.util.List;
 
 import rmdraw.shape.RMParentShape;
 import rmdraw.shape.RMShape;
-import rmdraw.shape.RMShapePaintProps;
+import rmdraw.shape.SceneGraph;
 import snap.geom.Point;
 import snap.gfx.*;
 import snap.util.*;
@@ -199,7 +199,7 @@ public void setWidth(double aWidth)
 protected void paintShape(Painter aPntr)
 {
     // If switch shape doesn't draw a stroke, draw a light one to indicate its bounds
-    if(getClass()==RMSwitchShape.class && getBorder()==null && RMShapePaintProps.isEditing(aPntr)) {
+    if(getClass()==RMSwitchShape.class && getBorder()==null && SceneGraph.isEditing(this)) {
         aPntr.setColor(Color.LIGHTGRAY); aPntr.setStroke(Stroke.Stroke1);
         aPntr.draw(getBoundsInside());
     }

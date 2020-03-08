@@ -8,7 +8,7 @@ import java.util.*;
 
 import rmdraw.shape.RMParentShape;
 import rmdraw.shape.RMShape;
-import rmdraw.shape.RMShapePaintProps;
+import rmdraw.shape.SceneGraph;
 import snap.geom.Path;
 import snap.geom.Point;
 import snap.geom.Rect;
@@ -395,7 +395,7 @@ protected void paintShape(Painter aPntr)
 {
     // Call normal paintShape (just return if not editing)
     super.paintShape(aPntr);
-    RMShapePaintProps props = RMShapePaintProps.get(aPntr); if(!props.isEditing()) return;
+    if (!SceneGraph.isEditing(this)) return;
     
     // Get table bounds and fill table base rect with light gray
     Rect bounds = getBoundsInside();
@@ -403,7 +403,7 @@ protected void paintShape(Painter aPntr)
     aPntr.setColor(new Color(11/12f)); aPntr.fillRect(0, y, getWidth(), bounds.getMaxY() - y);
 
     // Get whether or not to draw super-selected
-    boolean drawSuperSelect = props.isSuperSelected(this);
+    boolean drawSuperSelect = SceneGraph.isSuperSelected(this);
 
     // Draw dividers for each child; raised & with dimple if super selected and with title if one has been set
     for(int i=0, iMax=getChildCount(); i<iMax; i++) { RMTableRow child = getRow(i);
@@ -438,7 +438,7 @@ protected void paintShape(Painter aPntr)
         aPntr.drawString(child.getTitle(), resizeBarBounds.getX() + 10, resizeBarBounds.getY() + 12);
 
         // Draw child version name and structured button if child is RMTableRow
-        if(drawSuperSelect) {
+        if (drawSuperSelect) {
 
             // Draw Version name
             String version = child.getVersion();
@@ -459,24 +459,26 @@ protected void paintShape(Painter aPntr)
             aPntr.setColor(new Color(.94f)); aPntr.fillRect(buttonX + 2, buttonY + 2, buttonW - 4, buttonH - 4);
             
             // Draw jail bars
-            if(child.isStructured()) {
+            if (child.isStructured()) {
                 aPntr.setColor(new Color(.1f));
                 aPntr.drawLine(buttonX+6, buttonY+2, buttonX+6, buttonY + buttonH - 2);
                 aPntr.drawLine(buttonX+11, buttonY+2, buttonX+11, buttonY + buttonH - 2);
             }
             
             // If table row is selected draw red line around perimeter
-            if(props.isSelected(child) || props.isSuperSelected(child)) {
+            boolean isSel = SceneGraph.isSelected(child);
+            boolean isSuperSel = SceneGraph.isSuperSelected(child);
+            if (isSel || isSuperSel) {
                 
                 // Draw red line around perimeter
-                Color c = props.isSuperSelectedShape(child)? new Color(1f,0,0,.9f) : new Color(1f,0,0,.3f);
-                aPntr.setColor(c); aPntr.setStroke(Stroke.StrokeDash1);
+                Color color = isSel ? new Color(1f,0,0,.3f) : new Color(1f,0,0,.9f);
+                aPntr.setColor(color); aPntr.setStroke(Stroke.StrokeDash1);
                 aPntr.draw(child.getBounds().getInsetRect(-1));
                 
                 // Find selected column and highlight it
-                if(child.isStructured())
-                    for(int j=0, jMax=child.getChildCount(); j<jMax; j++) { RMShape trChild = child.getChild(j);
-                        if(props.isSuperSelectedShape(trChild)) {
+                if (child.isStructured())
+                    for (int j=0, jMax=child.getChildCount(); j<jMax; j++) { RMShape trChild = child.getChild(j);
+                        if (SceneGraph.isSuperSelectedLeaf(trChild)) {
                             Rect colRect = child.localToParent(trChild.getBounds().getInsetRect(-1)).getBounds();
                             aPntr.setColor(Color.RED); aPntr.draw(colRect); break;
                         }
@@ -495,7 +497,7 @@ protected void paintShapeOver(Painter aPntr)
     super.paintShapeOver(aPntr);
     
     // If table already draws stroke or if not editing, just return
-    if(getBorder()!=null || !RMShapePaintProps.isEditing(aPntr)) return;
+    if(getBorder()!=null || !SceneGraph.isEditing(this)) return;
         
     // Draw rect with antialiasing off
     aPntr.setColor(Color.DARKGRAY); aPntr.setStroke(Stroke.Stroke1);

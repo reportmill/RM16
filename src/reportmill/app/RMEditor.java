@@ -115,11 +115,11 @@ public class RMEditor extends Editor {
      */
     protected Tool createTool(Class aClass)
     {
-        if (aClass== RMCrossTab.class) return new RMCrossTabTool();
-        if (aClass== RMCrossTabCell.class) return new RMCrossTabCellTool();
-        if (aClass== RMCrossTabDivider.class) return new RMCrossTabDividerTool();
-        if (aClass== RMCrossTabFrame.class) return new RMCrossTabFrameTool();
-        if (aClass== RMDocument2.class) return new RMDocumentTool();
+        if (aClass==RMCrossTab.class) return new RMCrossTabTool();
+        if (aClass==RMCrossTabCell.class) return new RMCrossTabCellTool();
+        if (aClass==RMCrossTabDivider.class) return new RMCrossTabDividerTool();
+        if (aClass==RMCrossTabFrame.class) return new RMCrossTabFrameTool();
+        if (aClass==RMDocument2.class) return new RMDocumentTool();
         if (aClass==RMGraph.class) return new RMGraphTool();
         if (aClass==RMGraphLegend.class) return new RMGraphLegendTool();
         if (aClass==RMGraphPartBars.class) return new RMGraphPartBarsTool();
@@ -129,11 +129,11 @@ public class RMEditor extends Editor {
         if (aClass==RMGraphPartValueAxis.class) return new RMGraphPartValueAxisTool();
         if (aClass==RMLabel.class) return new RMLabelTool();
         if (aClass==RMLabels.class) return new RMLabelsTool();
-        if (aClass== RMSwitchShape.class) return new RMSwitchShapeTool();
-        if (aClass== RMTable.class) return new RMTableTool();
-        if (aClass== RMTableGroup.class) return new RMTableGroupTool();
-        if (aClass== RMTableRow.class) return new RMTableRowTool();
-        if (aClass== RMTextShape.class) return new TextTool2();
+        if (aClass==RMSwitchShape.class) return new RMSwitchShapeTool();
+        if (aClass==RMTable.class) return new RMTableTool();
+        if (aClass==RMTableGroup.class) return new RMTableGroupTool();
+        if (aClass==RMTableRow.class) return new RMTableRowTool();
+        if (aClass==RMTextShape.class) return new TableTextTool();
         if (aClass==RMPDFShape.class) return new RMPDFShapeTool();
         return super.createTool(aClass);
     }

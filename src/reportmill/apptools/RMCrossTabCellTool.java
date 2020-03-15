@@ -171,10 +171,10 @@ public RMGrouping getGrouping()
 /**
  * Event handling - overrides text tool to pass handling to table tool if user really wants to select cells.
  */
-public void processEvent(T aCell, ViewEvent anEvent)
+protected void processMouseEvent(T aText, ViewEvent anEvent)
 {
     // Get cell table and tool
-    RMCrossTab table = aCell.getTable();
+    RMCrossTab table = aText.getTable();
     Tool tableTool = getTool(table);
     
     // If event is popup trigger, run crosstab popup
@@ -194,13 +194,13 @@ public void processEvent(T aCell, ViewEvent anEvent)
         
         // Get event point in cell coords
         Editor editor = getEditor();
-        Point point = editor.convertToShape(anEvent.getX(), anEvent.getY(), aCell);
+        Point point = editor.convertToShape(anEvent.getX(), anEvent.getY(), aText);
         
         // If point is outside cell, start sending to table tool
-        if(point.getX()<-20 || point.getY()<-20 || point.getX()>aCell.getWidth()+20 || point.getY()>aCell.getHeight()+20) {
+        if(point.getX()<-20 || point.getY()<-20 || point.getX()> aText.getWidth()+20 || point.getY()> aText.getHeight()+20) {
             
             // Make cell selected instead of super selected
-            editor.setSelectedShape(aCell);
+            editor.setSelectedShape(aText);
             
             // Send table table mouse pressed
             tableTool.processEvent(table, _mousePressedEvent);
@@ -226,13 +226,13 @@ public void processEvent(T aCell, ViewEvent anEvent)
     }
     
     // Call normal text tool mouse released
-    super.processEvent(aCell, anEvent);
+    super.processMouseEvent(aText, anEvent);
 }
 
 /**
  * Key event handler for super selected cell.
  */
-public void processKeyEvent(T aCell, ViewEvent anEvent)
+protected void processKeyEvent(T aCell, ViewEvent anEvent)
 {
     // Get key code
     int keyCode = anEvent.getKeyCode();

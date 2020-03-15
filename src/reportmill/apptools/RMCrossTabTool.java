@@ -251,7 +251,7 @@ public void mouseReleased(T aCTab, ViewEvent anEvent)
 /**
  * Key event handler for crosstab editing.
  */
-public void processKeyEvent(T aCTab, ViewEvent anEvent)
+protected void processKeyEvent(T aCTab, ViewEvent anEvent)
 {
     // If event isn't typed or pressed, just return
     if(anEvent.isKeyPress() && anEvent.isKeyType()) return;
@@ -332,7 +332,7 @@ public void processKeyEvent(T aCTab, ViewEvent anEvent)
         // If key is anything else, superselect cell and forward key press to cell tool
         else {
             editor.setSuperSelectedShape(cell);
-            getTool(cell).processKeyEvent(cell, anEvent);
+            getTool(cell).processEvent(cell, anEvent);
         }
     }
     

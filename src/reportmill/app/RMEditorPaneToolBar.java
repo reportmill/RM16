@@ -226,16 +226,8 @@ public class RMEditorPaneToolBar extends EditorPaneToolBar {
             EditorPaneUtils.previewXML(epane);
 
         // Handle ToolButton(s)
-        if (anEvent.getName().endsWith("ToolButton")) {
-            String name = anEvent.getName().replace("Button", "");
-            for(Tool tool : getToolBarTools()) {
-                String toolName = tool.getClass().getSimpleName();
-                if (toolName.startsWith(name)) {
-                    getEditor().setCurrentTool(tool);
-                    break;
-                }
-            }
-        }
+        if (anEvent.getName().endsWith("ToolButton"))
+            setToolForButtonName(anEvent.getName());
 
         // Handle FontFaceComboBox
         if (anEvent.equals("FontFaceComboBox")) {
@@ -289,6 +281,16 @@ public class RMEditorPaneToolBar extends EditorPaneToolBar {
         // Handle ColorWell
         if (anEvent.equals("ColorWell"))
             editor.getStyler().setFillColor(_colorWell.getColor());
+    }
+
+    /**
+     * Sets the current tool for toolbar name.
+     */
+    protected Tool getToolForButtonName(String aName)
+    {
+        if (aName.startsWith("TextTool"))
+            return getEditor().getToolForClass(RMTextShape.class);
+        return super.getToolForButtonName(aName);
     }
 
     /**

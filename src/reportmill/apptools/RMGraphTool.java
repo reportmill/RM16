@@ -64,7 +64,7 @@ public void setEditor(Editor anEditor)
 }
 
 /**
- * Override to return Graph ProxyShape if needed.
+ * Override to return Graph StyleProxy if available.
  */
 public ToolStyler getStyler(RMShape aShape)
 {

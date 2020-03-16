@@ -174,15 +174,6 @@ public void setFont(Font aFont)
 }
 
 /** Override to handle proxy. */
-public boolean isUnderlined()  { return getProxy().isUnderlined(); }
-
-/** Override to handle proxy. */
-public void setUnderlined(boolean aFlag)
-{
-    getProxy().setUnderlined(aFlag);
-}
-
-/** Override to handle proxy. */
 public TextFormat getFormat()  { return getProxy().getFormat(); }
 
 /** Override to handle proxy. */

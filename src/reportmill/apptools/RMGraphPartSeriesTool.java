@@ -95,7 +95,7 @@ public void respondUI(ViewEvent anEvent)
         // Set Graph.ProxyShape
         RMGraph graph = getSelGraph();
         RMShape ps = graph.getSeries(ind);
-        graph.setProxyShape(ps);
+        graph.setStyleProxy(ps);
     }
 }
 

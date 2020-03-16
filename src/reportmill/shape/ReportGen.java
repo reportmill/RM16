@@ -5,6 +5,7 @@ import rmdraw.shape.*;
 import snap.gfx.Color;
 import snap.gfx.Font;
 import snap.text.RichText;
+import snap.text.TextStyle;
 import snap.util.SnapUtils;
 import snap.util.StringUtils;
 import snap.view.Binding;
@@ -126,8 +127,11 @@ public class ReportGen <T extends RMShape> {
                 String fs = value instanceof String? (String)value : null; if(fs==null || fs.length()==0) continue;
 
                 // If string has underline in it, underline and delete
-                if(StringUtils.indexOfIC(fs, "Underline")>=0) {
-                    aShapeRPG.setUnderlined(true); fs = StringUtils.deleteIC(fs, "Underline").trim(); }
+                if(StringUtils.indexOfIC(fs, "Underline")>=0 && aShapeRPG instanceof RMTextShape) {
+                    RMTextShape text = (RMTextShape) aShapeRPG;
+                    text.getRichText().setStyleValue(TextStyle.UNDERLINE_KEY, 1);
+                    fs = StringUtils.deleteIC(fs, "Underline").trim();
+                }
 
                 // Get size from string (if found, strip size from string)
                 int sizeIndex = fs.lastIndexOf(" ");

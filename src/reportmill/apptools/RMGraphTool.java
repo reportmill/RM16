@@ -5,6 +5,7 @@ package reportmill.apptools;
 import reportmill.shape.*;
 import rmdraw.app.AttributesPanel;
 import rmdraw.app.Editor;
+import rmdraw.app.ToolStyler;
 import rmdraw.apptools.RMScene3DTool;
 import rmdraw.app.Tool;
 import reportmill.util.RMGrouping;
@@ -60,6 +61,18 @@ public void setEditor(Editor anEditor)
     _labelAxisTool.setEditor(anEditor);
     _seriesTool.setEditor(anEditor);
     _3dTool.setEditor(anEditor);
+}
+
+/**
+ * Override to return Graph ProxyShape if needed.
+ */
+public ToolStyler getStyler(RMShape aShape)
+{
+    RMGraph graph = (RMGraph)aShape;
+    RMShape proxy = graph.getStyleProxy();
+    if (proxy!=null)
+        return getTool(proxy).getStyler(proxy);
+    return super.getStyler(aShape);
 }
 
 /**
@@ -172,7 +185,7 @@ protected void resetUI()
     
     // Update ProxyLabel
     String str = "Font/Color changes now apply to ";
-    RMShape proxy = graph.getProxyShape();
+    RMShape proxy = graph.getStyleProxy();
     if(proxy instanceof RMGraphPartValueAxis) str += "Value Axis";
     else if(proxy instanceof RMGraphPartLabelAxis) str += "Label Axis";
     else if(proxy instanceof RMGraphPartSeries) str += "Series " + (_seriesTool.getSelSeriesIndex() + 1);
@@ -306,7 +319,7 @@ private void titleViewExpandedChanged(ViewEvent anEvent)
     // If closing, clear Graph.ProxyShape and return
     if(tview.isExpanded()) {
         RMGraph graph = getSelectedGraph();
-        graph.setProxyShape(null);
+        graph.setStyleProxy(null);
         return;
     }
     
@@ -320,10 +333,10 @@ private void titleViewExpandedChanged(ViewEvent anEvent)
     // Change Proxy
     RMGraph graph = getSelectedGraph();
     switch(name) {
-        case "ValueAxisBox": graph.setProxyShape(graph.getValueAxis()); break;
-        case "LabelAxisBox": graph.setProxyShape(graph.getLabelAxis()); break;
-        case "SeriesBox": graph.setProxyShape(_seriesTool.getSelSeries()); break;
-        default: graph.setProxyShape(null); break;
+        case "ValueAxisBox": graph.setStyleProxy(graph.getValueAxis()); break;
+        case "LabelAxisBox": graph.setStyleProxy(graph.getLabelAxis()); break;
+        case "SeriesBox": graph.setStyleProxy(_seriesTool.getSelSeries()); break;
+        default: graph.setStyleProxy(null); break;
     }
 }
 
@@ -343,18 +356,18 @@ private void selGraphChanged()
         _lastSelGraph = graph; return; }
     
     // Make new graph.ProxyShape consistent with old
-    RMShape proxyShape = _lastSelGraph.getProxyShape();
+    RMShape proxyShape = _lastSelGraph.getStyleProxy();
     if(proxyShape instanceof RMGraphPartValueAxis)
-        graph.setProxyShape(graph.getValueAxis());
+        graph.setStyleProxy(graph.getValueAxis());
     else if(proxyShape instanceof RMGraphPartLabelAxis)
-        graph.setProxyShape(graph.getLabelAxis());
+        graph.setStyleProxy(graph.getLabelAxis());
     else if(proxyShape instanceof RMGraphPartSeries) {
         int ind = _seriesTool.getSelSeriesIndex();
         int ind2 = Math.min(ind, graph.getSeriesCount()-1);
         RMShape ps2 = ind2>=0? graph.getSeries(ind2) : null;
-        graph.setProxyShape(ps2);
+        graph.setStyleProxy(ps2);
     }
-    else graph.setProxyShape(null);
+    else graph.setStyleProxy(null);
     
     // Set LastSelGraph to graph
     _lastSelGraph = graph;

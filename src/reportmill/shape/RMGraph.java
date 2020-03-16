@@ -9,7 +9,6 @@ import rmdraw.shape.RMParentShape;
 import rmdraw.shape.RMScene3D;
 import rmdraw.shape.RMShape;
 import snap.gfx.*;
-import snap.text.TextFormat;
 import snap.util.*;
 
 /**
@@ -28,64 +27,61 @@ import snap.util.*;
 public class RMGraph extends RMParentShape implements ReportGen.RPG {
     
     // The dataset key used to get graph objects
-    String                    _datasetKey;
+    private String  _datasetKey;
     
     // An optional key expression used to limit the table list derived from dataset key
-    String                    _filterKey;
+    private String  _filterKey;
     
     // The list of keys to be graphed
-    List <String>             _keys = new ArrayList();
+    private List <String>  _keys = new ArrayList();
     
     // The type of graph
-    Type                      _type = Type.Bar;
+    private Type  _type = Type.Bar;
     
     // The graph object grouper
-    RMGrouping                _grouping = new RMGrouping("Objects");
+    private RMGrouping  _grouping = new RMGrouping("Objects");
     
     // The the layout of section values
-    SectionLayout             _sectionLayout = SectionLayout.Merge;
+    private SectionLayout  _sectionLayout = SectionLayout.Merge;
     
     // The layout of the section items values
-    ItemLayout                _itemsLayout = ItemLayout.Abreast;
+    private ItemLayout  _itemsLayout = ItemLayout.Abreast;
 
     // The graph area bar shape
-    RMGraphPartBars           _bars = new RMGraphPartBars();
+    private RMGraphPartBars  _bars = new RMGraphPartBars();
     
     // The graph area pie shape
-    RMGraphPartPie            _pie = new RMGraphPartPie();
+    private RMGraphPartPie  _pie = new RMGraphPartPie();
     
     // The graph area value axis
-    RMGraphPartValueAxis      _valueAxis = new RMGraphPartValueAxis();
+    private RMGraphPartValueAxis  _valueAxis = new RMGraphPartValueAxis();
     
     // The graph area label axis
-    RMGraphPartLabelAxis      _labelAxis = new RMGraphPartLabelAxis();
+    private RMGraphPartLabelAxis  _labelAxis = new RMGraphPartLabelAxis();
     
     // The graph area series shape
-    List <RMGraphPartSeries>  _series = new ArrayList();
+    private List <RMGraphPartSeries>  _series = new ArrayList();
     
     // The graph area 3D shape
-    RMScene3D _3d;
+    private RMScene3D _3d;
 
     // Whether to draw graph in 3D
-    boolean                   _draw3D = true;
+    private boolean  _draw3D = true;
     
     // Whether graph should color individual items
-    boolean                   _colorItems;
+    private boolean  _colorItems;
     
     // A key that can be evaluated on graph data item to return color string
-    String                    _colorKey;
+    private String  _colorKey;
     
     // This list of colors this graph uses
-    List                      _colors;
+    private List  _colors;
     
-    // A standin shape for editor to allow setting fill, stroke, font of component shapes
-    RMShape _proxyShape;
-    
-    // Whether to ignore proxy
-    boolean                   _proxyDisable;
+    // The contained view that should get style changes when graph is selected
+    private RMShape _styleProxy;
     
     // The shared default list of colors all graphs use
-    static List <Color>       _defaultColors;
+    static List <Color>  _defaultColors;
     
     // Constants for Graph type
     public enum Type { Bar, BarH, Area, Line, Scatter, Pie }
@@ -336,17 +332,19 @@ public RMScene3D get3D()
 
     // Create and return
     RMScene3D p3d = new RMScene3D();
-    p3d.setDepth(100); p3d.setYaw(8); p3d.setPitch(11); p3d.setFocalLength(8*72);
-    p3d.getCamera().addPropChangeListener(pc -> thr3DPropChange(pc));
+    p3d.setDepth(100);
+    p3d.setYaw(8); p3d.setPitch(11);
+    p3d.setFocalLength(8*72);
+    p3d.getCamera().addPropChangeListener(pc -> threeDPropChange());
     return _3d = p3d;
 }
 
 // Called when 3D changes to sync to graph.
-void thr3DPropChange(PropChange anEvent)
+private void threeDPropChange()
 {
     repaint();
-    RMScene3D p3d = getChildCount()>0 && getChild(0) instanceof RMScene3D? (RMScene3D)getChild(0) : null;
-    if(p3d!=null)
+    RMScene3D p3d = getChildCount()>0 && getChild(0) instanceof RMScene3D ? (RMScene3D)getChild(0) : null;
+    if (p3d!=null)
         p3d.copy3D(get3D());
 }
 
@@ -354,11 +352,6 @@ void thr3DPropChange(PropChange anEvent)
  * Returns whether the graph draws in 3D.
  */
 public boolean isDraw3D()  { return _draw3D; }
-
-/**
- * Returns whether the graph draws in 3D.
- */
-public boolean getDraw3D()  { return _draw3D; }
 
 /**
  * Sets whether the graph draws in 3D.
@@ -571,25 +564,13 @@ public RMParentShape rpgAll(ReportOwner anRptOwner, RMShape aParent)  { return r
  */
 public RMParentShape rpgAll(ReportOwner anRptOwner, RMShape aParent, boolean isSample)
 {
-    _proxyDisable = true;
     RMGraph.Type type = getType();
     RMParentShape rpg;
     if(type==RMGraph.Type.Bar || type==RMGraph.Type.BarH) rpg = new RMGraphRPGBar(this, anRptOwner).getGraphShape();
     else if(type==RMGraph.Type.Pie) rpg = new RMGraphRPGPie(this, anRptOwner).getGraphShape();
     else rpg = new RMGraphRPGLine(this, anRptOwner).getGraphShape(); // Type Area, Line, Scatter
     if(!isSample) rpgBindings(anRptOwner, rpg);
-    _proxyDisable = false;
     return rpg;
-}
-
-/**
- * Override to suppress ProxyShape.
- */
-public void paint(Painter aPntr)
-{
-    _proxyDisable = true;
-    super.paint(aPntr);
-    _proxyDisable = false;
 }
 
 /**
@@ -598,156 +579,17 @@ public void paint(Painter aPntr)
 public void paintShape(Painter aPntr)  { }
 
 /**
- * Return ProxyShape.
+ * Return the contained view that should get style changes when graph is selected.
  */
-public RMShape getProxyShape()  { return _proxyShape; }
+public RMShape getStyleProxy()  { return _styleProxy; }
 
 /**
- * Sets the ProxyShape.
+ * Sets the contained view that should get style changes when graph is selected.
  */
-public void setProxyShape(RMShape aShape)
+public void setStyleProxy(RMShape aShape)
 {
-    if(aShape==_proxyShape) return;
-    firePropChange(ProxyShape_Prop, _proxyShape, _proxyShape = aShape);
-}
-
-/**
- * Whether to use proxy.
- */
-private boolean useProxy()
-{
-    if(_proxyShape==null) return false;
-    if(isInLayout()) return false;
-    if(_proxyDisable) return false;
-    return true;
-}
-
-/**
- * Override to allow for ProxyShape.
- */
-public Paint getFill()
-{
-    return useProxy()? _proxyShape.getFill() : super.getFill();
-}
-
-/**
- * Override to allow for ProxyShape and trigger relayout.
- */
-public void setFill(Paint aFill)
-{
-    if (_proxyShape!=null)
-        _proxyShape.setFill(aFill);
-    else super.setFill(aFill);
-    relayout();
-}
-
-/**
- * Override to allow for ProxyShape.
- */
-public Border getBorder()
-{
-    return useProxy()? _proxyShape.getBorder() : super.getBorder();
-}
-
-/**
- * Override to allow for ProxyShape and trigger relayout.
- */
-@Override
-public void setBorder(Border aBorder)
-{
-    if (_proxyShape!=null)
-        _proxyShape.setBorder(aBorder);
-    else super.setBorder(aBorder);
-    relayout();
-}
-
-/**
- * Override to allow for ProxyShape.
- */
-public Effect getEffect()
-{
-    return useProxy()? _proxyShape.getEffect() : super.getEffect();
-}
-
-/**
- * Override to allow for ProxyShape and trigger relayout.
- */
-public void setEffect(Effect anEffect)
-{
-    if(_proxyShape!=null)
-        _proxyShape.setEffect(anEffect);
-    else super.setEffect(anEffect);
-    relayout();
-}
-
-/**
- * Override to allow for ProxyShape.
- */
-public Font getFont()
-{
-    return useProxy()? _proxyShape.getFont() : super.getFont();
-}
-
-/**
- * Override to allow for ProxyShape and trigger relayout.
- */
-public void setFont(Font aFont)
-{
-    if(_proxyShape!=null)
-        _proxyShape.setFont(aFont);
-    else super.setFont(aFont);
-    relayout();
-}
-
-/**
- * Override to allow for ProxyShape.
- */
-public Color getTextColor()  { return useProxy()? _proxyShape.getTextColor() : super.getTextColor(); }
-
-/**
- * Override to allow for ProxyShape and trigger relayout.
- */
-public void setTextColor(Color aColor)
-{
-    if(_proxyShape!=null)
-        _proxyShape.setTextColor(aColor);
-    else super.setTextColor(aColor);
-    relayout();
-}
-
-/**
- * Override to allow for ProxyShape.
- */
-public double getOpacity()
-{
-    return useProxy()? _proxyShape.getOpacity() : super.getOpacity();
-}
-
-/**
- * Override to allow for ProxyShape and trigger relayout.
- */
-public void setOpacity(double aValue)
-{
-    if(_proxyShape!=null)
-        _proxyShape.setOpacity(aValue);
-    else super.setOpacity(aValue);
-    relayout();
-}
-
-/**
- * Override to allow for ProxyShape.
- */
-public TextFormat getFormat()  { return useProxy()? _proxyShape.getFormat() : super.getFormat(); }
-
-/**
- * Override to allow for ProxyShape and trigger relayout.
- */
-public void setFormat(TextFormat aFormat)
-{
-    if(_proxyShape!=null)
-        _proxyShape.setFormat(aFormat);
-    else super.setFormat(aFormat);
-    relayout();
+    if(aShape== _styleProxy) return;
+    firePropChange(ProxyShape_Prop, _styleProxy, _styleProxy = aShape);
 }
 
 /**
@@ -755,7 +597,6 @@ public void setFormat(TextFormat aFormat)
  */
 public RMGraph clone()
 {
-    _proxyDisable = true;
     RMGraph clone = (RMGraph)super.clone();
     clone._keys = new ArrayList(_keys);
     clone._grouping = _grouping.clone();
@@ -769,7 +610,6 @@ public RMGraph clone()
         RMGraphPartSeries s2 = (RMGraphPartSeries)s.clone();
         clone.addSeries(s2);
     }
-    _proxyDisable = false;
     return clone;
 }
 
@@ -778,7 +618,6 @@ public RMGraph clone()
  */
 protected XMLElement toXMLShape(XMLArchiver anArchiver)
 {
-    _proxyDisable = true;
     // Archive basic shape attributes and reset element name and set type
     XMLElement e = super.toXMLShape(anArchiver); e.setName("graph");
     e.add("type", getGraphTypeString());
@@ -835,7 +674,6 @@ protected XMLElement toXMLShape(XMLArchiver anArchiver)
     }
     
     // Return xml element
-    _proxyDisable = false;
     return e;
 }
 

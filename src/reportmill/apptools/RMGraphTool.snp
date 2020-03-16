@@ -69,5 +69,5 @@
   <TitleView Name="LabelAxisBox" Margin="0,4,2,4" Padding="2" Text="Label Axis" TitleStyle="Button" Collapsible="true" Expanded="false" />
   <TitleView Name="SeriesBox" Margin="0,4,2,4" Padding="2" Text="Series" TitleStyle="Button" Collapsible="true" Expanded="false" />
   <TitleView Name="3DBox" Margin="0,4,2,4" Padding="2" Text="3D" TitleStyle="Button" Collapsible="true" Expanded="false" />
-  <Label Name="ProxyLabel" Align="CENTER" Padding="2" LeanY="BOTTOM" text="Font/Color changes now apply to Graph" Spacing="0" />
+  <Label Name="ProxyLabel" Align="CENTER" Padding="2" LeanY="BOTTOM" text="Style changes now apply to Graph" Spacing="0" />
 </ColView>

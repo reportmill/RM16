@@ -118,7 +118,7 @@ private void addGrid()
     float totalInterval = maxInterval - minInterval;
     
     // Get graph bounds
-    Rect bounds = _graph.getBoundsInside();
+    Rect bounds = _graph.getBoundsLocal();
     
     // Get grid line width/height
     double lineW = isVertical()? bounds.width : 0;
@@ -155,7 +155,7 @@ private void addGrid()
                 RMLineShape line = new RMLineShape();
                 double minorLineX = isVertical()? bounds.x : lineX + (j+1)*minorTickInterval;
                 double minorLineY = isVertical()? lineY + (j+1)*minorTickInterval : bounds.y;
-                line.setStrokeColor(Color.LIGHTGRAY);
+                line.setBorderColor(Color.LIGHTGRAY);
                 line.setFrame(minorLineX, minorLineY, lineW, lineH);
                 _barShape.addGridLineMinor(line);
             }
@@ -217,7 +217,7 @@ public void addBars()
             // Set bar color and bounds
             int cindex = i; if(_stacked && (iMax==1 || !_meshed) || _graph.isColorItems()) cindex = j;
             Color color = getColor(cindex);
-            bar.setColor(color);
+            bar.setFillColor(color);
             Rect barBounds = getBarBounds(i, j); bar.setBounds(barBounds);
             
             // Get layer index
@@ -422,7 +422,7 @@ private void addValueAxisLabels()
         if(!isVertical()) angle -= 90;
         
         // Get point on label perimeter that we want to sync to (in label parent coords)
-        Point point1 = label.getBoundsInside().getPerimeterPointForRadial(angle, true);
+        Point point1 = label.getBoundsLocal().getPerimeterPointForRadial(angle, true);
         point1 = label.localToParent(point1);
 
         // Offset label location from its current location to graph location
@@ -467,7 +467,7 @@ private void addLabelAxisLabel(Rect aRect, RMGroup aGroup)
     // If label width greater than available width for bar, grow height
     double labelMaxWidth = getBarLabelMaxWidth();
     if(label.getWidth()>labelMaxWidth && isVertical() && label.getRoll()==0) {
-        label.setWidth(labelMaxWidth); label.setHeight(label.getBestHeight()); label.setAlignment(Pos.CENTER); }
+        label.setWidth(labelMaxWidth); label.setHeight(label.getBestHeight()); label.setAlign(Pos.CENTER); }
 
     // Get point by graph that we want label to be aligned with
     Point point2 = isVertical()? new Point(aRect.getMidX(), aRect.getMaxY() + 5) :
@@ -480,7 +480,7 @@ private void addLabelAxisLabel(Rect aRect, RMGroup aGroup)
     if(isVertical()) angle -= 90;
     
     // Get point on label perimeter that we want to sync to (in label parent coords)
-    Point point1 = label.getBoundsInside().getPerimeterPointForRadial(angle, true);
+    Point point1 = label.getBoundsLocal().getPerimeterPointForRadial(angle, true);
     point1 = label.localToParent(point1);
 
     // Offset label location from its current location to graph location
@@ -537,7 +537,7 @@ public void addLabel(RMTextShape aLabel, RMGraphPartSeries.LabelPos aPosition, R
     // If label width greater than available width for bar, grow height
     double labelMaxWidth = getBarLabelMaxWidth();
     if(label.getWidth()>labelMaxWidth && isVertical() && label.getRoll()==0) {
-        label.setWidth(labelMaxWidth); label.setHeight(label.getBestHeight()); label.setAlignment(Pos.CENTER); }
+        label.setWidth(labelMaxWidth); label.setHeight(label.getBestHeight()); label.setAlign(Pos.CENTER); }
 
     // Get bar rect
     Rect barRect = seriesItem.getBar().getFrame();

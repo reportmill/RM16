@@ -198,7 +198,7 @@ private Rect getBoundsOfExcelChildren(RMShape aShape)
         }
     }
     
-    return maxBounds==null ? aShape.getBoundsInside() : maxBounds;
+    return maxBounds==null ? aShape.getBoundsLocal() : maxBounds;
 }
 
 
@@ -529,8 +529,8 @@ class WorkbookStyle {
     public boolean isMatch(RMTextShape aText, String aFormat)
     {
         if(!SnapUtils.equals(aText.getFont(), _text.getFont())) return false;
-        if(aText.getAlignmentX()!=_text.getAlignmentX()) return false;
-        if(aText.getAlignmentY()!=_text.getAlignmentY()) return false;
+        if(aText.getAlignX()!=_text.getAlignX()) return false;
+        if(aText.getAlignY()!=_text.getAlignY()) return false;
         if(!SnapUtils.equals(aText.getFill(), _text.getFill())) return false;
         if(!SnapUtils.equals(aText.getBorder(), _text.getBorder())) return false;
         if(!SnapUtils.equals(aText.getTextColor(), _text.getTextColor())) return false;
@@ -556,14 +556,14 @@ class WorkbookStyle {
             _style.setFont(getWorkbookFont(_text.getFont(), _text.getTextColor()));
         
         // Set style horizontal alignment
-        switch(_text.getAlignmentX()) {
+        switch(_text.getAlignX()) {
             case LEFT: _style.setAlignment(HSSFCellStyle.ALIGN_LEFT); break;
             case CENTER: _style.setAlignment(HSSFCellStyle.ALIGN_CENTER); break;
             case RIGHT: _style.setAlignment(HSSFCellStyle.ALIGN_RIGHT); break;
         }
         
         // Set vertical alignment
-        switch(_text.getAlignmentY()) {
+        switch(_text.getAlignY()) {
             case TOP: _style.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP); break;
             case BOTTOM: _style.setVerticalAlignment(HSSFCellStyle.VERTICAL_BOTTOM); break;
             case CENTER: _style.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER); break;

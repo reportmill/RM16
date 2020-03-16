@@ -201,7 +201,7 @@ protected void paintShape(Painter aPntr)
     // If switch shape doesn't draw a stroke, draw a light one to indicate its bounds
     if(getClass()==RMSwitchShape.class && getBorder()==null && SceneGraph.isEditing(this)) {
         aPntr.setColor(Color.LIGHTGRAY); aPntr.setStroke(Stroke.Stroke1);
-        aPntr.draw(getBoundsInside());
+        aPntr.draw(getBoundsLocal());
     }
     
     // Paint shape normally

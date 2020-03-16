@@ -398,7 +398,7 @@ protected void paintShape(Painter aPntr)
     if (!SceneGraph.isEditing(this)) return;
     
     // Get table bounds and fill table base rect with light gray
-    Rect bounds = getBoundsInside();
+    Rect bounds = getBoundsLocal();
     double y = getChildCount()>0? getChildLast().getMaxY() + 16 : 0;
     aPntr.setColor(new Color(11/12f)); aPntr.fillRect(0, y, getWidth(), bounds.getMaxY() - y);
 
@@ -501,7 +501,7 @@ protected void paintShapeOver(Painter aPntr)
         
     // Draw rect with antialiasing off
     aPntr.setColor(Color.DARKGRAY); aPntr.setStroke(Stroke.Stroke1);
-    aPntr.setAntialiasing(false); aPntr.draw(getBoundsInside()); aPntr.setAntialiasing(true);
+    aPntr.setAntialiasing(false); aPntr.draw(getBoundsLocal()); aPntr.setAntialiasing(true);
 }
 
 /**

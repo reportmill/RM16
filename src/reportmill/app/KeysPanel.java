@@ -211,7 +211,7 @@ public void respondUI(ViewEvent anEvent)
         // Get event Clipboard and start drag
         Clipboard cboard = anEvent.getClipboard();
         cboard.addData(dragKeyFull);
-        cboard.setDragImage(ImageUtils.getImage(dragKeyFull, getSelectedShape().getDocument().getFont()));
+        cboard.setDragImage(ImageUtils.getImage(dragKeyFull, getSelectedShape().getDoc().getFont()));
         cboard.startDrag();
         
         // Notify Attributes panel that dragging started

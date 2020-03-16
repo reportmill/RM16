@@ -54,7 +54,7 @@ protected void configure()
 {
     // Get Graph, graph bounds
     RMGraph graph = _graph;
-    Rect bounds = graph.getBoundsInside();
+    Rect bounds = graph.getBoundsLocal();
     
     // Get Pie shape and info
     RMGraphPartPie pieShape = graph.getPie();
@@ -76,7 +76,7 @@ protected void configure()
     // Get wedge prototype
     RMOvalShape prototype = new RMOvalShape();
     prototype.setHoleRatio(holeRatio);
-    prototype.setStrokeColor(Color.BLACK);
+    prototype.setBorderColor(Color.BLACK);
     
     // Iterate over each graph section and add individual pies
     for(int i=0, iMax=getSectionCount(); i<iMax; i++) { RMGraphSection section = getSection(i);
@@ -156,7 +156,7 @@ protected void configure()
             }
             
             // Set wedge color
-            wedge.setColor(getColor(j));
+            wedge.setFillColor(getColor(j));
             
             // Add wedge to section item
             sectionItem.setBar(wedge);
@@ -199,8 +199,8 @@ protected void configure()
                 RMTextShape label = new RMTextShape(rtext);
                 
                 // Set stroke and fill
-                if(labelAxis.getBorder()!=null) label.setStrokeColor(labelAxis.getStrokeColor());
-                if(labelAxis.getFill()!=null) label.setColor(labelAxis.getColor());
+                if(labelAxis.getBorder()!=null) label.setBorderColor(labelAxis.getBorderColor());
+                if(labelAxis.getFill()!=null) label.setFillColor(labelAxis.getFillColor());
                 
                 // Have wedge label set size to fit
                 label.setBestSize();
@@ -245,7 +245,7 @@ protected void configure()
                     
                     // Create wedge label line shape, set StrokeColor to LightGray and add label line
                     RMLineShape line = new RMLineShape(startX, startY, endX, endY);
-                    line.setStrokeColor(Color.LIGHTGRAY);
+                    line.setBorderColor(Color.LIGHTGRAY);
                     _pieShape.addWedgeLabelLine(line);
                 }
                 

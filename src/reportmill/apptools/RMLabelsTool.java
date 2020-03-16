@@ -120,14 +120,14 @@ public void respondUI(ViewEvent anEvent)
         
         // Fix size, repaint
         labels.fixSize();
-        labels.getDocument().repaint();
+        labels.getDoc().repaint();
         
         // Reset document margin
-        labels.getDocument().setMargins(_selectedLabelFormat.leftMargin, _selectedLabelFormat.rightMargin,
+        labels.getDoc().setMargins(_selectedLabelFormat.leftMargin, _selectedLabelFormat.rightMargin,
                 _selectedLabelFormat.topMargin, _selectedLabelFormat.bottomMargin);
         
         // Reset document size and label frame
-        labels.getDocument().setSize(_selectedLabelFormat.pageWidth, _selectedLabelFormat.pageHeight);
+        labels.getDoc().setSize(_selectedLabelFormat.pageWidth, _selectedLabelFormat.pageHeight);
         labels.setFrameXY(_selectedLabelFormat.leftMargin, _selectedLabelFormat.topMargin);
     }
 }

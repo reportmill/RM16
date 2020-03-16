@@ -116,8 +116,8 @@ public class ReportGens {
             pages.add(textCell);
 
             // Cache vertical alignment and set to Top
-            VPos alignY = textCell.getAlignmentY();
-            textCell.setAlignmentY(VPos.TOP);
+            VPos alignY = textCell.getAlignY();
+            textCell.setAlignY(VPos.TOP);
 
             // Get linked texts until all text visible
             RMTextShape text = textCell;
@@ -127,7 +127,7 @@ public class ReportGens {
             }
 
             // Restore alignment on last text and return list
-            text.setAlignmentY(alignY);
+            text.setAlignY(alignY);
             return pages;
         }
 

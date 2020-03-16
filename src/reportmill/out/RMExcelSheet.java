@@ -123,8 +123,8 @@ public HSSFShape addNewShape(RMShape aShape, HSSFShapeContainer aParent)
 {
     HSSFShape hssfShape = null;
     
-    // get the bounds with bounds() instead of getBounds() to preserve possible negative values
-    Rect bounds = aShape.bounds();
+    // Get bounds
+    Rect bounds = aShape.getBounds();
     
     if (aParent == null) 
         aParent = getPatriarch();

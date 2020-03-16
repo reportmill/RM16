@@ -284,11 +284,11 @@ private RMCrossTabCell createCell(int row, int column, RMCrossTabCell aRefCell)
     
     // If adding a header row, set header row attributes
     else if(row<getHeaderRowCount()) {
-        cell.setColor(HEADER_ROW_COLOR); if(!cell.getFont().isBold()) cell.setFont(cell.getFont().getBold()); }
+        cell.setFillColor(HEADER_ROW_COLOR); if(!cell.getFont().isBold()) cell.setFont(cell.getFont().getBold()); }
 
     // If adding header column, set header column attributes
     else if(column<getHeaderColCount()) {
-        cell.setColor(HEADER_COLUMN_COLOR); if(!cell.getFont().isBold()) cell.setFont(cell.getFont().getBold()); }
+        cell.setFillColor(HEADER_COLUMN_COLOR); if(!cell.getFont().isBold()) cell.setFont(cell.getFont().getBold()); }
 
     // Return new cell
     return cell;

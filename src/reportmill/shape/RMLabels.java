@@ -234,7 +234,7 @@ public RMShape rpgAll(ReportOwner anRptOwner, RMShape aParent)
 protected void paintShape(Painter aPntr)
 {
     // Get labels bounds
-    Rect bounds = getBoundsInside();
+    Rect bounds = getBoundsLocal();
 
     // Draw frame rect
     aPntr.setColor(Color.DARKGRAY); aPntr.setStroke(Stroke.Stroke1);

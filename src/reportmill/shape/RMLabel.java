@@ -29,7 +29,7 @@ protected void paintShape(Painter aPntr)
     // Table bands should draw a red band around thier perimeter when it is selected
     boolean selected = SceneGraph.isSelected(this) || SceneGraph.isSuperSelected(this);
     if (selected) {
-        Rect bounds = getBoundsInside();
+        Rect bounds = getBoundsLocal();
         bounds.inset(2, 2);
         aPntr.setColor(Color.RED);
         aPntr.setStroke(Stroke.Stroke1);

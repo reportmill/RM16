@@ -148,7 +148,7 @@ protected void configureRPG(RMGraphRPG graphRPG, boolean doRPG)
         
         // Create Legend item box
         RMRectShape box = new RMRectShape();
-        box.setColor(graphRPG.getColor(i));
+        box.setFillColor(graphRPG.getColor(i));
         box.setBounds(x,y,16,12); x += 18;
         
         // Create Legend item text

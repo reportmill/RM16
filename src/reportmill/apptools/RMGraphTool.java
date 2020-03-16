@@ -430,7 +430,7 @@ private static RMGraph createSampleGraph()
     // Create new 320x240(*90%) graph
     RMGraph graph = new RMGraph(); graph.setSize(288, 216);
     graph.setBorder(Border.blackBorder()); //setFill(newRMGradientFill(newColor(.85f,.88f,1),newColor(.58f,.65f,1),90));
-    graph.setColor(Color.WHITE);
+    graph.setFillColor(Color.WHITE);
     return graph;
 }
 

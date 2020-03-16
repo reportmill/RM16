@@ -66,12 +66,12 @@ public void addBars()
         // If area or 3D line, set fill color and stroke to black
         Color color = getColor(i);
         if(graphType==RMGraph.Type.Area || draw3D) {
-            lineShape.setColor(color);
-            lineShape.setStrokeColor(color.darker().darker());
+            lineShape.setFillColor(color);
+            lineShape.setBorderColor(color.darker().darker());
         }
         
         // If 2D line, set stroke color and line width
-        else { lineShape.setColor(null); lineShape.setBorder(color, 2); }
+        else { lineShape.setFillColor(null); lineShape.setBorder(color, 2); }
         
         // Set line bounds
         lineShape.setBounds(path.getBounds());
@@ -102,8 +102,8 @@ public void addBars()
             
             // Set bar color
             Color col = colorItems? getColor(j) : color;
-            linePointShape.setColor(col);
-            linePointShape.setStrokeColor(col.darker().darker());
+            linePointShape.setFillColor(col);
+            linePointShape.setBorderColor(col.darker().darker());
             
             // Add line point shape
             if(graphType==RMGraph.Type.Scatter || (graphType==RMGraph.Type.Line && !draw3D))

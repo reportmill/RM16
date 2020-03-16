@@ -3,7 +3,6 @@
  */
 package reportmill.out;
 import reportmill.shape.RMPDFShape;
-import rmdraw.gfx.*;
 import rmdraw.shape.*;
 import snap.geom.Rect;
 import snap.geom.Shape;
@@ -121,8 +120,8 @@ protected void writeShapeAfter(T aShape, RMPDFWriter aWriter)
     // Add link, if it's there (What happens with rotated or skewed shapes?)
     String url = aShape.getURL();
     if(url!=null) {
-        RMShape page = aShape.getPageShape();
-        Rect frame = aShape.localToParent(aShape.getBoundsInside(), page).getBounds();
+        RMShape page = aShape.getPage();
+        Rect frame = aShape.localToParent(aShape.getBoundsLocal(), page).getBounds();
         frame.setY(page.getHeight() - frame.getMaxY());
         PDFAnnotation link = new PDFAnnotation.Link(frame, url);
         if(url.startsWith("textfield")) link = new PDFAnnotation.Widget(frame,"");

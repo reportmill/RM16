@@ -75,7 +75,7 @@ public byte[] getBytes(RMDocument2 aDoc)
         
         // Get pdf page, set media box and add to pages tree and xref
         _pageWriter = new PDFPageWriter(_pfile, this);
-        _pageWriter.setMediaBox(page.getBoundsInside());
+        _pageWriter.setMediaBox(page.getBoundsLocal());
         
         // Have page pdfr write pdf
         RMShapePdfr.getPdfr(page).writePDF(page, this);

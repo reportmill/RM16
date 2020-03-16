@@ -393,8 +393,8 @@ public void setShowLegend(boolean aFlag)
     // If legend requested, but not present, create it, configure and add to parent
     if(aFlag && legend==null && getParent()!=null) {
         legend = new RMGraphLegend();
-        legend.setColor(Color.WHITE);
-        legend.setStrokeColor(Color.BLACK);
+        legend.setFillColor(Color.WHITE);
+        legend.setBorderColor(Color.BLACK);
         legend.setEffect(new ShadowEffect(5, new Color(0,0,0,.65),5,5));
         legend.setBounds(getMaxX() + 5, getY(), 90, 40);
         getParent().addChild(legend); // Add just before area

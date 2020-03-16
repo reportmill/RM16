@@ -100,13 +100,13 @@ public static void writeGradientFill(RMShape aShape, GradientPaint aFill, PDFWri
     shading.put("Function", xref.addObject(function));
     
     // Get gradient paint and start/end
-    GradientPaint gpnt = aFill.copyForRect(aShape.getBoundsInside());
+    GradientPaint gpnt = aFill.copyForRect(aShape.getBoundsLocal());
     Point startPt = new Point(gpnt.getStartX(), gpnt.getStartY()), endPt = new Point(gpnt.getEndX(), gpnt.getEndY());
     
     // In pdf, coordinates of the gradient axis are defined in pattern space.  Pattern space is the same as the
     // page's coordinate system, and doesn't get affected by changes to the ctm. Since the RMGradient returns
     // points in the shape's coordinate system, we have to transform them into pattern space (page space).
-    RMShape page = aShape.getPageShape();
+    RMShape page = aShape.getPage();
     Transform patternSpaceTransform = aShape.getLocalToParent(page);
     patternSpaceTransform.transform(startPt);
     patternSpaceTransform.transform(endPt);
@@ -155,7 +155,7 @@ public static void writeGradientFill(RMShape aShape, GradientPaint aFill, PDFWri
  */
 public static void writeImageFill(RMShape aShape, ImagePaint anImageFill, RMPDFWriter aWriter)
 {
-    writeImageFill(anImageFill, aShape.getPath(), aShape.getBoundsInside(), aWriter);
+    writeImageFill(anImageFill, aShape.getPath(), aShape.getBoundsLocal(), aWriter);
 }
 
 /**

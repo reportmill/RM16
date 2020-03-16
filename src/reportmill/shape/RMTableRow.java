@@ -419,7 +419,7 @@ protected void paintShape(Painter aPntr)
     aPntr.setColor(Color.DARKGRAY);
     aPntr.setStroke(Stroke.Stroke1);
     aPntr.setAntialiasing(false);
-    Rect bounds = getBoundsInside();
+    Rect bounds = getBoundsLocal();
     List <RMShape> children = RMShapeUtils.getShapesSortedByFrameX(getChildren());
     for (RMShape child : children)
         aPntr.drawLine(child.getX(), bounds.y, child.getX(), bounds.getMaxY());
@@ -429,7 +429,7 @@ protected void paintShape(Painter aPntr)
 /**
  * Returns clip shape for shape.
  */
-public Shape getClipShape()  { return !isStructured()? getBoundsInside() : null; }
+public Shape getClipShape()  { return !isStructured()? getBoundsLocal() : null; }
 
 /**
  * Override to layout children and maybe sync with other rows.

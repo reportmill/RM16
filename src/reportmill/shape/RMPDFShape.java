@@ -108,22 +108,22 @@ public void setPadding(int aPadding)
 /**
  * Returns the horizontal alignment.
  */
-public HPos getAlignmentX()  { return _alignX; } HPos _alignX = HPos.CENTER;
+public HPos getAlignX()  { return _alignX; } HPos _alignX = HPos.CENTER;
 
 /**
  * Sets the horizontal alignment.
  */
-public void setAlignmentX(HPos anAlignX)  { _alignX = anAlignX; }
+public void setAlignX(HPos anAlignX)  { _alignX = anAlignX; }
 
 /**
  * Returns the vertical alignment.
  */
-public VPos getAlignmentY()  { return _alignY; } VPos _alignY = VPos.CENTER;
+public VPos getAlignY()  { return _alignY; } VPos _alignY = VPos.CENTER;
 
 /**
  * Sets the vertical alignment.
  */
-public void setAlignmentY(VPos anAlignY)  { _alignY = anAlignY; }
+public void setAlignY(VPos anAlignY)  { _alignY = anAlignY; }
 
 /**
  * Returns whether to grow page to fit available area if shape larger than page.
@@ -244,8 +244,8 @@ public Rect getImageBounds()
     if(h>ph) { h = ph; if(getPreserveRatio()) w = iw*h/ih; }
     
     // Get image bounds x/y for width/height and return rect
-    HPos ax = getAlignmentX();
-    VPos ay = getAlignmentY();
+    HPos ax = getAlignX();
+    VPos ay = getAlignY();
     double x = ax==HPos.CENTER ? (sw - w)/2 : ax==HPos.LEFT ? pd : (sw - w);
     double y = ay==VPos.CENTER ? (sh - h)/2 : ay==VPos.TOP ? pd : (sh - h);
     return new Rect(x, y, w, h);
@@ -269,7 +269,7 @@ public XMLElement toXML(XMLArchiver anArchiver)
     if(_pageIndex>0) e.add("PageIndex", _pageIndex);
     if(_key!=null && _key.length()>0) e.add("key", _key);
     if(_padding>0) e.add("Padding", _padding);
-    if(getAlignment()!= Pos.CENTER) e.add("Alignment", getAlignment());
+    if(getAlign()!= Pos.CENTER) e.add("Alignment", getAlign());
     if(!isGrowToFit()) e.add("GrowToFit", isGrowToFit());
     if(!getPreserveRatio()) e.add("PreserveRatio", getPreserveRatio());
     
@@ -309,7 +309,7 @@ public Object fromXML(XMLArchiver anArchiver, XMLElement anElement)
         String s[] = { "TopLeft", "TopCenter", "TopRight", "CenterLeft", "Center", "CenterRight",
             "BottomLeft", "BottomCenter", "BottomRight" };
         int i = ArrayUtils.indexOf(s, as);
-        if(i>=0) setAlignment(Pos.values()[i]);
+        if(i>=0) setAlign(Pos.values()[i]);
     }
     
     // Return

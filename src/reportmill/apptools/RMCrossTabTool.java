@@ -387,7 +387,7 @@ public void paintHandles(T aShape, Painter aPntr, boolean isSuperSelected)
     // If super selected shape is RMCrossTabCell, get path for ouset bounds in editor coords
     if(editor.getSuperSelectedShape() instanceof RMCrossTabCell) {
         RMShape cell = editor.getSuperSelectedShape();
-        Rect rect = cell.getBoundsInside(); rect.inset(-2.5f, -2.5f);
+        Rect rect = cell.getBoundsLocal(); rect.inset(-2.5f, -2.5f);
         drawShape = editor.convertFromShape(rect, cell);
     }
     

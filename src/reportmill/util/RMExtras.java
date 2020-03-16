@@ -186,7 +186,7 @@ public static StringBuffer getImageMap(RMShape aShape, StringBuffer aSB)
 
     // If URL, add map area
     if(aShape.getURL()!=null) {
-        Rect bounds = aShape.localToParent(aShape.getBoundsInside(), aShape.getPageShape()).getBounds();
+        Rect bounds = aShape.localToParent(aShape.getBoundsLocal(), aShape.getPage()).getBounds();
         sb.append("<AREA SHAPE=RECT COORDS=\"");
         sb.append(String.format("%d,%d,%d,%d\" ", (int)bounds.x, (int)bounds.y, (int)bounds.width, (int)bounds.height));
         sb.append(String.format("HREF=\"%s\" ", aShape.getURL()));

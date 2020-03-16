@@ -69,7 +69,7 @@ public static RMShapeTable createTable(List <RMShape> theShapes, RMShape topLeve
         
         // Get shape bounds
         if(shape instanceof RMTextShape)
-            bounds = shape.localToParent(shape.getBoundsInside(),topLevel).getBounds();
+            bounds = shape.localToParent(shape.getBoundsLocal(),topLevel).getBounds();
         else bounds = shape.localToParent(shape.getBoundsMarked(), topLevel).getBounds();
 
         // Toss away cells whose size is less than the alignment tolerance.

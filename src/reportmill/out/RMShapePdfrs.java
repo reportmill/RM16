@@ -50,8 +50,8 @@ public static class RMTextShapePdfr <T extends RMTextShape> extends RMShapePdfr 
         String text = aTextShape.getText(), pdfText = text!=null && text.length()>0? '(' + text + ')' : null;
         
         // Get ViewShape frame in PDF page coords (minus text insets)
-        RMShape page = aTextShape.getPageShape();
-        Rect frame = aTextShape.localToParent(aTextShape.getBoundsInside(), page).getBounds();
+        RMShape page = aTextShape.getPage();
+        Rect frame = aTextShape.localToParent(aTextShape.getBoundsLocal(), page).getBounds();
         frame.y = page.getHeight() - frame.getMaxY();
         Insets ins = aTextShape.getMargin(); frame.x += ins.left; frame.y += ins.bottom;
         frame.width -= ins.getWidth(); frame.height -= ins.getHeight();

@@ -152,9 +152,9 @@ public class ReportGen <T extends RMShape> {
 
             // Handle FillColor, StrokeColor, TextColor
             else if(pname.equals("FillColor")) { Color color = Color.get(value);
-                if(color!=null) aShapeRPG.setColor(color); }
+                if(color!=null) aShapeRPG.setFillColor(color); }
             else if(pname.equals("StrokeColor")) { Color color = Color.get(value);
-                if(color!=null) aShapeRPG.setStrokeColor(color); }
+                if(color!=null) aShapeRPG.setBorderColor(color); }
             else if(pname.equals("TextColor")) { Color color = Color.get(value);
                 if(color!=null) aShapeRPG.setTextColor(color); }
 

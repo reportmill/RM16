@@ -243,7 +243,7 @@ static RMDocument2 getTableOfContentsTemplate()
     RMTableRow headerRow = (RMTableRow)table.getChildWithTitle("Objects Header");
     headerRow.setNumberOfColumns(1); headerRow.setHeight(205);
     headerRow.getColumn(0).setText("Hollywood Report\n\nTable of Contents");
-    headerRow.getColumn(0).setAlignmentX(HPos.CENTER);
+    headerRow.getColumn(0).setAlignX(HPos.CENTER);
     headerRow.getColumn(0).getRichText().setStyleValue(Font.getFont("Times Bold", 72));
     headerRow.getColumn(0).getRichText().setStyleValue(Font.getFont("Times", 18), 16, 35);
     headerRow.setVersion("Reprint");
@@ -256,7 +256,7 @@ static RMDocument2 getTableOfContentsTemplate()
     RMTableRow tableRow = (RMTableRow)table.getChildWithTitle("Objects Details");
     tableRow.getColumn(1).setText("@row@. @getStudio.getName@");
     tableRow.getColumn(2).setText("........................ @page@");
-    tableRow.getColumn(2).setAlignmentX(HPos.RIGHT);
+    tableRow.getColumn(2).setAlignX(HPos.RIGHT);
     tableRow.getColumn(0).setWidth(.5f);
     tableRow.getColumn(1).setWidth(2);
     tableRow.getColumn(2).setWidth(2);

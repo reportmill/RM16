@@ -159,8 +159,10 @@ public class ReportGen <T extends RMShape> {
                 if(color!=null) aShapeRPG.setFillColor(color); }
             else if(pname.equals("StrokeColor")) { Color color = Color.get(value);
                 if(color!=null) aShapeRPG.setBorderColor(color); }
-            else if(pname.equals("TextColor")) { Color color = Color.get(value);
-                if(color!=null) aShapeRPG.setTextColor(color); }
+            else if(pname.equals("TextColor") && aShapeRPG instanceof RMTextShape) { Color color = Color.get(value);
+                RMTextShape text = (RMTextShape)aShapeRPG;
+                if(color!=null) text.setTextColor(color);
+            }
 
             // Handle others: X, Y, Width, Height, Visible, URL
             else RMKey.setValueSafe(aShapeRPG, pname, value);

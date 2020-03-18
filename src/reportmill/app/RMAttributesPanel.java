@@ -3,7 +3,7 @@
  */
 package reportmill.app;
 import rmdraw.app.*;
-import rmdraw.gfx.FontPanel;
+import rmdraw.editors.FontPanel;
 import snap.view.*;
 
 /**

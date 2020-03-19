@@ -64,7 +64,7 @@ public void setPattern(String aFormat)  { _fmt.applyPattern(aFormat); }
  */
 public String format(Object anObj) 
 {
-    // If locale hasn't been set, get it from RMDocument locale
+    // If locale hasn't been set, get it from RMDoc locale
     if(_locale != SGDoc._locale) {
         _locale = SGDoc._locale;
         _fmt.setDateFormatSymbols(new DateFormatSymbols(SGDoc._locale));

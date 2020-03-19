@@ -301,7 +301,7 @@ public class RMEditorPaneToolBar extends EditorPaneToolBar {
         // Get filename for doc (if not set, write doc to temp file)
         String fname = getEditor().getDoc().getFilename();
         if(fname==null) {
-            fname = SnapUtils.getTempDir() + "RMDocument.rpt";
+            fname = SnapUtils.getTempDir() + "RMDoc.rpt";
             getEditor().getDoc().write(fname);
         }
 
@@ -347,7 +347,7 @@ public class RMEditorPaneToolBar extends EditorPaneToolBar {
         tools.add(editor.getToolForClass(SGOval.class));
         tools.add(editor.getToolForClass(SGText.class));
         tools.add(editor.getToolForClass(SGPolygon.class));
-        tools.add(new RMPolygonShapeTool.PencilTool(editor));
+        tools.add(new SGPolygonTool.PencilTool(editor));
         return tools.toArray(new Tool[0]);
     }
 }

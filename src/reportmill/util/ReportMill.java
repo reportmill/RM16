@@ -11,7 +11,7 @@ import snap.text.RichText;
 import snap.util.*;
 
 /**
- * This class is used as a helper object by RMDocument to generate a report.
+ * This class is used as a helper object by RMDoc to generate a report.
  */
 public class ReportMill {
     

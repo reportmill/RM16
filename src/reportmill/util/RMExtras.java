@@ -2,7 +2,7 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.util;
-import reportmill.shape.RMDocument2;
+import reportmill.shape.RMDoc;
 import reportmill.shape.RMTable;
 import reportmill.shape.RMTableGroup;
 import reportmill.out.RMPDFWriter;
@@ -277,7 +277,7 @@ public static void addToPage(SGDoc aDoc1, SGDoc aDoc2)
 public static void addPageBetweenPages()
 {
     // Get template
-    RMDocument2 template = RMDocument2.getDocFromSource(getMoviesURL());
+    RMDoc template = RMDoc.getDocFromSource(getMoviesURL());
     
     // Get objects
     RMDataSource dataSource = template.getDataSource();
@@ -309,7 +309,7 @@ public static void addPageBetweenPages()
  */
 public static void setTimeZone(SGView aShape, TimeZone aTimeZone)
 {
-    // Handle RMDocument
+    // Handle Doc
     if(aShape instanceof SGDoc) { SGDoc doc = (SGDoc)aShape;
         for(int i=0, iMax=doc.getPageCount(); i<iMax; i++)
             setTimeZone(doc.getPage(i), aTimeZone); }
@@ -342,8 +342,8 @@ public static void setTimeZone(SGView aShape, TimeZone aTimeZone)
 public static void passwordReport()
 {
     Map dset = new RMXMLReader().readObject(getHollywoodURL());
-    RMDocument2 template = RMDocument2.getDocFromSource(getMoviesURL());
-    RMDocument2 report = template.generateReport(dset);
+    RMDoc template = RMDoc.getDocFromSource(getMoviesURL());
+    RMDoc report = template.generateReport(dset);
     
     RMPDFWriter rm = new RMPDFWriter(); //rm.setUnmodifiable("Test");
     rm.setAccessPermissions("fluffy", "bunny", 2052);  // PDFEncryptor.PRINTING_ALLOWED, MAXIMUM_RESOLUTION_PRINTING
@@ -414,8 +414,8 @@ static void writeMoviesDataset() { new RMXMLWriter().writeObject(getMovies(), "/
 /** Generates a report. */
 static void genReport()
 {
-    RMDocument2 doc = RMDocument2.getDocFromSource("/tmp/junk.rpt");
-    RMDocument2 rep = doc.generateReport(getMovies());
+    RMDoc doc = RMDoc.getDocFromSource("/tmp/junk.rpt");
+    RMDoc rep = doc.generateReport(getMovies());
     rep.write("/tmp/junk.pdf");
 }
 

@@ -22,7 +22,7 @@ import snap.text.TextFormat;
 import snap.util.*;
 
 /**
- * This class is used to generate an Excel file from an RMDocument.
+ * This class is used to generate an Excel file from an RMDoc.
  *
  * You simply invoke this with: new RMExcelWriter().getBytes(aDoc);
  */
@@ -49,7 +49,7 @@ public class RMExcelWriter {
 public RMExcelWriter() { }
 
 /**
- * Returns a byte array of an Excel file (.xls) for the given RMDocument.
+ * Returns a byte array of an Excel file (.xls) for the given RMDoc.
  */
 public byte[] getBytes(SGDoc aDoc)
 {
@@ -65,7 +65,7 @@ public byte[] getBytes(SGDoc aDoc)
 }
 
 /**
- * Returns an Excel workbook for the RMDocument.
+ * Returns an Excel workbook for the RMDoc.
  * Use this routine instead of getBytes() if you need to do any post-processing on the workbook.
  */
 public HSSFWorkbook getWorkbook(SGDoc aDoc)

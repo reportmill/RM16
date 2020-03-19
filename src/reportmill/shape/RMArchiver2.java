@@ -33,7 +33,7 @@ public class RMArchiver2 extends RMArchiver {
         // Add RMShapes
         cmap.put("cell-table", RMCrossTab.class);
         cmap.put("cell-table-frame", RMCrossTabFrame.class);
-        cmap.put("document", RMDocument2.class);
+        cmap.put("document", RMDoc.class);
         cmap.put("graph", RMGraph.class);
         cmap.put("graph-legend", RMGraphLegend.class);
         cmap.put("label", RMLabel.class);

@@ -18,13 +18,13 @@ import snap.util.*;
  *
  <pre>
     // Generate report normally
-    RMDocument template = RMDocument.getDoc("MyTemplate.rpt");
-    RMDocument report = template.generateReport(myObjects);
+    RMDoc template = RMDoc.getDoc("MyTemplate.rpt");
+    RMDoc report = template.generateReport(myObjects);
     
     // Get table of contents and generate that report
     RMTableOfContents toc = new RMTableOfContents(report);
-    RMDocument tocTemplate = RMDocument.getDoc("MyTemplateTOC.rpt");
-    RMDocument report2 = tocTemplate.generateReport(toc);
+    RMDoc tocTemplate = RMDoc.getDoc("MyTemplateTOC.rpt");
+    RMDoc report2 = tocTemplate.generateReport(toc);
     
     // Append original report to table of contents and get PDF
     report2.addPages(report);

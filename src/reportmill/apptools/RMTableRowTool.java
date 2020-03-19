@@ -4,7 +4,7 @@
 package reportmill.apptools;
 import reportmill.shape.RMTableRow;
 import rmdraw.app.Editor;
-import rmdraw.apptools.RMParentShapeTool;
+import rmdraw.apptools.SGParentTool;
 import rmdraw.scene.*;
 import java.util.*;
 import snap.geom.Point;
@@ -15,7 +15,7 @@ import snap.viewx.DialogBox;
 /**
  * This class provides UI editing for table rows.
  */
-public class RMTableRowTool <T extends RMTableRow> extends RMParentShapeTool<T> {
+public class RMTableRowTool <T extends RMTableRow> extends SGParentTool<T> {
 
 /**
  * Initialize UI.

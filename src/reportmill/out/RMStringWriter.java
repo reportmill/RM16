@@ -12,7 +12,7 @@ import snap.text.RichText;
 import java.util.*;
 
 /**
- * This class is used to write a String representation of an RMDocument.
+ * This class is used to write a String representation of an RMDoc.
  */
 public class RMStringWriter {
 

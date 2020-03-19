@@ -2,7 +2,7 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.app;
-import reportmill.shape.RMDocument2;
+import reportmill.shape.RMDoc;
 import reportmill.shape.RMTable;
 import reportmill.shape.RMTableRow;
 import reportmill.util.*;
@@ -149,7 +149,7 @@ public static void main(String args[])
         // Load template
         System.err.print("Reading template: " + rptfile); System.err.flush();
         time = System.currentTimeMillis();
-        RMDocument2 template = RMDocument2.getDocFromSource(rptfile);
+        RMDoc template = RMDoc.getDocFromSource(rptfile);
         template.setCompress(compress);
         seconds = (System.currentTimeMillis() - time)/1000f;
         System.err.println(" (" + seconds + " seconds)");
@@ -180,7 +180,7 @@ public static void main(String args[])
             // If table of contents is requested, generate toc report and append
             if(toc) {
                 RMTableOfContents toco = new RMTableOfContents(report);
-                RMDocument2 toct = getTableOfContentsTemplate();
+                RMDoc toct = getTableOfContentsTemplate();
                 SGDoc tocr = toct.generateReport(toco);
                 tocr.addPages(report);
                 report = tocr;
@@ -208,12 +208,12 @@ public static void main(String args[])
 
 // An inner class to simply generate 'count' reports from a separate thread
 static class RPGThread extends Thread {
-    RMDocument2 template;
+    RMDoc template;
     Object     data;
     String     outfile;
     Boolean    paginate;
     int        id, count;
-    public RPGThread(RMDocument2 t, Object d, String o, Boolean p, int i, int c)
+    public RPGThread(RMDoc t, Object d, String o, Boolean p, int i, int c)
     {
         template = t; data = d; outfile = o; paginate = p; id = i; count = c;
     }
@@ -228,10 +228,10 @@ static class RPGThread extends Thread {
     }
 }
 
-static RMDocument2 getTableOfContentsTemplate()
+static RMDoc getTableOfContentsTemplate()
 {
     // Create template
-    RMDocument2 template = new RMDocument2(612, 792);
+    RMDoc template = new RMDoc(612, 792);
     
     // Create table, size it and add it to first template page
     RMTable table = new RMTable("Objects");

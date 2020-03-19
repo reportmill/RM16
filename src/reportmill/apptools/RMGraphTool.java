@@ -6,7 +6,7 @@ import reportmill.shape.*;
 import rmdraw.app.AttributesPanel;
 import rmdraw.app.Editor;
 import rmdraw.app.ToolStyler;
-import rmdraw.apptools.RMScene3DTool;
+import rmdraw.apptools.SGScene3DTool;
 import rmdraw.app.Tool;
 import reportmill.util.RMGrouping;
 import rmdraw.scene.*;
@@ -41,7 +41,7 @@ public class RMGraphTool <T extends RMGraph> extends Tool<T> implements RMSortPa
     RMGraphPartSeriesTool     _seriesTool = new RMGraphPartSeriesTool();
     
     // Assistant tool for 3D
-    RMScene3DTool _3dTool = new Scene3DTool();
+    SGScene3DTool _3dTool = new Scene3DTool();
     
     // The last graph that was the selected graph
     RMGraph                   _lastSelGraph;
@@ -491,7 +491,7 @@ public void mouseReleased(T aView, ViewEvent anEvent)
 /**
  * The Scene3DTool.
  */
-protected class Scene3DTool extends RMScene3DTool {
+protected class Scene3DTool extends SGScene3DTool {
 
     /** Override to get RMScene3D from GraphArea. */
     public SGView getSelView()

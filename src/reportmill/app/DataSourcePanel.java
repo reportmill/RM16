@@ -2,7 +2,7 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.app;
-import reportmill.shape.RMDocument2;
+import reportmill.shape.RMDoc;
 import reportmill.util.Entity;
 import reportmill.util.Property;
 import reportmill.util.RMDataSource;
@@ -17,13 +17,13 @@ import snap.view.*;
 public class DataSourcePanel extends RMEditorPane.RMSupportPane {
     
     // The index of the selected entity in the current datasource
-    int        _selectedEntityIndex = -1;
+    private int  _selEntityIndex = -1;
     
     // The index of the selected property in the current datasource
-    int        _selectedPropertyIndex = -1;
+    private int  _selPropertyIndex = -1;
     
     // Data types
-    String     _types[] = { "String", "Number", "Boolean", "Date", "DateTime", "Binary",
+    private String  _types[] = { "String", "Number", "Boolean", "Date", "DateTime", "Binary",
                                 "To-One Relation", "To-Many Relation" };
 /**
  * Creates a new DataSourcePanel.
@@ -53,12 +53,12 @@ public void resetUI()
     // Update EntitiesList items and selected index
     Schema schema = getSchema();
     setViewItems("EntitiesList", schema!=null? schema.getEntities() : null);
-    setViewSelIndex("EntitiesList", _selectedEntityIndex);
+    setViewSelIndex("EntitiesList", _selEntityIndex);
     
     // Update PropertiesList items and selected index
     Entity entity = getSelEntity();
     setViewItems("PropertiesList", entity!=null? entity.getProperties() : null);
-    setViewSelIndex("PropertiesList", _selectedPropertyIndex);
+    setViewSelIndex("PropertiesList", _selPropertyIndex);
     
     // Make property panel invisible/visible
     Property prop = getSelProperty();
@@ -88,10 +88,10 @@ public void respondUI(ViewEvent anEvent)
 
     // Handle EntitiesList: Reset SelectedEntityIndex and SelectedPropertyIndex
     if(anEvent.equals("EntitiesList")) {
-        _selectedEntityIndex = anEvent.getSelIndex(); _selectedPropertyIndex = -1; }
+        _selEntityIndex = anEvent.getSelIndex(); _selPropertyIndex = -1; }
     
     // Handle PropertiesList, TypeComboBox, SubtypeComboBox
-    if(anEvent.equals("PropertiesList")) _selectedPropertyIndex = anEvent.getSelIndex();
+    if(anEvent.equals("PropertiesList")) _selPropertyIndex = anEvent.getSelIndex();
     if(anEvent.equals("TypeComboBox")) {
         getSelProperty().setType(unprettyType(anEvent.getStringValue())); ds.setCustomSchema(true); }
     if(anEvent.equals("SubtypeComboBox")) {
@@ -107,7 +107,7 @@ public void respondUI(ViewEvent anEvent)
  */
 private RMDataSource getDataSource()
 {
-    RMDocument2 doc = getEditor().getDoc();
+    RMDoc doc = getEditor().getDoc();
     return doc!=null ? doc.getDataSource() : null;
 }
 
@@ -129,15 +129,15 @@ private Entity getSelEntity()
     Schema schema = getSchema(); if(schema==null) return null;
     
     // If selected entity index is greater than schema entity count, reset
-    if(_selectedEntityIndex>=schema.getEntityCount())
-        _selectedEntityIndex = schema.getEntityCount() - 1;
+    if(_selEntityIndex >=schema.getEntityCount())
+        _selEntityIndex = schema.getEntityCount() - 1;
     
     // If selected entity index less than zero, return null
-    if(_selectedEntityIndex<0)
+    if(_selEntityIndex <0)
         return null;
     
     // Return selected entity
-    return schema.getEntity(_selectedEntityIndex);
+    return schema.getEntity(_selEntityIndex);
 }
 
 /**
@@ -149,15 +149,15 @@ private Property getSelProperty()
     Entity entity = getSelEntity(); if(entity==null) return null;
     
     // If selected property index is greater than entity property count, reset
-    if(_selectedPropertyIndex>=entity.getPropertyCount())
-        _selectedPropertyIndex = entity.getPropertyCount() - 1;
+    if(_selPropertyIndex >=entity.getPropertyCount())
+        _selPropertyIndex = entity.getPropertyCount() - 1;
     
     // If selected property index is less than zero, return null
-    if(_selectedPropertyIndex<0)
+    if(_selPropertyIndex <0)
         return null;
     
     // Return entity property
-    return entity.getProperty(_selectedPropertyIndex);
+    return entity.getProperty(_selPropertyIndex);
 }
 
 /**

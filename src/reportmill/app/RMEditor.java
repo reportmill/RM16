@@ -35,7 +35,7 @@ public class RMEditor extends Editor {
     /**
      * Returns the document associated with this viewer.
      */
-    public RMDocument2 getDoc()  { return (RMDocument2)super.getDoc(); }
+    public RMDoc getDoc()  { return (RMDoc)super.getDoc(); }
 
     /**
      * Creates the shapes helper.
@@ -47,7 +47,7 @@ public class RMEditor extends Editor {
      */
     public RMDataSource getDataSource()
     {
-        RMDocument2 d = getDoc();
+        RMDoc d = getDoc();
         return d!=null ? d.getDataSource() : null;
     }
 
@@ -119,7 +119,7 @@ public class RMEditor extends Editor {
         if (aClass==RMCrossTabCell.class) return new RMCrossTabCellTool();
         if (aClass==RMCrossTabDivider.class) return new RMCrossTabDividerTool();
         if (aClass==RMCrossTabFrame.class) return new RMCrossTabFrameTool();
-        if (aClass==RMDocument2.class) return new RMDocumentTool();
+        if (aClass== RMDoc.class) return new SGDocTool();
         if (aClass==RMGraph.class) return new RMGraphTool();
         if (aClass==RMGraphLegend.class) return new RMGraphLegendTool();
         if (aClass==RMGraphPartBars.class) return new RMGraphPartBarsTool();

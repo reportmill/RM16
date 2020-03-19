@@ -6,7 +6,7 @@ import reportmill.shape.RMTable;
 import reportmill.shape.RMTableGroup;
 import reportmill.shape.RMTableRow;
 import rmdraw.app.Editor;
-import rmdraw.apptools.RMParentShapeTool;
+import rmdraw.apptools.SGParentTool;
 import reportmill.util.RMGrouper;
 import reportmill.util.RMGrouping;
 import rmdraw.scene.*;
@@ -19,7 +19,7 @@ import snap.viewx.DialogBox;
 /**
  * This class provides UI editing for Tables.
  */
-public class RMTableTool <T extends RMTable> extends RMParentShapeTool<T> implements RMSortPanel.Owner {
+public class RMTableTool <T extends RMTable> extends SGParentTool<T> implements RMSortPanel.Owner {
     
     // The grouping table
     TableView <RMGrouping>  _groupingTable;
@@ -79,7 +79,7 @@ public void resetUI()
     
     // Update GroupingTable
     _groupingTable.setItems(grouper.getGroupings());
-    _groupingTable.setSelIndex(grouper.getSelectedGroupingIndex());
+    _groupingTable.setSelIndex(grouper.getSelGroupingIndex());
     
     // Update TableGroupButton text
     String buttonText = table.getParent() instanceof RMTableGroup ? "Ungroup TableGroup" : "Make TableGroup";
@@ -152,7 +152,7 @@ public void respondUI(ViewEvent anEvent)
             // Update grouper SelectedGroupingIndex
             int row = _groupingTable.getSelRow();
             int col = _groupingTable.getSelCol();
-            grouper.setSelectedGroupingIndex(row);
+            grouper.setSelGroupingIndex(row);
             
             // If MouseClick, set or reset PageBreakGroupIndex
             if(anEvent.isMouseClick() && col==1)
@@ -240,7 +240,7 @@ public RMTable getTable()
 public RMGrouping getGrouping()
 {
     RMTable table = getTable();
-    return table!=null? table.getGrouper().getSelectedGrouping() : null;
+    return table!=null? table.getGrouper().getSelGrouping() : null;
 }
 
 /**

@@ -3,14 +3,14 @@
  */
 package reportmill.apptools;
 import reportmill.shape.RMGraphLegend;
-import rmdraw.apptools.RMParentShapeTool;
+import rmdraw.apptools.SGParentTool;
 import rmdraw.scene.*;
 import snap.view.ViewEvent;
 
 /**
  * Provides UI editing for RMGraphLegend.
  */
-public class RMGraphLegendTool <T extends RMGraphLegend> extends RMParentShapeTool<T> {
+public class RMGraphLegendTool <T extends RMGraphLegend> extends SGParentTool<T> {
 
 /**
  * Override to configure UI.

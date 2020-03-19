@@ -2,7 +2,7 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.app;
-import reportmill.shape.RMDocument2;
+import reportmill.shape.RMDoc;
 import reportmill.util.RMExtras;
 import rmdraw.app.*;
 import reportmill.util.RMDataSource;
@@ -67,7 +67,7 @@ public static void previewPDF(RMEditorPane anEP)
         filename = FilePathUtils.getSimple(anEP.getDoc().getFilename()) + ".pdf";
     
     // Get report, write report and open file
-    RMDocument2 report = generateReport(anEP, true);
+    RMDoc report = generateReport(anEP, true);
     report.writePDF(filename);
     FileUtils.openFile(filename);
 }
@@ -75,14 +75,14 @@ public static void previewPDF(RMEditorPane anEP)
 /**
  * Generates report from editor.
  */
-public static RMDocument2 generateReport(RMEditorPane anEP, boolean doPaginate)
+public static RMDoc generateReport(RMEditorPane anEP, boolean doPaginate)
 {
     // Get editor (make sure it's in editing mode)
     RMEditor editor = anEP.getEditor();
     anEP.setEditing(true);
     
     // Get document and return report
-    RMDocument2 document = anEP.getDoc();
+    RMDoc document = anEP.getDoc();
     return document.generateReport(editor.getDataSourceDataset(), doPaginate);
 }
 

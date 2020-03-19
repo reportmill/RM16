@@ -2,7 +2,7 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.out;
-import reportmill.shape.RMDocument2;
+import reportmill.shape.RMDoc;
 import reportmill.shape.RMPDFData;
 import reportmill.util.ReportMill;
 import rmdraw.scene.*;
@@ -20,9 +20,9 @@ public class RMPDFWriter extends PDFWriter {
     List <RMPDFData>            _pdfDatas = new ArrayList();
     
 /**
- * Returns a PDF byte array for a given RMDocument.
+ * Returns a PDF byte array for a given RMDoc.
  */
-public byte[] getBytes(RMDocument2 aDoc)
+public byte[] getBytes(RMDoc aDoc)
 {
     // Validate and resolve doc page references
     aDoc.layoutDeep();

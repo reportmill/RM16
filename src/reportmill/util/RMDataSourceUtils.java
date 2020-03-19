@@ -38,8 +38,8 @@ public class RMDataSourceUtils {
      */
     private static Entity getParentEntity(SGView aShape)
     {
-        // Handle RMDocument2
-        if (aShape instanceof RMDocument2) { RMDocument2 doc = (RMDocument2)aShape;
+        // Handle RMDoc
+        if (aShape instanceof RMDoc) { RMDoc doc = (RMDoc)aShape;
             RMDataSource dataSource = doc.getDataSource();
             Schema schema = dataSource!=null ? dataSource.getSchema() : null;
             Entity entity = schema!=null ? schema.getRootEntity() : null;

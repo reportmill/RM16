@@ -5,7 +5,7 @@ package reportmill.apptools;
 import reportmill.shape.RMTable;
 import reportmill.shape.RMTableGroup;
 import rmdraw.app.*;
-import rmdraw.apptools.RMParentShapeTool;
+import rmdraw.apptools.SGParentTool;
 import rmdraw.scene.*;
 import snap.util.StringUtils;
 import snap.view.*;
@@ -13,7 +13,7 @@ import snap.view.*;
 /**
  * This class handles UI editing of table groups.
  */
-public class RMTableGroupTool <T extends RMTableGroup> extends RMParentShapeTool<T> {
+public class RMTableGroupTool <T extends RMTableGroup> extends SGParentTool<T> {
 
 /**
  * Initialize UI panel.

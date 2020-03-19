@@ -3,7 +3,7 @@
  */
 package reportmill.apptools;
 import reportmill.shape.RMSwitchShape;
-import rmdraw.apptools.RMParentShapeTool;
+import rmdraw.apptools.SGParentTool;
 
 import java.util.*;
 import snap.util.ListUtils;
@@ -13,7 +13,7 @@ import snap.viewx.DialogBox;
 /**
  * Tool for Switch shape.
  */
-public class RMSwitchShapeTool <T extends RMSwitchShape> extends RMParentShapeTool<T> {
+public class RMSwitchShapeTool <T extends RMSwitchShape> extends SGParentTool<T> {
 
 /**
  * Returns the shape class this tool edits.

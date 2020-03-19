@@ -16,15 +16,15 @@ import java.util.Map;
 
 /**
  * An RMDoc subclass for ReportMill stuff.
- * RMDocuments are also what ReportMill refers to as templates, and is commonly used like
+ * RMDocs are also what ReportMill refers to as templates, and is commonly used like
  * this:
  * <p><blockquote><pre>
- *   RMDocument template = new RMDocument(aSource); // Load from path String, File, byte array, etc.
- *   RMDocument report = template.generateReport(aDataset); // Any Java dataset: EJBs, custom classes, collctns, etc.
+ *   RMDoc template = RMDoc.getDoc(aSource); // Load from path String, File, byte array, etc.
+ *   RMDoc report = template.generateReport(aDataset); // Any Java dataset: EJBs, custom classes, collctns, etc.
  *   report.writePDF("MyReport.pdf");
  * </pre></blockquote><p>
  */
-public class RMDocument2 extends SGDoc implements ReportGen.RPG {
+public class RMDoc extends SGDoc implements ReportGen.RPG {
 
     // The ReportMill version this document was created with
     private double _version = ReportMill.getVersion();
@@ -44,7 +44,7 @@ public class RMDocument2 extends SGDoc implements ReportGen.RPG {
     /**
      * Creates a plain empty document. It's really only used by the archiver.
      */
-    public RMDocument2()
+    public RMDoc()
     {
         super();
     }
@@ -52,7 +52,7 @@ public class RMDocument2 extends SGDoc implements ReportGen.RPG {
     /**
      * Creates a document with the given width and height (in printer points).
      */
-    public RMDocument2(double aWidth, double aHeight)
+    public RMDoc(double aWidth, double aHeight)
     {
         super(aWidth, aHeight);
     }
@@ -60,10 +60,10 @@ public class RMDocument2 extends SGDoc implements ReportGen.RPG {
     /**
      * Creates a new document from aSource using RMArchiver.
      */
-    public static RMDocument2 getDocFromSource(Object aSource)
+    public static RMDoc getDocFromSource(Object aSource)
     {
         RMArchiver arch = new RMArchiver();
-        return (RMDocument2) arch.getDocFromSource(aSource);
+        return (RMDoc) arch.getDocFromSource(aSource);
     }
 
     /**
@@ -116,7 +116,7 @@ public class RMDocument2 extends SGDoc implements ReportGen.RPG {
      */
     public byte[] getBytesDelimitedAscii(String fieldDelimiter, String recordDelimiter, boolean quoteFields)
     {
-        System.err.println("RMDocument.getBytesDelimitedAscii: Not implemented");
+        System.err.println("RMDoc.getBytesDelimitedAscii: Not implemented");
         return RMStringWriter.delimitedAsciiBytes(this, fieldDelimiter, recordDelimiter, quoteFields);
     }
 
@@ -133,7 +133,7 @@ public class RMDocument2 extends SGDoc implements ReportGen.RPG {
      */
     public byte[] getBytesRTF()
     {
-        System.err.println("RMDocument.getBytesDelimitedAscii: Not implemented");
+        System.err.println("RMDoc.getBytesDelimitedAscii: Not implemented");
         return new RMRTFWriter().getBytes(this);
     }
 
@@ -188,7 +188,7 @@ public class RMDocument2 extends SGDoc implements ReportGen.RPG {
     /**
      * Returns a generated report from this template evaluated against the given object.
      */
-    public RMDocument2 generateReport()
+    public RMDoc generateReport()
     {
         return generateReport(getDataSource() != null ? getDataSource().getDataset() : null, null, true);
     }
@@ -196,7 +196,7 @@ public class RMDocument2 extends SGDoc implements ReportGen.RPG {
     /**
      * Returns a generated report from this template evaluated against the given object.
      */
-    public RMDocument2 generateReport(Object theObjects)
+    public RMDoc generateReport(Object theObjects)
     {
         return generateReport(theObjects, null, true);
     }
@@ -204,7 +204,7 @@ public class RMDocument2 extends SGDoc implements ReportGen.RPG {
     /**
      * Returns a generated report from this template evaluated against the given object and userInfo.
      */
-    public RMDocument2 generateReport(Object objects, Object userInfo)
+    public RMDoc generateReport(Object objects, Object userInfo)
     {
         return generateReport(objects, userInfo, true);
     }
@@ -212,7 +212,7 @@ public class RMDocument2 extends SGDoc implements ReportGen.RPG {
     /**
      * Returns a generated report from this template evaluated against the given object with an option to paginate.
      */
-    public RMDocument2 generateReport(Object objects, boolean paginate)
+    public RMDoc generateReport(Object objects, boolean paginate)
     {
         return generateReport(objects, null, paginate);
     }
@@ -220,7 +220,7 @@ public class RMDocument2 extends SGDoc implements ReportGen.RPG {
     /**
      * Returns generated report from this template evaluated against given object/userInfo (with option to paginate).
      */
-    public RMDocument2 generateReport(Object theObjects, Object theUserInfo, boolean aPaginateFlag)
+    public RMDoc generateReport(Object theObjects, Object theUserInfo, boolean aPaginateFlag)
     {
         // Create and configure reportmill with objects, userinfo
         ReportOwner rptOwner = new ReportOwner();
@@ -236,7 +236,7 @@ public class RMDocument2 extends SGDoc implements ReportGen.RPG {
 
         // Generate report and return (set ivar to pass ReportOwner to new report in rpg clone)
         _rptOwner = rptOwner;
-        RMDocument2 rpt = rptOwner.generateReport();
+        RMDoc rpt = rptOwner.generateReport();
         _rptOwner = null;
         return rpt;
     }
@@ -250,7 +250,7 @@ public class RMDocument2 extends SGDoc implements ReportGen.RPG {
         super.addPages(aDoc);
 
         // Add page reference shapes from given document and clear from old document
-        RMDocument2 doc = aDoc instanceof RMDocument2 ? (RMDocument2) aDoc : null;
+        RMDoc doc = aDoc instanceof RMDoc ? (RMDoc) aDoc : null;
         if (doc != null && _rptOwner != null && doc._rptOwner != null) {
             _rptOwner.getPageReferenceShapes().addAll(doc._rptOwner.getPageReferenceShapes());
             doc._rptOwner.getPageReferenceShapes().clear();
@@ -301,11 +301,11 @@ public class RMDocument2 extends SGDoc implements ReportGen.RPG {
     }
 
     /**
-     * Override for RMDocument.
+     * Override for RMDoc.
      */
-    public RMDocument2 clone()
+    public RMDoc clone()
     {
-        RMDocument2 clone = (RMDocument2) super.clone();
+        RMDoc clone = (RMDoc) super.clone();
         if (_metadata != null) clone._metadata = new HashMap(_metadata);
         return clone;
     }

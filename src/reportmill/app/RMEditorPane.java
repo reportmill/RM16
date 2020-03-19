@@ -1,5 +1,5 @@
 package reportmill.app;
-import reportmill.shape.RMDocument2;
+import reportmill.shape.RMDoc;
 import rmdraw.app.*;
 import reportmill.util.RMDataSource;
 import reportmill.util.RMKey;
@@ -25,7 +25,7 @@ public class RMEditorPane extends EditorPane {
      */
     public EditorPane newDocument()
     {
-        return open(new RMDocument2(612, 792));
+        return open(new RMDoc(612, 792));
     }
 
     /**
@@ -34,9 +34,9 @@ public class RMEditorPane extends EditorPane {
     public RMEditor getEditor()  { return (RMEditor)getViewer(); }
 
     /**
-     * Override to return RMDocument.
+     * Override to return RMDoc.
      */
-    public RMDocument2 getDoc()  { return (RMDocument2)super.getDoc(); }
+    public RMDoc getDoc()  { return (RMDoc)super.getDoc(); }
 
     /**
      * Override to return an RMEditor.
@@ -72,7 +72,7 @@ public class RMEditorPane extends EditorPane {
         RMEditorPane epane = (RMEditorPane) super.open(aSource);
 
         // If old version, warn user that saving document will make it unreadable by RM7
-        RMDocument2 doc = getDoc();
+        RMDoc doc = getDoc();
         if(doc.getVersion()<7.0) {
             String msg = "This document has been upgraded from an older version.\n" +
                     "If saved, it will not open in earlier versions.";

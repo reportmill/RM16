@@ -1,5 +1,5 @@
 package reportmill.app;
-import reportmill.shape.RMDocument2;
+import reportmill.shape.RMDoc;
 import rmdraw.scene.SGView;
 import rmdraw.scene.SGViewUtils;
 import snap.geom.*;
@@ -61,7 +61,7 @@ void dialogBoxClosed()
     if(_dbox._cancelled) return;
 
     // Set new doc
-    RMDocument2 doc = getDoc(_selIndex);
+    RMDoc doc = getDoc(_selIndex);
     _epane.getEditor().setDoc(doc);
     _epane.getEditor().requestFocus();
 }
@@ -270,7 +270,7 @@ private static String getDocName(int anIndex)  { return _docNames[anIndex]; }
 /**
  * Returns the doc at given index.
  */
-private static RMDocument2 getDoc(int anIndex)
+private static RMDoc getDoc(int anIndex)
 {
     // Get document name, URL string and URL
     String name = getDocName(anIndex);
@@ -282,7 +282,7 @@ private static RMDocument2 getDoc(int anIndex)
     if(bytes==null) { System.err.println("SamplesPane.getDoc: Couldn't load " + url); return null; }
     
     // Return document
-    RMDocument2 doc = RMDocument2.getDocFromSource(bytes);
+    RMDoc doc = RMDoc.getDocFromSource(bytes);
     return doc;
 }
 
@@ -344,7 +344,7 @@ private void setImage(Image anImg, int anIndex)
 private static void createImages()
 {
     for(int i=0,iMax=getDocCount();i<iMax;i++) {
-        RMDocument2 doc = getDoc(i); if(doc==null) continue;
+        RMDoc doc = getDoc(i); if(doc==null) continue;
         doc = doc.generateReport();
         doc.getPage(0).setPaintBackground(false);
         Size size = getDocSize(i); int index = i;

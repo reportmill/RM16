@@ -50,7 +50,7 @@ protected void initUI()
 public void resetUI()
 {
     // Get currently selected labels shape (just return if null)
-    RMLabels labels = (RMLabels)getSelectedShape(); if(labels==null) return;
+    RMLabels labels = (RMLabels) getSelView(); if(labels==null) return;
     
     // Update ListKeyText, NumRowsText, NumColumnsText
     setViewValue("ListKeyText", labels.getDatasetKey());
@@ -76,7 +76,7 @@ public void resetUI()
 public void respondUI(ViewEvent anEvent)
 {
     // Get currently selected labels shape (just return if null)
-    RMLabels labels = (RMLabels)getSelectedShape(); if(labels==null) return;
+    RMLabels labels = (RMLabels) getSelView(); if(labels==null) return;
 
     // Handle ListKeyText
     if(anEvent.equals("ListKeyText")) labels.setDatasetKey(StringUtils.delete(anEvent.getStringValue(), "@"));
@@ -135,7 +135,7 @@ public void respondUI(ViewEvent anEvent)
 /**
  * Returns the selected labels shape.
  */
-public RMLabels getLabels()  { return (RMLabels)getSelectedShape(); }
+public RMLabels getLabels()  { return (RMLabels) getSelView(); }
 
 /**
  * Returns the grouping for the selected labels shape.
@@ -145,7 +145,7 @@ public RMGrouping getGrouping()  { RMLabels labels = getLabels(); return labels!
 /**
  * Returns the shape class handled by this tool.
  */
-public Class getShapeClass()  { return RMLabels.class; }
+public Class getViewClass()  { return RMLabels.class; }
 
 /**
  * Returns the window title for this tool.

@@ -58,7 +58,7 @@ static void appendDelimited(StringBuffer aSB, SGView aShape, String fieldD, Stri
     if (aShape instanceof RMTableRowRPG && aShape.getChildCount()>0) {
         
         // Get sorted children
-        List <SGView> children = SGViewUtils.getShapesSortedByFrameX(aShape.getChildren());
+        List <SGView> children = SGViewUtils.getViewsSortedByFrameX(aShape.getChildren());
 
         // Iterate over children
         for (int i=0, iMax=children.size(); i<iMax; i++) { SGView child = children.get(i);

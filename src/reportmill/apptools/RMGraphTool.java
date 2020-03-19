@@ -66,13 +66,13 @@ public void setEditor(Editor anEditor)
 /**
  * Override to return Graph StyleProxy if available.
  */
-public ToolStyler getStyler(SGView aShape)
+public ToolStyler getStyler(SGView aView)
 {
-    RMGraph graph = (RMGraph)aShape;
+    RMGraph graph = (RMGraph) aView;
     SGView proxy = graph.getStyleProxy();
     if (proxy!=null)
         return getTool(proxy).getStyler(proxy);
-    return super.getStyler(aShape);
+    return super.getStyler(aView);
 }
 
 /**
@@ -376,7 +376,7 @@ private void selGraphChanged()
 /**
  * Returns the selected graph.
  */
-public RMGraph getSelectedGraph()  { return getSelectedShape(); }
+public RMGraph getSelectedGraph()  { return getSelView(); }
 
 /**
  * Returns the graph's grouping.
@@ -390,7 +390,7 @@ public RMGrouping getGrouping()
 /**
  * Returns the class this tool edits.
  */
-public Class getShapeClass()  { return RMGraph.class; }
+public Class getViewClass()  { return RMGraph.class; }
 
 /**
  * Returns the name of the graph inspector.
@@ -423,7 +423,7 @@ public static void addGraph(Editor anEditor, String aKeyPath)
     graph.setDatasetKey(aKeyPath);
     
     // Get graph parent and set location in middle of parent
-    SGParent parent = anEditor.firstSuperSelectedShapeThatAcceptsChildren();
+    SGParent parent = anEditor.firstSuperSelViewThatAcceptsChildren();
     graph.setXY(parent.getWidth()/2 - graph.getWidth()/2, parent.getHeight()/2 - graph.getHeight()/2);
 
     // Add graph
@@ -450,13 +450,13 @@ private static RMGraph createSampleGraph()
 /**
  * Handle MousePressed.
  */
-public void mousePressed(T aGraph, ViewEvent anEvent)
+public void mousePressed(T aView, ViewEvent anEvent)
 {
     // See if 3D is available
-    if(isSuperSelected(aGraph) && aGraph.isDraw3D()) {
-        SGScene3D s3d = aGraph.get3D();
-        s3d.processEvent(createShapeEvent(s3d, anEvent));
-        getEditor().setSuperSelView(aGraph);
+    if(isSuperSelected(aView) && aView.isDraw3D()) {
+        SGScene3D s3d = aView.get3D();
+        s3d.processEvent(createSceneEvent(s3d, anEvent));
+        getEditor().setSuperSelView(aView);
         anEvent.consume();
         _inScene3DMouseLoop = true;
     }
@@ -465,12 +465,12 @@ public void mousePressed(T aGraph, ViewEvent anEvent)
 /**
  * Event handler for editing.
  */
-public void mouseDragged(T aGraph, ViewEvent anEvent)
+public void mouseDragged(T aView, ViewEvent anEvent)
 {
     // If child is scene3d, forward mouse event to child and consume event
     if(_inScene3DMouseLoop) {
-        SGScene3D s3d = aGraph.get3D();
-        s3d.processEvent(createShapeEvent(s3d, anEvent));
+        SGScene3D s3d = aView.get3D();
+        s3d.processEvent(createSceneEvent(s3d, anEvent));
         anEvent.consume();
     }
 }
@@ -478,11 +478,11 @@ public void mouseDragged(T aGraph, ViewEvent anEvent)
 /**
  * Handle MouseReleased.
  */
-public void mouseReleased(T aGraph, ViewEvent anEvent)
+public void mouseReleased(T aView, ViewEvent anEvent)
 {
     if(_inScene3DMouseLoop) {
-        SGScene3D s3d = aGraph.get3D();
-        s3d.processEvent(createShapeEvent(s3d, anEvent));
+        SGScene3D s3d = aView.get3D();
+        s3d.processEvent(createSceneEvent(s3d, anEvent));
         anEvent.consume();
         _inScene3DMouseLoop = false;
     }
@@ -494,9 +494,9 @@ public void mouseReleased(T aGraph, ViewEvent anEvent)
 protected class Scene3DTool extends RMScene3DTool {
 
     /** Override to get RMScene3D from GraphArea. */
-    public SGView getSelectedShape()
+    public SGView getSelView()
     {
-        RMGraph graph = RMGraphTool.this.getSelectedShape();
+        RMGraph graph = RMGraphTool.this.getSelView();
         return graph!=null? graph.get3D() : null;
     }
 }

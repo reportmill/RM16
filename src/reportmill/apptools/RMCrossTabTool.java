@@ -128,7 +128,7 @@ public void respondUI(ViewEvent anEvent)
 /**
  * Event handling - overridden to set a custom cursor.
  */
-public void mouseMoved(T aCTab, ViewEvent anEvent)
+public void mouseMoved(T aView, ViewEvent anEvent)
 {
     // Get shape under point
     SGView shape = getEditor().getViewAtPoint(anEvent.getX(), anEvent.getY());
@@ -147,30 +147,30 @@ public void mouseMoved(T aCTab, ViewEvent anEvent)
     }
         
     // Otherwise, do default behavior
-    else super.mouseMoved(aCTab, anEvent);
+    else super.mouseMoved(aView, anEvent);
 }
 
 /**
  * Handles Shape MousePressed.
  */
-public void mousePressed(T aCTab, ViewEvent anEvent)
+public void mousePressed(T aView, ViewEvent anEvent)
 {
     // If event is popup trigger, run crosstab popup
     if(anEvent.isPopupTrigger()) { _popupTriggered = true; runContextMenu(anEvent); return; }
     
     // If super selected, ensure that cell under event point is super selected
-    if(getEditor().getSuperSelView()==aCTab) {
+    if(getEditor().getSuperSelView()== aView) {
         
         // Get the event point in crosstab coords and cell under point
-        Point point = getEditor().convertToSceneView(anEvent.getX(), anEvent.getY(), aCTab);
-        SGView piece = aCTab.getChildContaining(point);
+        Point point = getEditor().convertToSceneView(anEvent.getX(), anEvent.getY(), aView);
+        SGView piece = aView.getChildContaining(point);
         
         // Clear divider
         _divider = null;
         
         // If hit cell: Record DownPoint and consume
         if(piece instanceof RMCrossTabCell) {
-            _downPoint = getEditor().convertToSceneView(anEvent.getX(), anEvent.getY(), aCTab);
+            _downPoint = getEditor().convertToSceneView(anEvent.getX(), anEvent.getY(), aView);
             anEvent.consume();
         }
         
@@ -186,7 +186,7 @@ public void mousePressed(T aCTab, ViewEvent anEvent)
 /**
  * Handle CrossTab mouse dragged.
  */
-public void mouseDragged(T aCTab, ViewEvent anEvent)
+public void mouseDragged(T aView, ViewEvent anEvent)
 {
     // If popup trigger, consume event and return
     if(anEvent.isPopupTrigger() || _popupTriggered) { _popupTriggered = true; anEvent.consume(); return; }
@@ -195,16 +195,16 @@ public void mouseDragged(T aCTab, ViewEvent anEvent)
     if(_divider==null) {
         
         // Get event point int table coords and cell rect for DownPoint and EventPoint
-        Point point = getEditor().convertToSceneView(anEvent.getX(), anEvent.getY(), aCTab);
-        Rect crect = getCellRect(aCTab, Rect.get(_downPoint, point)); crect.snap();
+        Point point = getEditor().convertToSceneView(anEvent.getX(), anEvent.getY(), aView);
+        Rect crect = getCellRect(aView, Rect.get(_downPoint, point)); crect.snap();
         int cx = (int)crect.getX(), cy = (int)crect.getY(), cw = (int)crect.getWidth(), ch = (int)crect.getHeight();
         
         // Create/fill list with selected cells (unique)
         List cells = new ArrayList();
         for(int i=cy; i<=cy+ch; i++)
             for(int j=cx; j<=cx+cw; j++)
-                if(!cells.contains(aCTab.getCell(i, j)))
-                    cells.add(aCTab.getCell(i, j));
+                if(!cells.contains(aView.getCell(i, j)))
+                    cells.add(aView.getCell(i, j));
         
         // Select cells
         getEditor().setSelViews(cells);
@@ -214,7 +214,7 @@ public void mouseDragged(T aCTab, ViewEvent anEvent)
     else if(_divider.isRowDivider()) {
         
         // Get event point in table coords and divider move delta
-        Point point = getEditor().convertToSceneView(anEvent.getX(), anEvent.getY(), aCTab);
+        Point point = getEditor().convertToSceneView(anEvent.getX(), anEvent.getY(), aView);
         double delta = point.y - _divider.getY();
         
         // Get divider row and resize
@@ -226,7 +226,7 @@ public void mouseDragged(T aCTab, ViewEvent anEvent)
     else {
         
         // Get event point in table coords and divider move delta
-        Point point = getEditor().convertToSceneView(anEvent.getX(), anEvent.getY(), aCTab);
+        Point point = getEditor().convertToSceneView(anEvent.getX(), anEvent.getY(), aView);
         double delta = point.x - _divider.getX();
         
         // Get divider column and resize
@@ -235,13 +235,13 @@ public void mouseDragged(T aCTab, ViewEvent anEvent)
     }
     
     // Register for layout/repaint
-    aCTab.relayout(); aCTab.repaint();
+    aView.relayout(); aView.repaint();
 }
 
 /**
  * Handle crosstab mouse released.
  */
-public void mouseReleased(T aCTab, ViewEvent anEvent)
+public void mouseReleased(T aView, ViewEvent anEvent)
 {
     // If popup trigger, consume event and return
     if(anEvent.isPopupTrigger() || _popupTriggered) {
@@ -251,13 +251,13 @@ public void mouseReleased(T aCTab, ViewEvent anEvent)
 /**
  * Key event handler for crosstab editing.
  */
-protected void processKeyEvent(T aCTab, ViewEvent anEvent)
+protected void processKeyEvent(T aView, ViewEvent anEvent)
 {
     // If event isn't typed or pressed, just return
     if(anEvent.isKeyPress() && anEvent.isKeyType()) return;
     
     // Have table register for repaint (and thus undo)
-    aCTab.repaint();
+    aView.repaint();
     
     // Get key code
     Editor editor = getEditor();
@@ -282,7 +282,7 @@ protected void processKeyEvent(T aCTab, ViewEvent anEvent)
                 // Get column index and iterate over divider rows and merge cells on either side of divider
                 int col = divider.getCol().getIndex();
                 for(int i=divider.getStart(), iMax=divider.getEnd(); i<iMax; i++)
-                    aCTab.mergeCells(i, col, i, col+1);
+                    aView.mergeCells(i, col, i, col+1);
             }
             
             // If row divider, merge cells around divider
@@ -291,11 +291,11 @@ protected void processKeyEvent(T aCTab, ViewEvent anEvent)
                 // Get divider row index and iterate over divider columns and merge cells on either side of divider
                 int row = divider.getRow().getIndex();
                 for(int i=divider.getStart(), iMax=divider.getEnd(); i<iMax; i++)
-                    aCTab.mergeCells(row, i, row+1, i);
+                    aView.mergeCells(row, i, row+1, i);
             }
             
             // Selected crosstab
-            editor.setSuperSelView(aCTab);
+            editor.setSuperSelView(aView);
         }
     }
     
@@ -374,10 +374,10 @@ private MenuItem createMenuItem(String t, String n)  { MenuItem mi = new MenuIte
 /**
  * Highlights the selected cells or dividers.
  */
-public void paintHandles(T aShape, Painter aPntr, boolean isSuperSelected)
+public void paintHandles(T aView, Painter aPntr, boolean isSuperSelected)
 {
     // If not super-selected just do normal paintHandles and return
-    if(!isSuperSelected) { super.paintHandles(aShape, aPntr, isSuperSelected); return; }
+    if(!isSuperSelected) { super.paintHandles(aView, aPntr, isSuperSelected); return; }
     
     // Get the table and declare rect to highlight
     Editor editor = getEditor();
@@ -418,7 +418,7 @@ public void paintHandles(T aShape, Painter aPntr, boolean isSuperSelected)
     }
     
     // Do normal paintHandles
-    super.paintHandles(aShape, aPntr, isSuperSelected);
+    super.paintHandles(aView, aPntr, isSuperSelected);
 }
 
 /**
@@ -460,7 +460,7 @@ private Rect getCellRect(RMCrossTab aCTab, Rect aRect)
 /**
  * Returns the shape class this tool edits (RMTable).
  */
-public Class getShapeClass()  { return RMCrossTab.class; }
+public Class getViewClass()  { return RMCrossTab.class; }
 
 /**
  * Returns the display name for this tool ("Table Inspector").
@@ -480,50 +480,50 @@ public boolean isUngroupable(SGView aShape)  { return false; }
 /**
  * Returns the number of handles for this shape.
  */
-public int getHandleCount(T aShape)
+public int getHandleCount(T aView)
 {
     // If crosstab parent isn't crosstab frame, return normal tool implementation
-    if(!(aShape.getParent() instanceof RMCrossTabFrame)) return super.getHandleCount(aShape);
+    if(!(aView.getParent() instanceof RMCrossTabFrame)) return super.getHandleCount(aView);
     return 3;  // crosstab in crosstab frame has 3 handles
 }
 
 /**
  * Editor method.
  */
-public Point getHandlePoint(T aShape, int aHandle, boolean isSuperSelected)
+public Point getHandlePoint(T aView, int aHandle, boolean isSuperSel)
 {
     // If crosstab parent isn't crosstab frame, return normal tool implementation
-    if(!(aShape.getParent() instanceof RMCrossTabFrame))
-        return super.getHandlePoint(aShape, aHandle, isSuperSelected);
+    if(!(aView.getParent() instanceof RMCrossTabFrame))
+        return super.getHandlePoint(aView, aHandle, isSuperSel);
     
     // Call base tool implementation with base tool handle
-    return super.getHandlePoint(aShape, getBaseHandle(aHandle), isSuperSelected);
+    return super.getHandlePoint(aView, getBaseHandle(aHandle), isSuperSel);
 }
 
 /**
  * Returns the cursor for given handle.
  */
-public Cursor getHandleCursor(T aShape, int aHandle)
+public Cursor getHandleCursor(T aView, int aHandle)
 {
     // If crosstab parent isn't crosstab frame, return normal tool implementation
-    if(!(aShape.getParent() instanceof RMCrossTabFrame))
-        return super.getHandleCursor(aShape, aHandle);
+    if(!(aView.getParent() instanceof RMCrossTabFrame))
+        return super.getHandleCursor(aView, aHandle);
     
     // Call base tool implementation with base tool handle
-    return super.getHandleCursor(aShape, getBaseHandle(aHandle));    
+    return super.getHandleCursor(aView, getBaseHandle(aHandle));
 }
 
 /**
  * Editor method.
  */
-public void moveShapeHandle(T aShape, int aHandle, Point aPoint)
+public void moveHandle(T aView, int aHandle, Point aPoint)
 {
     // If crosstab parent isn't crosstab frame, return normal tool implementation
-    if(!(aShape.getParent() instanceof RMCrossTabFrame))
-        super.moveShapeHandle(aShape, aHandle, aPoint);
+    if(!(aView.getParent() instanceof RMCrossTabFrame))
+        super.moveHandle(aView, aHandle, aPoint);
     
     // Call base tool implementation with base tool handle
-    else getToolForClass(SGView.class).moveShapeHandle(aShape, getBaseHandle(aHandle), aPoint);
+    else getToolForClass(SGView.class).moveHandle(aView, getBaseHandle(aHandle), aPoint);
 }
 
 /**
@@ -546,7 +546,7 @@ public static void addCrossTab(Editor anEditor, String aKeyPath)
     ctab.getTable().setDatasetKey(aKeyPath);
 
     // Get parent for shape add and set ctab shape location in middle of parent
-    SGParent parent = anEditor.firstSuperSelectedShapeThatAcceptsChildren();
+    SGParent parent = anEditor.firstSuperSelViewThatAcceptsChildren();
     ctab.setXY((parent.getWidth() - ctab.getWidth())/2, (parent.getHeight() - ctab.getHeight())/2);
     
     // Add table, select table, select selectTool and redisplay
@@ -566,7 +566,7 @@ public static void addCrossTab(Editor anEditor)
     ctab.setRowCount(3); ctab.setColCount(3); ctab.setHeaderRowCount(1);
     
     // Get parent for shape add and set ctab shape location in middle of parent
-    SGParent parent = anEditor.firstSuperSelectedShapeThatAcceptsChildren();
+    SGParent parent = anEditor.firstSuperSelViewThatAcceptsChildren();
     ctab.setXY((parent.getWidth() - ctab.getWidth())/2, (parent.getHeight() - ctab.getHeight())/2);
     
     // Add table, select table, select selectTool and redisplay

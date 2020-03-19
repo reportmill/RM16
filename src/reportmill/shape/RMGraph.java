@@ -93,7 +93,7 @@ public class RMGraph extends SGParent implements ReportGen.RPG {
     public enum ItemLayout { Abreast, Stacked, Layered }
     
     // Constants for properties
-    public static final String ProxyShape_Prop = "ProxyShape";
+    public static final String StyleProxy_Prop = "ProxyShape";
     
 /**
  * Creates an RMGraph.
@@ -586,10 +586,10 @@ public SGView getStyleProxy()  { return _styleProxy; }
 /**
  * Sets the contained view that should get style changes when graph is selected.
  */
-public void setStyleProxy(SGView aShape)
+public void setStyleProxy(SGView aView)
 {
-    if(aShape== _styleProxy) return;
-    firePropChange(ProxyShape_Prop, _styleProxy, _styleProxy = aShape);
+    if(aView==_styleProxy) return;
+    firePropChange(StyleProxy_Prop, _styleProxy, _styleProxy = aView);
 }
 
 /**

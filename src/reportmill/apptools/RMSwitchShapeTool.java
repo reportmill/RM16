@@ -18,7 +18,7 @@ public class RMSwitchShapeTool <T extends RMSwitchShape> extends RMParentShapeTo
 /**
  * Returns the shape class this tool edits.
  */
-public Class getShapeClass() { return RMSwitchShape.class; }
+public Class getViewClass() { return RMSwitchShape.class; }
 
 /**
  * Returns the window title for this tool
@@ -40,7 +40,7 @@ protected void initUI()
 public void resetUI()
 {
     // Get currently selected switch shape and versions (just return if null)
-    RMSwitchShape shape = getSelectedShape(); if(shape==null) return;
+    RMSwitchShape shape = getSelView(); if(shape==null) return;
     List <String> versions = getVersionNames(); if(versions==null) return;
     
     // Update SwitchList Items and SelItem
@@ -54,7 +54,7 @@ public void resetUI()
 public void respondUI(ViewEvent anEvent)
 {
     // Get currently selected switch shape (just return if null)
-    RMSwitchShape shape = getSelectedShape(); if(shape==null) return;
+    RMSwitchShape shape = getSelView(); if(shape==null) return;
     
     // Register for repaint (and thus undo)
     shape.repaint();
@@ -98,7 +98,7 @@ public void respondUI(ViewEvent anEvent)
  */
 public List <String> getVersionNames()
 {
-    RMSwitchShape s = getSelectedShape(); if(s==null) return Collections.emptyList();
+    RMSwitchShape s = getSelView(); if(s==null) return Collections.emptyList();
     List names = s.getVersionNames();
     ListUtils.moveToFront(names, "Standard");
     return names;
@@ -109,7 +109,7 @@ public List <String> getVersionNames()
  */
 public void configureSwitchList(ListCell <String> aCell)
 {
-    RMSwitchShape shape = getSelectedShape(); if(shape==null) return;
+    RMSwitchShape shape = getSelView(); if(shape==null) return;
     String version = aCell.getItem(); if(version==null) return;
     if(shape.hasVersion(version)) aCell.setFont(aCell.getFont().getBold());
 }

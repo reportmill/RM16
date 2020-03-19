@@ -19,6 +19,6 @@ protected View createUI()  { return new Label("CrossTab Divider"); }
 /**
  * Overrides tool method to indicate that cell dividers have no handles.
  */
-public int getHandleCount(T aShape)  { return 0; }
+public int getHandleCount(T aView)  { return 0; }
 
 }

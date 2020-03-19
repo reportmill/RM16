@@ -24,7 +24,7 @@ protected void initUI()  { enableEvents("ItemKeyText", DragDrop); }
 public void resetUI()
 {
     // Get the selected label axis
-    RMGraphPartLabelAxis labelAxis = getSelectedShape(); if(labelAxis==null) return;
+    RMGraphPartLabelAxis labelAxis = getSelView(); if(labelAxis==null) return;
     
     // Update ShowLabelsCheckBox, ShowGridLinesCheckBox, ItemKeyText, LabelRollSpinner
     setViewValue("ShowLabelsCheckBox", labelAxis.getShowAxisLabels());
@@ -39,7 +39,7 @@ public void resetUI()
 public void respondUI(ViewEvent anEvent)
 {
     // Get the selected label axis
-    RMGraphPartLabelAxis labelAxis = getSelectedShape();
+    RMGraphPartLabelAxis labelAxis = getSelView();
     
     // Handle ShowLabelsCheckBox, ShowGridLinesCheckBox, ItemKeyText, LabelRollSpinner
     if(anEvent.equals("ShowLabelsCheckBox")) labelAxis.setShowAxisLabels(anEvent.getBoolValue());
@@ -51,12 +51,12 @@ public void respondUI(ViewEvent anEvent)
 /**
  * Override to return tool shape class.
  */
-public Class <T> getShapeClass()  { return (Class<T>)RMGraphPartLabelAxis.class; }
+public Class <T> getViewClass()  { return (Class<T>)RMGraphPartLabelAxis.class; }
 
 /**
  * Returns the currently selected RMGraphPartBars.
  */
-public T getSelectedShape()
+public T getSelView()
 {
     RMGraph graph = getSelectedGraph();
     return graph!=null? (T)graph.getLabelAxis() : null;
@@ -80,6 +80,6 @@ public String getWindowTitle()  { return "Graph Label Axis Inspector"; }
 /**
  * Override to remove handles.
  */
-public int getHandleCount(T aShape)  { return 0; }
+public int getHandleCount(T aView)  { return 0; }
 
 }

@@ -23,7 +23,7 @@ protected void initUI()  { enableEvents("LegendText", DragDrop); }
 public void resetUI()
 {
     // Get selected legend
-    RMGraphLegend leg = getSelectedShape();
+    RMGraphLegend leg = getSelView();
     
     // Update LegendText
     setViewText("LegendText", leg.getLegendText());
@@ -35,7 +35,7 @@ public void resetUI()
 protected void respondUI(ViewEvent anEvent)
 {
     // Get selected legend
-    RMGraphLegend leg = getSelectedShape();
+    RMGraphLegend leg = getSelView();
     
     // Handle LegendText (Action and DragDrop)
     if(anEvent.equals("LegendText"))

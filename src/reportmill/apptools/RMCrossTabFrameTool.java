@@ -27,7 +27,7 @@ protected void initUI()  { enableEvents("DatasetKeyText", DragDrop); enableEvent
 public void resetUI()
 {
     // Get the currently selected crosstab frame and table (just return if null)
-    RMCrossTabFrame tableFrame = getSelectedShape(); if(tableFrame==null) return;
+    RMCrossTabFrame tableFrame = getSelView(); if(tableFrame==null) return;
     RMCrossTab table = tableFrame.getTable();
     
     // Update the DatasetKeyText, FilterKeyText, ReprintHeaderRowsCheckBox
@@ -42,7 +42,7 @@ public void resetUI()
 public void respondUI(ViewEvent anEvent)
 {
     // Get the currently selected crosstab frame and table (just return if null)
-    RMCrossTabFrame tableFrame = getSelectedShape(); if(tableFrame==null) return;
+    RMCrossTabFrame tableFrame = getSelView(); if(tableFrame==null) return;
     RMCrossTab table = tableFrame.getTable();
     
     // Handle DatasetKeyText, FilterKeyText, ReprintHeaderRowsCheckBox
@@ -54,28 +54,28 @@ public void respondUI(ViewEvent anEvent)
 /**
  * Event handling from select tool for super selected shapes.
  */
-public void mousePressed(T aCTabFrame, ViewEvent anEvent)
+public void mousePressed(T aView, ViewEvent anEvent)
 {
     // Get event point in TableFrame coords
     Editor editor = getEditor();
-    Point point = editor.convertToSceneView(anEvent.getX(), anEvent.getY(), aCTabFrame);
+    Point point = editor.convertToSceneView(anEvent.getX(), anEvent.getY(), aView);
     
     // Handle mouse press in crosstab when not superselected
-    if(editor.isSelected(aCTabFrame)) {
+    if(editor.isSelected(aView)) {
         
         // If click was inside table bounds, super select table and consume event
-        if(point.getX()<aCTabFrame.getTable().getWidth() && point.getY()<aCTabFrame.getTable().getHeight()) {
-            editor.setSuperSelView(aCTabFrame.getTable());
+        if(point.getX()< aView.getTable().getWidth() && point.getY()< aView.getTable().getHeight()) {
+            editor.setSuperSelView(aView.getTable());
             anEvent.consume();
         }
     }
     
     // Handle mouse press in super selected crosstab's buffer region
-    if(editor.isSuperSelected(aCTabFrame)) {
+    if(editor.isSuperSelected(aView)) {
         
         // If click was outside table bounds, make table frame just selected
-        if(point.getX()>=aCTabFrame.getTable().getWidth() || point.getY()>=aCTabFrame.getTable().getHeight()) {
-            editor.setSelView(aCTabFrame);
+        if(point.getX()>= aView.getTable().getWidth() || point.getY()>= aView.getTable().getHeight()) {
+            editor.setSelView(aView);
             editor.getSelectTool().setRedoMousePressed(true); // Register for redo
         }
     }
@@ -84,7 +84,7 @@ public void mousePressed(T aCTabFrame, ViewEvent anEvent)
 /**
  * Returns the shape class this tool edits (RMTable).
  */
-public Class getShapeClass()  { return RMCrossTabFrame.class; }
+public Class getViewClass()  { return RMCrossTabFrame.class; }
 
 /**
  * Returns the display name for this tool ("Table Inspector").

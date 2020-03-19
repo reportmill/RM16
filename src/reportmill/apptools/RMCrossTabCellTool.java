@@ -61,7 +61,7 @@ public void resetUI()
     super.resetUI();
     
     // Get currently selected cell (just return if null)
-    RMCrossTabCell cell = getSelectedShape(); if(cell==null) return;
+    RMCrossTabCell cell = getSelView(); if(cell==null) return;
     
     // Get whether cell is in header row or column
     boolean isHeaderCell = cell.isColHeader() || cell.isRowHeader();
@@ -98,10 +98,10 @@ public void resetUI()
 public void respondUI(ViewEvent anEvent)
 {
     // Get currently selected cell and table (just return if null)
-    RMCrossTabCell cell = getSelectedShape(); if(cell==null) return;
+    RMCrossTabCell cell = getSelView(); if(cell==null) return;
     RMCrossTab table = (RMCrossTab)cell.getParent();
     
-    // Get selected cross tab cell shapes
+    // Get selected cross tab cell views
     List <RMCrossTabCell> cells = (List)getEditor().getSelOrSuperSelViews();
     
     // Handle GroupingKeyText
@@ -157,7 +157,7 @@ public void respondUI(ViewEvent anEvent)
 /**
  * Returns the currently selected cell.
  */
-public RMCrossTabCell getCell()  { return ClassUtils.getInstance(getSelectedShape(), RMCrossTabCell.class); }
+public RMCrossTabCell getCell()  { return ClassUtils.getInstance(getSelView(), RMCrossTabCell.class); }
 
 /**
  * Returns the grouping of the selected cell.
@@ -232,21 +232,21 @@ protected void processMouseEvent(T aText, ViewEvent anEvent)
 /**
  * Key event handler for super selected cell.
  */
-protected void processKeyEvent(T aCell, ViewEvent anEvent)
+protected void processKeyEvent(T aView, ViewEvent anEvent)
 {
     // Get key code
     int keyCode = anEvent.getKeyCode();
         
     // If key is tab press (non-alt), move forward or backward (based on shift modifier)
     if(keyCode==KeyCode.TAB && !anEvent.isAltDown() && anEvent.isKeyPress())
-        getEditor().setSelView(anEvent.isShiftDown()? aCell.getCellBefore() : aCell.getCellAfter());
+        getEditor().setSelView(anEvent.isShiftDown()? aView.getCellBefore() : aView.getCellAfter());
             
     // If key is enter press (non-alt), move down or up
     else if(keyCode==KeyCode.ENTER && !anEvent.isAltDown() && anEvent.isKeyPress())
-        getEditor().setSelView(anEvent.isShiftDown()? aCell.getCellAbove() : aCell.getCellBelow());
+        getEditor().setSelView(anEvent.isShiftDown()? aView.getCellAbove() : aView.getCellBelow());
         
     // Anything else goes to text tool
-    else { super.processKeyEvent(aCell, anEvent); return; }
+    else { super.processKeyEvent(aView, anEvent); return; }
 
     // Consume event
     anEvent.consume();
@@ -255,12 +255,12 @@ protected void processKeyEvent(T aCell, ViewEvent anEvent)
 /**
  * Overrides tool method to indicate that cells have no handles.
  */
-public int getHandleCount(T aShape)  { return 0; }
+public int getHandleCount(T aView)  { return 0; }
 
 /**
  * Override to suppress normal TextTool painting.
  */
-public void paintHandles(T aText, Painter aPntr, boolean isSuperSelected)  { }
+public void paintHandles(T aView, Painter aPntr, boolean isSuperSelected)  { }
 
 /**
  * Override to suppress normal TextTool painting.
@@ -270,27 +270,27 @@ public void paintBoundsRect(SGText aText, Painter aPntr) { }
 /**
  * Override normal implementation to handle KeysPanel drop.
  */
-public void dragDrop(T aCell, ViewEvent anEvent)
+public void dragDrop(T aView, ViewEvent anEvent)
 {
     // If KeysPanel is dragging, add key to text
     Clipboard cb = anEvent.getClipboard();
     if(cb.hasString()) {
     
         // Do normal text version to add drop string to text
-        super.dragDrop(aCell, anEvent);
+        super.dragDrop(aView, anEvent);
     
         // Get the string
         String string = cb.getString(); //ClipboardUtils.getString(anEvent.getTransferable());
     
         // If this cell is header row or header column and there is no grouping, set grouping
-        if((aCell.isColHeader() || aCell.isRowHeader()) && aCell.getGrouping()==null) {
+        if((aView.isColHeader() || aView.isRowHeader()) && aView.getGrouping()==null) {
             String key = StringUtils.delete(string, "@"); // Get key (drop string without @-signs)
-            aCell.setGrouping(new RMGrouping(key)); // Set new grouping
+            aView.setGrouping(new RMGrouping(key)); // Set new grouping
         }
     }
     
     // Otherwise do normal version
-    else super.dragDrop(aCell, anEvent);
+    else super.dragDrop(aView, anEvent);
 }
 
 }

@@ -28,7 +28,7 @@ protected void initUI()
 public void resetUI()
 {
     // Get the selected part pie (just return if null)
-    RMGraphPartPie pie = getSelectedShape(); if(pie==null) return;
+    RMGraphPartPie pie = getSelView(); if(pie==null) return;
 
     // Update WedgeLinesCheckBox
     setViewValue("WedgeLinesCheckBox", pie.getDrawWedgeLabelLines());
@@ -48,7 +48,7 @@ public void resetUI()
 public void respondUI(ViewEvent anEvent)
 {
     // Get the selected part pie (just return if null)
-    RMGraphPartPie pie = getSelectedShape(); if(pie==null) return;
+    RMGraphPartPie pie = getSelView(); if(pie==null) return;
 
     // Handle WedgeLinesCheckBox
     if(anEvent.equals("WedgeLinesCheckBox"))
@@ -76,7 +76,7 @@ public void respondUI(ViewEvent anEvent)
 /**
  * Returns the currently selected RMGraphPartPie.
  */
-public RMGraphPartPie getSelectedShape()
+public RMGraphPartPie getSelView()
 {
     RMGraph graph = getSelectedGraph();
     return graph!=null? graph.getPie() : null;
@@ -87,7 +87,7 @@ public RMGraphPartPie getSelectedShape()
  */
 public RMGraph getSelectedGraph()
 {
-    SGView selShape = super.getSelectedShape();
+    SGView selShape = super.getSelView();
     return selShape instanceof RMGraph? (RMGraph)selShape : null;
 }
 

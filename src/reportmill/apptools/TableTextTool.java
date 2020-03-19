@@ -25,35 +25,35 @@ public class TableTextTool<T extends SGText> extends TextTool<T> {
     /**
      * Editor method - returns handle count.
      */
-    public int getHandleCount(T aText)
+    public int getHandleCount(T aView)
     {
-        return isStructured(aText)? 2 : super.getHandleCount(aText);
+        return isStructured(aView)? 2 : super.getHandleCount(aView);
     }
 
     /**
      * Editor method - returns handle rect in editor coords.
      */
-    public Rect getHandleRect(T aText, int handle, boolean isSuperSelected)
+    public Rect getHandleRect(T aView, int handle, boolean isSuperSelected)
     {
         // If structured, return special handles (tall & thin)
-        if (isStructured(aText)) {
+        if (isStructured(aView)) {
 
             // Get handle point in text bounds, convert to table row bounds
-            Point cp = getHandlePoint(aText, handle, true);
-            cp = aText.localToParent(cp);
+            Point cp = getHandlePoint(aView, handle, true);
+            cp = aView.localToParent(cp);
 
             // If point outside of parent, return bogus rect
-            if (cp.getX()<0 || cp.getX()>aText.getParent().getWidth())
+            if (cp.getX()<0 || cp.getX()> aView.getParent().getWidth())
                 return new Rect(-9999,-9999,0,0);
 
             // Get handle point in text coords
-            cp = getHandlePoint(aText, handle, false);
+            cp = getHandlePoint(aView, handle, false);
 
             // Get handle point in editor coords
-            cp = getEditor().convertFromSceneView(cp.getX(), cp.getY(), aText);
+            cp = getEditor().convertFromSceneView(cp.getX(), cp.getY(), aView);
 
             // Get handle rect
-            Rect hr = new Rect(cp.getX()-3, cp.getY(), 6, aText.height() * getEditor().getZoomFactor());
+            Rect hr = new Rect(cp.getX()-3, cp.getY(), 6, aView.height() * getEditor().getZoomFactor());
 
             // If super selected, offset
             if (isSuperSelected)
@@ -64,28 +64,28 @@ public class TableTextTool<T extends SGText> extends TextTool<T> {
         }
 
         // Return normal shape handle rect
-        return super.getHandleRect(aText, handle, isSuperSelected);
+        return super.getHandleRect(aView, handle, isSuperSelected);
     }
 
     /**
      * Paints selected shape indicator, like handles (and maybe a text linking indicator).
      */
-    public void paintHandles(T aText, Painter aPntr, boolean isSuperSelected)
+    public void paintHandles(T aView, Painter aPntr, boolean isSuperSelected)
     {
         // If not structured, do normal version
-        if (!isStructured(aText)) {
-            super.paintHandles(aText, aPntr, isSuperSelected);
+        if (!isStructured(aView)) {
+            super.paintHandles(aView, aPntr, isSuperSelected);
             return;
         }
 
         // Paint SuperSelected
         if (isSuperSelected)
-            paintTextEditor(aText, aPntr);
+            paintTextEditor(aView, aPntr);
 
         // Iterate over shape handles, get rect and draw
         aPntr.setAntialiasing(false);
-        for (int i=0, iMax=getHandleCount(aText); i<iMax; i++) {
-            Rect hr = getHandleRect(aText, i, isSuperSelected);
+        for (int i = 0, iMax = getHandleCount(aView); i<iMax; i++) {
+            Rect hr = getHandleRect(aView, i, isSuperSelected);
             aPntr.drawButton(hr, false);
         }
         aPntr.setAntialiasing(true);
@@ -132,15 +132,15 @@ public class TableTextTool<T extends SGText> extends TextTool<T> {
     /**
      * Key event handling for super selected text.
      */
-    protected void processKeyEvent(T aText, ViewEvent anEvent)
+    protected void processKeyEvent(T aView, ViewEvent anEvent)
     {
         // If tab was pressed and text is structured table row column, forward selection onto next column
-        if (isStructured(aText) && anEvent.isKeyPress() && anEvent.getKeyCode()== KeyCode.TAB && !anEvent.isAltDown()) {
+        if (isStructured(aView) && anEvent.isKeyPress() && anEvent.getKeyCode()== KeyCode.TAB && !anEvent.isAltDown()) {
 
             // Get structured text table row, child table rows and index of child
-            SGParent tableRow = aText.getParent();
-            List children = SGViewUtils.getShapesSortedByX(tableRow.getChildren());
-            int index = children.indexOf(aText);
+            SGParent tableRow = aView.getParent();
+            List children = SGViewUtils.getViewsSortedByX(tableRow.getChildren());
+            int index = children.indexOf(aView);
 
             // If shift is down, get index to the left, wrapped, otherwise get index to the right, wrapped
             if(anEvent.isShiftDown()) index = (index - 1 + children.size())%children.size();
@@ -155,41 +155,41 @@ public class TableTextTool<T extends SGText> extends TextTool<T> {
         }
 
         // Otherwise, do normal version
-        else super.processKeyEvent(aText, anEvent);
+        else super.processKeyEvent(aView, anEvent);
     }
 
     /**
      * Moves the handle at the given index to the given point.
      */
-    public void moveShapeHandle(T aShape, int aHandle, Point toPoint)
+    public void moveHandle(T aView, int aHandle, Point toPoint)
     {
         // If not structured, do normal version
-        if (!isStructured(aShape)) {
-            super.moveShapeHandle(aShape, aHandle, toPoint);
+        if (!isStructured(aView)) {
+            super.moveHandle(aView, aHandle, toPoint);
             return;
         }
 
         // Get handle point in shape coords and shape parent coords
-        Point p1 = getHandlePoint(aShape, aHandle, false);
-        Point p2 = aShape.parentToLocal(toPoint);
+        Point p1 = getHandlePoint(aView, aHandle, false);
+        Point p2 = aView.parentToLocal(toPoint);
 
         // Get whether left handle and width change
         boolean left = aHandle==HandleW || aHandle==HandleNW || aHandle==HandleSW;
         double dw = p2.getX() - p1.getX(); if (left) dw = -dw;
-        double nw = aShape.getWidth() + dw;
-        if (nw<8) { nw = 8; dw = nw - aShape.getWidth(); }
+        double nw = aView.getWidth() + dw;
+        if (nw<8) { nw = 8; dw = nw - aView.getWidth(); }
 
         // Get shape to adjust and new width (make sure it's no less than 8)
-        int index = aShape.indexOf();
+        int index = aView.indexOf();
         int index2 = left? index-1 : index+1;
-        SGView other = aShape.getParent().getChild(index2);
+        SGView other = aView.getParent().getChild(index2);
         double nw2 = other.getWidth() - dw;
-        if (nw2<8) { nw2 = 8; dw = other.getWidth() - nw2; nw = aShape.getWidth() + dw; }
+        if (nw2<8) { nw2 = 8; dw = other.getWidth() - nw2; nw = aView.getWidth() + dw; }
 
         // Adjust shape and layout parent
-        aShape.setWidth(nw);
+        aView.setWidth(nw);
         other.setWidth(nw2);
-        aShape.getParent().layout();
+        aView.getParent().layout();
     }
 
     /**
@@ -209,7 +209,7 @@ public class TableTextTool<T extends SGText> extends TextTool<T> {
 
         // Handle MouseDragged: layout children by X (if outside row, skip drag shape)
         if (anEvent.isMouseDrag()) {
-            List <SGView> children = SGViewUtils.getShapesSortedByFrameX(tableRow.getChildren());
+            List <SGView> children = SGViewUtils.getViewsSortedByFrameX(tableRow.getChildren());
             float x = 0;
             for (SGView child : children) {
                 if (child==shape) { if(inRow) child.setX(point.x-child.getWidth()/2);

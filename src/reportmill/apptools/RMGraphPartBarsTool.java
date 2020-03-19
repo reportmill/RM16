@@ -18,7 +18,7 @@ public class RMGraphPartBarsTool extends Tool {
 public void resetUI()
 {
     // Get the selected value axis
-    RMGraphPartBars bars = getSelectedShape(); if(bars==null) return;
+    RMGraphPartBars bars = getSelView(); if(bars==null) return;
     
     // Update BarGapSpinner, SetGapSpinner, BarCountSpinner
     setViewValue("BarGapSpinner", bars.getBarGap());
@@ -32,7 +32,7 @@ public void resetUI()
 public void respondUI(ViewEvent anEvent)
 {
     // Get the selected value axis
-    RMGraphPartBars bars = getSelectedShape(); if(bars==null) return;
+    RMGraphPartBars bars = getSelView(); if(bars==null) return;
     
     // Handle BarGapSpinner, SetGapSpinner, BarCountSpinner
     if(anEvent.equals("BarGapSpinner")) bars.setBarGap(anEvent.getFloatValue());
@@ -43,7 +43,7 @@ public void respondUI(ViewEvent anEvent)
 /**
  * Returns the currently selected RMGraphPartBars.
  */
-public RMGraphPartBars getSelectedShape()
+public RMGraphPartBars getSelView()
 {
     RMGraph graph = getSelectedGraph();
     return graph!=null? graph.getBars() : null;
@@ -54,7 +54,7 @@ public RMGraphPartBars getSelectedShape()
  */
 public RMGraph getSelectedGraph()
 {
-    return ClassUtils.getInstance(super.getSelectedShape(), RMGraph.class);
+    return ClassUtils.getInstance(super.getSelView(), RMGraph.class);
 }
 
 /**

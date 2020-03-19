@@ -113,7 +113,7 @@ public class RMEditor extends Editor {
     /**
      * Returns the specific tool for a given shape.
      */
-    protected Tool createTool(Class aClass)
+    protected Tool createToolForClass(Class aClass)
     {
         if (aClass==RMCrossTab.class) return new RMCrossTabTool();
         if (aClass==RMCrossTabCell.class) return new RMCrossTabCellTool();
@@ -135,6 +135,6 @@ public class RMEditor extends Editor {
         if (aClass==RMTableRow.class) return new RMTableRowTool();
         if (aClass== SGText.class) return new TableTextTool();
         if (aClass==RMPDFShape.class) return new RMPDFShapeTool();
-        return super.createTool(aClass);
+        return super.createToolForClass(aClass);
     }
 }

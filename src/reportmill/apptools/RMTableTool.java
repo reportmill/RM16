@@ -269,7 +269,7 @@ public void configureGroupingTable(ListCell <RMGrouping> aCell)
 /**
  * Returns the shape class this tool edits (RMTable).
  */
-public Class getShapeClass()  { return RMTable.class; }
+public Class getViewClass()  { return RMTable.class; }
 
 /**
  * Returns the display name for this tool ("Table Inspector").
@@ -304,7 +304,7 @@ public static void addTable(Editor anEditor, String aKeyPath)
     RMTable table = new RMTable(aKeyPath==null? "Objects" : aKeyPath);
 
     // Set table location in middle of selected shape
-    SGParent parent = anEditor.firstSuperSelectedShapeThatAcceptsChildren();
+    SGParent parent = anEditor.firstSuperSelViewThatAcceptsChildren();
     table.setXY(parent.getWidth()/2 - table.getWidth()/2, parent.getHeight()/2 - table.getHeight()/2);
 
     // Add table
@@ -319,18 +319,18 @@ public static void addTable(Editor anEditor, String aKeyPath)
 /**
  * MouseMoved implementation to update cursor for resize bars.
  */
-public void mouseMoved(T aTable, ViewEvent anEvent)
+public void mouseMoved(T aView, ViewEvent anEvent)
 {
     // Get event point in table coords and resize bar for point
     Editor editor = getEditor();
-    Point point = editor.convertToSceneView(anEvent.getX(), anEvent.getY(), aTable);
-    int resizeBarIndex = aTable.getResizeBarAtPoint(point);
+    Point point = editor.convertToSceneView(anEvent.getX(), anEvent.getY(), aView);
+    int resizeBarIndex = aView.getResizeBarAtPoint(point);
 
     // If resize bar is under point, set cursor
     if(resizeBarIndex>=0) {
         
         // Get the table row above resize bar
-        RMTableRow tableRow = (RMTableRow)aTable.getChild(resizeBarIndex);
+        RMTableRow tableRow = (RMTableRow) aView.getChild(resizeBarIndex);
         
         // If point is before resize bar controls, set cursor to N resize, otherwise default
         if(point.x<getResizeBarPopupX(tableRow) - 20) editor.setCursor(Cursor.N_RESIZE);
@@ -339,50 +339,50 @@ public void mouseMoved(T aTable, ViewEvent anEvent)
     }
     
     // Otherwise, do normal mouse moved
-    else super.mouseMoved(aTable, anEvent);
+    else super.mouseMoved(aView, anEvent);
 }
 
 /**
  * Event handling for table editing.
  */
-public void mousePressed(T aTable, ViewEvent anEvent)
+public void mousePressed(T aView, ViewEvent anEvent)
 {
     // Initialize resize bar index
     _resizeBarIndex = -1;
     
     // Get event point in table coords
     Editor editor = getEditor();
-    Point point = editor.convertToSceneView(anEvent.getX(), anEvent.getY(), aTable);
+    Point point = editor.convertToSceneView(anEvent.getX(), anEvent.getY(), aView);
     
     // If table isn't super selected, forward to TableRow and return
-    if(!isSuperSelected(aTable)) {
-        RMTableRow tableRow = (RMTableRow)aTable.getChildContaining(point); // Get hit table row
+    if(!isSuperSelected(aView)) {
+        RMTableRow tableRow = (RMTableRow) aView.getChildContaining(point); // Get hit table row
         if(tableRow!=null && tableRow.isStructured()) // If table row is structured
             getTool(tableRow).processEvent(tableRow, anEvent);
         return;
     }
     
     // If we're not editor super selected shape, just return
-    if(editor.getSuperSelView()!=aTable) return;
+    if(editor.getSuperSelView()!= aView) return;
     
     // If point hit's table row, just return
-    if(aTable.getChildContaining(point)!=null) return;
+    if(aView.getChildContaining(point)!=null) return;
     
     // Since we are the editor super selected shape, consume event to indicate we'll handle events
     anEvent.consume();
     
     // If point is inside table group button, super select table group 
-    if(aTable.getParent() instanceof RMTableGroup && point.x<100 && point.y>aTable.getHeight()-18)
-        editor.setSuperSelView(aTable.getParent());
+    if(aView.getParent() instanceof RMTableGroup && point.x<100 && point.y> aView.getHeight()-18)
+        editor.setSuperSelView(aView.getParent());
     
     // Get resize bar index for point
-    _resizeBarIndex = aTable.getResizeBarAtPoint(point);
+    _resizeBarIndex = aView.getResizeBarAtPoint(point);
     
     // If no selected resize bar, just return
     if(_resizeBarIndex == -1) return;
     
     // Get the table row above resize bar
-    RMTableRow tableRow = (RMTableRow)aTable.getChild(_resizeBarIndex);
+    RMTableRow tableRow = (RMTableRow) aView.getChild(_resizeBarIndex);
     
     // Get the x location of resize bar popup menu
     double resizeBarPopupX = getResizeBarPopupX(tableRow);
@@ -390,13 +390,13 @@ public void mousePressed(T aTable, ViewEvent anEvent)
     // If downPoint is on version, run its context menu
     if(point.x > resizeBarPopupX) {
         editor.setSuperSelView(tableRow); // Super select resize bar table row and run popup menu
-        runMenuForShape(aTable, resizeBarPopupX, aTable.getResizeBarBounds(_resizeBarIndex).getMaxY());
+        runMenuForShape(aView, resizeBarPopupX, aView.getResizeBarBounds(_resizeBarIndex).getMaxY());
         _resizeBarIndex = -1; // Reset resize bar index
     }
 
     // If downPoint is on structuredButton, change structured state of child
     else if(point.x > resizeBarPopupX - 20) {
-        aTable.undoerSetUndoTitle("Turn Table Row Structuring " + (tableRow.isStructured()? "Off" : "On"));
+        aView.undoerSetUndoTitle("Turn Table Row Structuring " + (tableRow.isStructured()? "Off" : "On"));
         tableRow.repaint(); // Register table row for repaint
         tableRow.setStructured(!tableRow.isStructured()); // Toggle structured setting
         _resizeBarIndex = -1; // Reset resize bar index
@@ -406,7 +406,7 @@ public void mousePressed(T aTable, ViewEvent anEvent)
     _lastMousePoint = point;
     
     // Set undo title
-    aTable.undoerSetUndoTitle("Resize Table Row");
+    aView.undoerSetUndoTitle("Resize Table Row");
 }
 
 /**
@@ -422,37 +422,37 @@ public double getResizeBarPopupX(RMTableRow aTableRow)
 /**
  * Event handling for table editing.
  */
-public void mouseDragged(T aTable, ViewEvent anEvent)
+public void mouseDragged(T aView, ViewEvent anEvent)
 {
     // If no resize bar selected, just return
     if(_resizeBarIndex<0) return;
     
     // Get event point in table coords
-    Point downPoint = getEditor().convertToSceneView(anEvent.getX(), anEvent.getY(), aTable);
+    Point downPoint = getEditor().convertToSceneView(anEvent.getX(), anEvent.getY(), aView);
     
     // Get change in Height and child for current ResizeBarIndex
     double dh = downPoint.y - _lastMousePoint.y;
     
     // Get table row for resize bar
-    SGView tableRow = aTable.getChild(_resizeBarIndex);
+    SGView tableRow = aView.getChild(_resizeBarIndex);
 
     // Make sure dh doesn't cause row to be smaller than zero or cause last row to go below bottom of table
-    dh = MathUtils.clamp(dh, -Math.abs(tableRow.height()), Math.abs(aTable.height()) -
-        aTable.getResizeBarBounds(aTable.getChildCount()-1).getMaxY());
+    dh = MathUtils.clamp(dh, -Math.abs(tableRow.height()), Math.abs(aView.height()) -
+        aView.getResizeBarBounds(aView.getChildCount()-1).getMaxY());
     
     // Update last mouse point, rese table row height and repaint table
     _lastMousePoint.y += dh;
     tableRow.setHeight(tableRow.height() + dh);
-    aTable.relayout(); aTable.repaint();
+    aView.relayout(); aView.repaint();
 }
 
 /**
  * Event handling for table editing.
  */
-public void mouseReleased(T aTable, ViewEvent anEvent)
+public void mouseReleased(T aView, ViewEvent anEvent)
 {
     if(_resizeBarIndex<0) return;                                         // If no resize bar selected, just return
-    getEditor().setSuperSelView(aTable.getChild(_resizeBarIndex));  // Super select child above resize bar
+    getEditor().setSuperSelView(aView.getChild(_resizeBarIndex));  // Super select child above resize bar
 }
 
 /**
@@ -471,9 +471,9 @@ public void runMenuForShape(SGView aShape, double x, double y)
 /**
  * Overrides shape implementation to declare no handles when the child of a table group.
  */
-public int getHandleCount(T aShape)
+public int getHandleCount(T aView)
 {
-    return aShape.getParent() instanceof RMTableGroup? 0 : super.getHandleCount(aShape);
+    return aView.getParent() instanceof RMTableGroup? 0 : super.getHandleCount(aView);
 }
 
 }

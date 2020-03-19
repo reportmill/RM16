@@ -22,13 +22,13 @@ public class RMGraphPartSeriesTool <T extends RMGraphPartSeries> extends Tool<T>
     /**
      * Override to return styler for GraphPartSeries.Proxy if available.
      */
-    public ToolStyler getStyler(SGView aShape)
+    public ToolStyler getStyler(SGView aView)
     {
-        RMGraphPartSeries series = (RMGraphPartSeries)aShape;
+        RMGraphPartSeries series = (RMGraphPartSeries) aView;
         SGView proxy = series.getProxy();
         if (proxy!=null)
             return getTool(proxy).getStyler(proxy);
-        return super.getStyler(aShape);
+        return super.getStyler(aView);
     }
 
     /**
@@ -50,7 +50,7 @@ public class RMGraphPartSeriesTool <T extends RMGraphPartSeries> extends Tool<T>
     public void resetUI()
     {
         // Get the selected series shape
-        RMGraphPartSeries series = getSelectedShape(); if(series==null) return;
+        RMGraphPartSeries series = getSelView(); if(series==null) return;
 
         // Update TitleText, LabelPositionsList
         setViewValue("TitleText", series.getTitle());
@@ -83,7 +83,7 @@ public class RMGraphPartSeriesTool <T extends RMGraphPartSeries> extends Tool<T>
     public void respondUI(ViewEvent anEvent)
     {
         // Get the selected series shape
-        RMGraphPartSeries series = getSelectedShape(); if(series==null) return;
+        RMGraphPartSeries series = getSelView(); if(series==null) return;
 
         // Handle TitleText, SeriesText
         if(anEvent.equals("TitleText"))
@@ -118,7 +118,7 @@ public class RMGraphPartSeriesTool <T extends RMGraphPartSeries> extends Tool<T>
     private void configureLabelsPositionListCell(ListCell <LabelPos> aCell)
     {
         LabelPos item = aCell.getItem(); if(item==null) return;
-        RMGraphPartSeries series = getSelectedShape(); if(series==null) return;
+        RMGraphPartSeries series = getSelView(); if(series==null) return;
         boolean active = series.getLabelShape(item).length()>0;
         if(active) aCell.setFont(aCell.getFont().getBold());
     }
@@ -145,7 +145,7 @@ public class RMGraphPartSeriesTool <T extends RMGraphPartSeries> extends Tool<T>
     /**
      * Returns the currently selected RMGraphPartSeries.
      */
-    public T getSelectedShape()  { return (T)getSelSeries(); }
+    public T getSelView()  { return (T)getSelSeries(); }
 
     /**
      * Returns the currently selected RMGraphPartSeries.
@@ -170,7 +170,7 @@ public class RMGraphPartSeriesTool <T extends RMGraphPartSeries> extends Tool<T>
     /**
      * Override to return tool shape class.
      */
-    public Class <T> getShapeClass()  { return (Class<T>)RMGraphPartSeries.class; }
+    public Class <T> getViewClass()  { return (Class<T>)RMGraphPartSeries.class; }
 
     /**
      * Returns the name of the graph inspector.
@@ -180,5 +180,5 @@ public class RMGraphPartSeriesTool <T extends RMGraphPartSeries> extends Tool<T>
     /**
      * Override to remove handles.
      */
-    public int getHandleCount(T aShape)  { return 0; }
+    public int getHandleCount(T aView)  { return 0; }
 }

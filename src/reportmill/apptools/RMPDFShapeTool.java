@@ -19,7 +19,7 @@ public class RMPDFShapeTool <T extends RMPDFShape> extends Tool<T> {
 /**
  * Returns the class that this tool is responsible for.
  */
-public Class getShapeClass()  { return RMPDFShape.class; }
+public Class getViewClass()  { return RMPDFShape.class; }
 
 /**
  * Returns the string used for the inspector window title.
@@ -37,7 +37,7 @@ protected void initUI()  { enableEvents("KeyText", DragDrop); }
 public void resetUI()
 {    
     // Get selected image, image fill, image data and fill style (just return if null)
-    RMPDFShape image = getSelectedShape(); if(image==null) return;
+    RMPDFShape image = getSelView(); if(image==null) return;
     RMPDFData idata = image.getPDFData();
     
     // Reset KeyText, PageText, MarginsText, GrowToFitCheckBox, PreserveRatioCheckBox
@@ -62,8 +62,8 @@ public void resetUI()
 public void respondUI(ViewEvent anEvent)
 {
     // Get selected image and images (just return if null)
-    RMPDFShape image = getSelectedShape(); if(image==null) return;
-    List <RMPDFShape> images = (List)getSelectedShapes();
+    RMPDFShape image = getSelView(); if(image==null) return;
+    List <RMPDFShape> images = (List) getSelViews();
 
     // Handle KeyText
     if(anEvent.equals("KeyText"))

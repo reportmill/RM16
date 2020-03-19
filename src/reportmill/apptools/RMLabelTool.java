@@ -14,7 +14,7 @@ public class RMLabelTool <T extends RMLabel> extends Tool<T> {
     /**
      * Override.
      */
-    public Class getShapeClass()  { return RMLabel.class; }
+    public Class getViewClass()  { return RMLabel.class; }
 
     /**
      * Override.
@@ -29,5 +29,5 @@ public class RMLabelTool <T extends RMLabel> extends Tool<T> {
     /**
      * Overrides to declare labels have no handles.
      */
-    public int getHandleCount(T aShape)  { return 0; }
+    public int getHandleCount(T aView)  { return 0; }
 }

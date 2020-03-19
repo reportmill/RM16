@@ -33,7 +33,7 @@ protected void initUI()
 public void resetUI()
 {
     // Get currently selected table group (just return if null)
-    RMTableGroup tableGroup = getSelectedShape(); if(tableGroup==null) return;
+    RMTableGroup tableGroup = getSelView(); if(tableGroup==null) return;
     RMTable mainTable = tableGroup.getMainTable();
     
     // Create root node for table group and add child tables to it
@@ -55,7 +55,7 @@ public void resetUI()
 public void respondUI(ViewEvent anEvent)
 {
     // Get currently selected table group and main table (just return if null)
-    RMTableGroup tableGroup = getSelectedShape(); if(tableGroup==null) return;
+    RMTableGroup tableGroup = getSelView(); if(tableGroup==null) return;
     RMTable mainTable = tableGroup.getMainTable();
     
     // Handle DatasetKeyText, StartOnNewPageCheckBox, MainTableNameText
@@ -164,7 +164,7 @@ public void respondUI(ViewEvent anEvent)
  */
 private void addChildTable(RMTable toTable, RMTable afterTable, String aKey)
 {
-    RMTableGroup tgroup = getSelectedShape();
+    RMTableGroup tgroup = getSelView();
 
     // Get new table, set default size and add grouping key for root entity (with structured tablerow)
     RMTable table = new RMTable(aKey==null? "Objects" : aKey);
@@ -180,7 +180,7 @@ private void addChildTable(RMTable toTable, RMTable afterTable, String aKey)
  */
 private void addPeerTable(RMTable afterThisTable)
 {
-    RMTableGroup tgroup = getSelectedShape();
+    RMTableGroup tgroup = getSelView();
 
     // Get table and set defalt size and add grouping key for root entity (with structured tablerow)
     RMTable table = new RMTable("Objects");
@@ -194,7 +194,7 @@ private void addPeerTable(RMTable afterThisTable)
 /**
  * Returns the shape class for this tool (table group).
  */
-public Class getShapeClass()  { return RMTableGroup.class; }
+public Class getViewClass()  { return RMTableGroup.class; }
 
 /**
  * Returns the display name for this inspector.
@@ -216,19 +216,19 @@ public boolean isUngroupable(SGView aShape)  { return false; }
  */
 public RMTable getMainTable()
 {
-    RMTableGroup tgroup = getSelectedShape();
+    RMTableGroup tgroup = getSelView();
     return tgroup!=null? tgroup.getMainTable() : null;
 }
 
 /**
  * MousePressed.
  */
-public void mousePressed(T aTableGroup, ViewEvent anEvent)
+public void mousePressed(T aView, ViewEvent anEvent)
 {
     // If selected, forward on to main table, to potentially super select structured table row
     Editor editor = getEditor();
-    if(editor.getSelOrSuperSelView()==aTableGroup) {
-        RMTable mainTable = aTableGroup.getMainTable();                // Get main table
+    if(editor.getSelOrSuperSelView()== aView) {
+        RMTable mainTable = aView.getMainTable();                // Get main table
         getTool(mainTable).processEvent(mainTable, anEvent);    // Forward on
     }
 }

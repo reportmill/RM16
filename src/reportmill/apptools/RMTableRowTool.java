@@ -28,7 +28,7 @@ protected void initUI()  { enableEvents("VersionKeyText", DragDrop); enableEvent
 public void resetUI()
 {
     // Get selected table row (just return if null)
-    RMTableRow trow = getSelectedShape(); if(trow==null) return;
+    RMTableRow trow = getSelView(); if(trow==null) return;
     
     // Update StructuredCheckBox
     setViewValue("StructuredCheckBox", trow.isStructured());
@@ -74,7 +74,7 @@ public void resetUI()
 public void respondUI(ViewEvent anEvent)
 {
     // Get currently selected table row (just return if null)
-    RMTableRow trow = getSelectedShape(); if(trow==null) return;
+    RMTableRow trow = getSelView(); if(trow==null) return;
     trow.repaint();
 
     // Handle StructuredCheckBox
@@ -266,7 +266,7 @@ public static void addColumn(Editor anEditor)
 /**
  * Returns the class that this tool is responsible for (RMTableRow).
  */
-public Class getShapeClass()  { return RMTableRow.class; }
+public Class getViewClass()  { return RMTableRow.class; }
 
 /**
  * Returns the name that should be used in the inspector window.
@@ -281,19 +281,19 @@ public boolean isUngroupable(SGView aShape)  { return false; }
 /**
  * MouseMoved implementation to update cursor for resize bars.
  */
-public void mouseMoved(T aTableRow, ViewEvent anEvent)
+public void mouseMoved(T aView, ViewEvent anEvent)
 {
     // If structured
-    if(!aTableRow.isStructured()) { super.mouseMoved(aTableRow, anEvent); return; }
+    if(!aView.isStructured()) { super.mouseMoved(aView, anEvent); return; }
         
     // Get handle shape
-    RMShapeHandle shapeHandle = getShapeHandleAtPoint(anEvent.getPoint());
+    ViewHandle shapeHandle = getHandleAtPoint(anEvent.getPoint());
     
     // If shape handle is non-null, see if it's a structured text that needs special cursor
     if(shapeHandle!=null) {
 
         // If shape handle shape is structured text, set cursor, consume event and return
-        if(shapeHandle.shape instanceof SGText && isStructured(shapeHandle.shape)) {
+        if(shapeHandle.view instanceof SGText && isStructured(shapeHandle.view)) {
             if(shapeHandle.handle==HandleNW) getEditor().setCursor(Cursor.W_RESIZE);
             else getEditor().setCursor(Cursor.E_RESIZE);
             anEvent.consume(); return;
@@ -301,21 +301,21 @@ public void mouseMoved(T aTableRow, ViewEvent anEvent)
     }
     
     // Do normal mouse moved
-    super.mouseMoved(aTableRow, anEvent);
+    super.mouseMoved(aView, anEvent);
 }
 
 /**
  * Mouse pressed implementation to make sure structured table row columns get selected.
  */
-public void mousePressed(T aTableRow, ViewEvent anEvent)
+public void mousePressed(T aView, ViewEvent anEvent)
 {
     // If selected and structured, select child
     Editor editor = getEditor();
-    if(aTableRow.isStructured() && aTableRow!=editor.getSuperSelView().getParent()) {
+    if(aView.isStructured() && aView !=editor.getSuperSelView().getParent()) {
         
         // Get the point and child at point
-        Point point = editor.convertToSceneView(anEvent.getX(), anEvent.getY(), aTableRow);
-        SGView child = aTableRow.getChildContaining(point);
+        Point point = editor.convertToSceneView(anEvent.getX(), anEvent.getY(), aView);
+        SGView child = aView.getChildContaining(point);
         
         // If child was hit, super select it and resend event
         if(child!=null) {
@@ -328,7 +328,7 @@ public void mousePressed(T aTableRow, ViewEvent anEvent)
 /**
  * Overrides tool method to declare that table rows have no handles.
  */
-public int getHandleCount(T aShape)  { return 0; }
+public int getHandleCount(T aView)  { return 0; }
 
 /**
  * Returns whether given shape is in a Structured TableRow.

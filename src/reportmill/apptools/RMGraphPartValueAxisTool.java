@@ -19,7 +19,7 @@ public class RMGraphPartValueAxisTool <T extends RMGraphPartValueAxis> extends T
 public void resetUI()
 {
     // Get the selected value axis (just return if null)
-    RMGraphPartValueAxis valueAxis = getSelectedShape(); if(valueAxis==null) return;
+    RMGraphPartValueAxis valueAxis = getSelView(); if(valueAxis==null) return;
     
     // Update ShowLabelsCheckBox, ShowMajorGridCheckBox, ShowMinorGridCheckBox, LabelRollSpinner
     setViewValue("ShowLabelsCheckBox", valueAxis.getShowAxisLabels());
@@ -42,7 +42,7 @@ public void resetUI()
 public void respondUI(ViewEvent anEvent)
 {
     // Get the selected value axis (just return if null)
-    RMGraphPartValueAxis valueAxis = getSelectedShape(); if(valueAxis==null) return;
+    RMGraphPartValueAxis valueAxis = getSelView(); if(valueAxis==null) return;
     
     // Handle ShowLabelsCheckBox, ShowMajorGridCheckBox, ShowMinorGridCheckBox, LabelRollSpinner
     if(anEvent.equals("ShowLabelsCheckBox")) valueAxis.setShowAxisLabels(anEvent.getBoolValue());
@@ -62,12 +62,12 @@ public void respondUI(ViewEvent anEvent)
 /**
  * Override to return tool shape class.
  */
-public Class <T> getShapeClass()  { return (Class<T>)RMGraphPartValueAxis.class; }
+public Class <T> getViewClass()  { return (Class<T>)RMGraphPartValueAxis.class; }
 
 /**
  * Returns the currently selected RMGraphPartBars.
  */
-public T getSelectedShape()
+public T getSelView()
 {
     RMGraph graph = getSelectedGraph();
     return graph!=null? (T)graph.getValueAxis() : null;
@@ -91,6 +91,6 @@ public String getWindowTitle()  { return "Graph Value Axis Inspector"; }
 /**
  * Override to remove handles.
  */
-public int getHandleCount(T aShape)  { return 0; }
+public int getHandleCount(T aView)  { return 0; }
 
 }

@@ -200,7 +200,7 @@ public void shiftShapesBelowHiddenShapesUp()
     
     // Get max FrameMaxY and shapes sorted by FrameY and FrameX
     double maxFrameY = SGViewUtils.getMaxFrameMaxY(getChildren());
-    List <SGView> shapes = SGViewUtils.getShapesSortedByFrameYFrameX(getChildren());
+    List <SGView> shapes = SGViewUtils.getViewsSortedByFrameYFrameX(getChildren());
     
     // Shift shapes for each hidden shape (from bottom up)
     for(int i=shapes.size()-1; i>=0; i--) { SGView shape = shapes.get(i);

@@ -347,8 +347,8 @@ public void syncStructureWithShape(SGParent aShape)
     if(aShape.getChildCount()>0 && aShape.getChildCount()==getChildCount()) {
         
         // Get shape children sorted by x
-        List <SGView> children = SGViewUtils.getShapesSortedByFrameX(getChildren());
-        List <SGView> schildren = SGViewUtils.getShapesSortedByFrameX(aShape.getChildren());
+        List <SGView> children = SGViewUtils.getViewsSortedByFrameX(getChildren());
+        List <SGView> schildren = SGViewUtils.getViewsSortedByFrameX(aShape.getChildren());
 
         // Iterate over children an align
         for (int i=0, iMax=children.size(); i<iMax; i++) {
@@ -420,7 +420,7 @@ protected void paintView(Painter aPntr)
     aPntr.setStroke(Stroke.Stroke1);
     aPntr.setAntialiasing(false);
     Rect bounds = getBoundsLocal();
-    List <SGView> children = SGViewUtils.getShapesSortedByFrameX(getChildren());
+    List <SGView> children = SGViewUtils.getViewsSortedByFrameX(getChildren());
     for (SGView child : children)
         aPntr.drawLine(child.getX(), bounds.y, child.getX(), bounds.getMaxY());
     aPntr.setAntialiasing(true);

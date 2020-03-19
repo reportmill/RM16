@@ -6,7 +6,7 @@ import reportmill.util.RMTableOfContents;
 import reportmill.out.RMHtmlFile;
 import reportmill.util.RMDataSource;
 import reportmill.util.ReportMill;
-import rmdraw.shape.*;
+import rmdraw.scene.*;
 import snap.util.SnapUtils;
 import snap.util.XMLArchiver;
 import snap.util.XMLElement;
@@ -24,7 +24,7 @@ import java.util.Map;
  *   report.writePDF("MyReport.pdf");
  * </pre></blockquote><p>
  */
-public class RMDocument2 extends RMDocument implements ReportGen.RPG {
+public class RMDocument2 extends SGDoc implements ReportGen.RPG {
 
     // The ReportMill version this document was created with
     private double _version = ReportMill.getVersion();
@@ -244,7 +244,7 @@ public class RMDocument2 extends RMDocument implements ReportGen.RPG {
     /**
      * Add the pages in the given document to this document (at end) and clears the pages list in the given document.
      */
-    public void addPages(RMDocument aDoc)
+    public void addPages(SGDoc aDoc)
     {
         // Do normal version
         super.addPages(aDoc);
@@ -260,15 +260,15 @@ public class RMDocument2 extends RMDocument implements ReportGen.RPG {
     /**
      * Override to handle ShapeLists special.
      */
-    public RMShape rpgChildren(ReportOwner anRptOwner, RMParentShape aParent)
+    public SGView rpgChildren(ReportOwner anRptOwner, SGParent aParent)
     {
         // Declare local variable for whether table of contents page was encountered
-        RMPage tableOfContentsPage = null;
+        SGPage tableOfContentsPage = null;
         int tocPageIndex = 0;
 
-        RMDocument doc = (RMDocument) aParent;
+        SGDoc doc = (SGDoc) aParent;
         for (int i = 0, iMax = getChildCount(); i < iMax; i++) {
-            RMPage page = getPage(i);
+            SGPage page = getPage(i);
 
             // Check for table of contents table
             if (RMTableOfContents.checkForTableOfContents(page)) {
@@ -278,10 +278,10 @@ public class RMDocument2 extends RMDocument implements ReportGen.RPG {
             }
 
             // Generate report and add results
-            RMParentShape crpg = (RMParentShape) anRptOwner.rpg(page, doc);
+            SGParent crpg = (SGParent) anRptOwner.rpg(page, doc);
             if (crpg instanceof ReportOwner.ShapeList) {
-                for (RMShape pg : crpg.getChildArray()) doc.addPage((RMPage) pg);
-            } else doc.addPage((RMPage) crpg);
+                for (SGView pg : crpg.getChildArray()) doc.addPage((SGPage) pg);
+            } else doc.addPage((SGPage) crpg);
         }
 
         // Do RPG for TableOfContentsPage
@@ -313,10 +313,10 @@ public class RMDocument2 extends RMDocument implements ReportGen.RPG {
     /**
      * XML archival.
      */
-    protected XMLElement toXMLShape(XMLArchiver anArchiver)
+    protected XMLElement toXMLView(XMLArchiver anArchiver)
     {
         // Archive basic shape attributes and reset element name
-        XMLElement e = super.toXMLShape(anArchiver);
+        XMLElement e = super.toXMLView(anArchiver);
 
         // Archive Version
         e.add("version", ReportMill.getVersion());
@@ -332,10 +332,10 @@ public class RMDocument2 extends RMDocument implements ReportGen.RPG {
     /**
      * XML unarchival.
      */
-    protected void fromXMLShape(XMLArchiver anArchiver, XMLElement anElement)
+    protected void fromXMLView(XMLArchiver anArchiver, XMLElement anElement)
     {
         // Do normal version
-        super.fromXMLShape(anArchiver, anElement);
+        super.fromXMLView(anArchiver, anElement);
 
         // Unarchive Version
         _version = anElement.getAttributeFloatValue("version", 8.0f);

@@ -6,7 +6,7 @@ import reportmill.util.RMGroup;
 import reportmill.util.RMKeyChain;
 
 import java.util.*;
-import rmdraw.shape.*;
+import rmdraw.scene.*;
 import snap.gfx.Color;
 import snap.geom.Rect;
 import snap.text.RichText;
@@ -37,7 +37,7 @@ public RMGraphRPGPie(RMGraph aGraph, ReportOwner anRptOwner)
 /**
  * Creates the graph shape.
  */
-protected RMParentShape createGraphShape()
+protected SGParent createGraphShape()
 {
     return _graph.isDraw3D()? new PieGraphShape3D(_graph) : new PieGraphShape2D(_graph);
 }
@@ -74,7 +74,7 @@ protected void configure()
     }
     
     // Get wedge prototype
-    RMOvalShape prototype = new RMOvalShape();
+    SGOval prototype = new SGOval();
     prototype.setHoleRatio(holeRatio);
     prototype.setBorderColor(Color.BLACK);
     
@@ -107,7 +107,7 @@ protected void configure()
 
         // If total is zero, then we can't draw wedges. Just add oval and continue
         if(total==0) {
-            RMOvalShape oval = new RMOvalShape();
+            SGOval oval = new SGOval();
             oval.setHoleRatio(holeRatio);
             oval.setFrame(pieBounds);
             _pieShape.addWedge(oval);
@@ -127,7 +127,7 @@ protected void configure()
             
             // Create new oval shape for wedge
             _rptOwner.pushDataStack(group);
-            RMOvalShape wedge = (RMOvalShape)_rptOwner.rpg(prototype, _graphShape);
+            SGOval wedge = (SGOval)_rptOwner.rpg(prototype, _graphShape);
             _rptOwner.popDataStack();
             
             // Set wedge bounds to pie bounds and set start angle and sweep
@@ -179,7 +179,7 @@ protected void configure()
                 
                 // Get current loop section item and item wedge
                 RMGraphSection.Item sectionItem = section.getItem(j);
-                RMOvalShape wedge = (RMOvalShape)sectionItem.getBar();
+                SGOval wedge = (SGOval)sectionItem.getBar();
                 
                 // Calcuate percent of 
                 float percent = wedge.getSweepAngle()/360*100;
@@ -196,7 +196,7 @@ protected void configure()
                 _rptOwner.popDataStack();
 
                 // Get new wedge label text
-                RMTextShape label = new RMTextShape(rtext);
+                SGText label = new SGText(rtext);
                 
                 // Set stroke and fill
                 if(labelAxis.getBorder()!=null) label.setBorderColor(labelAxis.getBorderColor());
@@ -244,7 +244,7 @@ protected void configure()
                     double endY = _graph.getHeight()/2 + MathUtils.sin(angle)*((wedge.width()/2)*.8f);
                     
                     // Create wedge label line shape, set StrokeColor to LightGray and add label line
-                    RMLineShape line = new RMLineShape(startX, startY, endX, endY);
+                    SGLine line = new SGLine(startX, startY, endX, endY);
                     line.setBorderColor(Color.LIGHTGRAY);
                     _pieShape.addWedgeLabelLine(line);
                 }
@@ -301,22 +301,22 @@ private static Rect squareRectInRect(Rect aRect)
 public interface PieGraphShape extends RMGraphRPG.GraphShape {
 
     /** Add a wedge shape. */
-    public void addWedge(RMShape aShape);
+    public void addWedge(SGView aShape);
     
     /** Add a wedge label shape. */
-    public void addWedgeLabel(RMTextShape aLabel);
+    public void addWedgeLabel(SGText aLabel);
     
     /** Add a wedge label line. */
-    public void addWedgeLabelLine(RMLineShape aLine);
+    public void addWedgeLabelLine(SGLine aLine);
 }
 
 /**
  * A BarGraphShape implementation.
  */
-public static class PieGraphShape2D extends RMParentShape implements PieGraphShape {
+public static class PieGraphShape2D extends SGParent implements PieGraphShape {
 
     /** Creates a new BarGraphShape2D. */
-    public PieGraphShape2D(RMGraph aGraph)  { copyShape(aGraph); }
+    public PieGraphShape2D(RMGraph aGraph)  { copyView(aGraph); }
 
     /** Returns the RMGraphRPG. */
     public RMGraphRPG getGraphRPG()  { return _grpg; } RMGraphRPG _grpg;
@@ -325,29 +325,29 @@ public static class PieGraphShape2D extends RMParentShape implements PieGraphSha
     public void setGraphRPG(RMGraphRPG aGRPG)  { _grpg = aGRPG; }
 
     /** Implements PieView method to just add wedge shape. */
-    public void addWedge(RMShape aBar)  { addChild(aBar); }
+    public void addWedge(SGView aBar)  { addChild(aBar); }
     
     /** Implements PieView method to just add wedge label shape. */
-    public void addWedgeLabel(RMTextShape aLabel)  { addChild(aLabel); }
+    public void addWedgeLabel(SGText aLabel)  { addChild(aLabel); }
     
     /** Implements PieView method to just add wedge label line shape. */
-    public void addWedgeLabelLine(RMLineShape aLine)  { addChild(aLine); }
+    public void addWedgeLabelLine(SGLine aLine)  { addChild(aLine); }
 }
 
 /**
  * This graph renders a pie graph in 3D.
  */
-static class PieGraphShape3D extends RMScene3D implements PieGraphShape {
+static class PieGraphShape3D extends SGScene3D implements PieGraphShape {
 
     // List of pie wedges, labels and lines
-    List <RMShape>    _wedges = new ArrayList();
-    List <RMShape>    _labels = new ArrayList();
-    List <RMShape>    _lines = new ArrayList();
+    List <SGView>    _wedges = new ArrayList();
+    List <SGView>    _labels = new ArrayList();
+    List <SGView>    _lines = new ArrayList();
 
     /** Creates a new pie view 3d. */
     public PieGraphShape3D(RMGraph aGraph)
     {
-        copyShape(aGraph); // Copy graph area attributes
+        copyView(aGraph); // Copy graph area attributes
         copy3D(aGraph.get3D()); // Copy 3D attributes from graph area 3D
     }
     
@@ -358,13 +358,13 @@ static class PieGraphShape3D extends RMScene3D implements PieGraphShape {
     public void setGraphRPG(RMGraphRPG aGRPG)  { _grpg = aGRPG; }
     
     /** Adds a wedge shape to graph view. */
-    public void addWedge(RMShape aWedge)  { _wedges.add(aWedge); }
+    public void addWedge(SGView aWedge)  { _wedges.add(aWedge); }
     
     /** Adds a wedge label to graph view. */
-    public void addWedgeLabel(RMTextShape aLabel)  { _labels.add(aLabel); }
+    public void addWedgeLabel(SGText aLabel)  { _labels.add(aLabel); }
     
     /** Adds a wedge label line to graph view. */
-    public void addWedgeLabelLine(RMLineShape aLine)  { _lines.add(aLine); }
+    public void addWedgeLabelLine(SGLine aLine)  { _lines.add(aLine); }
     
     /** Rebuilds 3D representation of shapes from shapes list (called by layout manager). */
     protected void layoutImpl()
@@ -373,7 +373,7 @@ static class PieGraphShape3D extends RMScene3D implements PieGraphShape {
         removeShapes();
         
         // Iterate over wedges and add them as 3D
-        for(int i=0, iMax=_wedges.size(); i<iMax; i++) { RMShape wedge = _wedges.get(i);
+        for(int i=0, iMax=_wedges.size(); i<iMax; i++) { SGView wedge = _wedges.get(i);
             addShapesForRMShape(wedge, 0, getDepth(), true); }
         
         // Iterate over lines and add them as 3D
@@ -381,7 +381,7 @@ static class PieGraphShape3D extends RMScene3D implements PieGraphShape {
         
         // Create label shapes
         boolean fullRender = true; // !isValueAdjusting()
-        for(int i=0, iMax=_labels.size(); i<iMax && fullRender; i++) { RMShape label = _labels.get(i);
+        for(int i=0, iMax=_labels.size(); i<iMax && fullRender; i++) { SGView label = _labels.get(i);
             addShapesForRMShape(label, -5, -5, false); }
     
         // Do normal version

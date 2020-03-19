@@ -4,7 +4,7 @@
 package reportmill.apptools;
 import reportmill.shape.*;
 import rmdraw.app.Tool;
-import rmdraw.shape.*;
+import rmdraw.scene.*;
 import snap.view.*;
 import snap.viewx.DialogBox;
 
@@ -87,7 +87,7 @@ public RMGraphPartPie getSelectedShape()
  */
 public RMGraph getSelectedGraph()
 {
-    RMShape selShape = super.getSelectedShape();
+    SGView selShape = super.getSelectedShape();
     return selShape instanceof RMGraph? (RMGraph)selShape : null;
 }
 

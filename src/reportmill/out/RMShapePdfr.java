@@ -3,7 +3,7 @@
  */
 package reportmill.out;
 import reportmill.shape.RMPDFShape;
-import rmdraw.shape.*;
+import rmdraw.scene.*;
 import snap.geom.Rect;
 import snap.geom.Shape;
 import snap.gfx.*;
@@ -12,7 +12,7 @@ import snappdf.write.*;
 /**
  * This RMObjectPdfr subclass writes PDF for RMShape.
  */
-public class RMShapePdfr <T extends RMShape> {
+public class RMShapePdfr <T extends SGView> {
     
     // Shared RMShapePdfr
     static RMShapePdfr    _shapePdfr = new RMShapePdfr();
@@ -93,10 +93,10 @@ protected void writeShape(T aShape, RMPDFWriter aWriter)
 /**
  * Writes a given RMShape hierarchy to a PDF file (recursively).
  */
-protected void writeShapeChildren(RMShape aShape, RMPDFWriter aWriter)
+protected void writeShapeChildren(SGView aShape, RMPDFWriter aWriter)
 {
     // Write children
-    for(int i=0, iMax=aShape.getChildCount(); i<iMax; i++) { RMShape child = aShape.getChild(i);
+    for(int i=0, iMax=aShape.getChildCount(); i<iMax; i++) { SGView child = aShape.getChild(i);
         if(child.isVisible())
             getPdfr(child).writePDF(child, aWriter);
     }
@@ -120,7 +120,7 @@ protected void writeShapeAfter(T aShape, RMPDFWriter aWriter)
     // Add link, if it's there (What happens with rotated or skewed shapes?)
     String url = aShape.getURL();
     if(url!=null) {
-        RMShape page = aShape.getPage();
+        SGView page = aShape.getPage();
         Rect frame = aShape.localToParent(aShape.getBoundsLocal(), page).getBounds();
         frame.setY(page.getHeight() - frame.getMaxY());
         PDFAnnotation link = new PDFAnnotation.Link(frame, url);
@@ -132,7 +132,7 @@ protected void writeShapeAfter(T aShape, RMPDFWriter aWriter)
 /**
  * Writes PDF for given RMShape and it's stroke.
  */
-protected void writeShapeStroke(RMShape aShape, RMPDFWriter aWriter)
+protected void writeShapeStroke(SGView aShape, RMPDFWriter aWriter)
 {
     Border border = aShape.getBorder();
     Color color = border.getColor();
@@ -145,13 +145,13 @@ protected void writeShapeStroke(RMShape aShape, RMPDFWriter aWriter)
 /**
  * Returns the shape pdfr for a shape.
  */
-public static RMShapePdfr getPdfr(RMShape aShape)
+public static RMShapePdfr getPdfr(SGView aShape)
 {
-    if(aShape instanceof RMTextShape) return RMShapePdfrs._textShapePdfr;
-    if(aShape instanceof RMImageShape) return RMShapePdfrs._imgShapePdfr;
+    if(aShape instanceof SGText) return RMShapePdfrs._textShapePdfr;
+    if(aShape instanceof SGImage) return RMShapePdfrs._imgShapePdfr;
     if(aShape instanceof RMPDFShape) return RMShapePdfrs.getPDFShapePdfr();
-    if(aShape instanceof RMPage) return RMShapePdfrs._pageShapePdfr;
-    if(aShape instanceof RMScene3D) return RMShapePdfrs._scene3DPdfr;
+    if(aShape instanceof SGPage) return RMShapePdfrs._pageShapePdfr;
+    if(aShape instanceof SGScene3D) return RMShapePdfrs._scene3DPdfr;
     return _shapePdfr;
 }
 

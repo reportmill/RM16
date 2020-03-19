@@ -4,9 +4,9 @@
 package reportmill.shape;
 import java.util.*;
 
-import rmdraw.shape.RMParentShape;
-import rmdraw.shape.RMShape;
-import rmdraw.shape.SceneGraph;
+import rmdraw.scene.SGParent;
+import rmdraw.scene.SGView;
+import rmdraw.scene.SceneGraph;
 import snap.gfx.*;
 import snap.util.*;
 
@@ -14,7 +14,7 @@ import snap.util.*;
  * This class manages a hierarchy of tables so that multiple tables can be configured to display in the same area
  * of a given page. Each table will pick up exactly where the previous table ended.
  */
-public class RMTableGroup extends RMParentShape implements ReportGen.RPG {
+public class RMTableGroup extends SGParent implements ReportGen.RPG {
     
     // The currently selected table in the hierarchy
     RMTable                     _mainTable;
@@ -266,10 +266,10 @@ public void removeTable(RMTable aTable)
 /**
  * Paints table group button after child table has been drawn.
  */
-protected void paintShapeOver(Painter aPntr)
+protected void paintOver(Painter aPntr)
 {
     // Do normal version (just return if not editing)
-    super.paintShapeOver(aPntr); if(!SceneGraph.isEditing(this)) return;
+    super.paintOver(aPntr); if(!SceneGraph.isEditing(this)) return;
     
     // Draw TableGroup button
     aPntr.drawButton(1, getHeight() - 18, 100, 18, false);
@@ -298,7 +298,7 @@ protected void layoutImpl()
     }
 
     // Set MainTable bounds to full bounds
-    RMShape child = getChild(0);
+    SGView child = getChild(0);
     child.setBounds(0, 0, getWidth(), getHeight());
 }
 
@@ -306,7 +306,7 @@ protected void layoutImpl()
  * Override to set main table to first child table.
  */
 @Override
-public RMShape rpgAll(ReportOwner anRptOwner, RMShape aParent)
+public SGView rpgAll(ReportOwner anRptOwner, SGView aParent)
 {
     return new RMTableGroupRPG(anRptOwner, this, null).rpgAll();
 }
@@ -350,10 +350,10 @@ private void cloneChildTables(RMTableGroup aClone, RMTable aParentTable, RMTable
 /**
  * XML archival.
  */
-protected XMLElement toXMLShape(XMLArchiver anArchiver)
+protected XMLElement toXMLView(XMLArchiver anArchiver)
 {
     // Archive basic shape attributes, reset element name and return element
-    XMLElement e = super.toXMLShape(anArchiver); e.setName("table-group");
+    XMLElement e = super.toXMLView(anArchiver); e.setName("table-group");
     return e;
 }
 
@@ -420,10 +420,10 @@ private void fixWidths(RMTable t) {
     t.setWidth(getWidth()); for(int i=0,iMax=t.getChildCount();i<iMax;i++) fixWidths(t.getRow(i)); }
 private void fixWidths(RMTableRow aRow) {
     if(aRow.getAlternates()!=null)
-        for(RMShape alt : aRow.getAlternates().values()) if(alt!=aRow) fixWidths((RMTableRow)alt);
+        for(SGView alt : aRow.getAlternates().values()) if(alt!=aRow) fixWidths((RMTableRow)alt);
     double rw = aRow.getWidth(), dw = getWidth() - rw; aRow.setWidth(getWidth());
     if(aRow.isStructured())
-        for(RMShape child : aRow.getChildren()) { double cw = child.getWidth(); child.setWidth(cw+cw/rw*dw); }
+        for(SGView child : aRow.getChildren()) { double cw = child.getWidth(); child.setWidth(cw+cw/rw*dw); }
 }
 
 }

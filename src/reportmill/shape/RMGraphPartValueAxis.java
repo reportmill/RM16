@@ -3,7 +3,7 @@
  */
 package reportmill.shape;
 import reportmill.util.RMNumberFormat;
-import rmdraw.shape.RMTextShape;
+import rmdraw.scene.SGText;
 import snap.gfx.*;
 import snap.text.TextFormat;
 import snap.text.TextStyle;
@@ -12,7 +12,7 @@ import snap.util.*;
 /**
  * This shape is used by graph area to hold attributes of the value axis.
  */
-public class RMGraphPartValueAxis extends RMTextShape {
+public class RMGraphPartValueAxis extends SGText {
 
     // Whether to draw axis labels
     boolean       _showAxisLabels = true;

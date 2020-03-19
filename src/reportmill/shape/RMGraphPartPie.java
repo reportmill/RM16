@@ -2,13 +2,13 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.shape;
-import rmdraw.shape.RMShape;
+import rmdraw.scene.SGView;
 import snap.util.*;
 
 /**
  * This shape is used by graph area to hold attributes of pies.
  */
-public class RMGraphPartPie extends RMShape {
+public class RMGraphPartPie extends SGView {
 
     // Pie Chart: Whether to draw lines from wedge to labels
     boolean       _drawWedgeLabelLines = false;

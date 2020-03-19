@@ -2,7 +2,7 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.util;
-import rmdraw.shape.*;
+import rmdraw.scene.*;
 import java.util.*;
 import snap.gfx.Color;
 import snap.gfx.Font;
@@ -37,7 +37,7 @@ public class ReportMill {
  * An interface for classes than want to know about filled shapes.
  */
 public interface Listener {
-    public void didFillShape(RMShape aShape, RMShape aCopy);
+    public void didFillShape(SGView aShape, SGView aCopy);
 }
 
 /**
@@ -129,7 +129,7 @@ public static boolean isLicensed()
 /**
  * Simple lc check.
  */
-public static void lc(RMDocument aDoc)
+public static void lc(SGDoc aDoc)
 {
     // If licenced, just return
     if(isLicensed()) return;
@@ -152,7 +152,7 @@ public static void lc(RMDocument aDoc)
 /**
  * This method adds a watermark to the given shape.
  */
-private static void addWatermark(RMParentShape aShape)
+private static void addWatermark(SGParent aShape)
 {
     // Get attributed string with REPORTMILL in 72pt grey (with R & M in 100pt)
     Font font72 = Font.getFont("Arial Bold", 72);
@@ -162,7 +162,7 @@ private static void addWatermark(RMParentShape aShape)
     richText.setStyleValue(font100, 6, 7); // Set R & M in 100pt
 
     // Create evalShape watermark across background
-    RMTextShape evalShape = new RMTextShape(richText);
+    SGText evalShape = new SGText(richText);
     evalShape.setFrame((aShape.getWidth() - 570)/2, (aShape.getHeight() - 140)/2, 570, 140);
     evalShape.setRoll(45); evalShape.setOpacity(.667f);
     aShape.addChild(evalShape, 0);
@@ -172,7 +172,7 @@ private static void addWatermark(RMParentShape aShape)
     richText = new RichText(msg, Font.Arial12);
 
     // Create evalShape license string in lower left corner
-    evalShape = new RMTextShape(richText);
+    evalShape = new SGText(richText);
     evalShape.setFrame(5, aShape.getHeight() - 20, 500, 18);
     evalShape.setURL("http://www.reportmill.com");
     aShape.addChild(evalShape);

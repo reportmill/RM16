@@ -3,8 +3,8 @@
  */
 package reportmill.shape;
 import java.util.*;
-import rmdraw.shape.RMParentShape;
-import rmdraw.shape.RMShape;
+import rmdraw.scene.SGParent;
+import rmdraw.scene.SGView;
 import snap.gfx.Border;
 import snap.gfx.Color;
 import snap.util.*;
@@ -12,7 +12,7 @@ import snap.util.*;
 /**
  * Manages a table of RMCells, which is really a stack of RMCellRows.
  */
-public class RMCrossTab extends RMParentShape implements ReportGen.RPG {
+public class RMCrossTab extends SGParent implements ReportGen.RPG {
 
     // The dataset key for this table
     String                   _datasetKey;
@@ -276,7 +276,7 @@ private RMCrossTabCell createCell(int row, int column, RMCrossTabCell aRefCell)
     
     // If reference row cell is available, copy it's attributes (but not content)
     if(aRefCell!=null)
-        cell.copyShape(aRefCell);
+        cell.copyView(aRefCell);
     
     // If adding header row-column cross-section cell, set not visible
     if(row<getHeaderRowCount() && column<getHeaderColCount())
@@ -445,7 +445,7 @@ int _ci, _ri;
  * Sets a reportmill for this crosstab (which really gets the dataset and calls setObjects).
  */
 @Override
-public RMShape rpgAll(ReportOwner anRptOwner, RMShape aParent)
+public SGView rpgAll(ReportOwner anRptOwner, SGView aParent)
 {
     return new RMCrossTabRPG().rpgCrossTab(anRptOwner, aParent, this);
 }
@@ -454,7 +454,7 @@ public RMShape rpgAll(ReportOwner anRptOwner, RMShape aParent)
  * Divides the shape by a given amount from the top. Returns a clone of the given shape with bounds 
  * set to the remainder. Divies children among the two shapes (recursively calling divide shape for those stradling).
  */
-public RMShape divideShapeFromTop(double anAmount)
+public SGView divideViewFromTop(double anAmount)
 {
     // Get whether to ReprintHeaderRows from parent crosstab frame
     RMCrossTabFrame crossTabFrame = getParent(RMCrossTabFrame.class);
@@ -545,10 +545,10 @@ public RMCrossTab cloneDeep()
 /**
  * XML archival.
  */
-protected XMLElement toXMLShape(XMLArchiver anArchiver)
+protected XMLElement toXMLView(XMLArchiver anArchiver)
 {
     // Archive basic shape attributes and reset element name
-    XMLElement e = super.toXMLShape(anArchiver); e.setName("cell-table");
+    XMLElement e = super.toXMLView(anArchiver); e.setName("cell-table");
     
     // Archive DatasetKey, FilterKey
     if(getDatasetKey()!=null) e.add("dataset-key", getDatasetKey());
@@ -582,10 +582,10 @@ protected void toXMLChildren(XMLArchiver anArchiver, XMLElement anElement) { }
 /**
  * XML unarchival.
  */
-protected void fromXMLShape(XMLArchiver anArchiver, XMLElement anElement)
+protected void fromXMLView(XMLArchiver anArchiver, XMLElement anElement)
 {
     // Unarchive basic shape attributes
-    super.fromXMLShape(anArchiver, anElement);
+    super.fromXMLView(anArchiver, anElement);
     
     // Unarchive DatasetKey, FilterKey
     _datasetKey = anElement.getAttributeValue("dataset-key");

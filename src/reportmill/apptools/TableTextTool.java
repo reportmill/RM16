@@ -5,7 +5,7 @@ package reportmill.apptools;
 import reportmill.shape.RMTableRow;
 import rmdraw.app.Editor;
 import rmdraw.apptools.TextTool;
-import rmdraw.shape.*;
+import rmdraw.scene.*;
 import snap.geom.Point;
 import snap.geom.Rect;
 import snap.gfx.Painter;
@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * This class provides UI editing for text shapes.
  */
-public class TableTextTool<T extends RMTextShape> extends TextTool<T> {
+public class TableTextTool<T extends SGText> extends TextTool<T> {
 
     // Whether current mouse drag should be moving table column
     private boolean  _moveTableColumn;
@@ -50,7 +50,7 @@ public class TableTextTool<T extends RMTextShape> extends TextTool<T> {
             cp = getHandlePoint(aText, handle, false);
 
             // Get handle point in editor coords
-            cp = getEditor().convertFromShape(cp.getX(), cp.getY(), aText);
+            cp = getEditor().convertFromSceneView(cp.getX(), cp.getY(), aText);
 
             // Get handle rect
             Rect hr = new Rect(cp.getX()-3, cp.getY(), 6, aText.height() * getEditor().getZoomFactor());
@@ -94,7 +94,7 @@ public class TableTextTool<T extends RMTextShape> extends TextTool<T> {
     /**
      * Returns whether to paint text link indicator.
      */
-    protected boolean isPaintingTextLinkIndicator(RMTextShape aText)
+    protected boolean isPaintingTextLinkIndicator(SGText aText)
     {
         // If text is child of table row, return false
         if (aText.getParent() instanceof RMTableRow) return false;
@@ -114,12 +114,12 @@ public class TableTextTool<T extends RMTextShape> extends TextTool<T> {
 
             // If text is a structured table row column and point is outside column, start MoveTableRow
         else if (anEvent.isMouseDrag()) {
-            RMTextShape tshp = aText;
-            Point pnt = getEditor().convertToShape(anEvent.getX(), anEvent.getY(), aText);
+            SGText tshp = aText;
+            Point pnt = getEditor().convertToSceneView(anEvent.getX(), anEvent.getY(), aText);
             double px = pnt.getX();
             if (isStructured(tshp) && (px < -20 || px > tshp.getWidth() + 10) && tshp.getParent().getChildCount() > 1) {
                 setUndoTitle("Reorder columns");
-                getEditor().setSelectedShape(tshp);
+                getEditor().setSelView(tshp);
                 _moveTableColumn = true;
                 return;
             }
@@ -138,8 +138,8 @@ public class TableTextTool<T extends RMTextShape> extends TextTool<T> {
         if (isStructured(aText) && anEvent.isKeyPress() && anEvent.getKeyCode()== KeyCode.TAB && !anEvent.isAltDown()) {
 
             // Get structured text table row, child table rows and index of child
-            RMParentShape tableRow = aText.getParent();
-            List children = RMShapeUtils.getShapesSortedByX(tableRow.getChildren());
+            SGParent tableRow = aText.getParent();
+            List children = SGViewUtils.getShapesSortedByX(tableRow.getChildren());
             int index = children.indexOf(aText);
 
             // If shift is down, get index to the left, wrapped, otherwise get index to the right, wrapped
@@ -147,8 +147,8 @@ public class TableTextTool<T extends RMTextShape> extends TextTool<T> {
             else index = (index + 1)%children.size();
 
             // Get next text and super-select
-            RMShape nextText = (RMShape)children.get(index);
-            getEditor().setSuperSelectedShape(nextText);
+            SGView nextText = (SGView)children.get(index);
+            getEditor().setSuperSelView(nextText);
 
             // Consume event and return
             anEvent.consume();
@@ -182,7 +182,7 @@ public class TableTextTool<T extends RMTextShape> extends TextTool<T> {
         // Get shape to adjust and new width (make sure it's no less than 8)
         int index = aShape.indexOf();
         int index2 = left? index-1 : index+1;
-        RMShape other = aShape.getParent().getChild(index2);
+        SGView other = aShape.getParent().getChild(index2);
         double nw2 = other.getWidth() - dw;
         if (nw2<8) { nw2 = 8; dw = other.getWidth() - nw2; nw = aShape.getWidth() + dw; }
 
@@ -199,19 +199,19 @@ public class TableTextTool<T extends RMTextShape> extends TextTool<T> {
     {
         // Get editor, editor SelectedShape and TableRow
         Editor editor = getEditor();
-        RMShape shape = editor.getSelectedOrSuperSelectedShape();
-        RMParentShape tableRow = shape.getParent();
+        SGView shape = editor.getSelOrSuperSelView();
+        SGParent tableRow = shape.getParent();
         tableRow.repaint();
 
         // Get event x in TableRow coords and whether point is in TableRow
-        Point point = editor.convertToShape(anEvent.getX(), anEvent.getY(), tableRow); point.y = 2;
+        Point point = editor.convertToSceneView(anEvent.getX(), anEvent.getY(), tableRow); point.y = 2;
         boolean inRow = tableRow.contains(point);
 
         // Handle MouseDragged: layout children by X (if outside row, skip drag shape)
         if (anEvent.isMouseDrag()) {
-            List <RMShape> children = RMShapeUtils.getShapesSortedByFrameX(tableRow.getChildren());
+            List <SGView> children = SGViewUtils.getShapesSortedByFrameX(tableRow.getChildren());
             float x = 0;
-            for (RMShape child : children) {
+            for (SGView child : children) {
                 if (child==shape) { if(inRow) child.setX(point.x-child.getWidth()/2);
                 else { child.setX(9999); continue; }}
                 else child.setX(x); x += child.getWidth(); }
@@ -233,7 +233,7 @@ public class TableTextTool<T extends RMTextShape> extends TextTool<T> {
             // If shape is outside bounds of tableRow, remove it
             else {
                 tableRow.removeChild(shape);
-                editor.setSuperSelectedShape(tableRow);
+                editor.setSuperSelView(tableRow);
             }
 
             // Do layout again to snap shape back into place
@@ -245,9 +245,9 @@ public class TableTextTool<T extends RMTextShape> extends TextTool<T> {
     /**
      * Returns whether given shape is in a Structured TableRow.
      */
-    protected boolean isStructured(RMShape aShape)
+    protected boolean isStructured(SGView aShape)
     {
-        RMShape par = aShape.getParent();
+        SGView par = aShape.getParent();
         return par instanceof RMTableRow && ((RMTableRow)par).isStructured();
     }
 }

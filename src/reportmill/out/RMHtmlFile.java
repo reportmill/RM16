@@ -2,7 +2,7 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.out;
-import rmdraw.shape.*;
+import rmdraw.scene.*;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.util.*;
@@ -21,7 +21,7 @@ import snap.util.*;
 public class RMHtmlFile {
 
     // The document
-    RMDocument             _doc;
+    SGDoc _doc;
 
     // The HTML image root
     String                 _imageRoot = "images";
@@ -35,7 +35,7 @@ public class RMHtmlFile {
 /**
  * Creates a new RMHtmlFile for given document.
  */
-public RMHtmlFile(RMDocument aDoc)  { _doc = aDoc; }
+public RMHtmlFile(SGDoc aDoc)  { _doc = aDoc; }
 
 /**
  * Returns whether to show border around page(s).
@@ -60,7 +60,7 @@ public XMLElement getXML()
     XMLElement html = new XMLElement("html");
     XMLElement body = new XMLElement("body"); html.addElement(body);
     XMLElement div = new XMLElement("div"); body.addElement(div);
-    for(int i=0;i<_doc.getPageCount(); i++) { RMPage page = _doc.getPage(i);
+    for(int i=0;i<_doc.getPageCount(); i++) { SGPage page = _doc.getPage(i);
         XMLElement pageXML = toXML(page); div.addElement(pageXML); }
     return html;
 }
@@ -119,7 +119,7 @@ public void write(String aPath)
 /**
  * Writes a shape to SVG HTML XML.
  */
-protected XMLElement toXML(RMShape aShape)
+protected XMLElement toXML(SGView aShape)
 {
     RMHtmlHelper hpr = RMHtmlHelper.getHelper(aShape);
     return hpr.toHTML(aShape, this);
@@ -148,10 +148,10 @@ private static abstract class RMHtmlHelper <T> {
     /** Returns a writer for a class. */
     private static RMHtmlHelper getHelperImpl(Class aClass)
     {
-        if(RMPage.class.isAssignableFrom(aClass)) return new RMPageHpr();
-        if(RMTextShape.class.isAssignableFrom(aClass)) return new RMTextShapeHpr();
-        if(RMImageShape.class.isAssignableFrom(aClass)) return new RMImageShapeHpr();
-        if(RMShape.class.isAssignableFrom(aClass)) return new RMShapeHpr();
+        if(SGPage.class.isAssignableFrom(aClass)) return new RMPageHpr();
+        if(SGText.class.isAssignableFrom(aClass)) return new RMTextShapeHpr();
+        if(SGImage.class.isAssignableFrom(aClass)) return new RMImageShapeHpr();
+        if(SGView.class.isAssignableFrom(aClass)) return new RMShapeHpr();
         return null;
     }
 }
@@ -159,7 +159,7 @@ private static abstract class RMHtmlHelper <T> {
 /**
  * An HTML helper for RMShape.
  */
-private static class RMShapeHpr <T extends RMShape> extends RMHtmlHelper<T> {
+private static class RMShapeHpr <T extends SGView> extends RMHtmlHelper<T> {
 
     /** Returns an SVG XML for given shape. */
     public XMLElement toHTML(T aShape, RMHtmlFile aWriter)
@@ -303,7 +303,7 @@ private static class RMShapeHpr <T extends RMShape> extends RMHtmlHelper<T> {
     /** Writes shape children to XML. */
     protected void writeChildren(T aShape, RMHtmlFile aWriter, XMLElement anXML)
     {
-        for(int i=0, iMax=aShape.getChildCount(); i<iMax; i++) { RMShape child = aShape.getChild(i);
+        for(int i=0, iMax=aShape.getChildCount(); i<iMax; i++) { SGView child = aShape.getChild(i);
             XMLElement childXML = aWriter.toXML(child);
             anXML.addElement(childXML);
         }
@@ -313,7 +313,7 @@ private static class RMShapeHpr <T extends RMShape> extends RMHtmlHelper<T> {
     public void writeClose(T aShape, RMHtmlFile aWriter, XMLElement anXML)  { }
     
     /** Returns a unique image name for a shape with an image fill. */
-    protected String imageName(RMHtmlFile aWriter, RMShape aShape, Image anImage)
+    protected String imageName(RMHtmlFile aWriter, SGView aShape, Image anImage)
     {
         // See if imageBytes are already in _files, if so return respective key
         byte imageBytes[] = anImage.getBytes();
@@ -334,7 +334,7 @@ private static class RMShapeHpr <T extends RMShape> extends RMHtmlHelper<T> {
 /**
  * RMHtmlHelper implementation for RMPage.
  */
-private static class RMPageHpr <T extends RMPage> extends RMShapeHpr <T> {
+private static class RMPageHpr <T extends SGPage> extends RMShapeHpr <T> {
 
     /** Returns an SVG XML for given shape. */
     protected XMLElement createElement(T aShape, RMHtmlFile aWriter)  { return new XMLElement("svg"); }
@@ -360,7 +360,7 @@ private static class RMPageHpr <T extends RMPage> extends RMShapeHpr <T> {
 /**
  * RMHtmlHelper for RMTextShape.
  */
-private static class RMTextShapeHpr <T extends RMTextShape> extends RMShapeHpr <T> {
+private static class RMTextShapeHpr <T extends SGText> extends RMShapeHpr <T> {
 
     /** Returns an SVG XML for given shape. */
     protected XMLElement createElement(T aShape, RMHtmlFile aWriter)  { return new XMLElement("g"); }
@@ -401,7 +401,7 @@ private static class RMTextShapeHpr <T extends RMTextShape> extends RMShapeHpr <
 /**
  * An RMHtmlHelper implementation for RMImageShape.
  */
-private static class RMImageShapeHpr <T extends RMImageShape> extends RMShapeHpr <T> {
+private static class RMImageShapeHpr <T extends SGImage> extends RMShapeHpr <T> {
 
     /** Returns an SVG XML for given shape. */
     protected XMLElement createElement(T aShape, RMHtmlFile aWriter)  { return new XMLElement("g"); }

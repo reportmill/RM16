@@ -6,8 +6,8 @@ import reportmill.shape.RMDocument2;
 import reportmill.util.RMExtras;
 import rmdraw.app.*;
 import reportmill.util.RMDataSource;
-import rmdraw.shape.RMArchiver;
-import rmdraw.shape.RMDocument;
+import rmdraw.scene.RMArchiver;
+import rmdraw.scene.SGDoc;
 import snap.util.*;
 import snap.view.ViewUtils;
 import snap.viewx.DialogBox;
@@ -91,7 +91,7 @@ public static RMDocument2 generateReport(RMEditorPane anEP, boolean doPaginate)
  */
 public static void previewHTML(RMEditorPane anEP)
 {
-    RMDocument report = generateReport(anEP, !ViewUtils.isAltDown());
+    SGDoc report = generateReport(anEP, !ViewUtils.isAltDown());
     report.write(SnapUtils.getTempDir() + "RMHTMLFile.html");
     FileUtils.openFile(SnapUtils.getTempDir() + "RMHTMLFile.html");
 }
@@ -101,7 +101,7 @@ public static void previewHTML(RMEditorPane anEP)
  */
 public static void previewCSV(RMEditorPane anEP)
 {
-    RMDocument report = generateReport(anEP, false);
+    SGDoc report = generateReport(anEP, false);
     report.write(SnapUtils.getTempDir() + "RMCSVFile.csv");
     FileUtils.openFile(SnapUtils.getTempDir() + "RMCSVFile.csv");
 }
@@ -111,7 +111,7 @@ public static void previewCSV(RMEditorPane anEP)
  */
 public static void previewJPG(RMEditorPane anEP)
 {
-    RMDocument report = generateReport(anEP, false);
+    SGDoc report = generateReport(anEP, false);
     report.write(SnapUtils.getTempDir() + "RMJPGFile.jpg");
     FileUtils.openFile(SnapUtils.getTempDir() + "RMJPGFile.jpg");
 }
@@ -121,7 +121,7 @@ public static void previewJPG(RMEditorPane anEP)
  */
 public static void previewPNG(RMEditorPane anEP)
 {
-    RMDocument report = generateReport(anEP, false);
+    SGDoc report = generateReport(anEP, false);
     report.write(SnapUtils.getTempDir() + "RMPNGFile.png");
     FileUtils.openFile(SnapUtils.getTempDir() + "RMPNGFile.png");
 }
@@ -133,7 +133,7 @@ public static void previewXLS(RMEditorPane anEP)
 {
     // Get report, write report and open file (in handler, in case POI jar is missing)
     try {
-        RMDocument report = generateReport(anEP, false);
+        SGDoc report = generateReport(anEP, false);
         report.write(SnapUtils.getTempDir() + "RMXLSFile.xls");
         FileUtils.openFile(SnapUtils.getTempDir() + "RMXLSFile.xls");
     }
@@ -163,7 +163,7 @@ public static void previewXLS(RMEditorPane anEP)
 public static void previewRTF(RMEditorPane anEP)
 {
     // Get report, write report and open file
-    RMDocument report = generateReport(anEP, true);
+    SGDoc report = generateReport(anEP, true);
     report.write(SnapUtils.getTempDir() + "RMRTFFile.rtf");
     FileUtils.openFile(SnapUtils.getTempDir() + "RMRTFFile.rtf");
 }

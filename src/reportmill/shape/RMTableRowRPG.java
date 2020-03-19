@@ -6,14 +6,14 @@ import reportmill.util.RMGroup;
 import reportmill.util.RMKeyChain;
 import java.util.*;
 
-import rmdraw.shape.*;
+import rmdraw.scene.*;
 import snap.geom.Rect;
 import snap.util.MathUtils;
 
 /**
  * Report generation shape for RMTableRow.
  */
-public class RMTableRowRPG extends RMSpringShape implements ReportGen.RPG {
+public class RMTableRowRPG extends SGSpringsView implements ReportGen.RPG {
 
     // The TableRow used to do RPG (and potentially an alternate)
     RMTableRow            _row, _row2;
@@ -43,7 +43,7 @@ public void rpgAll(ReportOwner anRptOwner, RMTableRow aRow, RMGroup aGroup, Stri
     RMTableRow row = (RMTableRow)aRow.getVersion(version);
     
     _row = aRow; _row2 = row; _group = aGroup; // Set ivars
-    copyShape(row); // Copy attributes
+    copyView(row); // Copy attributes
     if(_row2.isStructured()) setSpringsDisabled(true); // If structured, disable springs
 
     // Call rpgChildren
@@ -150,13 +150,13 @@ public void deleteVerticalSpansOfHiddenShapes()
     SpanList spans = new SpanList();
     
     // Collect hidden shape spans
-    for(RMShape child : getChildren())
+    for(SGView child : getChildren())
         if(!child.isVisible())
             spans.addSpan(new Span(child.getFrameY(), getShapeBelowFrameY(this, child)));
     
     // Remove visible shape spans
     if(spans.size()>0)
-        for(RMShape child : getChildren())
+        for(SGView child : getChildren())
             if(child.isVisible())
                 spans.removeSpan(new Span(child.getFrameY(), getShapeBelowFrameY(this, child)));
     
@@ -168,7 +168,7 @@ public void deleteVerticalSpansOfHiddenShapes()
     for(Span span : spans) {
         
         // Iterate over children and shift them up
-        for(RMShape child : getChildren())
+        for(SGView child : getChildren())
             if(child.getFrameY()>=span.end)
                 child.setFrameY(child.getFrameY() - span.getLength());
         
@@ -180,10 +180,10 @@ public void deleteVerticalSpansOfHiddenShapes()
 /**
  * Returns the next shape y for a given parent and child (so we can find the gap).
  */
-public static double getShapeBelowFrameY(RMParentShape aParent, RMShape aChild)
+public static double getShapeBelowFrameY(SGParent aParent, SGView aChild)
 {
     double y = aParent.getHeight();
-    for(RMShape child : aParent.getChildren())
+    for(SGView child : aParent.getChildren())
         if(child!=aChild && child.getFrameY()>aChild.getFrameMaxY() && child.getFrameY()<y)
             y = child.getFrameY();
     return y;    
@@ -199,17 +199,17 @@ public void shiftShapesBelowHiddenShapesUp()
     for(int i=0, iMax=getChildCount(); i<iMax && vsbl; i++) vsbl = getChild(i).isVisible(); if(vsbl) return;
     
     // Get max FrameMaxY and shapes sorted by FrameY and FrameX
-    double maxFrameY = RMShapeUtils.getMaxFrameMaxY(getChildren());
-    List <RMShape> shapes = RMShapeUtils.getShapesSortedByFrameYFrameX(getChildren());
+    double maxFrameY = SGViewUtils.getMaxFrameMaxY(getChildren());
+    List <SGView> shapes = SGViewUtils.getShapesSortedByFrameYFrameX(getChildren());
     
     // Shift shapes for each hidden shape (from bottom up)
-    for(int i=shapes.size()-1; i>=0; i--) { RMShape shape = shapes.get(i);
+    for(int i=shapes.size()-1; i>=0; i--) { SGView shape = shapes.get(i);
         if(!shape.isVisible())
             shiftShapesBelowHiddenRect(shapes, shape.getFrame());
     }
     
     // Get new max frame y and remove bottom of shape
-    double maxFrameY2 = RMShapeUtils.getMaxFrameMaxY(getChildren());
+    double maxFrameY2 = SGViewUtils.getMaxFrameMaxY(getChildren());
     if(!MathUtils.equals(maxFrameY, maxFrameY2))
         setHeight(getHeight() + maxFrameY2 - maxFrameY);
     
@@ -220,7 +220,7 @@ public void shiftShapesBelowHiddenShapesUp()
 /**
  * Shifts shapes below hidden rect up.
  */
-public void shiftShapesBelowHiddenRect(List <RMShape> theShapes, Rect aRect)
+public void shiftShapesBelowHiddenRect(List <SGView> theShapes, Rect aRect)
 {
     // Get rect for region below given rect
     Rect belowRect = aRect.clone();
@@ -229,10 +229,10 @@ public void shiftShapesBelowHiddenRect(List <RMShape> theShapes, Rect aRect)
     // Iterate over shapes and get shape rects, minX/maxX/maxY and sort rects into static and floating lists
     List <Rect> staticRects = new ArrayList();
     List <Rect> floatingRects = new ArrayList();
-    List <RMShape> floatingRectShapes = new ArrayList();
+    List <SGView> floatingRectShapes = new ArrayList();
     
     // Iterate over shapes and get shape rects, minX/maxX/maxY and sort rects into static and floating lists
-    for(RMShape shape : theShapes) {
+    for(SGView shape : theShapes) {
         
         // If shape not visible, just continue
         if(!shape.isVisible()) continue;
@@ -273,7 +273,7 @@ public void shiftShapesBelowHiddenRect(List <RMShape> theShapes, Rect aRect)
     }
     
     // Shift remaining floating rect shapes
-    for(RMShape shape : floatingRectShapes)
+    for(SGView shape : floatingRectShapes)
         shape.setFrameY(shape.getFrameY() - height);
 }
 
@@ -293,7 +293,7 @@ protected void layoutImpl()
     
     // Layout children edge to edge by iterating over children and setting successive x values
     double dx = 0;
-    for(RMShape child : getChildren()) {
+    for(SGView child : getChildren()) {
         child.setBounds(dx, 0, child.getWidth(), getHeight());
         dx += child.getWidth();
     }
@@ -309,7 +309,7 @@ protected double getPrefHeightImpl(double aWidth)
     
     // Return max of current row height and max child best size
     double max = getHeight();
-    for(RMShape child : getChildren()) max = Math.max(max, child.getPrefHeight());
+    for(SGView child : getChildren()) max = Math.max(max, child.getPrefHeight());
     return max;
 }
 

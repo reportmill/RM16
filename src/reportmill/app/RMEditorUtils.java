@@ -5,8 +5,8 @@ import reportmill.apptools.RMLabelsTool;
 import reportmill.apptools.RMTableTool;
 import reportmill.shape.RMSwitchShape;
 import rmdraw.app.*;
-import rmdraw.shape.RMShape;
-import rmdraw.shape.RMShapeUtils;
+import rmdraw.scene.SGView;
+import rmdraw.scene.SGViewUtils;
 import java.util.List;
 
 /**
@@ -45,12 +45,12 @@ public class RMEditorUtils extends EditorUtils {
     public static void groupInSwitchShape(Editor anEditor)
     {
         // Get selected shapes and parent (just return if no shapes)
-        List<RMShape> shapes = anEditor.getSelectedShapes(); if(shapes.size()==0) { anEditor.beep(); return; }
-        RMShape parent = anEditor.getSelectedShape(0).getParent();
+        List<SGView> shapes = anEditor.getSelViews(); if(shapes.size()==0) { anEditor.beep(); return; }
+        SGView parent = anEditor.getSelView(0).getParent();
 
         // Create switch shape to hold selected shapes with fram of combined bounds of children (ouset by just a little)
         RMSwitchShape groupShape = new RMSwitchShape();
-        groupShape.setFrame(RMShapeUtils.getBoundsOfChildren(parent, shapes).getInsetRect(-2));
+        groupShape.setFrame(SGViewUtils.getBoundsOfChildren(parent, shapes).getInsetRect(-2));
 
         // Add shapes to group shape (with undo title)
         anEditor.undoerSetUndoTitle("Group in Switch Shape");

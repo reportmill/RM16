@@ -3,7 +3,7 @@
  */
 package reportmill.shape;
 import reportmill.util.RMKeyChain;
-import rmdraw.shape.*;
+import rmdraw.scene.*;
 import snap.geom.HPos;
 import snap.geom.Pos;
 import snap.geom.Rect;
@@ -14,7 +14,7 @@ import snap.util.*;
 /**
  * This class is a shape representation of a PDF page.
  */
-public class RMPDFShape extends RMRectShape implements ReportGen.RPG {
+public class RMPDFShape extends SGRect implements ReportGen.RPG {
     
     // The key used to get pdf data during RPG
     String             _key;
@@ -179,7 +179,7 @@ protected double getPrefHeightImpl(double aWidth)
  * Report generation method.
  */
 @Override
-public RMShape rpgShape(ReportOwner aRptOwner, RMShape aParent)
+public SGView rpgShape(ReportOwner aRptOwner, SGView aParent)
 {
     // Do normal version
     ReportGen rgen = ReportGen.getRPG(this);
@@ -204,9 +204,9 @@ public RMShape rpgShape(ReportOwner aRptOwner, RMShape aParent)
 /**
  * Report generation method from RMImageShape that got PDF data.
  */
-static RMShape rpgShape(ReportOwner aRptOwner, RMShape aParent, RMImageShape aShape, Object aSource)
+static SGView rpgShape(ReportOwner aRptOwner, SGView aParent, SGImage aShape, Object aSource)
 {
-    RMPDFShape pshape = new RMPDFShape(); pshape.copyShape(aShape); pshape.setGrowToFit(aShape.isGrowToFit());
+    RMPDFShape pshape = new RMPDFShape(); pshape.copyView(aShape); pshape.setGrowToFit(aShape.isGrowToFit());
     pshape.setPreserveRatio(aShape.getPreserveRatio()); pshape.setPadding(aShape.getPadding());
     pshape.setPDFData(aSource); pshape.setPrefHeight(pshape.getHeight()*pshape.getScaleY());
     return pshape;
@@ -215,9 +215,9 @@ static RMShape rpgShape(ReportOwner aRptOwner, RMShape aParent, RMImageShape aSh
 /**
  * Override to paint shape.
  */
-protected void paintShape(Painter aPntr)
+protected void paintView(Painter aPntr)
 {
-    super.paintShape(aPntr);
+    super.paintView(aPntr);
     RMPDFData pd = getPDFData(); if(pd==null) { System.out.println("RMPDFShape.paint: Need empty impl"); return; }
     Rect ibounds = getImageBounds();
     aPntr.clip(getPath());
@@ -319,16 +319,16 @@ public Object fromXML(XMLArchiver anArchiver, XMLElement anElement)
 /**
  * Creates a new document from a PDF source.
  */
-public static RMDocument getDocPDF(Object aSource, RMDocument aBaseDoc)
+public static SGDoc getDocPDF(Object aSource, SGDoc aBaseDoc)
 {
     // Get/create new document (with no pages)
-    RMDocument doc = aBaseDoc!=null? aBaseDoc : new RMDocument();
+    SGDoc doc = aBaseDoc!=null? aBaseDoc : new SGDoc();
     while(doc.getPageCount()>0) doc.removePage(0);
     
     // Get PDF data for source and iterate over each PDF page and create/add document page
     RMPDFData pdata = RMPDFData.getPDFData(aSource);
     for(int i=0, iMax=pdata.getPageCount(); i<iMax; i++) { RMPDFData pd = pdata.getPage(i);
-        RMPage page = doc.addPage(); page.setSize(pd.getWidth(), pd.getHeight());
+        SGPage page = doc.addPage(); page.setSize(pd.getWidth(), pd.getHeight());
         page.addChild(new RMPDFShape(pd));
         if(i==0) doc.setSize(page.getWidth(), page.getHeight());
     }

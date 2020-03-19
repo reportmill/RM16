@@ -4,7 +4,7 @@ import rmdraw.app.*;
 import reportmill.util.RMDataSource;
 import reportmill.util.RMKey;
 import reportmill.util.RMKeyChain;
-import rmdraw.shape.RMDocument;
+import rmdraw.scene.SGDoc;
 import snap.geom.Rect;
 import snap.util.StringUtils;
 import snap.view.ViewEvent;
@@ -158,7 +158,7 @@ public class RMEditorPane extends EditorPane {
             _realEditor = getEditor();
 
             // Generate report and restore filename
-            RMDocument report = getDoc().generateReport(getEditor().getDataSourceDataset());
+            SGDoc report = getDoc().generateReport(getEditor().getDataSourceDataset());
 
             // Create new editor, set editing to false and set report document
             RMEditor editor = new RMEditor();

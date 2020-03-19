@@ -5,7 +5,7 @@ package reportmill.shape;
 import reportmill.util.RMGroup;
 import java.util.*;
 
-import rmdraw.shape.RMShape;
+import rmdraw.scene.SGView;
 import snap.geom.Rect;
 import snap.util.ListUtils;
 
@@ -188,10 +188,10 @@ public class Item {
     public RMGroup getGroup()  { return getSeriesItem().getGroup(); }
     
     /** Returns the item bar. */
-    public RMShape getBar()  { return getSeriesItem().getBar(); }
+    public SGView getBar()  { return getSeriesItem().getBar(); }
     
     /** Sets the bar created for this series value. */
-    public void setBar(RMShape aBar)  { getSeriesItem().setBar(aBar); }
+    public void setBar(SGView aBar)  { getSeriesItem().setBar(aBar); }
     
     /** Returns the bounds for this section item. */
     public Rect getBounds()

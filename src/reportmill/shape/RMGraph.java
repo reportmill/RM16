@@ -5,9 +5,9 @@ package reportmill.shape;
 import reportmill.util.RMGrouping;
 import java.util.*;
 import java.util.List;
-import rmdraw.shape.RMParentShape;
-import rmdraw.shape.RMScene3D;
-import rmdraw.shape.RMShape;
+import rmdraw.scene.SGParent;
+import rmdraw.scene.SGScene3D;
+import rmdraw.scene.SGView;
 import snap.gfx.*;
 import snap.util.*;
 
@@ -24,7 +24,7 @@ import snap.util.*;
  *  graph.setType(RMGraph.TYPE_PIE);
  *  </pre></blockquote>
  */
-public class RMGraph extends RMParentShape implements ReportGen.RPG {
+public class RMGraph extends SGParent implements ReportGen.RPG {
     
     // The dataset key used to get graph objects
     private String  _datasetKey;
@@ -63,7 +63,7 @@ public class RMGraph extends RMParentShape implements ReportGen.RPG {
     private List <RMGraphPartSeries>  _series = new ArrayList();
     
     // The graph area 3D shape
-    private RMScene3D _3d;
+    private SGScene3D _3d;
 
     // Whether to draw graph in 3D
     private boolean  _draw3D = true;
@@ -78,7 +78,7 @@ public class RMGraph extends RMParentShape implements ReportGen.RPG {
     private List  _colors;
     
     // The contained view that should get style changes when graph is selected
-    private RMShape _styleProxy;
+    private SGView _styleProxy;
     
     // The shared default list of colors all graphs use
     static List <Color>  _defaultColors;
@@ -325,13 +325,13 @@ protected void addSeries(RMGraphPartSeries aSeries)
 /**
  * Returns the 3d shape.
  */
-public RMScene3D get3D()
+public SGScene3D get3D()
 {
     // If already set, just return
     if(_3d!=null) return _3d;
 
     // Create and return
-    RMScene3D p3d = new RMScene3D();
+    SGScene3D p3d = new SGScene3D();
     p3d.setDepth(100);
     p3d.setYaw(8); p3d.setPitch(11);
     p3d.setFocalLength(8*72);
@@ -343,7 +343,7 @@ public RMScene3D get3D()
 private void threeDPropChange()
 {
     repaint();
-    RMScene3D p3d = getChildCount()>0 && getChild(0) instanceof RMScene3D ? (RMScene3D)getChild(0) : null;
+    SGScene3D p3d = getChildCount()>0 && getChild(0) instanceof SGScene3D ? (SGScene3D)getChild(0) : null;
     if (p3d!=null)
         p3d.copy3D(get3D());
 }
@@ -498,12 +498,12 @@ protected void layoutImpl()
 /**
  * Override to suppress selection of children.
  */
-protected boolean isHittable(RMShape aChild)  { return false; }
+protected boolean isHittable(SGView aChild)  { return false; }
 
 /**
  * Returns a graph area configured like this one showing sample data.
  */
-private RMShape createSampleGraph()
+private SGView createSampleGraph()
 {
     // Get copy of graph so we can apply sample data, keys, axis, etc.
     RMGraph graph = (RMGraph)cloneDeep();
@@ -517,7 +517,7 @@ private RMShape createSampleGraph()
     // Do rpg for graph and return
     ReportOwner rownr= new ReportOwner();
     rownr.addModelObject(getSampleObjects());
-    RMParentShape graphRPG = graph.rpgAll(rownr, graph, true);
+    SGParent graphRPG = graph.rpgAll(rownr, graph, true);
     graphRPG.setXY(0,0);
     graphRPG.layout();
     return graphRPG;
@@ -557,15 +557,15 @@ private List getSampleObjects()
 /**
  * Set ReportMill (which tries to get a dataset from reportmill and calls setObjects).
  */
-public RMParentShape rpgAll(ReportOwner anRptOwner, RMShape aParent)  { return rpgAll(anRptOwner, aParent, false); }
+public SGParent rpgAll(ReportOwner anRptOwner, SGView aParent)  { return rpgAll(anRptOwner, aParent, false); }
 
 /**
  * Set ReportMill (which tries to get a dataset from reportmill and calls setObjects).
  */
-public RMParentShape rpgAll(ReportOwner anRptOwner, RMShape aParent, boolean isSample)
+public SGParent rpgAll(ReportOwner anRptOwner, SGView aParent, boolean isSample)
 {
     RMGraph.Type type = getType();
-    RMParentShape rpg;
+    SGParent rpg;
     if(type==RMGraph.Type.Bar || type==RMGraph.Type.BarH) rpg = new RMGraphRPGBar(this, anRptOwner).getGraphShape();
     else if(type==RMGraph.Type.Pie) rpg = new RMGraphRPGPie(this, anRptOwner).getGraphShape();
     else rpg = new RMGraphRPGLine(this, anRptOwner).getGraphShape(); // Type Area, Line, Scatter
@@ -576,17 +576,17 @@ public RMParentShape rpgAll(ReportOwner anRptOwner, RMShape aParent, boolean isS
 /**
  * Override to suppress background paint.
  */
-public void paintShape(Painter aPntr)  { }
+public void paintView(Painter aPntr)  { }
 
 /**
  * Return the contained view that should get style changes when graph is selected.
  */
-public RMShape getStyleProxy()  { return _styleProxy; }
+public SGView getStyleProxy()  { return _styleProxy; }
 
 /**
  * Sets the contained view that should get style changes when graph is selected.
  */
-public void setStyleProxy(RMShape aShape)
+public void setStyleProxy(SGView aShape)
 {
     if(aShape== _styleProxy) return;
     firePropChange(ProxyShape_Prop, _styleProxy, _styleProxy = aShape);
@@ -604,7 +604,7 @@ public RMGraph clone()
     clone._labelAxis = (RMGraphPartLabelAxis)_labelAxis.clone();
     clone._bars = (RMGraphPartBars)_bars.clone();
     clone._pie = (RMGraphPartPie)_pie.clone();
-    clone._3d = (RMScene3D)get3D().clone();
+    clone._3d = (SGScene3D)get3D().clone();
     clone._series = new ArrayList();
     for(RMGraphPartSeries s : _series) {
         RMGraphPartSeries s2 = (RMGraphPartSeries)s.clone();
@@ -616,10 +616,10 @@ public RMGraph clone()
 /**
  * XML archival.
  */
-protected XMLElement toXMLShape(XMLArchiver anArchiver)
+protected XMLElement toXMLView(XMLArchiver anArchiver)
 {
     // Archive basic shape attributes and reset element name and set type
-    XMLElement e = super.toXMLShape(anArchiver); e.setName("graph");
+    XMLElement e = super.toXMLView(anArchiver); e.setName("graph");
     e.add("type", getGraphTypeString());
     
     // Archive DatasetKey, FilterKey
@@ -680,10 +680,10 @@ protected XMLElement toXMLShape(XMLArchiver anArchiver)
 /**
  * XML unarchival.
  */
-protected void fromXMLShape(XMLArchiver anArchiver, XMLElement anElement)
+protected void fromXMLView(XMLArchiver anArchiver, XMLElement anElement)
 {
     // Unarchive basic shape attributes
-    super.fromXMLShape(anArchiver, anElement);
+    super.fromXMLView(anArchiver, anElement);
     
     // Unarchive type
     setGraphTypeString(anElement.getAttributeValue("type", "bar"));
@@ -756,10 +756,10 @@ protected void toXMLChildren(XMLArchiver anArchiver, XMLElement anElement)  { }
 protected void fromXMLChildren(XMLArchiver anArchiver, XMLElement anElement)  { }
 
 /** Legacy unarchival. */
-public RMShape fromXML(XMLArchiver anArchiver, XMLElement anElement)
+public SGView fromXML(XMLArchiver anArchiver, XMLElement anElement)
 {
     XMLElement gaxml = anElement.getElement("graph-area"); if(gaxml==null) return super.fromXML(anArchiver, anElement);
-    RMParentShape frameShape = new RMParentShape(); frameShape.fromXML(anArchiver, anElement);
+    SGParent frameShape = new SGParent(); frameShape.fromXML(anArchiver, anElement);
     for(XMLAttribute at : anElement.getAttributes()) if(!gaxml.hasAttribute(at.getName())) gaxml.addAttribute(at);
     fromXML(anArchiver, gaxml);
     frameShape.addChild(this, 0);

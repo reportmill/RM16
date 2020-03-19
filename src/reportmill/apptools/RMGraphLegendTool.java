@@ -4,7 +4,7 @@
 package reportmill.apptools;
 import reportmill.shape.RMGraphLegend;
 import rmdraw.apptools.RMParentShapeTool;
-import rmdraw.shape.*;
+import rmdraw.scene.*;
 import snap.view.ViewEvent;
 
 /**
@@ -50,6 +50,6 @@ public String getWindowTitle()  { return "Graph Legend Inspector"; }
 /**
  * Override to make RMGraphLegend not super-selectable. 
  */
-public boolean isSuperSelectable(RMShape aShape)  { return false; }
+public boolean isSuperSelectable(SGView aShape)  { return false; }
 
 }

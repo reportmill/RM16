@@ -6,7 +6,7 @@ import reportmill.shape.RMDocument2;
 import reportmill.shape.RMTable;
 import reportmill.shape.RMTableGroup;
 import reportmill.out.RMPDFWriter;
-import rmdraw.shape.*;
+import rmdraw.scene.*;
 import snap.geom.Rect;
 import snap.text.*;
 import snap.util.FileUtils;
@@ -38,10 +38,10 @@ public static WebURL getMoviesURL()
 /**
  * Iterates over all document (or shape) text and replaces occurrences of the first string with the second.
  */
-public static void replaceText(RMShape aShape, String aString1, String aString2)
+public static void replaceText(SGView aShape, String aString1, String aString2)
 {
     // Handle RMTextShape
-    if(aShape instanceof RMTextShape) { RMTextShape text = (RMTextShape)aShape;
+    if(aShape instanceof SGText) { SGText text = (SGText)aShape;
         RichText richText = text.getRichText();
         String string = richText.getString();
         for(int i=string.indexOf(aString1); i>=0; i=string.indexOf(aString1, i)) {
@@ -51,14 +51,14 @@ public static void replaceText(RMShape aShape, String aString1, String aString2)
     }
     
     // Handle anything else
-    else for(int i=0, iMax=aShape.getChildCount(); i<iMax; i++) { RMShape child = aShape.getChild(i);
+    else for(int i=0, iMax=aShape.getChildCount(); i<iMax; i++) { SGView child = aShape.getChild(i);
         replaceText(child, aString1, aString2); }
 }
 
 /**
  * Replaces any dataset key in template that matches first given dataset key with the second given dataset key.
  */
-public static void replaceDatasetKey(RMShape aShape, String aKey1, String aKey2)
+public static void replaceDatasetKey(SGView aShape, String aKey1, String aKey2)
 {
     // If shape is table, check table dataset key, and replace if found
     if(aShape instanceof RMTable) { RMTable table = (RMTable)aShape;
@@ -66,7 +66,7 @@ public static void replaceDatasetKey(RMShape aShape, String aKey1, String aKey2)
             table.setDatasetKey(aKey2); }
 
     // If shape is document, recursively call replace on pages
-    else if(aShape instanceof RMDocument) { RMDocument doc = (RMDocument)aShape;
+    else if(aShape instanceof SGDoc) { SGDoc doc = (SGDoc)aShape;
         for(int i=0; i<doc.getPageCount(); i++)
             replaceDatasetKey(doc.getPage(i), aKey1, aKey2); }
     
@@ -83,7 +83,7 @@ public static void replaceDatasetKey(RMShape aShape, String aKey1, String aKey2)
 /**
  * Replaces any grouping key in the template that matches first given key with the second given key.
  */
-public static void replaceGroupingKey(RMShape aShape, String aKey1, String aKey2)
+public static void replaceGroupingKey(SGView aShape, String aKey1, String aKey2)
 {
     // If shape is table, check table grouping's sorts for sort, and replace if found
     if(aShape instanceof RMTable) { RMTable table = (RMTable)aShape;
@@ -102,7 +102,7 @@ public static void replaceGroupingKey(RMShape aShape, String aKey1, String aKey2
     }
 
     // If shape is document, recursively call replace on pages
-    else if(aShape instanceof RMDocument) { RMDocument doc = (RMDocument)aShape;
+    else if(aShape instanceof SGDoc) { SGDoc doc = (SGDoc)aShape;
         for(int i=0; i<doc.getPageCount(); i++)
             replaceGroupingKey(doc.getPage(i), aKey1, aKey2); }
     
@@ -119,7 +119,7 @@ public static void replaceGroupingKey(RMShape aShape, String aKey1, String aKey2
 /**
  * Replaces any sort in the template that matches first given sort with the second given sort.
  */
-public static void replaceSort(RMShape aShape, String aSort1, String aSort2)
+public static void replaceSort(SGView aShape, String aSort1, String aSort2)
 {
     // If shape is table, check table grouping's sorts for sort, and replace if found
     if(aShape instanceof RMTable) { RMTable table = (RMTable)aShape;
@@ -133,7 +133,7 @@ public static void replaceSort(RMShape aShape, String aSort1, String aSort2)
     }
 
     // If shape is document, recursively call replace on pages
-    else if(aShape instanceof RMDocument) { RMDocument doc = (RMDocument)aShape;
+    else if(aShape instanceof SGDoc) { SGDoc doc = (SGDoc)aShape;
         for(int i=0; i<doc.getPageCount(); i++)
             replaceSort(doc.getPage(i), aSort1, aSort2); }
     
@@ -150,20 +150,20 @@ public static void replaceSort(RMShape aShape, String aSort1, String aSort2)
 /**
  * Replaces a format.
  */
-public static void replaceFormat(RMShape aShape, TextFormat aFormat)
+public static void replaceFormat(SGView aShape, TextFormat aFormat)
 {
     // Handle document
-    if(aShape instanceof RMDocument) { RMDocument document = (RMDocument)aShape;
-        for(RMPage page : document.getPages())
+    if(aShape instanceof SGDoc) { SGDoc document = (SGDoc)aShape;
+        for(SGPage page : document.getPages())
             replaceFormat(page, aFormat); }
     
     // Handle anything with children
     else if(aShape.getChildCount()>0)
-        for(RMShape child : aShape.getChildren())
+        for(SGView child : aShape.getChildren())
             replaceFormat(child, aFormat);
     
     // Handle Text
-    else if(aShape instanceof RMTextShape) { RMTextShape text = (RMTextShape)aShape;
+    else if(aShape instanceof SGText) { SGText text = (SGText)aShape;
         RichText richText = text.getRichText();
         for (RichTextLine line : richText.getLines())
             for (RichTextRun run : line.getRuns())
@@ -179,7 +179,7 @@ public static void replaceFormat(RMShape aShape, TextFormat aFormat)
 /**
  * Returns a StringBuffer image map for a given shape.
  */
-public static StringBuffer getImageMap(RMShape aShape, StringBuffer aSB)
+public static StringBuffer getImageMap(SGView aShape, StringBuffer aSB)
 {
     // Get string buffer (create if missing)
     StringBuffer sb = aSB!=null? aSB : new StringBuffer("<MAP>");
@@ -210,13 +210,13 @@ public static StringBuffer getImageMap(RMShape aShape, StringBuffer aSB)
 /**
  * Prints name of every shape in a template hierarchy.
  */
-public static void printNames(RMShape aShape)
+public static void printNames(SGView aShape)
 {
     // Print shape name
     System.out.println(aShape.getClass().getName() + ": " + aShape.getName());
         
     // If shape is document, recursively call replace on pages
-    if(aShape instanceof RMDocument) { RMDocument doc = (RMDocument)aShape;
+    if(aShape instanceof SGDoc) { SGDoc doc = (SGDoc)aShape;
         for(int i=0; i<doc.getPageCount(); i++)
             printNames(doc.getPage(i)); }
     
@@ -235,7 +235,7 @@ public static void printNames(RMShape aShape)
 public static void printNames(RMTableGroup aTableGroup, RMTable aTable)
 {
     // Get table or table group
-    RMShape tableOrTableGroup = aTable==null ? aTableGroup : aTable;
+    SGView tableOrTableGroup = aTable==null ? aTableGroup : aTable;
     
     // Print table (or tableGroup) name
     System.out.println(tableOrTableGroup.getClass().getName() + ": " + tableOrTableGroup.getName());
@@ -251,17 +251,17 @@ public static void printNames(RMTableGroup aTableGroup, RMTable aTable)
 /**
  * Adds the contents from second document to the bottom of the first page of first document.
  */
-public static void addToPage(RMDocument aDoc1, RMDocument aDoc2)
+public static void addToPage(SGDoc aDoc1, SGDoc aDoc2)
 {
     // Get page 1 & 2 from doc 1 & 2
-    RMPage page1 = aDoc1.getPage(0);
-    RMPage page2 = aDoc2.getPage(0);
+    SGPage page1 = aDoc1.getPage(0);
+    SGPage page2 = aDoc2.getPage(0);
     
     // Get copy of page 2 child list
-    RMShape children[] = page2.getChildArray();
+    SGView children[] = page2.getChildArray();
     
     // Iterate over page 2 children, add to page 1 and shift to bottom of page
-    for(RMShape child : children) {
+    for(SGView child : children) {
         child.setY(child.getY() + page1.getHeight());
         page1.addChild(child);
     }
@@ -285,20 +285,20 @@ public static void addPageBetweenPages()
     Map map = new RMXMLReader().readObject(getHollywoodURL(), schema);
     
     // Generate report
-    RMDocument report = template.generateReport(map);
+    SGDoc report = template.generateReport(map);
     
     // Resolve page references
     report.resolvePageReferences();
     
     // Create notice page
-    RMPage page = report.createPage();
-    RMTextShape text = new RMTextShape("General Billing Information");
+    SGPage page = report.createPage();
+    SGText text = new SGText("General Billing Information");
     text.setBounds(72,72,300,100);
     page.addChild(text);
     
     // Iterate over report
     for(int i=report.getPageCount(); i>0; i--)
-        report.addPage((RMPage)page.cloneDeep(), i);
+        report.addPage((SGPage)page.cloneDeep(), i);
     
     // Write report
     report.write("/tmp/Report.pdf");
@@ -307,15 +307,15 @@ public static void addPageBetweenPages()
 /**
  * Sets the time zone for a document.
  */
-public static void setTimeZone(RMShape aShape, TimeZone aTimeZone)
+public static void setTimeZone(SGView aShape, TimeZone aTimeZone)
 {
     // Handle RMDocument
-    if(aShape instanceof RMDocument) { RMDocument doc = (RMDocument)aShape;
+    if(aShape instanceof SGDoc) { SGDoc doc = (SGDoc)aShape;
         for(int i=0, iMax=doc.getPageCount(); i<iMax; i++)
             setTimeZone(doc.getPage(i), aTimeZone); }
     
     // Handle RMText - iterate over xstring runs and reset date format time zones
-    else if(aShape instanceof RMTextShape) { RMTextShape text = (RMTextShape)aShape;
+    else if(aShape instanceof SGText) { SGText text = (SGText)aShape;
         RichText richText = text.getRichText();
         for (RichTextLine line : richText.getLines())
             for (RichTextRun run : line.getRuns())

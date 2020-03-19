@@ -5,7 +5,7 @@ package reportmill.shape;
 import java.util.*;
 import java.util.List;
 
-import rmdraw.shape.*;
+import rmdraw.scene.*;
 import snap.geom.Rect;
 import snap.geom.Shape;
 import snap.gfx.*;
@@ -126,9 +126,9 @@ public void setStructured(boolean aFlag)
     }
 
     // If turning structuring off, remove all empty texts
-    else for(int i=getChildCount()-1; i>=0; i--) { RMShape child = getChild(i);
+    else for(int i=getChildCount()-1; i>=0; i--) { SGView child = getChild(i);
         child.setAutosizing("--~,--~");
-        if(child instanceof RMTextShape && ((RMTextShape)child).length()==0)
+        if(child instanceof SGText && ((SGText)child).length()==0)
             removeChild(i);
     }
 }
@@ -180,7 +180,7 @@ public void setSyncStructureWithAlternates(boolean aFlag)
 /**
  * Returns the column at the given index (assumes row is structured and column is RMTextShape).
  */
-public RMTextShape getColumn(int anIndex)  { return ClassUtils.getInstance(getChild(anIndex), RMTextShape.class); }
+public SGText getColumn(int anIndex)  { return ClassUtils.getInstance(getChild(anIndex), SGText.class); }
 
 /**
  * Returns the number of columns in this table row (really just child count).
@@ -196,11 +196,11 @@ public void setNumberOfColumns(int aCount)
     if(aCount<1) aCount = 1;
 
     // Get average width of children
-    double width = getChildCount()==0? 120 : RMShapeUtils.getAverageWidth(getChildren());
+    double width = getChildCount()==0? 120 : SGViewUtils.getAverageWidth(getChildren());
     
     // Iterate over missing children range and add children
     for(int i=getChildCount(); i<aCount; i++) {
-        RMTextShape child = new RMTextShape();
+        SGText child = new SGText();
         child.setX(10000); child.setWidth(width);
         addChild(child);
     }
@@ -335,7 +335,7 @@ public void setShiftShapesBelowHiddenShapesUp(boolean aValue)
 /**
  * The syncStructureWithShape() method sync's the column widths of receiver to those of given shape.
  */
-public void syncStructureWithShape(RMParentShape aShape)
+public void syncStructureWithShape(SGParent aShape)
 {
     // Register for repaint
     repaint();
@@ -347,13 +347,13 @@ public void syncStructureWithShape(RMParentShape aShape)
     if(aShape.getChildCount()>0 && aShape.getChildCount()==getChildCount()) {
         
         // Get shape children sorted by x
-        List <RMShape> children = RMShapeUtils.getShapesSortedByFrameX(getChildren());
-        List <RMShape> schildren = RMShapeUtils.getShapesSortedByFrameX(aShape.getChildren());
+        List <SGView> children = SGViewUtils.getShapesSortedByFrameX(getChildren());
+        List <SGView> schildren = SGViewUtils.getShapesSortedByFrameX(aShape.getChildren());
 
         // Iterate over children an align
         for (int i=0, iMax=children.size(); i<iMax; i++) {
-            RMShape child = children.get(i);
-            RMShape schild = schildren.get(i);
+            SGView child = children.get(i);
+            SGView schild = schildren.get(i);
             child.setX(schild.getX());
             child.setWidth(schild.getWidth());
         }
@@ -380,10 +380,10 @@ public RMTableRow getRowAbove()
 /**
  * Overrides standard shape method to turn off structuring if child isn't text.
  */
-public void addChild(RMShape aChild, int anIndex)
+public void addChild(SGView aChild, int anIndex)
 {
     // If structured and trying to add something other than text, automatically turn off structuring
-    if(_structured && !(aChild instanceof RMTextShape))
+    if(_structured && !(aChild instanceof SGText))
         setStructured(false);
     
     // Do normal add child
@@ -410,18 +410,18 @@ public boolean childrenSuperSelectImmediately()  { return _structured; }
 /**
  * Paints table row.
  */
-protected void paintShape(Painter aPntr)
+protected void paintView(Painter aPntr)
 {
     // Do normal version (just return if not editing)
-    super.paintShape(aPntr); if (!SceneGraph.isEditing(this) || !isStructured()) return;
+    super.paintView(aPntr); if (!SceneGraph.isEditing(this) || !isStructured()) return;
     
     // Iterate over children sorted by X and draw divider lines
     aPntr.setColor(Color.DARKGRAY);
     aPntr.setStroke(Stroke.Stroke1);
     aPntr.setAntialiasing(false);
     Rect bounds = getBoundsLocal();
-    List <RMShape> children = RMShapeUtils.getShapesSortedByFrameX(getChildren());
-    for (RMShape child : children)
+    List <SGView> children = SGViewUtils.getShapesSortedByFrameX(getChildren());
+    for (SGView child : children)
         aPntr.drawLine(child.getX(), bounds.y, child.getX(), bounds.getMaxY());
     aPntr.setAntialiasing(true);
 }
@@ -440,8 +440,8 @@ protected void layoutImpl()
     if(!isStructured() || getChildCount()==0) return;
     
     // Layout children edge to edge by iterating over children and setting successive x values
-    List <RMShape> children = getChildren(); double width = 0;
-    for (RMShape child : children) {
+    List <SGView> children = getChildren(); double width = 0;
+    for (SGView child : children) {
         child.setBounds(width, 0, child.getWidth(), getHeight());
         width += child.getWidth();
     }
@@ -449,7 +449,7 @@ protected void layoutImpl()
     // If total width doesn't equal parent width, divy up and add to each child by ratio of their current sizes
     double pwidth = getWidth();
     if(!MathUtils.equals(width,pwidth)) { double extra = pwidth - width, x = 0;
-        for(RMShape child : children) {
+        for(SGView child : children) {
             double ow = child.getWidth(), nw = ow + ow/width*extra;
             child.setX(x); child.setWidth(nw); x += nw;
         }
@@ -475,17 +475,17 @@ protected double getPrefHeightImpl(double aWidth)
     
     // Return max of current row height and max child best size
     double max = getHeight();
-    for(RMShape child : getChildren()) max = Math.max(max, child.getPrefHeight());
+    for(SGView child : getChildren()) max = Math.max(max, child.getPrefHeight());
     return max;
 }
 
 /**
  * XML archival.
  */
-protected XMLElement toXMLShape(XMLArchiver anArchiver)
+protected XMLElement toXMLView(XMLArchiver anArchiver)
 {
     // Archive basic shape attributes and switch shape attributes and reset element name
-    XMLElement e = super.toXMLShape(anArchiver);
+    XMLElement e = super.toXMLView(anArchiver);
     e.setName("tablerow");
     
     // Archive Title, Structured
@@ -523,10 +523,10 @@ protected XMLElement toXMLShape(XMLArchiver anArchiver)
 /**
  * XML unarchival.
  */
-protected void fromXMLShape(XMLArchiver anArchiver, XMLElement anElement)
+protected void fromXMLView(XMLArchiver anArchiver, XMLElement anElement)
 {
     // Unarchive basic shape attributes and switch shape attributes
-    super.fromXMLShape(anArchiver, anElement);
+    super.fromXMLView(anArchiver, anElement);
     
     // Unarchive Title, Structured
     _title = anElement.getAttributeValue("title");
@@ -568,7 +568,7 @@ protected void fromXMLShape(XMLArchiver anArchiver, XMLElement anElement)
 protected void fromXMLChildren(XMLArchiver anArchiver, XMLElement anElement)
 {
     super.fromXMLChildren(anArchiver, anElement);
-    if(isStructured()) RMShapeUtils.sortByX(getChildren());
+    if(isStructured()) SGViewUtils.sortByX(getChildren());
 }
 
 /**

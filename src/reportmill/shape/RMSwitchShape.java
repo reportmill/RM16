@@ -6,9 +6,9 @@ import reportmill.util.RMKeyChain;
 import java.util.*;
 import java.util.List;
 
-import rmdraw.shape.RMParentShape;
-import rmdraw.shape.RMShape;
-import rmdraw.shape.SceneGraph;
+import rmdraw.scene.SGParent;
+import rmdraw.scene.SGView;
+import rmdraw.scene.SceneGraph;
 import snap.geom.Point;
 import snap.gfx.*;
 import snap.util.*;
@@ -17,7 +17,7 @@ import snap.util.*;
  * This class represents a sophisticated shape that can maintain multiple versions of itself. For example, a shape can
  * have a "Standard" version and an "Alternate" version (for alternating TableRows).
  */
-public class RMSwitchShape extends RMParentShape implements ReportGen.RPG {
+public class RMSwitchShape extends SGParent implements ReportGen.RPG {
     
     // Current version name
     String          _version = getDefaultVersionName();
@@ -84,10 +84,10 @@ protected void transferAttributes(RMSwitchShape toShape)
     Point origin = toShape.getXYP();
     
     // Have toShape copy normal shape attributes
-    toShape.copyShape(this);
+    toShape.copyView(this);
     
     // Install children from this shape into toShape
-    for(RMShape child : getChildArray())
+    for(SGView child : getChildArray())
         toShape.addChild(child);
     
     // Reset origin
@@ -188,7 +188,7 @@ public void setWidth(double aWidth)
     
     // If alternates, set width deep on alternate shapes
     if(getAlternates()!=null)
-        for(RMShape alt : getAlternates().values())
+        for(SGView alt : getAlternates().values())
             if(alt!=this)
                 alt.setWidth(aWidth);
 }
@@ -196,7 +196,7 @@ public void setWidth(double aWidth)
 /**
  * Paints switch shape.
  */
-protected void paintShape(Painter aPntr)
+protected void paintView(Painter aPntr)
 {
     // If switch shape doesn't draw a stroke, draw a light one to indicate its bounds
     if(getClass()==RMSwitchShape.class && getBorder()==null && SceneGraph.isEditing(this)) {
@@ -205,14 +205,14 @@ protected void paintShape(Painter aPntr)
     }
     
     // Paint shape normally
-    super.paintShape(aPntr);
+    super.paintView(aPntr);
 }
 
 /**
  * Report generation.
  */
 @Override
-public RMShape rpgAll(ReportOwner anRptOwner, RMShape aParent)
+public SGView rpgAll(ReportOwner anRptOwner, SGView aParent)
 {
     // Get version
     String version = getDefaultVersionName();
@@ -289,10 +289,10 @@ public XMLElement toXML(XMLArchiver anArchiver)
 /**
  * XML archival.
  */
-protected XMLElement toXMLShape(XMLArchiver anArchiver)
+protected XMLElement toXMLView(XMLArchiver anArchiver)
 {
     // Archive basic shape attributes and reset element name
-    XMLElement e = super.toXMLShape(anArchiver); e.setName("switchshape");
+    XMLElement e = super.toXMLView(anArchiver); e.setName("switchshape");
 
     // Archive VersionKey
     if(_versionKey!=null && _versionKey.length()>0) e.add("version-key", _versionKey);
@@ -318,7 +318,7 @@ protected void toXMLChildren(XMLArchiver anArchiver, XMLElement anElement)
         if(key.equals(getDefaultVersionName())) continue;
         
         // Get alternate shape, generate xml and add to alts xml
-        RMShape shape = getAlternates().get(key);
+        SGView shape = getAlternates().get(key);
         XMLElement alternateXML = shape.toXML(anArchiver);
         alternateXML.add("alt-key", key);
         alternatesXML.add(alternateXML);
@@ -328,10 +328,10 @@ protected void toXMLChildren(XMLArchiver anArchiver, XMLElement anElement)
 /**
  * XML unarchival.
  */
-protected void fromXMLShape(XMLArchiver anArchiver, XMLElement anElement)
+protected void fromXMLView(XMLArchiver anArchiver, XMLElement anElement)
 {
     // Unarchive basic shape attributes
-    super.fromXMLShape(anArchiver, anElement);
+    super.fromXMLView(anArchiver, anElement);
 
     // Unarchive VersionKey
     setVersionKey(anElement.getAttributeValue("version-key"));

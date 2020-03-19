@@ -5,7 +5,7 @@ package reportmill.apptools;
 import reportmill.shape.*;
 import rmdraw.app.Editor;
 import rmdraw.app.Tool;
-import rmdraw.shape.*;
+import rmdraw.scene.*;
 import snap.view.*;
 
 /**
@@ -79,7 +79,7 @@ public T getSelectedShape()
 public RMGraph getSelectedGraph()
 {
     Editor e = getEditor(); if(e==null) return null;
-    RMShape selShape = e.getSelectedOrSuperSelectedShape();
+    SGView selShape = e.getSelOrSuperSelView();
     return selShape instanceof RMGraph? (RMGraph)selShape : null;
 }
 

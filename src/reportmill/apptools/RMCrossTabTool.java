@@ -5,7 +5,7 @@ package reportmill.apptools;
 import reportmill.shape.*;
 import rmdraw.app.Editor;
 import rmdraw.app.Tool;
-import rmdraw.shape.*;
+import rmdraw.scene.*;
 import java.util.*;
 
 import snap.geom.Point;
@@ -85,10 +85,10 @@ public void respondUI(ViewEvent anEvent)
     
     // Handle ClearContentsMenuItem
     if(anEvent.equals("ClearContentsMenuItem"))
-        for(int i=0, iMax=getEditor().getSelectedOrSuperSelectedShapeCount(); i<iMax; i++)
-            if(getEditor().getSelectedOrSuperSelectedShape(i) instanceof RMCrossTabCell) {
-                getEditor().getSelectedOrSuperSelectedShape(i).repaint();
-                ((RMCrossTabCell)getEditor().getSelectedOrSuperSelectedShape(i)).clearContents();
+        for(int i = 0, iMax = getEditor().getSelOrSuperSelViewCount(); i<iMax; i++)
+            if(getEditor().getSelOrSuperSelView(i) instanceof RMCrossTabCell) {
+                getEditor().getSelOrSuperSelView(i).repaint();
+                ((RMCrossTabCell)getEditor().getSelOrSuperSelView(i)).clearContents();
             }
     
     // Handle AddRowAboveMenuItem, AddRowBelowMenuItem, AddColBeforeMenuItem, AddColAfterMenuItem
@@ -99,9 +99,9 @@ public void respondUI(ViewEvent anEvent)
     
     // Handle RemoveRowMenuItem, RemoveColMenuItem
     if(anEvent.equals("RemoveRowMenuItem") && cell!=null) {
-        ctab.removeRow(cell.getRow()); getEditor().setSuperSelectedShape(ctab); }
+        ctab.removeRow(cell.getRow()); getEditor().setSuperSelView(ctab); }
     if(anEvent.equals("RemoveColMenuItem") && cell!=null) {
-        ctab.removeCol(cell.getCol()); getEditor().setSuperSelectedShape(ctab); }
+        ctab.removeCol(cell.getCol()); getEditor().setSuperSelView(ctab); }
     
     // Handle MergeCellsMenuItem
     if(anEvent.equals("MergeCellsMenuItem") && cell!=null) {
@@ -109,20 +109,20 @@ public void respondUI(ViewEvent anEvent)
         // Get selected cell row/col min/min and expand to total row & col min/max
         int rowMin = cell.getRow(), rowMax = cell.getRow();
         int colMin = cell.getCol(), colMax = cell.getCol();
-        for(int i=1; i<getEditor().getSelectedShapeCount(); i++) { 
-            cell = (RMCrossTabCell)getEditor().getSelectedShape(i);
+        for(int i = 1; i<getEditor().getSelViewCount(); i++) {
+            cell = (RMCrossTabCell)getEditor().getSelView(i);
             rowMin = Math.min(rowMin, cell.getRow()); rowMax = Math.max(rowMax, cell.getRow());
             colMin = Math.min(colMin, cell.getCol()); colMax = Math.max(colMax, cell.getCol());
         }
             
         // Have table merge cells and super-select cell
         ctab.mergeCells(rowMin, colMin, rowMax, colMax);
-        getEditor().setSuperSelectedShape(ctab.getCell(rowMin, colMin));
+        getEditor().setSuperSelView(ctab.getCell(rowMin, colMin));
     }
     
     // Handle SplitCellMenuItem
     if(anEvent.equals("SplitCellMenuItem") && cell!=null)
-        ctab.splitCell((RMCrossTabCell)getEditor().getSelectedOrSuperSelectedShape());
+        ctab.splitCell((RMCrossTabCell)getEditor().getSelOrSuperSelView());
 }
 
 /**
@@ -131,7 +131,7 @@ public void respondUI(ViewEvent anEvent)
 public void mouseMoved(T aCTab, ViewEvent anEvent)
 {
     // Get shape under point
-    RMShape shape = getEditor().getShapeAtPoint(anEvent.getX(), anEvent.getY());
+    SGView shape = getEditor().getViewAtPoint(anEvent.getX(), anEvent.getY());
     
     // If shape is a divider, set RESIZE_CURSOR
     if(shape instanceof RMCrossTabDivider) { RMCrossTabDivider divider = (RMCrossTabDivider)shape;
@@ -159,25 +159,25 @@ public void mousePressed(T aCTab, ViewEvent anEvent)
     if(anEvent.isPopupTrigger()) { _popupTriggered = true; runContextMenu(anEvent); return; }
     
     // If super selected, ensure that cell under event point is super selected
-    if(getEditor().getSuperSelectedShape()==aCTab) {
+    if(getEditor().getSuperSelView()==aCTab) {
         
         // Get the event point in crosstab coords and cell under point
-        Point point = getEditor().convertToShape(anEvent.getX(), anEvent.getY(), aCTab);
-        RMShape piece = aCTab.getChildContaining(point);
+        Point point = getEditor().convertToSceneView(anEvent.getX(), anEvent.getY(), aCTab);
+        SGView piece = aCTab.getChildContaining(point);
         
         // Clear divider
         _divider = null;
         
         // If hit cell: Record DownPoint and consume
         if(piece instanceof RMCrossTabCell) {
-            _downPoint = getEditor().convertToShape(anEvent.getX(), anEvent.getY(), aCTab);
+            _downPoint = getEditor().convertToSceneView(anEvent.getX(), anEvent.getY(), aCTab);
             anEvent.consume();
         }
         
         // If hit divider, set it
         else if(piece instanceof RMCrossTabDivider) {
             _divider = (RMCrossTabDivider)piece; // Set divider
-            getEditor().setSelectedShape(_divider); // Select divider
+            getEditor().setSelView(_divider); // Select divider
             anEvent.consume(); // Consume event
         }
     }
@@ -195,7 +195,7 @@ public void mouseDragged(T aCTab, ViewEvent anEvent)
     if(_divider==null) {
         
         // Get event point int table coords and cell rect for DownPoint and EventPoint
-        Point point = getEditor().convertToShape(anEvent.getX(), anEvent.getY(), aCTab);
+        Point point = getEditor().convertToSceneView(anEvent.getX(), anEvent.getY(), aCTab);
         Rect crect = getCellRect(aCTab, Rect.get(_downPoint, point)); crect.snap();
         int cx = (int)crect.getX(), cy = (int)crect.getY(), cw = (int)crect.getWidth(), ch = (int)crect.getHeight();
         
@@ -207,14 +207,14 @@ public void mouseDragged(T aCTab, ViewEvent anEvent)
                     cells.add(aCTab.getCell(i, j));
         
         // Select cells
-        getEditor().setSelectedShapes(cells);
+        getEditor().setSelViews(cells);
     }
     
     // If divider is row divider, resize rows
     else if(_divider.isRowDivider()) {
         
         // Get event point in table coords and divider move delta
-        Point point = getEditor().convertToShape(anEvent.getX(), anEvent.getY(), aCTab);
+        Point point = getEditor().convertToSceneView(anEvent.getX(), anEvent.getY(), aCTab);
         double delta = point.y - _divider.getY();
         
         // Get divider row and resize
@@ -226,7 +226,7 @@ public void mouseDragged(T aCTab, ViewEvent anEvent)
     else {
         
         // Get event point in table coords and divider move delta
-        Point point = getEditor().convertToShape(anEvent.getX(), anEvent.getY(), aCTab);
+        Point point = getEditor().convertToSceneView(anEvent.getX(), anEvent.getY(), aCTab);
         double delta = point.x - _divider.getX();
         
         // Get divider column and resize
@@ -264,13 +264,13 @@ protected void processKeyEvent(T aCTab, ViewEvent anEvent)
     int keyCode = anEvent.getKeyCode();
     
     // If backspace or delete key is pressed, remove selected divider
-    if(editor.getSelectedShape() instanceof RMCrossTabDivider) {
+    if(editor.getSelView() instanceof RMCrossTabDivider) {
         
         // If key was backspace or delete, remove selected grouping
         if(keyCode==KeyCode.BACK_SPACE || keyCode==KeyCode.DELETE) {
             
             // Get the selected divider
-            RMCrossTabDivider divider = (RMCrossTabDivider)editor.getSelectedShape();
+            RMCrossTabDivider divider = (RMCrossTabDivider)editor.getSelView();
             
             // If divider is last column or row divider, just beep
             if(divider.isColDivider()? divider.getNextCol()==null : divider.getNextRow()==null)
@@ -295,31 +295,31 @@ protected void processKeyEvent(T aCTab, ViewEvent anEvent)
             }
             
             // Selected crosstab
-            editor.setSuperSelectedShape(aCTab);
+            editor.setSuperSelView(aCTab);
         }
     }
     
     // If selected shape is cell, either change selection or super select
-    if(editor.getSelectedShape() instanceof RMCrossTabCell) {
+    if(editor.getSelView() instanceof RMCrossTabCell) {
         
         // Get selected cell
-        RMCrossTabCell cell = (RMCrossTabCell)editor.getSelectedShape();
+        RMCrossTabCell cell = (RMCrossTabCell)editor.getSelView();
         
         // If key is right arrow or tab, move forward
         if(keyCode==KeyCode.RIGHT || (keyCode==KeyCode.TAB && !anEvent.isShiftDown()))
-            editor.setSelectedShape(cell.getCellAfter());
+            editor.setSelView(cell.getCellAfter());
         
         // If key is left arrow or shift tab, move backward
         else if(keyCode==KeyCode.LEFT || (keyCode==KeyCode.TAB && anEvent.isShiftDown()))
-            editor.setSelectedShape(cell.getCellBefore());
+            editor.setSelView(cell.getCellBefore());
 
         // If key is down arrow or enter, move down
         else if(keyCode==KeyCode.DOWN || (keyCode==KeyCode.ENTER && !anEvent.isShiftDown()))
-            editor.setSelectedShape(cell.getCellBelow());
+            editor.setSelView(cell.getCellBelow());
         
         // If key is up arrow or shift-enter, move up
         else if(keyCode==KeyCode.UP || (keyCode==KeyCode.ENTER && anEvent.isShiftDown()))
-            editor.setSelectedShape(cell.getCellAbove());
+            editor.setSelView(cell.getCellAbove());
         
         // If key has meta-down or control-down, just return
         else if(anEvent.isMetaDown() || anEvent.isControlDown())
@@ -331,7 +331,7 @@ protected void processKeyEvent(T aCTab, ViewEvent anEvent)
         
         // If key is anything else, superselect cell and forward key press to cell tool
         else {
-            editor.setSuperSelectedShape(cell);
+            editor.setSuperSelView(cell);
             getTool(cell).processEvent(cell, anEvent);
         }
     }
@@ -385,29 +385,29 @@ public void paintHandles(T aShape, Painter aPntr, boolean isSuperSelected)
     Shape drawShape = null;
     
     // If super selected shape is RMCrossTabCell, get path for ouset bounds in editor coords
-    if(editor.getSuperSelectedShape() instanceof RMCrossTabCell) {
-        RMShape cell = editor.getSuperSelectedShape();
+    if(editor.getSuperSelView() instanceof RMCrossTabCell) {
+        SGView cell = editor.getSuperSelView();
         Rect rect = cell.getBoundsLocal(); rect.inset(-2.5f, -2.5f);
-        drawShape = editor.convertFromShape(rect, cell);
+        drawShape = editor.convertFromSceneView(rect, cell);
     }
     
     // If selected shape is RMCrossTabCell, get composite area of bounds for all selected cell (outset) bounds
-    else if(editor.getSelectedShape() instanceof RMCrossTabCell) {
+    else if(editor.getSelView() instanceof RMCrossTabCell) {
         
         // Get composite area of selected shapes, get bounds of selected shapes ouset by 2
-        for(int i=0, iMax=editor.getSelectedShapeCount(); i<iMax; i++) {
-            Rect bounds = editor.getSelectedShape(i).getBounds(); bounds.inset(-2.5f, -2.5f);
+        for(int i = 0, iMax = editor.getSelViewCount(); i<iMax; i++) {
+            Rect bounds = editor.getSelView(i).getBounds(); bounds.inset(-2.5f, -2.5f);
             drawShape = drawShape!=null? Shape.add(drawShape, bounds) : bounds; }
         
         // Get shape of bounds transformed to editor
-        if(drawShape!=null) drawShape = editor.convertFromShape(drawShape, table);
+        if(drawShape!=null) drawShape = editor.convertFromSceneView(drawShape, table);
     }
     
     // If selected shape is divider, get path for divider outset bounds in editor coords
-    else if(editor.getSelectedShape() instanceof RMCrossTabDivider) {
-        RMShape shape = editor.getSelectedShape(); // Get current loop selected shape
+    else if(editor.getSelView() instanceof RMCrossTabDivider) {
+        SGView shape = editor.getSelView(); // Get current loop selected shape
         Rect bounds = shape.getBounds(); bounds.inset(-2.5f, -2.5f); // Get bounds outset by 3
-        drawShape = editor.convertFromShape(bounds, table);
+        drawShape = editor.convertFromSceneView(bounds, table);
     }
     
     // If draw shape is non-null, stroke it
@@ -428,7 +428,7 @@ public RMCrossTab getTable()
 {
     // Get editor and selected shape
     Editor editor = getEditor(); if(editor==null) return null;
-    RMShape shape = editor.getSelectedOrSuperSelectedShape();
+    SGView shape = editor.getSelOrSuperSelView();
     
     // Iterate up chain until table is found and return
     while(shape!=null && !(shape instanceof RMCrossTab)) shape = shape.getParent();
@@ -440,7 +440,7 @@ public RMCrossTab getTable()
  */
 public RMCrossTabCell getCell()
 {
-    RMShape shape = getEditor().getSelectedOrSuperSelectedShape(); // Get editor selected or super selected shape
+    SGView shape = getEditor().getSelOrSuperSelView(); // Get editor selected or super selected shape
     return shape instanceof RMCrossTabCell? (RMCrossTabCell)shape : null;
 }
 
@@ -470,12 +470,12 @@ public String getWindowTitle()  { return "CrossTab Inspector"; }
 /**
  * Overridden to make crosstab super-selectable.
  */
-public boolean isSuperSelectable(RMShape aShape)  { return true; }
+public boolean isSuperSelectable(SGView aShape)  { return true; }
 
 /**
  * Overridden to make crosstab ungroupable.
  */
-public boolean isUngroupable(RMShape aShape)  { return false; }
+public boolean isUngroupable(SGView aShape)  { return false; }
 
 /**
  * Returns the number of handles for this shape.
@@ -523,7 +523,7 @@ public void moveShapeHandle(T aShape, int aHandle, Point aPoint)
         super.moveShapeHandle(aShape, aHandle, aPoint);
     
     // Call base tool implementation with base tool handle
-    else getToolForClass(RMShape.class).moveShapeHandle(aShape, getBaseHandle(aHandle), aPoint);
+    else getToolForClass(SGView.class).moveShapeHandle(aShape, getBaseHandle(aHandle), aPoint);
 }
 
 /**
@@ -546,14 +546,14 @@ public static void addCrossTab(Editor anEditor, String aKeyPath)
     ctab.getTable().setDatasetKey(aKeyPath);
 
     // Get parent for shape add and set ctab shape location in middle of parent
-    RMParentShape parent = anEditor.firstSuperSelectedShapeThatAcceptsChildren();
+    SGParent parent = anEditor.firstSuperSelectedShapeThatAcceptsChildren();
     ctab.setXY((parent.getWidth() - ctab.getWidth())/2, (parent.getHeight() - ctab.getHeight())/2);
     
     // Add table, select table, select selectTool and redisplay
     anEditor.undoerSetUndoTitle("Add CrossTab");
     parent.addChild(ctab);
     anEditor.setCurrentToolToSelectTool();
-    anEditor.setSelectedShape(ctab);
+    anEditor.setSelView(ctab);
 }
 
 /**
@@ -566,14 +566,14 @@ public static void addCrossTab(Editor anEditor)
     ctab.setRowCount(3); ctab.setColCount(3); ctab.setHeaderRowCount(1);
     
     // Get parent for shape add and set ctab shape location in middle of parent
-    RMParentShape parent = anEditor.firstSuperSelectedShapeThatAcceptsChildren();
+    SGParent parent = anEditor.firstSuperSelectedShapeThatAcceptsChildren();
     ctab.setXY((parent.getWidth() - ctab.getWidth())/2, (parent.getHeight() - ctab.getHeight())/2);
     
     // Add table, select table, select selectTool and redisplay
     anEditor.undoerSetUndoTitle("Add Simple Table");
     parent.addChild(ctab);
     anEditor.setCurrentToolToSelectTool();
-    anEditor.setSelectedShape(ctab);
+    anEditor.setSelView(ctab);
 }
 
 }

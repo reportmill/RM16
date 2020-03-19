@@ -1,7 +1,7 @@
 package reportmill.app;
 import reportmill.shape.RMDocument2;
-import rmdraw.shape.RMShape;
-import rmdraw.shape.RMShapeUtils;
+import rmdraw.scene.SGView;
+import rmdraw.scene.SGViewUtils;
 import snap.geom.*;
 import snap.gfx.*;
 import snap.util.SnapUtils;
@@ -359,7 +359,7 @@ private static void createImages()
 /**
  * Returns an image for the given shape, with given background color (null for clear) and scale.
  */
-private static Image createImage(RMShape aShape, double aW, double aH)
+private static Image createImage(SGView aShape, double aW, double aH)
 {
     // Create new image
     int w = (int)Math.round(aW), h = (int)Math.round(aH);
@@ -373,8 +373,8 @@ private static Image createImage(RMShape aShape, double aW, double aH)
     pntr.setColor(Color.GRAY); pntr.drawRect(.5,.5,w-1,h-1);
 
     // Paint shape and return image
-    RMShapeUtils.layoutDeep(aShape);
-    RMShapeUtils.paintShape(pntr, aShape, new Rect(0,0,w,h), 1d/6);
+    SGViewUtils.layoutDeep(aShape);
+    SGViewUtils.paintView(aShape, pntr, new Rect(0,0,w,h), 1d/6);
     pntr.flush();
     return img;
 }

@@ -9,7 +9,7 @@ import rmdraw.app.Editor;
 import rmdraw.apptools.RMParentShapeTool;
 import reportmill.util.RMGrouper;
 import reportmill.util.RMGrouping;
-import rmdraw.shape.*;
+import rmdraw.scene.*;
 import snap.geom.Point;
 import snap.gfx.*;
 import snap.util.*;
@@ -188,7 +188,7 @@ public void respondUI(ViewEvent anEvent)
     if(anEvent.equals("TableGroupButton")) {
         
         // Get table parent
-        RMParentShape parent = table.getParent();
+        SGParent parent = table.getParent();
         
         // If in TableGroup, get out of it
         if(parent instanceof RMTableGroup) {
@@ -198,7 +198,7 @@ public void respondUI(ViewEvent anEvent)
             table.setFrame(tableGroup.getFrame());
             if(tableGroup.getChildTableCount()==0)
                 tableGroup.getParent().removeChild(tableGroup);
-            getEditor().setSelectedShape(table);
+            getEditor().setSelView(table);
         }
         
         // If not in TableGroup, create one and add
@@ -208,14 +208,14 @@ public void respondUI(ViewEvent anEvent)
             RMTableGroup tableGroup = new RMTableGroup();
 
             // Configure tableGroup
-            tableGroup.copyShape(table);
+            tableGroup.copyView(table);
             tableGroup.addPeerTable(table);
 
             // Add TableGroup to table's parent and select tableGroup
             tableGroup.undoerSetUndoTitle("Make TableGroup");
             parent.removeChild(table);
             parent.addChild(tableGroup);
-            getEditor().setSelectedShape(tableGroup);
+            getEditor().setSelView(tableGroup);
         }
     }
 }
@@ -226,7 +226,7 @@ public void respondUI(ViewEvent anEvent)
 public RMTable getTable()
 {
     // Get editor selected or super selected shape - if shape isn't table, go up hierarchy until table is found
-    RMShape shape = getEditor()!=null? getEditor().getSelectedOrSuperSelectedShape() : null;
+    SGView shape = getEditor()!=null? getEditor().getSelOrSuperSelView() : null;
     while(shape!=null && !(shape instanceof RMTable))
         shape = shape.getParent();
     
@@ -279,12 +279,12 @@ public String getWindowTitle()  { return "Table Inspector"; }
 /**
  * Overridden to make table super-selectable.
  */
-public boolean isSuperSelectable(RMShape aShape)  { return true; }
+public boolean isSuperSelectable(SGView aShape)  { return true; }
 
 /**
  * Overridden to make table not ungroupable.
  */
-public boolean isUngroupable(RMShape aShape)  { return false; }
+public boolean isUngroupable(SGView aShape)  { return false; }
 
 /**
  * Adds a grouping key to the currently selected table.
@@ -304,7 +304,7 @@ public static void addTable(Editor anEditor, String aKeyPath)
     RMTable table = new RMTable(aKeyPath==null? "Objects" : aKeyPath);
 
     // Set table location in middle of selected shape
-    RMParentShape parent = anEditor.firstSuperSelectedShapeThatAcceptsChildren();
+    SGParent parent = anEditor.firstSuperSelectedShapeThatAcceptsChildren();
     table.setXY(parent.getWidth()/2 - table.getWidth()/2, parent.getHeight()/2 - table.getHeight()/2);
 
     // Add table
@@ -313,7 +313,7 @@ public static void addTable(Editor anEditor, String aKeyPath)
 
     // Select table, select selectTool and redisplay
     anEditor.setCurrentToolToSelectTool();
-    anEditor.setSelectedShape(table);
+    anEditor.setSelView(table);
 }
 
 /**
@@ -323,7 +323,7 @@ public void mouseMoved(T aTable, ViewEvent anEvent)
 {
     // Get event point in table coords and resize bar for point
     Editor editor = getEditor();
-    Point point = editor.convertToShape(anEvent.getX(), anEvent.getY(), aTable);
+    Point point = editor.convertToSceneView(anEvent.getX(), anEvent.getY(), aTable);
     int resizeBarIndex = aTable.getResizeBarAtPoint(point);
 
     // If resize bar is under point, set cursor
@@ -352,7 +352,7 @@ public void mousePressed(T aTable, ViewEvent anEvent)
     
     // Get event point in table coords
     Editor editor = getEditor();
-    Point point = editor.convertToShape(anEvent.getX(), anEvent.getY(), aTable);
+    Point point = editor.convertToSceneView(anEvent.getX(), anEvent.getY(), aTable);
     
     // If table isn't super selected, forward to TableRow and return
     if(!isSuperSelected(aTable)) {
@@ -363,7 +363,7 @@ public void mousePressed(T aTable, ViewEvent anEvent)
     }
     
     // If we're not editor super selected shape, just return
-    if(editor.getSuperSelectedShape()!=aTable) return;
+    if(editor.getSuperSelView()!=aTable) return;
     
     // If point hit's table row, just return
     if(aTable.getChildContaining(point)!=null) return;
@@ -373,7 +373,7 @@ public void mousePressed(T aTable, ViewEvent anEvent)
     
     // If point is inside table group button, super select table group 
     if(aTable.getParent() instanceof RMTableGroup && point.x<100 && point.y>aTable.getHeight()-18)
-        editor.setSuperSelectedShape(aTable.getParent());
+        editor.setSuperSelView(aTable.getParent());
     
     // Get resize bar index for point
     _resizeBarIndex = aTable.getResizeBarAtPoint(point);
@@ -389,7 +389,7 @@ public void mousePressed(T aTable, ViewEvent anEvent)
 
     // If downPoint is on version, run its context menu
     if(point.x > resizeBarPopupX) {
-        editor.setSuperSelectedShape(tableRow); // Super select resize bar table row and run popup menu
+        editor.setSuperSelView(tableRow); // Super select resize bar table row and run popup menu
         runMenuForShape(aTable, resizeBarPopupX, aTable.getResizeBarBounds(_resizeBarIndex).getMaxY());
         _resizeBarIndex = -1; // Reset resize bar index
     }
@@ -428,13 +428,13 @@ public void mouseDragged(T aTable, ViewEvent anEvent)
     if(_resizeBarIndex<0) return;
     
     // Get event point in table coords
-    Point downPoint = getEditor().convertToShape(anEvent.getX(), anEvent.getY(), aTable);
+    Point downPoint = getEditor().convertToSceneView(anEvent.getX(), anEvent.getY(), aTable);
     
     // Get change in Height and child for current ResizeBarIndex
     double dh = downPoint.y - _lastMousePoint.y;
     
     // Get table row for resize bar
-    RMShape tableRow = aTable.getChild(_resizeBarIndex);
+    SGView tableRow = aTable.getChild(_resizeBarIndex);
 
     // Make sure dh doesn't cause row to be smaller than zero or cause last row to go below bottom of table
     dh = MathUtils.clamp(dh, -Math.abs(tableRow.height()), Math.abs(aTable.height()) -
@@ -452,19 +452,19 @@ public void mouseDragged(T aTable, ViewEvent anEvent)
 public void mouseReleased(T aTable, ViewEvent anEvent)
 {
     if(_resizeBarIndex<0) return;                                         // If no resize bar selected, just return
-    getEditor().setSuperSelectedShape(aTable.getChild(_resizeBarIndex));  // Super select child above resize bar
+    getEditor().setSuperSelView(aTable.getChild(_resizeBarIndex));  // Super select child above resize bar
 }
 
 /**
  * Opens a popup menu specific for table row divider under mouse.
  */
-public void runMenuForShape(RMShape aShape, double x, double y)
+public void runMenuForShape(SGView aShape, double x, double y)
 {
     Editor editor = getEditor(); // Get editor
-    RMTableRow tableRow = (RMTableRow)editor.getSuperSelectedShape(); // Get table row
+    RMTableRow tableRow = (RMTableRow)editor.getSuperSelView(); // Get table row
     RMTableRowTool tableRowTool = (RMTableRowTool)getTool(tableRow); // Get table row tool
     Menu pmenu = tableRowTool.getPopupMenu(tableRow); // Fill menu
-    Point point = editor.convertFromShape(x, y, aShape); // Get point in editor
+    Point point = editor.convertFromSceneView(x, y, aShape); // Get point in editor
     pmenu.show(editor, point.x, point.y); // Show popup menu
 }
 

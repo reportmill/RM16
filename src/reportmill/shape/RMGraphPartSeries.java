@@ -4,16 +4,14 @@
 package reportmill.shape;
 import java.util.*;
 
-import rmdraw.shape.RMShape;
-import rmdraw.shape.RMTextShape;
-import snap.gfx.*;
-import snap.text.TextFormat;
+import rmdraw.scene.SGView;
+import rmdraw.scene.SGText;
 import snap.util.*;
 
 /**
  * This shape is used by graph area to hold attributes of the value axis.
  */
-public class RMGraphPartSeries extends RMShape {
+public class RMGraphPartSeries extends SGView {
 
     // The graph this series part works for
     RMGraph                     _graph;
@@ -25,7 +23,7 @@ public class RMGraphPartSeries extends RMShape {
     LabelPos                    _position = LabelPos.Middle;
     
     // The map of label shapes for label positions
-    Map <LabelPos, RMTextShape>  _labelShapes = new HashMap();
+    Map <LabelPos, SGText>  _labelShapes = new HashMap();
     
     // Constants for value label positions
     public enum LabelPos { Top, Middle, Bottom, Above, Below }
@@ -81,11 +79,11 @@ public LabelPos getPosition(String aString)
 /**
  * Returns a label shape for given position.
  */
-public RMTextShape getLabelShape(LabelPos aPosition)
+public SGText getLabelShape(LabelPos aPosition)
 {
-    RMTextShape labelShape = _labelShapes.get(aPosition);
+    SGText labelShape = _labelShapes.get(aPosition);
     if(labelShape==null)
-        _labelShapes.put(aPosition, labelShape = new RMTextShape());
+        _labelShapes.put(aPosition, labelShape = new SGText());
     return labelShape;
 }
 
@@ -94,7 +92,7 @@ public RMTextShape getLabelShape(LabelPos aPosition)
  */
 public void setLabelText(LabelPos aPosition, String aString)
 {
-    RMTextShape ts = getLabelShape(aPosition);
+    SGText ts = getLabelShape(aPosition);
     ts.setText(aString);
     relayoutParent();
 }
@@ -113,7 +111,7 @@ public LabelPos getFirstActivePosition()
 /**
  * Returns the proxy, determined by the current position.
  */
-public RMTextShape getProxy()
+public SGText getProxy()
 {
     return getLabelShape(getPosition());
 }
@@ -160,14 +158,14 @@ public Object fromXML(XMLArchiver anArchiver, XMLElement anElement)
     
     // Unarchive label position shape if embedded string (legacy)
     if(anElement.get("string")!=null) {
-        RMTextShape label = (RMTextShape)new RMTextShape().fromXML(anArchiver, anElement);
+        SGText label = (SGText)new SGText().fromXML(anArchiver, anElement);
         LabelPos position = getPosition((anElement.getAttributeValue("position", LabelPos.Middle.toString())));
         _labelShapes.put(position, label);
     }
     
     // Unarchive labels
     for(XMLElement labelXML : anElement.getElements("label")) {
-        RMTextShape label = (RMTextShape)new RMTextShape().fromXML(anArchiver, labelXML);
+        SGText label = (SGText)new SGText().fromXML(anArchiver, labelXML);
         LabelPos position = getPosition(labelXML.getAttributeValue("position"));
         _labelShapes.put(position, label);
     }

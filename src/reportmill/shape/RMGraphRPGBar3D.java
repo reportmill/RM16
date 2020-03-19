@@ -4,9 +4,9 @@
 package reportmill.shape;
 import rmdraw.gfx3d.*;
 import java.util.*;
-import rmdraw.shape.RMLineShape;
-import rmdraw.shape.RMScene3D;
-import rmdraw.shape.RMShape;
+import rmdraw.scene.SGLine;
+import rmdraw.scene.SGScene3D;
+import rmdraw.scene.SGView;
 import snap.geom.Path;
 import snap.geom.Rect;
 import snap.gfx.*;
@@ -14,7 +14,7 @@ import snap.gfx.*;
 /**
  * This class renders a bar graph in 3D.
  */
-class RMGraphRPGBar3D extends RMScene3D implements RMGraphRPGBar.BarGraphShape {
+class RMGraphRPGBar3D extends SGScene3D implements RMGraphRPGBar.BarGraphShape {
     
     // The graph
     RMGraph           _graph;
@@ -44,13 +44,13 @@ class RMGraphRPGBar3D extends RMScene3D implements RMGraphRPGBar.BarGraphShape {
     List <Bar>        _bars = new ArrayList();
     
     // The list of bar labels
-    List <RMShape>    _barLabels = new ArrayList();
+    List <SGView>    _barLabels = new ArrayList();
     
     // The list of bar label types (synced with list above)
     List <RMGraphPartSeries.LabelPos>  _barLabelPositions = new ArrayList();
     
     // Axis label shapes
-    List <RMShape>    _axisLabels = new ArrayList();
+    List <SGView>    _axisLabels = new ArrayList();
     
     // The number of layers
     int               _layerCount;
@@ -79,7 +79,7 @@ public void setGraphRPG(RMGraphRPG aGRPG)  { _grpg = aGRPG; }
 /**
  * Adds a major grid line to the graph view.
  */
-public void addGridLineMajor(RMLineShape aLine)
+public void addGridLineMajor(SGLine aLine)
 {
     _grid.moveTo(aLine.getX(), aLine.getY());
     _grid.lineTo(aLine.getFrameMaxX(), aLine.getFrameMaxY());
@@ -90,7 +90,7 @@ public void addGridLineMajor(RMLineShape aLine)
 /**
  * Adds a minor grid line to the graph view.
  */
-public void addGridLineMinor(RMLineShape aLine)
+public void addGridLineMinor(SGLine aLine)
 {
     _gridMinor.moveTo(aLine.getX(), aLine.getY());
     _gridMinor.lineTo(aLine.getFrameMaxX(), aLine.getFrameMaxY());
@@ -99,7 +99,7 @@ public void addGridLineMinor(RMLineShape aLine)
 /**
  * Adds a grid line separator to the graph view.
  */
-public void addGridLineSeparator(RMLineShape aLine)
+public void addGridLineSeparator(SGLine aLine)
 {
     _grid.moveTo(aLine.getX(), aLine.getY());
     _grid.lineTo(aLine.getFrameMaxX(), aLine.getFrameMaxY());
@@ -108,7 +108,7 @@ public void addGridLineSeparator(RMLineShape aLine)
 /**
  * Adds a bar to the graph view.
  */
-public void addBar(RMShape aBar, int aLayer)
+public void addBar(SGView aBar, int aLayer)
 {
     // Set bar width
     if(_barWidth==0)
@@ -125,14 +125,14 @@ public void addBar(RMShape aBar, int aLayer)
  * A class to represent a bar shape.
  */
 private static class Bar {
-    RMShape barShape;
+    SGView barShape;
     int layer;
-    public Bar(RMShape aShape, int aLayer) { barShape = aShape; layer = aLayer; }
+    public Bar(SGView aShape, int aLayer) { barShape = aShape; layer = aLayer; }
 }
 /**
  * Adds a bar label to the graph view.
  */
-public void addBarLabel(RMShape aBarLabel, RMGraphPartSeries.LabelPos aPosition)
+public void addBarLabel(SGView aBarLabel, RMGraphPartSeries.LabelPos aPosition)
 {
     _barLabels.add(aBarLabel);
     _barLabelPositions.add(aPosition);
@@ -141,17 +141,17 @@ public void addBarLabel(RMShape aBarLabel, RMGraphPartSeries.LabelPos aPosition)
 /**
  * Adds the axis to the graph view.
  */
-public void addAxis(RMShape aShape)  { } // Handled in layoutImp
+public void addAxis(SGView aShape)  { } // Handled in layoutImp
 
 /**
  * Adds the value axis label to the graph view.
  */
-public void addValueAxisLabel(RMShape anAxisLabel)  { _axisLabels.add(anAxisLabel); }
+public void addValueAxisLabel(SGView anAxisLabel)  { _axisLabels.add(anAxisLabel); }
 
 /**
  * Adds the label axis label to the graph view.
  */
-public void addLabelAxisLabel(RMShape anAxisLabel)  { _axisLabels.add(anAxisLabel); }
+public void addLabelAxisLabel(SGView anAxisLabel)  { _axisLabels.add(anAxisLabel); }
 
 /**
  * Returns the width of the bars.
@@ -271,7 +271,7 @@ protected void layoutImpl()
         for(int i=0, iMax=_barLabels.size(); i<iMax && fullRender; i++) {
             
             // Get current loop bar label and bar label type
-            RMShape barLabel = _barLabels.get(i);
+            SGView barLabel = _barLabels.get(i);
             
             // Handle outside labels
             if(_barLabelPositions.get(i)==RMGraphPartSeries.LabelPos.Above ||

@@ -6,7 +6,7 @@ import reportmill.apptools.RMTableTool;
 import rmdraw.app.*;
 import rmdraw.apptools.*;
 import reportmill.util.RMNumberFormat;
-import rmdraw.shape.*;
+import rmdraw.scene.*;
 import snap.geom.HPos;
 import snap.geom.Pos;
 import snap.gfx.*;
@@ -289,7 +289,7 @@ public class RMEditorPaneToolBar extends EditorPaneToolBar {
     protected Tool getToolForButtonName(String aName)
     {
         if (aName.startsWith("TextTool"))
-            return getEditor().getToolForClass(RMTextShape.class);
+            return getEditor().getToolForClass(SGText.class);
         return super.getToolForButtonName(aName);
     }
 
@@ -342,11 +342,11 @@ public class RMEditorPaneToolBar extends EditorPaneToolBar {
         List<Tool> tools = new ArrayList();
         Editor editor = getEditor();
         tools.add(editor.getSelectTool());
-        tools.add(editor.getToolForClass(RMLineShape.class));
-        tools.add(editor.getToolForClass(RMRectShape.class));
-        tools.add(editor.getToolForClass(RMOvalShape.class));
-        tools.add(editor.getToolForClass(RMTextShape.class));
-        tools.add(editor.getToolForClass(RMPolygonShape.class));
+        tools.add(editor.getToolForClass(SGLine.class));
+        tools.add(editor.getToolForClass(SGRect.class));
+        tools.add(editor.getToolForClass(SGOval.class));
+        tools.add(editor.getToolForClass(SGText.class));
+        tools.add(editor.getToolForClass(SGPolygon.class));
         tools.add(new RMPolygonShapeTool.PencilTool(editor));
         return tools.toArray(new Tool[0]);
     }

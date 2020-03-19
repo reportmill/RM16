@@ -1,6 +1,6 @@
 package reportmill.util;
 import reportmill.shape.*;
-import rmdraw.shape.RMShape;
+import rmdraw.scene.SGView;
 
 /**
  * Utilities related to datasource.
@@ -10,7 +10,7 @@ public class RMDataSourceUtils {
     /**
      * Returns the entity given shape should show in keys browser.
      */
-    public static Entity getDatasetEntity(RMShape aShape)
+    public static Entity getDatasetEntity(SGView aShape)
     {
         // Handle RMCrossTabFrame
         if (aShape instanceof RMCrossTabFrame) {
@@ -36,7 +36,7 @@ public class RMDataSourceUtils {
     /**
      * Returns the parent entity for a shape.
      */
-    private static Entity getParentEntity(RMShape aShape)
+    private static Entity getParentEntity(SGView aShape)
     {
         // Handle RMDocument2
         if (aShape instanceof RMDocument2) { RMDocument2 doc = (RMDocument2)aShape;
@@ -47,14 +47,14 @@ public class RMDataSourceUtils {
         }
 
         // Try parent
-        RMShape par = aShape.getParent();
+        SGView par = aShape.getParent();
         return par!=null ? getParentEntity(par) : null;
     }
 
     /**
      * Returns the entity given shape should show in keys browser.
      */
-    private static Entity getDatasetEntityForShapeAndParentEntity(RMShape aShape, Entity anEntity)
+    private static Entity getDatasetEntityForShapeAndParentEntity(SGView aShape, Entity anEntity)
     {
         // If no parent entity, return null
         if (anEntity==null) return null;

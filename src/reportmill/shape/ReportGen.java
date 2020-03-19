@@ -1,7 +1,7 @@
 package reportmill.shape;
 import reportmill.util.RMKey;
 import reportmill.util.RMKeyChain;
-import rmdraw.shape.*;
+import rmdraw.scene.*;
 import snap.gfx.Color;
 import snap.gfx.Font;
 import snap.text.RichText;
@@ -13,7 +13,7 @@ import snap.view.Binding;
 /**
  * A class to add Report generation to RMShape classes.
  */
-public class ReportGen <T extends RMShape> {
+public class ReportGen <T extends SGView> {
 
     // The shape
     private T _shape;
@@ -21,38 +21,38 @@ public class ReportGen <T extends RMShape> {
     /**
      * Interface for shapes that do their own RPG.
      */
-    public interface RPG <T extends RMShape> {
+    public interface RPG <T extends SGView> {
 
         /**
          * Generate report with report owner.
          */
-        default RMShape rpgAll(ReportOwner anRptOwner, RMShape aParent)
+        default SGView rpgAll(ReportOwner anRptOwner, SGView aParent)
         {
-            return rpgAllSuperFor((RMShape)this, anRptOwner, aParent);
+            return rpgAllSuperFor((SGView)this, anRptOwner, aParent);
         }
 
         /**
          * Generate report with report owner.
          */
-        default T rpgShape(ReportOwner anRptOwner, RMShape aParent)
+        default T rpgShape(ReportOwner anRptOwner, SGView aParent)
         {
-            return (T)rpgShapeSuperFor((RMShape)this, anRptOwner, aParent);
+            return (T)rpgShapeSuperFor((SGView)this, anRptOwner, aParent);
         }
 
         /**
          * Generate report with report owner.
          */
-        default RMShape rpgChildren(ReportOwner anRptOwner, RMParentShape aParent)
+        default SGView rpgChildren(ReportOwner anRptOwner, SGParent aParent)
         {
-            return rpgChildrenSuperFor((RMShape)this, anRptOwner, aParent);
+            return rpgChildrenSuperFor((SGView)this, anRptOwner, aParent);
         }
 
         /**
          * Report generation for URL and bindings.
          */
-        default void rpgBindings(ReportOwner anRptOwner, RMShape aShapeRPG)
+        default void rpgBindings(ReportOwner anRptOwner, SGView aShapeRPG)
         {
-            rpgBindingsSuperFor((RMShape)this, anRptOwner, aShapeRPG);
+            rpgBindingsSuperFor((SGView)this, anRptOwner, aShapeRPG);
         }
 
         /**
@@ -60,7 +60,7 @@ public class ReportGen <T extends RMShape> {
          */
         default void resolvePageReferences(ReportOwner aRptOwner, Object userInfo)
         {
-            resolvePageReferencesSuperFor((RMShape)this, aRptOwner, userInfo);
+            resolvePageReferencesSuperFor((SGView)this, aRptOwner, userInfo);
         }
     }
 
@@ -75,10 +75,10 @@ public class ReportGen <T extends RMShape> {
     /**
      * Generate report with report owner.
      */
-    public RMShape rpgAll(ReportOwner anRptOwner, RMShape aParent)
+    public SGView rpgAll(ReportOwner anRptOwner, SGView aParent)
     {
         T cell = getShape();
-        RMShape clone = rpgShapeFor(cell, anRptOwner, aParent);
+        SGView clone = rpgShapeFor(cell, anRptOwner, aParent);
         rpgBindingsFor(cell, anRptOwner, clone);
         return clone;
     }
@@ -86,7 +86,7 @@ public class ReportGen <T extends RMShape> {
     /**
      * Generate report with report owner.
      */
-    protected RMShape rpgShape(ReportOwner anRptOwner, RMShape aParent)
+    protected SGView rpgShape(ReportOwner anRptOwner, SGView aParent)
     {
         return _shape.clone();
     }
@@ -94,7 +94,7 @@ public class ReportGen <T extends RMShape> {
     /**
      * Generate report with report owner.
      */
-    protected RMShape rpgChildren(ReportOwner anRptOwner, RMParentShape aParent)
+    protected SGView rpgChildren(ReportOwner anRptOwner, SGParent aParent)
     {
         throw new RuntimeException("ReportGen.rpgChildren: Shouldn't get called");
     }
@@ -102,7 +102,7 @@ public class ReportGen <T extends RMShape> {
     /**
      * Report generation for URL and bindings.
      */
-    public void rpgBindings(ReportOwner anRptOwner, RMShape aShapeRPG)
+    public void rpgBindings(ReportOwner anRptOwner, SGView aShapeRPG)
     {
         // Clone URL
         String urls = _shape.getURL();
@@ -127,8 +127,8 @@ public class ReportGen <T extends RMShape> {
                 String fs = value instanceof String? (String)value : null; if(fs==null || fs.length()==0) continue;
 
                 // If string has underline in it, underline and delete
-                if(StringUtils.indexOfIC(fs, "Underline")>=0 && aShapeRPG instanceof RMTextShape) {
-                    RMTextShape text = (RMTextShape) aShapeRPG;
+                if(StringUtils.indexOfIC(fs, "Underline")>=0 && aShapeRPG instanceof SGText) {
+                    SGText text = (SGText) aShapeRPG;
                     text.getRichText().setStyleValue(TextStyle.UNDERLINE_KEY, 1);
                     fs = StringUtils.deleteIC(fs, "Underline").trim();
                 }
@@ -159,8 +159,8 @@ public class ReportGen <T extends RMShape> {
                 if(color!=null) aShapeRPG.setFillColor(color); }
             else if(pname.equals("StrokeColor")) { Color color = Color.get(value);
                 if(color!=null) aShapeRPG.setBorderColor(color); }
-            else if(pname.equals("TextColor") && aShapeRPG instanceof RMTextShape) { Color color = Color.get(value);
-                RMTextShape text = (RMTextShape)aShapeRPG;
+            else if(pname.equals("TextColor") && aShapeRPG instanceof SGText) { Color color = Color.get(value);
+                SGText text = (SGText)aShapeRPG;
                 if(color!=null) text.setTextColor(color);
             }
 
@@ -186,13 +186,13 @@ public class ReportGen <T extends RMShape> {
     /**
      * Returns the appropriate ReportGen for given cell.
      */
-    public static ReportGen getRPG(RMShape aCell)
+    public static ReportGen getRPG(SGView aCell)
     {
         ReportGen rpg;
-        if (aCell instanceof RMImageShape) rpg = new ReportGens.ImageCellRPG();
-        else if (aCell instanceof RMPage) rpg = new ReportGens.PageCellRPG();
-        else if (aCell instanceof RMTextShape) rpg = new ReportGens.TextCellRPG();
-        else if (aCell instanceof RMParentShape) rpg = new ReportGens.ParentCellRPG();
+        if (aCell instanceof SGImage) rpg = new ReportGens.ImageCellRPG();
+        else if (aCell instanceof SGPage) rpg = new ReportGens.PageCellRPG();
+        else if (aCell instanceof SGText) rpg = new ReportGens.TextCellRPG();
+        else if (aCell instanceof SGParent) rpg = new ReportGens.ParentCellRPG();
         else rpg = new ReportGen();
         rpg._shape = aCell;
         return rpg;
@@ -201,7 +201,7 @@ public class ReportGen <T extends RMShape> {
     /**
      * Calls rpgAll for given cell.
      */
-    public static RMShape rpgAllFor(RMShape aCell, ReportOwner anRptOwner, RMShape aParent)
+    public static SGView rpgAllFor(SGView aCell, ReportOwner anRptOwner, SGView aParent)
     {
         if (aCell instanceof RPG)
             return ((RPG)aCell).rpgAll(anRptOwner, aParent);
@@ -211,7 +211,7 @@ public class ReportGen <T extends RMShape> {
     /**
      * Calls rpgAll for given shape.
      */
-    public static RMShape rpgAllSuperFor(RMShape aCell, ReportOwner anRptOwner, RMShape aParent)
+    public static SGView rpgAllSuperFor(SGView aCell, ReportOwner anRptOwner, SGView aParent)
     {
         ReportGen rgen = getRPG(aCell);
         return rgen.rpgAll(anRptOwner, aParent);
@@ -220,7 +220,7 @@ public class ReportGen <T extends RMShape> {
     /**
      * Calls rpgAll for given cell.
      */
-    public static RMShape rpgShapeFor(RMShape aCell, ReportOwner anRptOwner, RMShape aParent)
+    public static SGView rpgShapeFor(SGView aCell, ReportOwner anRptOwner, SGView aParent)
     {
         if (aCell instanceof RPG)
             return ((RPG)aCell).rpgShape(anRptOwner, aParent);
@@ -230,7 +230,7 @@ public class ReportGen <T extends RMShape> {
     /**
      * Calls rpgAll for given cell.
      */
-    public static RMShape rpgShapeSuperFor(RMShape aCell, ReportOwner anRptOwner, RMShape aParent)
+    public static SGView rpgShapeSuperFor(SGView aCell, ReportOwner anRptOwner, SGView aParent)
     {
         ReportGen rgen = getRPG(aCell);
         return rgen.rpgShape(anRptOwner, aParent);
@@ -239,7 +239,7 @@ public class ReportGen <T extends RMShape> {
     /**
      * Calls rpgChildrenFor for given cell.
      */
-    public static RMShape rpgChildrenFor(RMShape aCell, ReportOwner anRptOwner, RMParentShape aParent)
+    public static SGView rpgChildrenFor(SGView aCell, ReportOwner anRptOwner, SGParent aParent)
     {
         if (aCell instanceof RPG)
             return ((RPG)aCell).rpgChildren(anRptOwner, aParent);
@@ -249,7 +249,7 @@ public class ReportGen <T extends RMShape> {
     /**
      * Calls rpgChildrenFor for given cell.
      */
-    public static RMShape rpgChildrenSuperFor(RMShape aCell, ReportOwner anRptOwner, RMParentShape aParent)
+    public static SGView rpgChildrenSuperFor(SGView aCell, ReportOwner anRptOwner, SGParent aParent)
     {
         ReportGen rgen = getRPG(aCell);
         return rgen.rpgChildren(anRptOwner, aParent);
@@ -258,7 +258,7 @@ public class ReportGen <T extends RMShape> {
     /**
      * Calls rpgBindingsFor for given cell.
      */
-    public static void rpgBindingsFor(RMShape aCell, ReportOwner anRptOwner, RMShape aShapeRPG)
+    public static void rpgBindingsFor(SGView aCell, ReportOwner anRptOwner, SGView aShapeRPG)
     {
         if (aCell instanceof RPG)
             ((RPG)aCell).rpgBindings(anRptOwner, aShapeRPG);
@@ -268,7 +268,7 @@ public class ReportGen <T extends RMShape> {
     /**
      * Calls rpgBindingsFor for given cell.
      */
-    public static void rpgBindingsSuperFor(RMShape aCell, ReportOwner anRptOwner, RMShape aShapeRPG)
+    public static void rpgBindingsSuperFor(SGView aCell, ReportOwner anRptOwner, SGView aShapeRPG)
     {
         ReportGen rgen = getRPG(aCell);
         rgen.rpgBindings(anRptOwner, aShapeRPG);
@@ -277,7 +277,7 @@ public class ReportGen <T extends RMShape> {
     /**
      * Calls resolvePageReferencesFor for given cell.
      */
-    public static void resolvePageReferencesFor(RMShape aCell, ReportOwner aRptOwner, Object userInfo)
+    public static void resolvePageReferencesFor(SGView aCell, ReportOwner aRptOwner, Object userInfo)
     {
         if (aCell instanceof RPG)
             ((RPG)aCell).resolvePageReferences(aRptOwner, userInfo);
@@ -287,7 +287,7 @@ public class ReportGen <T extends RMShape> {
     /**
      * Calls resolvePageReferencesFor for given cell.
      */
-    public static void resolvePageReferencesSuperFor(RMShape aCell, ReportOwner aRptOwner, Object userInfo)
+    public static void resolvePageReferencesSuperFor(SGView aCell, ReportOwner aRptOwner, Object userInfo)
     {
         ReportGen rgen = getRPG(aCell);
         rgen.resolvePageReferences(aRptOwner, userInfo);

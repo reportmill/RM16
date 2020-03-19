@@ -2,7 +2,7 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.out;
-import rmdraw.shape.RMShape;
+import rmdraw.scene.SGView;
 import java.util.*;
 
 import snap.geom.Point;
@@ -22,7 +22,7 @@ public class RMFillPdfr {
 /**
  * Writes a given shape fill.
  */
-public static void writeShapeFill(RMShape aShape, Paint aFill, RMPDFWriter aWriter)
+public static void writeShapeFill(SGView aShape, Paint aFill, RMPDFWriter aWriter)
 {
     // Handle GradientPaint and ImagePaint
     if(aFill instanceof GradientPaint) writeGradientFill(aShape, (GradientPaint)aFill, aWriter);
@@ -38,7 +38,7 @@ public static void writeShapeFill(RMShape aShape, Paint aFill, RMPDFWriter aWrit
 /** 
  * Writes pdf for the path filled with a shading pattern defined by the RMGradientFill
  */
-public static void writeGradientFill(RMShape aShape, GradientPaint aFill, PDFWriter aWriter)
+public static void writeGradientFill(SGView aShape, GradientPaint aFill, PDFWriter aWriter)
 {
     // Get shape path and PDF page and write path
     Shape path = aShape.getPath();
@@ -106,7 +106,7 @@ public static void writeGradientFill(RMShape aShape, GradientPaint aFill, PDFWri
     // In pdf, coordinates of the gradient axis are defined in pattern space.  Pattern space is the same as the
     // page's coordinate system, and doesn't get affected by changes to the ctm. Since the RMGradient returns
     // points in the shape's coordinate system, we have to transform them into pattern space (page space).
-    RMShape page = aShape.getPage();
+    SGView page = aShape.getPage();
     Transform patternSpaceTransform = aShape.getLocalToParent(page);
     patternSpaceTransform.transform(startPt);
     patternSpaceTransform.transform(endPt);
@@ -153,7 +153,7 @@ public static void writeGradientFill(RMShape aShape, GradientPaint aFill, PDFWri
 /**
  * Writes given RMImageFill to a PDF file.
  */
-public static void writeImageFill(RMShape aShape, ImagePaint anImageFill, RMPDFWriter aWriter)
+public static void writeImageFill(SGView aShape, ImagePaint anImageFill, RMPDFWriter aWriter)
 {
     writeImageFill(anImageFill, aShape.getPath(), aShape.getBoundsLocal(), aWriter);
 }

@@ -2,7 +2,7 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.out;
-import rmdraw.shape.*;
+import rmdraw.scene.*;
 import org.apache.poi.hssf.usermodel.*;
 import snap.geom.Point;
 import snap.geom.Rect;
@@ -119,7 +119,7 @@ public ExcelPoint convertPoint(Point pt)
     return new ExcelPoint((short)r, (short)c, dx, dy);
 }
 
-public HSSFShape addNewShape(RMShape aShape, HSSFShapeContainer aParent)
+public HSSFShape addNewShape(SGView aShape, HSSFShapeContainer aParent)
 {
     HSSFShape hssfShape = null;
     
@@ -138,11 +138,11 @@ public HSSFShape addNewShape(RMShape aShape, HSSFShapeContainer aParent)
         HSSFClientAnchor anchor = new HSSFClientAnchor(origin._dx, origin._dy, max._dx, max._dy, origin._column, origin._row, max._column, max._row);
         
         // Handle image
-        if(aShape instanceof RMImageShape)
+        if(aShape instanceof SGImage)
             hssfShape = ((HSSFPatriarch)aParent).createPicture(anchor,0); // fill in index later
         
         // Handle text
-        else if(aShape instanceof RMTextShape && ((RMTextShape)aShape).length()>0)
+        else if(aShape instanceof SGText && ((SGText)aShape).length()>0)
             hssfShape = ((HSSFPatriarch)aParent).createTextbox(anchor);
         
         // Handle everything else
@@ -160,14 +160,14 @@ public HSSFShape addNewShape(RMShape aShape, HSSFShapeContainer aParent)
     return hssfShape;
 }
 
-public HSSFShape addRect(RMShape aRect, HSSFShapeContainer aParent)
+public HSSFShape addRect(SGView aRect, HSSFShapeContainer aParent)
 {
     HSSFSimpleShape s = (HSSFSimpleShape)addNewShape(aRect, aParent);
     s.setShapeType(HSSFSimpleShape.OBJECT_TYPE_RECTANGLE);
     return s;    
 }
 
-public HSSFShape addLine(RMShape aLine, HSSFShapeContainer aParent)
+public HSSFShape addLine(SGView aLine, HSSFShapeContainer aParent)
 {
     HSSFSimpleShape s = (HSSFSimpleShape)addNewShape(aLine, aParent);
     s.setShapeType(HSSFSimpleShape.OBJECT_TYPE_LINE);

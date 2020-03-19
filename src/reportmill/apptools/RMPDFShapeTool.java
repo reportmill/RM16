@@ -4,7 +4,7 @@
 package reportmill.apptools;
 import rmdraw.app.*;
 import rmdraw.app.Tool;
-import rmdraw.shape.RMImageShape;
+import rmdraw.scene.SGImage;
 import reportmill.shape.*;
 import java.util.List;
 import snap.util.*;
@@ -96,6 +96,6 @@ public void respondUI(ViewEvent anEvent)
 /**
  * Returns the image used to represent shapes that this tool represents.
  */
-protected snap.gfx.Image getImageImpl()  { return getToolForClass(RMImageShape.class).getImage(); }
+protected snap.gfx.Image getImageImpl()  { return getToolForClass(SGImage.class).getImage(); }
 
 }

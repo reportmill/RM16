@@ -4,7 +4,7 @@
 package reportmill.shape;
 import reportmill.util.RMGroup;
 import reportmill.util.RMKeyChain;
-import rmdraw.shape.RMShape;
+import rmdraw.scene.SGView;
 
 import java.util.*;
 
@@ -28,7 +28,7 @@ class RMTableGroupRPG extends RMTableRPG {
 public RMTableGroupRPG(ReportOwner anRptOwner, RMTableGroup aTableGroup, RMTable aTable)
 {
     super(anRptOwner, aTable); _tgroup = aTableGroup;
-    copyShape(aTableGroup);
+    copyView(aTableGroup);
     
     // Legacy: RM13 used to base attributes on first table instead of table group
     RMTable table = _tgroup.getChildTableCount()>0? _tgroup.getChildTable(0) : null;
@@ -40,7 +40,7 @@ public RMTableGroupRPG(ReportOwner anRptOwner, RMTableGroup aTableGroup, RMTable
 /**
  * Do RPG.
  */
-public RMShape rpgAll()
+public SGView rpgAll()
 {
     // If not paginating, set height arbitrarily large
     if(!_rptOwner.getPaginate()) {

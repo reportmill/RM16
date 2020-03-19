@@ -5,7 +5,7 @@ package reportmill.shape;
 import reportmill.util.RMGroup;
 
 import java.util.*;
-import rmdraw.shape.*;
+import rmdraw.scene.*;
 import snap.geom.Path;
 import snap.geom.Point;
 import snap.geom.Pos;
@@ -31,7 +31,7 @@ class RMGraphRPGBar extends RMGraphRPG {
     boolean                _meshed, _stacked, _layered;
     
     // The shape that holds the basic attributes for bars (prototype)
-    RMShape _barProtype;
+    SGView _barProtype;
     
 /**
  * Creates a bar graph maker.
@@ -72,7 +72,7 @@ public RMGraphRPGBar(RMGraph aGraph, ReportOwner anRptOwner)
 /**
  * Creates the graph shape.
  */
-protected RMParentShape createGraphShape()
+protected SGParent createGraphShape()
 {
     return _graph.isDraw3D()? new RMGraphRPGBar3D(_graph) : new BarGraphShape2D(_graph);
 }
@@ -142,7 +142,7 @@ private void addGrid()
 
             // DrawMajorAxis
             if(i>0) {
-                RMLineShape line = new RMLineShape();
+                SGLine line = new SGLine();
                 line.setFrame(lineX, lineY, lineW, lineH);
                 _barShape.addGridLineMajor(line);
             }
@@ -152,7 +152,7 @@ private void addGrid()
                 
             // Draw minor axis
             for(int j=0; j<getMinorTickCount(); j++) {
-                RMLineShape line = new RMLineShape();
+                SGLine line = new SGLine();
                 double minorLineX = isVertical()? bounds.x : lineX + (j+1)*minorTickInterval;
                 double minorLineY = isVertical()? lineY + (j+1)*minorTickInterval : bounds.y;
                 line.setBorderColor(Color.LIGHTGRAY);
@@ -170,7 +170,7 @@ private void addGrid()
     
     // If zero axis line not added, add it (happens when there are pos & neg values)
     if(!zeroAxisLineAdded) {
-        RMLineShape line = new RMLineShape();
+        SGLine line = new SGLine();
         double intervalRatio = minInterval/totalInterval;
         double lineX = isVertical()? 0 : -bounds.width*intervalRatio;
         double lineY = isVertical()? bounds.height + bounds.height*intervalRatio : 0;
@@ -188,7 +188,7 @@ private void addGrid()
         
         // Iterate over series
         for(int i=1, iMax=sectionCount; i<iMax; i++) {
-            RMLineShape line = new RMLineShape();
+            SGLine line = new SGLine();
             double lineX = isVertical()? bounds.x + bounds.width*i/iMax : bounds.x;
             double lineY = isVertical()? bounds.y : bounds.y + bounds.height*i/iMax;
             line.setFrame(lineX, lineY, isVertical()? 0 : bounds.width, isVertical()? bounds.height : 0);
@@ -203,7 +203,7 @@ private void addGrid()
 public void addBars()
 {
     // Get graph bar prototype
-    RMShape prototype = getBarPrototype();
+    SGView prototype = getBarPrototype();
     
     // Iterate over series and series items
     for(int i=0, iMax=getSeriesCount(); i<iMax; i++) { RMGraphSeries series = getSeries(i);
@@ -211,7 +211,7 @@ public void addBars()
             
             // Get bar by doing RPG on prototype for SeriesItem
             _rptOwner.pushDataStack(seriesItem.getGroup());
-            RMShape bar = _rptOwner.rpg(prototype, (RMShape)_barShape);
+            SGView bar = _rptOwner.rpg(prototype, (SGView)_barShape);
             _rptOwner.popDataStack();
             
             // Set bar color and bounds
@@ -373,7 +373,7 @@ private void addValueAxisLabels()
     TextFormat format = valueAxis.getFormat();
 
     // Create shape for value axis and configure
-    RMPolygonShape axis = new RMPolygonShape(); axis.copyShape(_graph);
+    SGPolygon axis = new SGPolygon(); axis.copyView(_graph);
     double axisX = isVertical()? -5 : 0;
     double axisY = isVertical()? 0 : height;
     double axisW = isVertical()? 5 : width;
@@ -402,8 +402,8 @@ private void addValueAxisLabels()
         rtext.setLineStyle(TextLineStyle.DEFAULT_CENTERED, 0, rtext.length());
         
         // Create new text for label, copy value axis text shape attributes and size to fit
-        RMTextShape label = new RMTextShape(rtext);
-        label.copyShape(valueAxis);
+        SGText label = new SGText(rtext);
+        label.copyView(valueAxis);
         label.setBestSize();
         
         // Calculate interval position
@@ -456,8 +456,8 @@ private void addLabelAxisLabel(Rect aRect, RMGroup aGroup)
 {
     // Create label for group: Get label axis, get label (a clone), set text, do RPG and set best size
     RMGraphPartLabelAxis labelAxis = _graph.getLabelAxis();
-    RMTextShape label = new RMTextShape(labelAxis.getItemKey()); // Create new RMText with attributes of label axis
-    label.copyShape(labelAxis);
+    SGText label = new SGText(labelAxis.getItemKey()); // Create new RMText with attributes of label axis
+    label.copyView(labelAxis);
     label.setFont(labelAxis.getFont());
     RichText rtext = label.getRichText();
     rtext.setLineStyle(TextLineStyle.DEFAULT_CENTERED, 0, label.length());
@@ -519,13 +519,13 @@ private void addSeriesLabels()
 /**
  * Adds an individual label.
  */
-public void addLabel(RMTextShape aLabel, RMGraphPartSeries.LabelPos aPosition, RMGraphSeries.Item seriesItem)
+public void addLabel(SGText aLabel, RMGraphPartSeries.LabelPos aPosition, RMGraphSeries.Item seriesItem)
 {
     // Get group
     RMGroup group = seriesItem.getGroup();
 
     // Create new RMText with attributes of label axis
-    RMTextShape label = (RMTextShape)aLabel.cloneDeep();
+    SGText label = (SGText)aLabel.cloneDeep();
     
     // Do rpg on new label string
     RichText rtext = label.getRichText();
@@ -605,14 +605,14 @@ public void addLabel(RMTextShape aLabel, RMGraphPartSeries.LabelPos aPosition, R
 /**
  * Returns the shape used to represent the basic attributes of bars & wedges.
  */
-public RMShape getBarPrototype()  { return _barProtype!=null? _barProtype : (_barProtype=createBarPrototype()); }
+public SGView getBarPrototype()  { return _barProtype!=null? _barProtype : (_barProtype=createBarPrototype()); }
 
 /**
  * Returns the shape used to represent the basic attributes of bars & wedges.
  */
-private RMShape createBarPrototype()
+private SGView createBarPrototype()
 {
-    RMShape bp = new RMRectShape();
+    SGView bp = new SGRect();
     bp.setBorder(Border.blackBorder());
     return bp;
 }
@@ -623,37 +623,37 @@ private RMShape createBarPrototype()
 public interface BarGraphShape extends RMGraphRPG.GraphShape {
 
     /** Add grid line. */
-    public void addGridLineMajor(RMLineShape aLine);
+    public void addGridLineMajor(SGLine aLine);
 
     /** Add grid line. */
-    public void addGridLineMinor(RMLineShape aLine);
+    public void addGridLineMinor(SGLine aLine);
     
     /** Add grid line. */
-    public void addGridLineSeparator(RMLineShape aLine);
+    public void addGridLineSeparator(SGLine aLine);
     
     /** Add Bar. */
-    public void addBar(RMShape aBar, int aLayer);
+    public void addBar(SGView aBar, int aLayer);
     
     /** Add bar label. */
-    public void addBarLabel(RMShape aBarLabel, RMGraphPartSeries.LabelPos aVersion);
+    public void addBarLabel(SGView aBarLabel, RMGraphPartSeries.LabelPos aVersion);
     
     /** Add axis. */
-    public void addAxis(RMShape aShape);
+    public void addAxis(SGView aShape);
     
     /** Add value axis label. */
-    public void addValueAxisLabel(RMShape anAxisLabel);
+    public void addValueAxisLabel(SGView anAxisLabel);
     
     /** Add label axis label. */
-    public void addLabelAxisLabel(RMShape anAxisLabel);
+    public void addLabelAxisLabel(SGView anAxisLabel);
 }
 
 /**
  * A BarGraphShape implementation.
  */
-public static class BarGraphShape2D extends RMParentShape implements BarGraphShape {
+public static class BarGraphShape2D extends SGParent implements BarGraphShape {
 
     /** Creates a new BarGraphShape2D. */
-    public BarGraphShape2D(RMGraph aGraph)  { copyShape(aGraph); }
+    public BarGraphShape2D(RMGraph aGraph)  { copyView(aGraph); }
 
     /** Returns the RMGraphRPG. */
     public RMGraphRPG getGraphRPG()  { return _grpg; } RMGraphRPG _grpg;
@@ -662,28 +662,28 @@ public static class BarGraphShape2D extends RMParentShape implements BarGraphSha
     public void setGraphRPG(RMGraphRPG aGRPG)  { _grpg = aGRPG; }
     
     /** Add grid line major. */
-    public void addGridLineMajor(RMLineShape aLine)  { addChild(aLine); }
+    public void addGridLineMajor(SGLine aLine)  { addChild(aLine); }
     
     /** Add grid line minor. */
-    public void addGridLineMinor(RMLineShape aLine)  { addChild(aLine); }
+    public void addGridLineMinor(SGLine aLine)  { addChild(aLine); }
     
     /** Add grid line separator */
-    public void addGridLineSeparator(RMLineShape aLine)  { addChild(aLine); }
+    public void addGridLineSeparator(SGLine aLine)  { addChild(aLine); }
     
     /** Add bar shape. */
-    public void addBar(RMShape aBar, int aLayer)  { addChild(aBar); }
+    public void addBar(SGView aBar, int aLayer)  { addChild(aBar); }
     
     /** Add bar label. */
-    public void addBarLabel(RMShape aBarLabel, RMGraphPartSeries.LabelPos aPosition)  { addChild(aBarLabel); }
+    public void addBarLabel(SGView aBarLabel, RMGraphPartSeries.LabelPos aPosition)  { addChild(aBarLabel); }
     
     /** Add axis shape. */
-    public void addAxis(RMShape aShape)  { addChild(aShape); }
+    public void addAxis(SGView aShape)  { addChild(aShape); }
     
     /** Add value axis label shape. */
-    public void addValueAxisLabel(RMShape anAxisLabel)  { addChild(anAxisLabel); }
+    public void addValueAxisLabel(SGView anAxisLabel)  { addChild(anAxisLabel); }
     
     /** Add label axis label shape. */
-    public void addLabelAxisLabel(RMShape anAxisLabel)  { addChild(anAxisLabel); }
+    public void addLabelAxisLabel(SGView anAxisLabel)  { addChild(anAxisLabel); }
 }
 
 }

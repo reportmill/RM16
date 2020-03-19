@@ -2,7 +2,7 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.out;
-import rmdraw.shape.*;
+import rmdraw.scene.*;
 import java.util.*;
 import snap.geom.Rect;
 
@@ -53,7 +53,7 @@ public Cell getCell(int aRow, int aCol)  { return _cells[aRow][aCol]; }
  * topLevel is a common ancestor of all the shapes (usually the RMPage)
  * minTableRect, if non-null, specifies a minimum size and origin for the final table.
  */
-public static RMShapeTable createTable(List <RMShape> theShapes, RMShape topLevel, Rect minTableRect)
+public static RMShapeTable createTable(List <SGView> theShapes, SGView topLevel, Rect minTableRect)
 {
     // Get number of shapes (just return if no shapes and no min-table rect)
     int shapeCount = theShapes.size(); if(shapeCount==0 && minTableRect==null) return null;
@@ -65,10 +65,10 @@ public static RMShapeTable createTable(List <RMShape> theShapes, RMShape topLeve
     Rect bounds, maxBounds = null;
     
     // Iterate over shapes: Fill row & column boundary arrays   (beware of roll/scale/skew)
-    for(int i=0; i<shapeCount; i++) { RMShape shape = theShapes.get(i);
+    for(int i=0; i<shapeCount; i++) { SGView shape = theShapes.get(i);
         
         // Get shape bounds
-        if(shape instanceof RMTextShape)
+        if(shape instanceof SGText)
             bounds = shape.localToParent(shape.getBoundsLocal(),topLevel).getBounds();
         else bounds = shape.localToParent(shape.getBoundsMarked(), topLevel).getBounds();
 
@@ -124,9 +124,9 @@ public static RMShapeTable createTable(List <RMShape> theShapes, RMShape topLeve
             printOverlapWarning(); continue; }
         
         // Create a new cell for shape and add to cells
-        RMShape shape = theShapes.get(i);
+        SGView shape = theShapes.get(i);
         Cell newCell = new Cell(); newCell._cshape = shape;
-        RMShape s = shape; while(s!=null && s.getFill()==null) s = s.getParent();
+        SGView s = shape; while(s!=null && s.getFill()==null) s = s.getParent();
         if(s!=null) newCell.setFill(s.getFill());
         cells[row][col] = newCell;
         
@@ -277,7 +277,7 @@ static boolean _pow;
 /**
  * A class for cells.
  */
-public static class Cell extends RMShape {
+public static class Cell extends SGView {
     
     // Ivars
     int _row, _col, _rspan, _cspan;
@@ -295,7 +295,7 @@ public static class Cell extends RMShape {
     public int getColumnSpan()  { return _cspan; }
     
     /** Returns the shape. */
-    public RMShape getCellShape()  { return _cshape; } RMShape _cshape;
+    public SGView getCellShape()  { return _cshape; } SGView _cshape;
     
     /** Sets values for cell. */
     void setVals(int row, int col, int rspan, int cspan)  { _row = row; _col = col; _rspan = rspan; _cspan = cspan; }

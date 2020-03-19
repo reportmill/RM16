@@ -7,8 +7,8 @@ import reportmill.util.RMGroup;
 import reportmill.util.RMGrouping;
 import reportmill.util.RMKeyChain;
 import reportmill.shape.RMGraph.*;
-import rmdraw.shape.RMParentShape;
-import rmdraw.shape.RMShape;
+import rmdraw.scene.SGParent;
+import rmdraw.scene.SGView;
 import snap.gfx.Color;
 import java.util.*;
 
@@ -36,7 +36,7 @@ abstract class RMGraphRPG {
     List <Color>           _colors;
     
     // The graph shape
-    RMParentShape _graphShape;
+    SGParent _graphShape;
 
 /**
  * Creates a new RMGraphRPG for a graph and a report owner.
@@ -49,7 +49,7 @@ public RMGraphRPG(RMGraph aGraph, ReportOwner anRptOwner)
     // Get dataset: If parent TableRow was found, get dataset from table row group 
     List dataset;
     String datasetKey = _graph.getDatasetKey();
-    RMShape parentTableRow = _graph.getParent(RMTableRow.class);
+    SGView parentTableRow = _graph.getParent(RMTableRow.class);
     if(parentTableRow!=null) {
         
         // If no dataset key, use last data bearing object if RMGroup
@@ -109,12 +109,12 @@ public ReportOwner getReportOwner()  { return _rptOwner; }
 /**
  * Returns the graph shape.
  */
-public RMParentShape getGraphShape()  { return _graphShape; }
+public SGParent getGraphShape()  { return _graphShape; }
 
 /**
  * Creates the graph shape.
  */
-protected abstract RMParentShape createGraphShape();
+protected abstract SGParent createGraphShape();
 
 /**
  * Returns whether section layout is meshed.

@@ -2,13 +2,13 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.shape;
-import rmdraw.shape.RMShape;
+import rmdraw.scene.SGView;
 import snap.util.*;
 
 /**
  * This shape is used by graph area to hold attributes of bars.
  */
-public class RMGraphPartBars extends RMShape {
+public class RMGraphPartBars extends SGView {
 
     // The width of the gap between bars in a set as a fraction of bar width
     float         _barGap = .3f;

@@ -4,8 +4,8 @@
 package reportmill.shape;
 import reportmill.util.RMGroup;
 import reportmill.util.RMGrouping;
-import rmdraw.shape.RMTextShape;
-import rmdraw.shape.SceneGraph;
+import rmdraw.scene.SGText;
+import rmdraw.scene.SceneGraph;
 import snap.geom.Insets;
 import snap.geom.VPos;
 import snap.gfx.*;
@@ -15,7 +15,7 @@ import snap.util.*;
 /**
  * A text shape subclass used to form the basis of a table.
  */
-public class RMCrossTabCell extends RMTextShape {
+public class RMCrossTabCell extends SGText {
 
     // The row this cell originates in
     int           _row = -1;
@@ -251,10 +251,10 @@ public void clearContents()  { setText(""); setGrouping(null); }
 /**
  * Handles painting a crosstab cell.
  */
-protected void paintShape(Painter aPntr)
+protected void paintView(Painter aPntr)
 {
     // Draw normal text
-    super.paintShape(aPntr);
+    super.paintView(aPntr);
     
     // If cell has grouping, paint corner grouping indicator
     if(SceneGraph.isEditing(this) && (isRowHeader() || isColHeader())) {

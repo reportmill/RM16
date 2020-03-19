@@ -6,7 +6,7 @@ import reportmill.util.RMGroup;
 
 import java.util.*;
 
-import rmdraw.shape.*;
+import rmdraw.scene.*;
 import snap.gfx.Font;
 import snap.geom.Rect;
 import snap.text.RichText;
@@ -15,7 +15,7 @@ import snap.util.*;
 /**
  * An inner class for Legend.
  */
-public class RMGraphLegend extends RMParentShape implements ReportGen.RPG {
+public class RMGraphLegend extends SGParent implements ReportGen.RPG {
 
     // The legend text
     String          _legendText;
@@ -63,7 +63,7 @@ public void setFont(Font aFont)  { _font = aFont; }
 /**
  * Override to reset sample legend items if no children.
  */
-public void setParent(RMParentShape aPar)
+public void setParent(SGParent aPar)
 {
     super.setParent(aPar);
     if(getChildCount()==0) resetItems();
@@ -95,13 +95,13 @@ protected void layoutImpl()
  * Override to .
  */
 @Override
-public RMShape rpgAll(ReportOwner anRptOwner, RMShape aParent)
+public SGView rpgAll(ReportOwner anRptOwner, SGView aParent)
 {
     // Do normal clone (rpgShape())
     RMGraphLegend clone = (RMGraphLegend)clone();
     
     // Get Graph RPG and configure
-    RMGraphRPG graphRPG = getGraphRPG((RMParentShape)aParent);
+    RMGraphRPG graphRPG = getGraphRPG((SGParent)aParent);
     clone.configureRPG(graphRPG, true);
     
     // Do bindings and return
@@ -147,13 +147,13 @@ protected void configureRPG(RMGraphRPG graphRPG, boolean doRPG)
     for(int i=0,iMax=strings.size();i<iMax; i++) {
         
         // Create Legend item box
-        RMRectShape box = new RMRectShape();
+        SGRect box = new SGRect();
         box.setFillColor(graphRPG.getColor(i));
         box.setBounds(x,y,16,12); x += 18;
         
         // Create Legend item text
         String text = strings.get(i);
-        RMTextShape label = new RMTextShape();
+        SGText label = new SGText();
         label.setText(text);
         label.setFont(getFont());
         
@@ -187,7 +187,7 @@ private RMGraph getGraph()  { return getParent()!=null? getParent().getChildWith
 /**
  * Returns RMGraphRPG, if parent has RMGraphRPG.GraphShape child.
  */
-private RMGraphRPG getGraphRPG(RMParentShape aParent)
+private RMGraphRPG getGraphRPG(SGParent aParent)
 {
     RMGraphRPG.GraphShape gshp = aParent!=null? aParent.getChildWithClass(RMGraphRPG.GraphShape.class) : null;
     return gshp!=null? gshp.getGraphRPG() : null;
@@ -196,10 +196,10 @@ private RMGraphRPG getGraphRPG(RMParentShape aParent)
 /**
  * XML archival.
  */
-public XMLElement toXMLShape(XMLArchiver anArchiver)
+public XMLElement toXMLView(XMLArchiver anArchiver)
 {
     // Archive basic shape attributes
-    XMLElement e = super.toXMLShape(anArchiver); e.setName("graph-legend");
+    XMLElement e = super.toXMLView(anArchiver); e.setName("graph-legend");
     
     // Archive LegendText
     if(getLegendText()!=null && getLegendText().length()>0) e.add("text", getLegendText());
@@ -209,10 +209,10 @@ public XMLElement toXMLShape(XMLArchiver anArchiver)
 /**
  * XML unarchival.
  */
-public void fromXMLShape(XMLArchiver anArchiver, XMLElement anElement)
+public void fromXMLView(XMLArchiver anArchiver, XMLElement anElement)
 {
     // Unarchive basic shape attributes
-    super.fromXMLShape(anArchiver, anElement);
+    super.fromXMLView(anArchiver, anElement);
     
     // Unarchive LegendText
     setLegendText(anElement.getAttributeValue("text"));

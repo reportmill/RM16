@@ -2,7 +2,7 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.shape;
-import rmdraw.shape.*;
+import rmdraw.scene.*;
 import snap.geom.Path;
 import snap.geom.Rect;
 import snap.gfx.*;
@@ -12,7 +12,7 @@ import snap.util.*;
  * This class wraps a shape around a crosstab to constrain the crosstab's bounds to a region on the page. It
  * also provides support for paginating to multiple pages.
  */
-public class RMCrossTabFrame extends RMParentShape implements ReportGen.RPG {
+public class RMCrossTabFrame extends SGParent implements ReportGen.RPG {
 
     // Whether a paginating table will reprint header rows
     boolean            _reprintHeaderRows = true;
@@ -53,7 +53,7 @@ public void setReprintHeaderRows(boolean aFlag)  { _reprintHeaderRows = aFlag; }
  * Override to constrain child crosstab to frame.
  */
 @Override
-public RMShape rpgAll(ReportOwner anRptOwner, RMShape aParent)
+public SGView rpgAll(ReportOwner anRptOwner, SGView aParent)
 {
     // Get frame clone and CrossTab clone and add
     RMCrossTabFrame rclone = (RMCrossTabFrame)clone(); //new RMCrossTabFrame(); rclone.copyShape(this);
@@ -92,13 +92,13 @@ private void shrinkCrossTabToFitFrameWidth(RMCrossTab ctab)
 /**
  * Paginates frame.
  */
-private RMParentShape paginateFrame(RMCrossTab ctab)
+private SGParent paginateFrame(RMCrossTab ctab)
 {
     // Create ShapeList and while remainder is greater than page height, divide and add
     ReportOwner.ShapeList slist = new ReportOwner.ShapeList(); slist.addChild(this);
     while(ctab.getHeight()>getHeight()) {
-        RMCrossTabFrame frame = new RMCrossTabFrame(); frame.copyShape(this);
-        ctab = (RMCrossTab)ctab.divideShapeFromTop(getHeight()); // Divide clone from top by frame height
+        RMCrossTabFrame frame = new RMCrossTabFrame(); frame.copyView(this);
+        ctab = (RMCrossTab)ctab.divideViewFromTop(getHeight()); // Divide clone from top by frame height
         ctab.setXY(0,0);
         frame.addChild(ctab); // Add to clone shape
         slist.addChild(frame);
@@ -111,10 +111,10 @@ private RMParentShape paginateFrame(RMCrossTab ctab)
 /**
  * Paints crosstab.
  */
-protected void paintShape(Painter aPntr)
+protected void paintView(Painter aPntr)
 {
     // Do normal version
-    super.paintShape(aPntr);
+    super.paintView(aPntr);
     
     // If not editing, just return
     if(!SceneGraph.isEditing(this)) return;
@@ -171,9 +171,9 @@ public boolean childrenSuperSelectImmediately()  { return true; }
 /**
  * XML Archival.
  */
-protected XMLElement toXMLShape(XMLArchiver anArchiver)
+protected XMLElement toXMLView(XMLArchiver anArchiver)
 {
-    XMLElement e = super.toXMLShape(anArchiver); e.setName("cell-table-frame");
+    XMLElement e = super.toXMLView(anArchiver); e.setName("cell-table-frame");
     if(!getReprintHeaderRows()) e.add("reprint-header-rows", false);
     return e;
 }
@@ -181,9 +181,9 @@ protected XMLElement toXMLShape(XMLArchiver anArchiver)
 /**
  * XML Unarchival.
  */
-protected void fromXMLShape(XMLArchiver anArchiver, XMLElement anElement)
+protected void fromXMLView(XMLArchiver anArchiver, XMLElement anElement)
 {
-    super.fromXMLShape(anArchiver, anElement);
+    super.fromXMLView(anArchiver, anElement);
     if(anElement.hasAttribute("reprint-header-rows"))
         setReprintHeaderRows(anElement.getAttributeBoolValue("reprint-header-rows"));
 }

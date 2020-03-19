@@ -10,8 +10,8 @@ import reportmill.util.Entity;
 import reportmill.util.Property;
 import reportmill.util.RMDataSource;
 import reportmill.util.RMKeyChain;
-import rmdraw.shape.RMParentShape;
-import rmdraw.shape.RMShape;
+import rmdraw.scene.SGParent;
+import rmdraw.scene.SGView;
 import reportmill.shape.RMTable;
 import snap.geom.Insets;
 import snap.geom.Polygon;
@@ -110,7 +110,7 @@ public Entity getKeyPathEntity(String aKey)
 public List getKeyPathItems()
 {
     // Get full list key from selected shape and browser
-    RMShape selShape = getSelectedShape();
+    SGView selShape = getSelectedShape();
     String kprfx = selShape.getDatasetKey();
     String ksfx = _keysBrowser.getPath();
     String key = kprfx!=null? (kprfx + '.' + ksfx) : ksfx;
@@ -159,7 +159,7 @@ protected void initUI()
 public void resetUI()
 {
     // Get selected shape and entity
-    RMShape selShape = getSelectedShape();
+    SGView selShape = getSelectedShape();
     Entity entity = !_showBuiltIn? RMDataSourceUtils.getDatasetEntity(selShape) : null;
 
     // If found, set in browser
@@ -239,7 +239,7 @@ public void respondUI(ViewEvent anEvent)
 /**
  * Returns the current editor's selected shape.
  */
-public RMShape getSelectedShape()  { return getEditor().getSelectedOrSuperSelectedShape(); }
+public SGView getSelectedShape()  { return getEditor().getSelOrSuperSelView(); }
 
 /**
  * Returns the window title for this panel.
@@ -346,7 +346,7 @@ public static String getDragKey()  { return _active!=null? _active._dragKey : nu
 /**
  * Drops a drag key.
  */
-public static void dropDragKey(RMShape aShape, ViewEvent anEvent)
+public static void dropDragKey(SGView aShape, ViewEvent anEvent)
 {
     // Get editor
     Editor editor = (Editor)anEvent.getView();
@@ -362,7 +362,7 @@ public static void dropDragKey(RMShape aShape, ViewEvent anEvent)
         aShape.repaint();
         editor.undoerSetUndoTitle("Drag and Drop Key");
         Clipboard cb = anEvent.getClipboard();
-        editor.getCopyPasterDefault().paste(cb, (RMParentShape)aShape, anEvent.getPoint());
+        editor.getCopyPasterDefault().paste(cb, (SGParent)aShape, anEvent.getPoint());
     }
 }
 

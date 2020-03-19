@@ -7,7 +7,7 @@ import reportmill.shape.RMGraphPartSeries.LabelPos;
 import rmdraw.app.Editor;
 import rmdraw.app.Tool;
 import rmdraw.app.ToolStyler;
-import rmdraw.shape.*;
+import rmdraw.scene.*;
 import snap.util.StringUtils;
 import snap.view.*;
 
@@ -22,10 +22,10 @@ public class RMGraphPartSeriesTool <T extends RMGraphPartSeries> extends Tool<T>
     /**
      * Override to return styler for GraphPartSeries.Proxy if available.
      */
-    public ToolStyler getStyler(RMShape aShape)
+    public ToolStyler getStyler(SGView aShape)
     {
         RMGraphPartSeries series = (RMGraphPartSeries)aShape;
-        RMShape proxy = series.getProxy();
+        SGView proxy = series.getProxy();
         if (proxy!=null)
             return getTool(proxy).getStyler(proxy);
         return super.getStyler(aShape);
@@ -107,7 +107,7 @@ public class RMGraphPartSeriesTool <T extends RMGraphPartSeries> extends Tool<T>
 
             // Set Graph.ProxyShape
             RMGraph graph = getSelGraph();
-            RMShape ps = graph.getSeries(ind);
+            SGView ps = graph.getSeries(ind);
             graph.setStyleProxy(ps);
         }
     }
@@ -163,7 +163,7 @@ public class RMGraphPartSeriesTool <T extends RMGraphPartSeries> extends Tool<T>
     public RMGraph getSelGraph()
     {
         Editor e = getEditor(); if(e==null) return null;
-        RMShape selShape = e.getSelectedOrSuperSelectedShape();
+        SGView selShape = e.getSelOrSuperSelView();
         return selShape instanceof RMGraph? (RMGraph)selShape : null;
     }
 

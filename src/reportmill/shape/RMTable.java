@@ -6,9 +6,9 @@ import reportmill.util.RMGrouper;
 import reportmill.util.RMGrouping;
 import java.util.*;
 
-import rmdraw.shape.RMParentShape;
-import rmdraw.shape.RMShape;
-import rmdraw.shape.SceneGraph;
+import rmdraw.scene.SGParent;
+import rmdraw.scene.SGView;
+import rmdraw.scene.SceneGraph;
 import snap.geom.Path;
 import snap.geom.Point;
 import snap.geom.Rect;
@@ -19,7 +19,7 @@ import snap.util.*;
  * This RMShape subclass provides functionality to graphically represent a list of data in a ReportMill report.
  * It also supports data manipulation such as grouping and sorting.
  */
-public class RMTable extends RMParentShape implements ReportGen.RPG {
+public class RMTable extends SGParent implements ReportGen.RPG {
     
     // The key chain used to get a list of objects from document's datasource
     String          _datasetKey;
@@ -199,7 +199,7 @@ public RMTableRow addSummary(String aKey)
 protected void grouperChanged()
 {
     // Get list of all rows and declare variable for row count
-    List <RMShape> allRows = new ArrayList(Arrays.asList(getChildArray()));
+    List <SGView> allRows = new ArrayList(Arrays.asList(getChildArray()));
     int rowCount = 0;
     
     // Iterate over groupings to add header and details bands for each grouping key if appropriate
@@ -238,7 +238,7 @@ protected void grouperChanged()
     }
     
     // Remove any superfluous rows
-    for(RMShape shape : allRows)
+    for(SGView shape : allRows)
         removeChild(shape);
 }
 
@@ -321,7 +321,7 @@ public RMTableRow getRow(String aName)  { return (RMTableRow)getChildWithTitle(a
 /**
  * Returns a specific child with the given name.
  */
-public RMShape getChildWithTitle(String aTitle)
+public SGView getChildWithTitle(String aTitle)
 {
     for(int i=0, iMax=getChildCount(); i<iMax; i++) { RMTableRow child = getRow(i);
         if(child.getTitle().equals(aTitle))
@@ -370,7 +370,7 @@ protected void layoutImpl()
 {
     // Iterate over table rows and reset successive y values based on cumulative height of preceding rows
     double y = 0, maxy = getChildCount()>0? getChildLast().getMaxY() : 0;
-    for(int i=0, iMax=getChildCount(); i<iMax; i++) { RMShape child = getChild(i);
+    for(int i=0, iMax=getChildCount(); i<iMax; i++) { SGView child = getChild(i);
         child.setXY(0, y); y += child.getHeight() + 16;
         child.setWidth(getWidth());
     }
@@ -383,7 +383,7 @@ protected void layoutImpl()
  * Report generation for table.
  */
 @Override
-public RMShape rpgAll(ReportOwner anOwner, RMShape aParent)
+public SGView rpgAll(ReportOwner anOwner, SGView aParent)
 {
     return new RMTableRPG(anOwner, this).rpgAll();
 }
@@ -391,10 +391,10 @@ public RMShape rpgAll(ReportOwner anOwner, RMShape aParent)
 /**
  * Paints a table shape.
  */
-protected void paintShape(Painter aPntr)
+protected void paintView(Painter aPntr)
 {
     // Call normal paintShape (just return if not editing)
-    super.paintShape(aPntr);
+    super.paintView(aPntr);
     if (!SceneGraph.isEditing(this)) return;
     
     // Get table bounds and fill table base rect with light gray
@@ -477,7 +477,7 @@ protected void paintShape(Painter aPntr)
                 
                 // Find selected column and highlight it
                 if (child.isStructured())
-                    for (int j=0, jMax=child.getChildCount(); j<jMax; j++) { RMShape trChild = child.getChild(j);
+                    for (int j=0, jMax=child.getChildCount(); j<jMax; j++) { SGView trChild = child.getChild(j);
                         if (SceneGraph.isSuperSelectedLeaf(trChild)) {
                             Rect colRect = child.localToParent(trChild.getBounds().getInsetRect(-1)).getBounds();
                             aPntr.setColor(Color.RED); aPntr.draw(colRect); break;
@@ -491,10 +491,10 @@ protected void paintShape(Painter aPntr)
 /**
  * Paints stroke around table after all children have drawn.
  */
-protected void paintShapeOver(Painter aPntr)
+protected void paintOver(Painter aPntr)
 {
     // Do normal version
-    super.paintShapeOver(aPntr);
+    super.paintOver(aPntr);
     
     // If table already draws stroke or if not editing, just return
     if(getBorder()!=null || !SceneGraph.isEditing(this)) return;
@@ -523,10 +523,10 @@ public RMTable clone()
 /**
  * XML archival.
  */
-protected XMLElement toXMLShape(XMLArchiver anArchiver)
+protected XMLElement toXMLView(XMLArchiver anArchiver)
 {
     // Archive basic shape attributes and reset element name
-    XMLElement e = super.toXMLShape(anArchiver); e.setName("table");
+    XMLElement e = super.toXMLView(anArchiver); e.setName("table");
     
     // Archive DatasetKey, FilterKey
     if(_datasetKey!=null && _datasetKey.length()>0) e.add("list-key", _datasetKey);
@@ -549,10 +549,10 @@ protected XMLElement toXMLShape(XMLArchiver anArchiver)
 /**
  * XML unarchival.
  */
-protected void fromXMLShape(XMLArchiver anArchiver, XMLElement anElement)
+protected void fromXMLView(XMLArchiver anArchiver, XMLElement anElement)
 {
     // Unarchive basic shape attributes and split shape attributes
-    super.fromXMLShape(anArchiver, anElement);
+    super.fromXMLView(anArchiver, anElement);
     
     // Unarchive DatasetKey, FilterKey
     setDatasetKey(anElement.getAttributeValue("list-key"));
@@ -574,7 +574,7 @@ protected void fromXMLChildren(XMLArchiver anArchiver, XMLElement anElement)
     for(int i=0, iMax=anElement.size(); i<iMax; i++) { XMLElement childXML = anElement.get(i);
         Class childClass = anArchiver.getClass(childXML.getName());
         if(childClass!=null && RMTableRow.class.isAssignableFrom(childClass)) {
-            RMShape shape = (RMTableRow)anArchiver.fromXML(childXML, this);
+            SGView shape = (RMTableRow)anArchiver.fromXML(childXML, this);
             addChild(shape);
         }
     }

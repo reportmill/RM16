@@ -5,7 +5,7 @@ package reportmill.out;
 import reportmill.shape.RMPDFData;
 import reportmill.shape.RMPDFShape;
 import rmdraw.gfx3d.*;
-import rmdraw.shape.*;
+import rmdraw.scene.*;
 import java.util.*;
 
 import snap.geom.Insets;
@@ -29,7 +29,7 @@ public class RMShapePdfrs {
 /**
  * This class generates PDF for an RMText.
  */
-public static class RMTextShapePdfr <T extends RMTextShape> extends RMShapePdfr <T> {
+public static class RMTextShapePdfr <T extends SGText> extends RMShapePdfr <T> {
 
     /** Writes a given RMShape hierarchy to a PDF file (recursively). */
     protected void writeShape(T aTextShape, RMPDFWriter aWriter)
@@ -50,7 +50,7 @@ public static class RMTextShapePdfr <T extends RMTextShape> extends RMShapePdfr 
         String text = aTextShape.getText(), pdfText = text!=null && text.length()>0? '(' + text + ')' : null;
         
         // Get ViewShape frame in PDF page coords (minus text insets)
-        RMShape page = aTextShape.getPage();
+        SGView page = aTextShape.getPage();
         Rect frame = aTextShape.localToParent(aTextShape.getBoundsLocal(), page).getBounds();
         frame.y = page.getHeight() - frame.getMaxY();
         Insets ins = aTextShape.getMargin(); frame.x += ins.left; frame.y += ins.bottom;
@@ -86,7 +86,7 @@ public static class RMTextShapePdfr <T extends RMTextShape> extends RMShapePdfr 
 /**
  * PDF writer for RMImageShape.
  */
-public static class RMImageShapePdfr <T extends RMImageShape> extends RMShapePdfr <T> {
+public static class RMImageShapePdfr <T extends SGImage> extends RMShapePdfr <T> {
 
     /** Override to write Image. */
     protected void writeShape(T anImageShape, RMPDFWriter aWriter)
@@ -168,7 +168,7 @@ public static class RMPDFShapePdfr <T extends RMPDFShape> extends RMShapePdfr <T
 /**
  * This RMShapePdfr subclass writes PDF for RMPage.
  */
-public static class RMPagePdfr <T extends RMPage> extends RMShapePdfr <T> {
+public static class RMPagePdfr <T extends SGPage> extends RMShapePdfr <T> {
 
     /** Writes a given RMShape hierarchy to a PDF file (recursively). */
     protected void writeShapeBefore(T aPageShape, RMPDFWriter aWriter)
@@ -194,7 +194,7 @@ public static class RMPagePdfr <T extends RMPage> extends RMShapePdfr <T> {
 /**
  * This class generates PDF for an RMScene3D.
  */
-public static class RMScene3DPdfr <T extends RMScene3D> extends RMShapePdfr <T> {
+public static class RMScene3DPdfr <T extends SGScene3D> extends RMShapePdfr <T> {
 
     /** Writes a given RMShape hierarchy to a PDF file (recursively). */
     protected void writeShape(T aScene3D, RMPDFWriter aWriter)
@@ -213,7 +213,7 @@ public static class RMScene3DPdfr <T extends RMScene3D> extends RMShapePdfr <T> 
     }
     
     /** Writes a path. */
-    protected void writePath(RMScene3D aScene3D, Path3D aPath, PDFWriter aWriter)
+    protected void writePath(SGScene3D aScene3D, Path3D aPath, PDFWriter aWriter)
     {
         // Get path, fill and stroke
         Shape path = aPath.getPath();

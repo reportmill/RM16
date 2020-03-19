@@ -1,7 +1,7 @@
 package reportmill.shape;
 import reportmill.util.RMKeyChain;
 import reportmill.util.RMTableOfContents;
-import rmdraw.shape.*;
+import rmdraw.scene.*;
 import snap.text.RichText;
 import snap.geom.VPos;
 import snap.util.ListUtils;
@@ -18,15 +18,15 @@ public class ReportGens {
     /**
      * A ReportGen subclass for ImageCell.
      */
-    public static class ImageCellRPG<T extends RMImageShape> extends ReportGen<T> {
+    public static class ImageCellRPG<T extends SGImage> extends ReportGen<T> {
 
         /**
          * Report generation method.
          */
-        public RMShape rpgShape(ReportOwner aRptOwner, RMShape aParent)
+        public SGView rpgShape(ReportOwner aRptOwner, SGView aParent)
         {
             // Do normal version
-            RMImageShape clone = (RMImageShape) super.rpgShape(aRptOwner, aParent);
+            SGImage clone = (SGImage) super.rpgShape(aRptOwner, aParent);
 
             // If key: Evaluate key for image and set
             T imageCell = getShape();
@@ -61,15 +61,15 @@ public class ReportGens {
     /**
      * A ReportGen subclass for TextCell.
      */
-    public static class TextCellRPG<T extends RMTextShape> extends ReportGen<T> {
+    public static class TextCellRPG<T extends SGText> extends ReportGen<T> {
 
         /**
          * Report generation method.
          */
-        public RMShape rpgShape(ReportOwner anRptOwner, RMShape aParent)
+        public SGView rpgShape(ReportOwner anRptOwner, SGView aParent)
         {
-            RMTextShape textCell = getShape();
-            RMTextShape clone = textCell.clone();
+            SGText textCell = getShape();
+            SGText clone = textCell.clone();
             RichText rtext = clone.getRichText();
 
             // Do xstring RPG (if no change due to RPG, just use normal) with FirePropChangeEnabled turned off
@@ -87,7 +87,7 @@ public class ReportGens {
                 rtext.removeChars(end, len);
 
             // If WRAP_SCALE, set FitText ivar
-            if (textCell.getWraps() == RMTextShape.WRAP_SCALE)
+            if (textCell.getWraps() == SGText.WRAP_SCALE)
                 clone.setFitText(true);
 
             // Enable string FirePropChangeEnabled and revalidate
@@ -95,9 +95,9 @@ public class ReportGens {
             clone.revalidate();
 
             // If paginating, swap in paginated parts (disable in table row)
-            if (textCell.getWraps() == RMTextShape.WRAP_BASIC && !(textCell.getParent() instanceof RMTableRow)) {
+            if (textCell.getWraps() == SGText.WRAP_BASIC && !(textCell.getParent() instanceof RMTableRow)) {
                 ReportOwner.ShapeList shapes = new ReportOwner.ShapeList();
-                for (RMTextShape text : paginate(clone))
+                for (SGText text : paginate(clone))
                     shapes.addChild(text);
                 return shapes;
             }
@@ -109,10 +109,10 @@ public class ReportGens {
         /**
          * Paginates this text by creating linked texts to show all text and returns list of this text and linked texts.
          */
-        protected List<RMTextShape> paginate(RMTextShape textCell)
+        protected List<SGText> paginate(SGText textCell)
         {
             // Create pages list with this text in it
-            List<RMTextShape> pages = new ArrayList();
+            List<SGText> pages = new ArrayList();
             pages.add(textCell);
 
             // Cache vertical alignment and set to Top
@@ -120,9 +120,9 @@ public class ReportGens {
             textCell.setAlignY(VPos.TOP);
 
             // Get linked texts until all text visible
-            RMTextShape text = textCell;
+            SGText text = textCell;
             while (!text.isAllTextVisible()) {
-                text = new RMLinkedText(text);
+                text = new SGLinkedText(text);
                 pages.add(text);
             }
 
@@ -141,7 +141,7 @@ public class ReportGens {
             super.resolvePageReferences(aRptOwner, userInfo);
 
             // RPG clone RichText again and set
-            RMTextShape textCell = getShape();
+            SGText textCell = getShape();
             RichText rtext = textCell.getRichText();
             RichText clone = aRptOwner.rpgCloneRichText(rtext, userInfo, null, true);
             textCell.setRichText(clone);
@@ -170,33 +170,33 @@ public class ReportGens {
     /**
      * A ReportGen subclass for ParentCell.
      */
-    public static class ParentCellRPG<T extends RMParentShape> extends ReportGen<T> {
+    public static class ParentCellRPG<T extends SGParent> extends ReportGen<T> {
 
         /**
          * Generate report with report owner.
          */
-        public RMShape rpgAll(ReportOwner anRptOwner, RMShape aParent)
+        public SGView rpgAll(ReportOwner anRptOwner, SGView aParent)
         {
             // Do normal version
-            RMParentShape clone = (RMParentShape) super.rpgAll(anRptOwner, aParent);
+            SGParent clone = (SGParent) super.rpgAll(anRptOwner, aParent);
 
             // Call rpgChildren and return
             T cell = getShape();
-            clone = (RMParentShape) ReportGen.rpgChildrenFor(cell, anRptOwner, clone);
+            clone = (SGParent) ReportGen.rpgChildrenFor(cell, anRptOwner, clone);
             return clone;
         }
 
         /**
          * Generate report with report owner.
          */
-        protected RMShape rpgChildren(ReportOwner anRptOwner, RMParentShape aParent)
+        protected SGView rpgChildren(ReportOwner anRptOwner, SGParent aParent)
         {
-            RMParentShape parentCell = getShape();
-            RMParentShape parent = aParent;
+            SGParent parentCell = getShape();
+            SGParent parent = aParent;
             ReportOwner.ShapeList slists[] = null;
             for (int i = 0, iMax = parentCell.getChildCount(); i < iMax; i++) {
-                RMShape child = parentCell.getChild(i);
-                RMShape crpg = anRptOwner.rpg(child, aParent);
+                SGView child = parentCell.getChild(i);
+                SGView crpg = anRptOwner.rpg(child, aParent);
                 if (crpg instanceof ReportOwner.ShapeList) {
                     if (slists == null) slists = new ReportOwner.ShapeList[iMax];
                     slists[i] = (ReportOwner.ShapeList) crpg;
@@ -213,13 +213,13 @@ public class ReportGens {
                 parent = new ReportOwner.ShapeList();
                 parent.addChild(aParent);
                 for (int i = 1; i < iMax; i++) {
-                    RMParentShape page = parentCell.clone();
+                    SGParent page = parentCell.clone();
                     parent.addChild(page);
                     for (int j = 0; j < slists.length; j++) {
                         ReportOwner.ShapeList slist = slists[j];
                         if (slist == null) {
-                            RMShape ch = aParent.getChild(j);
-                            RMShape clone = ch.cloneDeep();
+                            SGView ch = aParent.getChild(j);
+                            SGView clone = ch.cloneDeep();
                             page.addChild(clone);
                             if (ListUtils.containsId(anRptOwner.getPageReferenceShapes(), ch))
                                 anRptOwner.addPageReferenceShape(clone);
@@ -237,15 +237,15 @@ public class ReportGens {
     /**
      * A ReportGen subclass for PageCell.
      */
-    public static class PageCellRPG<T extends RMPage> extends ParentCellRPG<T> {
+    public static class PageCellRPG<T extends SGPage> extends ParentCellRPG<T> {
 
         /**
          * Returns a report page.
          */
-        public RMShape rpgAll(ReportOwner anRptOwner, RMShape aParent)
+        public SGView rpgAll(ReportOwner anRptOwner, SGView aParent)
         {
             // Get page objects - if none, do normal version and return
-            RMPage pageCell = getShape();
+            SGPage pageCell = getShape();
             String datasetKey = pageCell.getDatasetKey();
             List objects = datasetKey != null ? anRptOwner.getKeyChainListValue(datasetKey) : null;
             if (objects == null)
@@ -258,10 +258,10 @@ public class ReportGens {
             for (int i = 0, iMax = objects.size(); i < iMax; i++) {
                 Object obj = objects.get(i);
                 anRptOwner.pushDataStack(obj);
-                RMParentShape prpg = (RMParentShape) super.rpgAll(anRptOwner, aParent);
+                SGParent prpg = (SGParent) super.rpgAll(anRptOwner, aParent);
                 anRptOwner.popDataStack();
                 if (prpg instanceof ReportOwner.ShapeList)
-                    for (RMShape c : prpg.getChildArray())
+                    for (SGView c : prpg.getChildArray())
                         pagesShape.addChild(c);
                 else pagesShape.addChild(prpg);
             }
@@ -273,24 +273,24 @@ public class ReportGens {
         /**
          * Override to handle pagination.
          */
-        protected RMShape rpgChildren(ReportOwner anRptOwner, RMParentShape aParent)
+        protected SGView rpgChildren(ReportOwner anRptOwner, SGParent aParent)
         {
             // If paginating, just do normal version
             if (anRptOwner.getPaginate())
                 return super.rpgChildren(anRptOwner, aParent);
 
             // Otherwise, generate rpg children to RMSpringShape
-            RMSpringShape springShape = new RMSpringShape();
+            SGSpringsView springShape = new SGSpringsView();
             springShape.setSize(aParent.getWidth(), aParent.getHeight());
-            RMShape page = super.rpgChildren(anRptOwner, springShape);
+            SGView page = super.rpgChildren(anRptOwner, springShape);
 
             // Set best height with springs and propogate to given parent
             springShape.setBestHeight();
             aParent.setSize(springShape.getWidth(), springShape.getHeight());
 
             // Add children back to given parent
-            RMShape children[] = springShape.getChildren().toArray(new RMShape[0]);
-            for (RMShape child : children)
+            SGView children[] = springShape.getChildren().toArray(new SGView[0]);
+            for (SGView child : children)
                 aParent.addChild(child);
 
             // Return given parent
@@ -301,29 +301,29 @@ public class ReportGens {
     /**
      * A ReportGen subclass for PageCell.
      */
-    public static class DocCellRPG<T extends RMDocument> extends ParentCellRPG<T> {
+    public static class DocCellRPG<T extends SGDoc> extends ParentCellRPG<T> {
 
         /**
          * Override to handle ShapeLists special.
          */
-        protected RMShape rpgChildren(ReportOwner anRptOwner, RMParentShape aParent)
+        protected SGView rpgChildren(ReportOwner anRptOwner, SGParent aParent)
         {
             // Declare local variable for whether table of contents page was encountered
-            RMPage tableOfContentsPage = null; int tocPageIndex = 0;
+            SGPage tableOfContentsPage = null; int tocPageIndex = 0;
 
-            RMDocument docCell = getShape();
-            RMDocument doc = (RMDocument)aParent;
-            for(int i=0, iMax=docCell.getChildCount(); i<iMax; i++) { RMPage page = docCell.getPage(i);
+            SGDoc docCell = getShape();
+            SGDoc doc = (SGDoc)aParent;
+            for(int i=0, iMax=docCell.getChildCount(); i<iMax; i++) { SGPage page = docCell.getPage(i);
 
                 // Check for table of contents table
                 if(RMTableOfContents.checkForTableOfContents(page)) {
                     tableOfContentsPage = page; tocPageIndex = aParent.getChildCount(); continue; }
 
                 // Generate report and add results
-                RMParentShape crpg = (RMParentShape)anRptOwner.rpg(page, doc);
+                SGParent crpg = (SGParent)anRptOwner.rpg(page, doc);
                 if(crpg instanceof ReportOwner.ShapeList) {
-                    for(RMShape pg : crpg.getChildArray()) doc.addPage((RMPage)pg); }
-                else doc.addPage((RMPage)crpg);
+                    for(SGView pg : crpg.getChildArray()) doc.addPage((SGPage)pg); }
+                else doc.addPage((SGPage)crpg);
             }
 
             // Do RPG for TableOfContentsPage

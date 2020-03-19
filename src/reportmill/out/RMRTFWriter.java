@@ -3,7 +3,7 @@
  */
 package reportmill.out;
 import reportmill.shape.RMCrossTabCell;
-import rmdraw.shape.*;
+import rmdraw.scene.*;
 import java.io.*;
 import java.util.*;
 
@@ -38,7 +38,7 @@ public class RMRTFWriter {
 /**
  * Returns RTF bytes for given document.
  */
-public byte[] getBytes(RMDocument aDoc)
+public byte[] getBytes(SGDoc aDoc)
 {
     // Validate and resolve page references
     aDoc.layoutDeep();
@@ -165,7 +165,7 @@ public int twip(double x)  { return (int)(20*x); }
 /**
  * Returns RTF for document Shapes.
  */
-public byte[] getRTFForShapes(RMDocument aDoc)
+public byte[] getRTFForShapes(SGDoc aDoc)
 {
     ByteArrayOutputStream outs = new ByteArrayOutputStream();
     PrintStream ps = new PrintStream(outs);
@@ -194,14 +194,14 @@ public byte[] getRTFForShapes(RMDocument aDoc)
 /**
  * Returns a new list with all the shapes to be output.
  */
-List getRTFShapes(RMShape parent)  { List shapes = new ArrayList(); getRTFShapes(parent, shapes); return shapes; }
+List getRTFShapes(SGView parent)  { List shapes = new ArrayList(); getRTFShapes(parent, shapes); return shapes; }
 
 /**
  * Similar to Excel getSheetShapes(), which pulls out shapes that should be placed inside a table.  In the case of RTF,
  * however, everything goes in a table.  Therefore this routine just pulls out anything that we know how
  * to put in an rtf file. Anything weird we can use the jpg stuff to turn into an image.
  */
-void getRTFShapes(RMShape aShape, List aList)
+void getRTFShapes(SGView aShape, List aList)
 {
     if(!aShape.isVisible()) return; // If shape not visible, just return
     if(isRTFShape(aShape)) aList.add(aShape); // Add rtf for shape
@@ -212,16 +212,16 @@ void getRTFShapes(RMShape aShape, List aList)
 /**
  * Returns true if this shape should can be represented in the rtf.
  */
-boolean isRTFShape(RMShape aShape)
+boolean isRTFShape(SGView aShape)
 {
-    return aShape instanceof RMRectShape || aShape instanceof RMImageShape || aShape instanceof RMOvalShape ||
-        aShape instanceof RMPolygonShape || aShape instanceof RMScene3D;
+    return aShape instanceof SGRect || aShape instanceof SGImage || aShape instanceof SGOval ||
+        aShape instanceof SGPolygon || aShape instanceof SGScene3D;
 }
 
-public void appendRTF(RMShape aShape, PrintStream ps)
+public void appendRTF(SGView aShape, PrintStream ps)
 {
     // Table representing the page is placed relative to margins of the page, whereas nested tables are relative to ...
-    if(aShape instanceof RMPage) {
+    if(aShape instanceof SGPage) {
         Rect bounds = null; //((RMPage)aShape).getDocument().getMarginRect();
         RMShapeTable cells = RMShapeTable.createTable(getRTFShapes(aShape), aShape, bounds);
         appendTable(cells, ps);
@@ -236,7 +236,7 @@ public void appendRTF(RMShape aShape, PrintStream ps)
             aShape = ((RMShapeTable.Cell)aShape).getCellShape();
         
         // Append text or image for shape
-        if(aShape instanceof RMTextShape) appendText(((RMTextShape)aShape).getRichText(), ps);
+        if(aShape instanceof SGText) appendText(((SGText)aShape).getRichText(), ps);
         else appendImageBytesForShape(aShape, ps);
     }
 }
@@ -303,7 +303,7 @@ public void appendTable(RMShapeTable table, PrintStream ps)
             ps.print("\\clheight"+twip(rmcell.getHeight()));
             
             // Cell borders
-            RMShape cshape = rmcell.getCellShape();
+            SGView cshape = rmcell.getCellShape();
             RMCrossTabCell ctcell = cshape instanceof RMCrossTabCell? (RMCrossTabCell)cshape : null;
             ps.print("\\clbrdrt"+RTFBorderStyle(ctcell!=null && ctcell.isShowTopBorder(),20));
             ps.print("\\clbrdrb"+RTFBorderStyle(ctcell!=null && ctcell.isShowBottomBorder(),20));
@@ -449,9 +449,9 @@ public String RTFBorderStyle(boolean show, int width)  { return show? ("\\brdrs\
 /**
  * Convert the shape into an image stream and embedd that into the rtf.
  */
-public void appendImageBytesForShape(RMShape s, PrintStream ps) 
+public void appendImageBytesForShape(SGView s, PrintStream ps)
 {
-    Image img = RMShapeUtils.createImage(s, Color.WHITE);
+    Image img = SGViewUtils.createImage(s, Color.WHITE);
     byte[] pngBytes = img.getBytesPNG(); if(pngBytes==null) return;
     
     // The image code above uses getBoundsMarked(), so a rectangle of 100x100 might wind up returning an image of

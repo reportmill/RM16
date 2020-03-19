@@ -8,8 +8,8 @@ import reportmill.util.RMSort;
 
 import java.util.List;
 
-import rmdraw.shape.RMParentShape;
-import rmdraw.shape.RMShape;
+import rmdraw.scene.SGParent;
+import rmdraw.scene.SGView;
 import snap.geom.Rect;
 import snap.gfx.*;
 import snap.util.*;
@@ -17,7 +17,7 @@ import snap.util.*;
 /**
  * This class represents a block of labels.
  */
-public class RMLabels extends RMParentShape implements ReportGen.RPG {
+public class RMLabels extends SGParent implements ReportGen.RPG {
     
     // Dataset key used to get objects during RPG
     String           _datasetKey;
@@ -175,7 +175,7 @@ public void fixSize()
  * Report Generation.
  */
 @Override
-public RMShape rpgAll(ReportOwner anRptOwner, RMShape aParent)
+public SGView rpgAll(ReportOwner anRptOwner, SGView aParent)
 {
     // Get objects for labels, group and sort
     List objects = anRptOwner.getKeyChainListValue(_datasetKey);
@@ -190,7 +190,7 @@ public RMShape rpgAll(ReportOwner anRptOwner, RMShape aParent)
     RMLabel label = getLabel();
 
     // Top level group represents explicit page breaks, create shape for each page, set DataBearing object and fill
-    RMParentShape page = null;
+    SGParent page = null;
     for(int i=-1, j=-1, k=0, kMax=group.size(); k<kMax; k++) {
 
         // Adjust i & j
@@ -200,7 +200,7 @@ public RMShape rpgAll(ReportOwner anRptOwner, RMShape aParent)
 
         // If at beginning of new page, create and add new page shape
         if(i==0 && j==0) {
-            page = new RMParentShape(); page.copyShape(this);
+            page = new SGParent(); page.copyView(this);
             pages.addChild(page);
         }
 
@@ -209,7 +209,7 @@ public RMShape rpgAll(ReportOwner anRptOwner, RMShape aParent)
         
         // Add object to data bearing objects, do rpg, and remove
         anRptOwner.pushDataStack(object);
-        RMParentShape newLabel = (RMParentShape)anRptOwner.rpg(label, page);
+        SGParent newLabel = (SGParent)anRptOwner.rpg(label, page);
         anRptOwner.popDataStack();
         
         // Add new label
@@ -222,7 +222,7 @@ public RMShape rpgAll(ReportOwner anRptOwner, RMShape aParent)
     }
     
     // Make sure there's at least one page
-    if(pages.getChildCount()==0) { page = new RMParentShape(); page.copyShape(this); pages.addChild(page); }
+    if(pages.getChildCount()==0) { page = new SGParent(); page.copyView(this); pages.addChild(page); }
     
     // Return pages
     return pages;
@@ -231,7 +231,7 @@ public RMShape rpgAll(ReportOwner anRptOwner, RMShape aParent)
 /**
  * Paint labels shapes.
  */
-protected void paintShape(Painter aPntr)
+protected void paintView(Painter aPntr)
 {
     // Get labels bounds
     Rect bounds = getBoundsLocal();
@@ -241,7 +241,7 @@ protected void paintShape(Painter aPntr)
     aPntr.draw(bounds);
 
     // Paint shape normally
-    super.paintShape(aPntr);
+    super.paintView(aPntr);
 
     // Get labels template shape
     RMLabel label = getLabel();
@@ -275,10 +275,10 @@ public boolean childrenSuperSelectImmediately()  { return true; }
 /**
  * XML archival.
  */
-protected XMLElement toXMLShape(XMLArchiver anArchiver)
+protected XMLElement toXMLView(XMLArchiver anArchiver)
 {
     // Archive basic shape attributes and reset element name
-    XMLElement e = super.toXMLShape(anArchiver); e.setName("labels");
+    XMLElement e = super.toXMLView(anArchiver); e.setName("labels");
     
     // Archive DatasetKey, Sorts, NumberOfRows, NumberOfColumns, SpacingWidth, SpacingHeight
     if(_datasetKey!=null && _datasetKey.length()>0) e.add("list-key", _datasetKey);
@@ -295,10 +295,10 @@ protected XMLElement toXMLShape(XMLArchiver anArchiver)
 /**
  * XML unarchival.
  */
-protected void fromXMLShape(XMLArchiver anArchiver, XMLElement anElement)
+protected void fromXMLView(XMLArchiver anArchiver, XMLElement anElement)
 {
     // Unarchive basic shape attributes
-    super.fromXMLShape(anArchiver, anElement);
+    super.fromXMLView(anArchiver, anElement);
     
     // Unarchive DatasetKey, Sorts
     setDatasetKey(anElement.getAttributeValue("list-key"));

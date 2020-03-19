@@ -3,7 +3,7 @@ import reportmill.util.RMDateFormat;
 import reportmill.util.RMGrouper;
 import reportmill.util.RMGrouping;
 import reportmill.util.RMNumberFormat;
-import rmdraw.shape.RMArchiver;
+import rmdraw.scene.RMArchiver;
 import snap.util.XMLArchiver;
 import snap.util.XMLElement;
 import java.util.Map;

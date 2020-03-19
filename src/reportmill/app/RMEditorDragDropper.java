@@ -2,8 +2,8 @@ package reportmill.app;
 import rmdraw.app.Editor;
 import rmdraw.app.EditorDragDropper;
 import reportmill.shape.RMPDFShape;
-import rmdraw.shape.RMParentShape;
-import rmdraw.shape.RMShape;
+import rmdraw.scene.SGParent;
+import rmdraw.scene.SGView;
 import snap.geom.Point;
 import snap.view.ClipboardData;
 import snap.view.ViewEvent;
@@ -24,7 +24,7 @@ public class RMEditorDragDropper extends EditorDragDropper {
     /**
      * Called to drop string.
      */
-    public void dropForView(RMShape aView, ViewEvent anEvent)
+    public void dropForView(SGView aView, ViewEvent anEvent)
     {
         // If a binding key drop, apply binding
         if (KeysPanel.getDragKey()!=null)
@@ -47,20 +47,20 @@ public class RMEditorDragDropper extends EditorDragDropper {
     /**
      * Called to handle an PDF file drop on the editor.
      */
-    protected void dropPDFFile(RMShape aShape, ClipboardData aFile, Point aPoint)
+    protected void dropPDFFile(SGView aShape, ClipboardData aFile, Point aPoint)
     {
         // Get image source
         Object imgSrc = aFile.getSourceURL()!=null? aFile.getSourceURL() : aFile.getBytes();
 
         // If image hit a real shape, see if user wants it to be a texture
         Editor editor = getEditor();
-        RMShape shape = aShape;
+        SGView shape = aShape;
         while(!editor.getToolForView(shape).getAcceptsChildren(shape))
             shape = shape.getParent();
 
         // Get parent to add image shape to and drop point in parent coords
-        RMParentShape parent = shape instanceof RMParentShape? (RMParentShape)shape : shape.getParent();
-        Point point = editor.convertToShape(aPoint.x, aPoint.y, parent);
+        SGParent parent = shape instanceof SGParent ? (SGParent)shape : shape.getParent();
+        Point point = editor.convertToSceneView(aPoint.x, aPoint.y, parent);
 
         // Create new PDF shape
         RMPDFShape pdfShape = new RMPDFShape(imgSrc);
@@ -74,7 +74,7 @@ public class RMEditorDragDropper extends EditorDragDropper {
         parent.addChild(pdfShape);
 
         // Select imageShape and SelectTool
-        editor.setSelectedShape(pdfShape);
+        editor.setSelView(pdfShape);
         editor.setCurrentToolToSelectTool();
     }
 }

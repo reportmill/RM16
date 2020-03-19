@@ -4,7 +4,7 @@
 package reportmill.shape;
 import reportmill.util.RMGroup;
 import reportmill.util.RMKeyChain;
-import rmdraw.shape.RMShape;
+import rmdraw.scene.SGView;
 
 import java.util.*;
 
@@ -114,7 +114,7 @@ public static class Item {
     Number       _value;
     
     // The bar created for this series value
-    RMShape _bar;
+    SGView _bar;
     
     /** Creates a new series value. */
     public Item(String aKey, RMGroup aGroup)  { _key = aKey; _group = aGroup; }
@@ -139,10 +139,10 @@ public static class Item {
     public float getFloatValue()  { return getValue().floatValue(); }
     
     /** Returns the bar created for this series value. */
-    public RMShape getBar()  { return _bar; }
+    public SGView getBar()  { return _bar; }
     
     /** Sets the bar created for this series value. */
-    public void setBar(RMShape aBar)  { _bar = aBar; }
+    public void setBar(SGView aBar)  { _bar = aBar; }
 }
 
 }

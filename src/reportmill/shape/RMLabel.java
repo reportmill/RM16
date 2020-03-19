@@ -2,8 +2,8 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.shape;
-import rmdraw.shape.RMParentShape;
-import rmdraw.shape.SceneGraph;
+import rmdraw.scene.SGParent;
+import rmdraw.scene.SceneGraph;
 import snap.geom.Rect;
 import snap.gfx.*;
 import snap.util.*;
@@ -11,7 +11,7 @@ import snap.util.*;
 /**
  * This class represents an individual label inside an RMLabels template.
  */
-public class RMLabel extends RMParentShape {
+public class RMLabel extends SGParent {
 
 /**
  * Editor method - indicates that individual label accepts children.
@@ -21,10 +21,10 @@ public boolean acceptsChildren()  { return true; }
 /**
  * Paints label.
  */
-protected void paintShape(Painter aPntr)
+protected void paintView(Painter aPntr)
 {
     // Do normal paint shape
-    super.paintShape(aPntr);
+    super.paintView(aPntr);
     
     // Table bands should draw a red band around thier perimeter when it is selected
     boolean selected = SceneGraph.isSelected(this) || SceneGraph.isSuperSelected(this);
@@ -40,10 +40,10 @@ protected void paintShape(Painter aPntr)
 /**
  * XML archival.
  */
-protected XMLElement toXMLShape(XMLArchiver anArchiver)
+protected XMLElement toXMLView(XMLArchiver anArchiver)
 {
     // Archive basic shape attributes and reset element name
-    XMLElement e = super.toXMLShape(anArchiver); e.setName("label");
+    XMLElement e = super.toXMLView(anArchiver); e.setName("label");
     return e;
 }
 

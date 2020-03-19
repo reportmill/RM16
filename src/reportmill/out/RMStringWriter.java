@@ -6,7 +6,7 @@ import reportmill.shape.RMCrossTab;
 import reportmill.shape.RMCrossTabCell;
 import reportmill.shape.RMCrossTabRow;
 import reportmill.shape.RMTableRowRPG;
-import rmdraw.shape.*;
+import rmdraw.scene.*;
 import snap.text.RichText;
 
 import java.util.*;
@@ -19,7 +19,7 @@ public class RMStringWriter {
 /**
  * Returns a byte array holding an ASCII representation of a given document.
  */
-public static byte[] delimitedAsciiBytes(RMDocument aDoc, String fieldDelim, String recordDelim, boolean quoteFields)
+public static byte[] delimitedAsciiBytes(SGDoc aDoc, String fieldDelim, String recordDelim, boolean quoteFields)
 {
     // Generate delimited string
     String s = delimitedString(aDoc, fieldDelim, recordDelim, quoteFields);
@@ -32,7 +32,7 @@ public static byte[] delimitedAsciiBytes(RMDocument aDoc, String fieldDelim, Str
 /**
  * Returns a String holding the delimited data for a given document.
  */
-public static String delimitedString(RMDocument aDoc, String fieldDelim, String recordDelim, boolean quoteFields)
+public static String delimitedString(SGDoc aDoc, String fieldDelim, String recordDelim, boolean quoteFields)
 {
     // Validate and resolve page references
     aDoc.layoutDeep();
@@ -52,19 +52,19 @@ public static String delimitedString(RMDocument aDoc, String fieldDelim, String 
 /**
  * Appends a string representation of the given shape to the given string buffer.
  */
-static void appendDelimited(StringBuffer aSB, RMShape aShape, String fieldD, String recD, boolean quoteFields)
+static void appendDelimited(StringBuffer aSB, SGView aShape, String fieldD, String recD, boolean quoteFields)
 {
     // If table row, iterate over children (sorted by minX) and append their strings separated by fieldDelim
     if (aShape instanceof RMTableRowRPG && aShape.getChildCount()>0) {
         
         // Get sorted children
-        List <RMShape> children = RMShapeUtils.getShapesSortedByFrameX(aShape.getChildren());
+        List <SGView> children = SGViewUtils.getShapesSortedByFrameX(aShape.getChildren());
 
         // Iterate over children
-        for (int i=0, iMax=children.size(); i<iMax; i++) { RMShape child = children.get(i);
+        for (int i=0, iMax=children.size(); i<iMax; i++) { SGView child = children.get(i);
 
             // Handle text children
-            if(child instanceof RMTextShape) { RMTextShape text = (RMTextShape)child;
+            if(child instanceof SGText) { SGText text = (SGText)child;
                 RichText rtext = text.getRichText();
                 if(quoteFields)
                     aSB.append('\"').append(rtext.getString()).append('\"').append(fieldD);

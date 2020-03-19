@@ -6,7 +6,7 @@ import reportmill.shape.RMCrossTab;
 import reportmill.shape.RMCrossTabFrame;
 import rmdraw.app.Editor;
 import rmdraw.app.Tool;
-import rmdraw.shape.*;
+import rmdraw.scene.*;
 import snap.geom.Point;
 import snap.util.StringUtils;
 import snap.view.ViewEvent;
@@ -58,14 +58,14 @@ public void mousePressed(T aCTabFrame, ViewEvent anEvent)
 {
     // Get event point in TableFrame coords
     Editor editor = getEditor();
-    Point point = editor.convertToShape(anEvent.getX(), anEvent.getY(), aCTabFrame);
+    Point point = editor.convertToSceneView(anEvent.getX(), anEvent.getY(), aCTabFrame);
     
     // Handle mouse press in crosstab when not superselected
     if(editor.isSelected(aCTabFrame)) {
         
         // If click was inside table bounds, super select table and consume event
         if(point.getX()<aCTabFrame.getTable().getWidth() && point.getY()<aCTabFrame.getTable().getHeight()) {
-            editor.setSuperSelectedShape(aCTabFrame.getTable());
+            editor.setSuperSelView(aCTabFrame.getTable());
             anEvent.consume();
         }
     }
@@ -75,7 +75,7 @@ public void mousePressed(T aCTabFrame, ViewEvent anEvent)
         
         // If click was outside table bounds, make table frame just selected
         if(point.getX()>=aCTabFrame.getTable().getWidth() || point.getY()>=aCTabFrame.getTable().getHeight()) {
-            editor.setSelectedShape(aCTabFrame);
+            editor.setSelView(aCTabFrame);
             editor.getSelectTool().setRedoMousePressed(true); // Register for redo
         }
     }
@@ -94,6 +94,6 @@ public String getWindowTitle()  { return "CrossTab Frame Inspector"; }
 /**
  * Overridden to make crosstab frame super-selectable.
  */
-public boolean isSuperSelectable(RMShape aShape)  { return true; }
+public boolean isSuperSelectable(SGView aShape)  { return true; }
 
 }

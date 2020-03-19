@@ -8,7 +8,7 @@ import rmdraw.app.*;
 import rmdraw.apptools.TextTool;
 import rmdraw.app.Tool;
 import reportmill.util.RMGrouping;
-import rmdraw.shape.*;
+import rmdraw.scene.*;
 import java.util.List;
 
 import snap.geom.Point;
@@ -102,7 +102,7 @@ public void respondUI(ViewEvent anEvent)
     RMCrossTab table = (RMCrossTab)cell.getParent();
     
     // Get selected cross tab cell shapes
-    List <RMCrossTabCell> cells = (List)getEditor().getSelectedOrSuperSelectedShapes();
+    List <RMCrossTabCell> cells = (List)getEditor().getSelOrSuperSelViews();
     
     // Handle GroupingKeyText
     if(anEvent.equals("GroupingKeyText")) {
@@ -194,13 +194,13 @@ protected void processMouseEvent(T aText, ViewEvent anEvent)
         
         // Get event point in cell coords
         Editor editor = getEditor();
-        Point point = editor.convertToShape(anEvent.getX(), anEvent.getY(), aText);
+        Point point = editor.convertToSceneView(anEvent.getX(), anEvent.getY(), aText);
         
         // If point is outside cell, start sending to table tool
         if(point.getX()<-20 || point.getY()<-20 || point.getX()> aText.getWidth()+20 || point.getY()> aText.getHeight()+20) {
             
             // Make cell selected instead of super selected
-            editor.setSelectedShape(aText);
+            editor.setSelView(aText);
             
             // Send table table mouse pressed
             tableTool.processEvent(table, _mousePressedEvent);
@@ -239,11 +239,11 @@ protected void processKeyEvent(T aCell, ViewEvent anEvent)
         
     // If key is tab press (non-alt), move forward or backward (based on shift modifier)
     if(keyCode==KeyCode.TAB && !anEvent.isAltDown() && anEvent.isKeyPress())
-        getEditor().setSelectedShape(anEvent.isShiftDown()? aCell.getCellBefore() : aCell.getCellAfter());
+        getEditor().setSelView(anEvent.isShiftDown()? aCell.getCellBefore() : aCell.getCellAfter());
             
     // If key is enter press (non-alt), move down or up
     else if(keyCode==KeyCode.ENTER && !anEvent.isAltDown() && anEvent.isKeyPress())
-        getEditor().setSelectedShape(anEvent.isShiftDown()? aCell.getCellAbove() : aCell.getCellBelow());
+        getEditor().setSelView(anEvent.isShiftDown()? aCell.getCellAbove() : aCell.getCellBelow());
         
     // Anything else goes to text tool
     else { super.processKeyEvent(aCell, anEvent); return; }
@@ -265,7 +265,7 @@ public void paintHandles(T aText, Painter aPntr, boolean isSuperSelected)  { }
 /**
  * Override to suppress normal TextTool painting.
  */
-public void paintBoundsRect(RMTextShape aText, Painter aPntr) { }
+public void paintBoundsRect(SGText aText, Painter aPntr) { }
 
 /**
  * Override normal implementation to handle KeysPanel drop.

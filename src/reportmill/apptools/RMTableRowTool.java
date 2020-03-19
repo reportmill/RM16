@@ -5,7 +5,7 @@ package reportmill.apptools;
 import reportmill.shape.RMTableRow;
 import rmdraw.app.Editor;
 import rmdraw.apptools.RMParentShapeTool;
-import rmdraw.shape.*;
+import rmdraw.scene.*;
 import java.util.*;
 import snap.geom.Point;
 import snap.util.StringUtils;
@@ -173,14 +173,14 @@ public void setVersionFromMenu(String aVersion)
 {
     // Get editor and selected TableRow
     Editor editor = getEditor();
-    RMTableRow tableRow = (RMTableRow)editor.getSelectedOrSuperSelectedShape();
+    RMTableRow tableRow = (RMTableRow)editor.getSelOrSuperSelView();
     
     // Set version
     tableRow.repaint(); // Register table row for repaint
     tableRow.undoerSetUndoTitle("Version Change"); // Set undo title
     tableRow.setVersion(aVersion); // Set table row version
     tableRow.getParent().repaint(); // Register table for repaint
-    editor.setSuperSelectedShape(tableRow); // Super select table row
+    editor.setSuperSelView(tableRow); // Super select table row
 }
 
 /**
@@ -190,7 +190,7 @@ public void addVersionFromMenu(String aVersion)
 {
     // Get main editor and selected TableRow
     Editor editor = getEditor();
-    RMTableRow tableRow = (RMTableRow)editor.getSelectedOrSuperSelectedShape();
+    RMTableRow tableRow = (RMTableRow)editor.getSelOrSuperSelView();
 
     // Get name of Custom Version if requested
     if(aVersion.equals("Custom...")) {
@@ -210,7 +210,7 @@ public void addVersionFromMenu(String aVersion)
     tableRow.repaint(); // Register table row for repaint
     tableRow.undoerSetUndoTitle("Add New Version"); // Set undo title
     tableRow.setVersion(aVersion); // Set version
-    editor.setSelectedShapes(tableRow.getChildren()); // Select new table row children
+    editor.setSelViews(tableRow.getChildren()); // Select new table row children
 }
 
 /**
@@ -220,7 +220,7 @@ public void removeVersionCurrent()
 {
     // Get main editor and selected TableRow
     Editor editor = getEditor();
-    RMTableRow tableRow = (RMTableRow)editor.getSelectedOrSuperSelectedShape();
+    RMTableRow tableRow = (RMTableRow)editor.getSelOrSuperSelView();
     
     // Register table row for repaint (thus undo)
     tableRow.repaint();
@@ -248,7 +248,7 @@ public void removeVersionCurrent()
 public static void addColumn(Editor anEditor)
 {
     // Get currently selected editor and selected shape
-    RMShape shape = anEditor.getSelectedOrSuperSelectedShape();
+    SGView shape = anEditor.getSelOrSuperSelView();
     
     // Get currently selected table row (by iterating up selected shape's ancestor list)
     while(shape!=null && !(shape instanceof RMTableRow))
@@ -260,7 +260,7 @@ public static void addColumn(Editor anEditor)
     // Add column
     RMTableRow tableRow = (RMTableRow)shape; // Get the table row
     tableRow.setNumberOfColumns(tableRow.getNumberOfColumns()+1); // Increment ColumnCount
-    anEditor.setSuperSelectedShape(tableRow.getChildLast()); // Super-Select last child
+    anEditor.setSuperSelView(tableRow.getChildLast()); // Super-Select last child
 }
 
 /**
@@ -276,7 +276,7 @@ public String getWindowTitle()  { return "Table Row Inspector"; }
 /**
  * Overridden to make table row not ungroupable.
  */
-public boolean isUngroupable(RMShape aShape)  { return false; }
+public boolean isUngroupable(SGView aShape)  { return false; }
 
 /**
  * MouseMoved implementation to update cursor for resize bars.
@@ -293,7 +293,7 @@ public void mouseMoved(T aTableRow, ViewEvent anEvent)
     if(shapeHandle!=null) {
 
         // If shape handle shape is structured text, set cursor, consume event and return
-        if(shapeHandle.shape instanceof RMTextShape && isStructured(shapeHandle.shape)) {
+        if(shapeHandle.shape instanceof SGText && isStructured(shapeHandle.shape)) {
             if(shapeHandle.handle==HandleNW) getEditor().setCursor(Cursor.W_RESIZE);
             else getEditor().setCursor(Cursor.E_RESIZE);
             anEvent.consume(); return;
@@ -311,15 +311,15 @@ public void mousePressed(T aTableRow, ViewEvent anEvent)
 {
     // If selected and structured, select child
     Editor editor = getEditor();
-    if(aTableRow.isStructured() && aTableRow!=editor.getSuperSelectedShape().getParent()) {
+    if(aTableRow.isStructured() && aTableRow!=editor.getSuperSelView().getParent()) {
         
         // Get the point and child at point
-        Point point = editor.convertToShape(anEvent.getX(), anEvent.getY(), aTableRow);
-        RMShape child = aTableRow.getChildContaining(point);
+        Point point = editor.convertToSceneView(anEvent.getX(), anEvent.getY(), aTableRow);
+        SGView child = aTableRow.getChildContaining(point);
         
         // If child was hit, super select it and resend event
         if(child!=null) {
-            editor.setSuperSelectedShape(child); // Select child
+            editor.setSuperSelView(child); // Select child
             editor.getSelectTool().setRedoMousePressed(true); // Have SelectTool resend event
         }
     }
@@ -333,9 +333,9 @@ public int getHandleCount(T aShape)  { return 0; }
 /**
  * Returns whether given shape is in a Structured TableRow.
  */
-private static boolean isStructured(RMShape aShape)
+private static boolean isStructured(SGView aShape)
 {
-    RMShape par = aShape.getParent();
+    SGView par = aShape.getParent();
     return par instanceof RMTableRow && ((RMTableRow)par).isStructured();
 }
 

@@ -3,7 +3,7 @@
  */
 package reportmill.util;
 import reportmill.shape.*;
-import rmdraw.shape.*;
+import rmdraw.scene.*;
 import java.util.*;
 import snap.util.*;
 
@@ -50,24 +50,24 @@ public class RMTableOfContents extends HashMap {
 /**
  * Creates a new table of contents instance.
  */
-public RMTableOfContents(RMDocument aDoc)
+public RMTableOfContents(SGDoc aDoc)
 {
     // Iterate over report pages to find any filled table shapes and collect row info from them
-    for(int i=0, iMax=aDoc.getPageCount(); i<iMax; i++) { RMPage page = aDoc.getPage(i);
+    for(int i=0, iMax=aDoc.getPageCount(); i<iMax; i++) { SGPage page = aDoc.getPage(i);
         findTable(page); }
 }
 
 /**
  * Finds tables to process for TOC info.
  */
-private void findTable(RMShape aShape)
+private void findTable(SGView aShape)
 {
     // If shape is table RPG, get row info
     if(aShape instanceof RMTableRPG)
         processTable((RMTableRPG)aShape);
     
     // Otherwise, recurse
-    else if(aShape instanceof RMParentShape) { RMParentShape parent = (RMParentShape)aShape;
+    else if(aShape instanceof SGParent) { SGParent parent = (SGParent)aShape;
         for(int i=0, iMax=parent.getChildCount(); i<iMax; i++)
             findTable(parent.getChild(i));
     }
@@ -86,7 +86,7 @@ private void processTable(RMTableRPG aTable)
         
         // Get original table row template and table
         RMTableRow templateRow = row.getTemplate();
-        RMShape table = templateRow.getParent();
+        SGView table = templateRow.getParent();
         
         // Get table dataset key (set to Objects if null)
         String datasetKey = table.getDatasetKey();
@@ -131,13 +131,13 @@ private void processTable(RMTableRPG aTable)
 public static class RowGroup implements Key.Get {
 
     // The row shape for this entry
-    RMShape _row;
+    SGView _row;
     
     // The row group for this entry
     Object  _group;
     
     /** Creates a new table of contents entry. */
-    public RowGroup(RMShape row, Object group) { _row = row; _group = group; }
+    public RowGroup(SGView row, Object group) { _row = row; _group = group; }
     
     /** Implements this method to provide page info. */
     public Object getKeyValue(String aKey)
@@ -166,7 +166,7 @@ public static class RowGroup implements Key.Get {
 /**
  * Checks for table of contents page in given template, and copies page as-is if found.
  */
-public static boolean checkForTableOfContents(RMPage aPage)
+public static boolean checkForTableOfContents(SGPage aPage)
 {
     // If page has table with DatasetKey that starts with "TOC." return true
     RMTable table = aPage.getChildWithClass(RMTable.class);
@@ -178,15 +178,15 @@ public static boolean checkForTableOfContents(RMPage aPage)
 /**
  * Re-run report with table of contents.
  */
-public static void rpgPage(ReportOwner anRptOwner, RMDocument aDocRPG, RMPage aPage, int anIndex)
+public static void rpgPage(ReportOwner anRptOwner, SGDoc aDocRPG, SGPage aPage, int anIndex)
 {
     Map toc = new RMTableOfContents(aDocRPG);
     toc = Collections.singletonMap("TOC", toc);
     anRptOwner.pushDataStack(toc);
-    RMParentShape crpg = (RMParentShape)anRptOwner.rpg(aPage, aDocRPG);
+    SGParent crpg = (SGParent)anRptOwner.rpg(aPage, aDocRPG);
     if(crpg instanceof ReportOwner.ShapeList) {
-        for(RMShape pg : crpg.getChildArray()) aDocRPG.addPage((RMPage)pg, anIndex++); }
-    else aDocRPG.addPage((RMPage)crpg, anIndex);
+        for(SGView pg : crpg.getChildArray()) aDocRPG.addPage((SGPage)pg, anIndex++); }
+    else aDocRPG.addPage((SGPage)crpg, anIndex);
     aDocRPG.setSelPageIndex(0);
 }
 

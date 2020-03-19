@@ -5,7 +5,7 @@ package reportmill.out;
 import reportmill.shape.RMDocument2;
 import reportmill.shape.RMPDFData;
 import reportmill.util.ReportMill;
-import rmdraw.shape.*;
+import rmdraw.scene.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import snappdf.*;
@@ -71,7 +71,7 @@ public byte[] getBytes(RMDocument2 aDoc)
     _pfile.setCreator(version + build + jvm);
     
     // Iterate over doc pages
-    for(int i=0, iMax=aDoc.getPageCount(); i<iMax; i++) { RMShape page = aDoc.getPage(i);
+    for(int i=0, iMax=aDoc.getPageCount(); i<iMax; i++) { SGView page = aDoc.getPage(i);
         
         // Get pdf page, set media box and add to pages tree and xref
         _pageWriter = new PDFPageWriter(_pfile, this);

@@ -8,14 +8,14 @@ import reportmill.util.RMKeyChain;
 
 import java.util.*;
 
-import rmdraw.shape.RMParentShape;
-import rmdraw.shape.RMShape;
+import rmdraw.scene.SGParent;
+import rmdraw.scene.SGView;
 import snap.util.ListUtils;
 
 /**
  * Performs RPG for a table.
  */
-public class RMTableRPG extends RMParentShape {
+public class RMTableRPG extends SGParent {
 
    // The ReportOwner
    ReportOwner _rptOwner;
@@ -50,13 +50,13 @@ public class RMTableRPG extends RMParentShape {
 public RMTableRPG(ReportOwner anRptOwner, RMTable aTable)
 {
     _rptOwner = anRptOwner; _table = aTable;
-    if(aTable!=null) copyShape(aTable);
+    if(aTable!=null) copyView(aTable);
 }
 
 /**
  * Do RPG.
  */
-public RMShape rpgAll()
+public SGView rpgAll()
 {
     // If not paginating, set height arbitrarily large
     if(!_rptOwner.getPaginate()) {
@@ -411,7 +411,7 @@ boolean splitRow(RMTableRowRPG aRow)
     
     // Get next row
     int nextRowIndex = aRow.indexOf() + 1;
-    RMShape nextRow = nextRowIndex<getChildCount()? getChild(nextRowIndex) : null;
+    SGView nextRow = nextRowIndex<getChildCount()? getChild(nextRowIndex) : null;
     
     // Calculate how much of the row overruns bottom of this page (and how much underruns)
     double maxY = nextRow!=null? nextRow.getFrameY() : getHeight();
@@ -423,7 +423,7 @@ boolean splitRow(RMTableRowRPG aRow)
         part1Height = aRow.getHeight() - minSplitRemainderHeight;
 
     // Divide row by part1Height, grow to best height and validate
-    RMTableRowRPG split = (RMTableRowRPG)aRow.divideShapeFromTop(part1Height); aRow._split = split;
+    RMTableRowRPG split = (RMTableRowRPG)aRow.divideViewFromTop(part1Height); aRow._split = split;
     split.setBestHeight();
     split.layoutDeep();
     return true;

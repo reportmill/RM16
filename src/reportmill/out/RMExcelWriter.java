@@ -7,7 +7,7 @@ import reportmill.shape.RMTableRPG;
 import reportmill.shape.RMTableRowRPG;
 import reportmill.util.RMDateFormat;
 import reportmill.util.RMNumberFormat;
-import rmdraw.shape.*;
+import rmdraw.scene.*;
 import java.io.*;
 import java.util.*;
 import org.apache.poi.hssf.usermodel.*;
@@ -51,7 +51,7 @@ public RMExcelWriter() { }
 /**
  * Returns a byte array of an Excel file (.xls) for the given RMDocument.
  */
-public byte[] getBytes(RMDocument aDoc)
+public byte[] getBytes(SGDoc aDoc)
 {
     // Create the workbook
     HSSFWorkbook book = getWorkbook(aDoc);
@@ -68,7 +68,7 @@ public byte[] getBytes(RMDocument aDoc)
  * Returns an Excel workbook for the RMDocument.
  * Use this routine instead of getBytes() if you need to do any post-processing on the workbook.
  */
-public HSSFWorkbook getWorkbook(RMDocument aDoc)
+public HSSFWorkbook getWorkbook(SGDoc aDoc)
 {
     // Create a new workbook
     _workbook = new HSSFWorkbook();
@@ -78,25 +78,25 @@ public HSSFWorkbook getWorkbook(RMDocument aDoc)
     aDoc.resolvePageReferences();
 
     // Allocate the array of shapes that ultimately will become the spreadsheet
-    List <RMShape> sheetShapes = new ArrayList();
+    List <SGView> sheetShapes = new ArrayList();
     
     // Iterate through pages and have each one append XLS
-    for(int i=0, iMax=aDoc.getPageCount(); i<iMax; i++) { RMPage page = aDoc.getPage(i);
+    for(int i=0, iMax=aDoc.getPageCount(); i<iMax; i++) { SGPage page = aDoc.getPage(i);
         
         // Create a new sheet for each explicit page
         RMExcelSheet sheet = new RMExcelSheet(_workbook.createSheet());
         
         // If shape named ExcelHeader is present, remove and set sheet Header text
-        RMShape excelHeader = page.getChildWithName("ExcelHeader"); if(excelHeader!=null) {
+        SGView excelHeader = page.getChildWithName("ExcelHeader"); if(excelHeader!=null) {
             page.removeChild(excelHeader);
-            String text = excelHeader instanceof RMTextShape? ((RMTextShape)excelHeader).getText() : "";
+            String text = excelHeader instanceof SGText ? ((SGText)excelHeader).getText() : "";
             sheet.getSheet().getHeader().setCenter(text);
         }
        
         // If shape named ExcelFooter is present, remove and set sheet Footer text
-        RMShape excelFooter = page.getChildWithName("ExcelFooter"); if(excelFooter!=null) {
+        SGView excelFooter = page.getChildWithName("ExcelFooter"); if(excelFooter!=null) {
             page.removeChild(excelFooter);
-            String text = excelFooter instanceof RMTextShape? ((RMTextShape)excelFooter).getText() : "";
+            String text = excelFooter instanceof SGText ? ((SGText)excelFooter).getText() : "";
             sheet.getSheet().getFooter().setCenter(text);
         }
        
@@ -150,17 +150,17 @@ public boolean getShowsGridlines(int aPage)  { return _showsAllGridlines; }
  * Returns true if this shape should become a fixed spreadsheet cell.
  * Also returns true if all of the shape's children will be spreadsheet cells.
  */
-public boolean isSheetShape(RMShape aShape)  { return aShape instanceof RMTableRowRPG || aShape instanceof RMCrossTab; }
+public boolean isSheetShape(SGView aShape)  { return aShape instanceof RMTableRowRPG || aShape instanceof RMCrossTab; }
 
 /**
  * Searches through the hierarchy for tables & cells which will define the 
  * row/column structure of the spreadsheet and adds them to the list.
  */
-private void getSheetShapes(RMShape aShape, List aList)
+private void getSheetShapes(SGView aShape, List aList)
 {
     // Save away all RMTexts inside a sheetshape (note that RMCells are RMText subclasses)
     if(isSheetShape(aShape))
-        ((RMParentShape)aShape).getChildrenWithClass(RMTextShape.class, aList);
+        ((SGParent)aShape).getChildrenWithClass(SGText.class, aList);
     
     // Recurse for every child    
     else for(int i=0, n=aShape.getChildCount(); i<n; ++i)
@@ -170,12 +170,12 @@ private void getSheetShapes(RMShape aShape, List aList)
 /** 
  * a lot like RMShape.getBoundsOfChildren(), but excludes RMTableRPGs
  */
-private Rect getBoundsOfExcelChildren(RMShape aShape)
+private Rect getBoundsOfExcelChildren(SGView aShape)
 {
     Rect maxBounds = null;
 
     // Iterate over shape children
-    for(int i=0, iMax=aShape.getChildCount(); i<iMax; i++) { RMShape child = aShape.getChild(i);
+    for(int i=0, iMax=aShape.getChildCount(); i<iMax; i++) { SGView child = aShape.getChild(i);
         
         // Declare variable for child bounds
         Rect childBounds = null;
@@ -237,7 +237,7 @@ public static short getColumnWidthFromPoints(double points)  { return (short)(25
 /**
  * Recursively iterates over shape hierarchy and adds HSSFShapes for RMShapes.
  */
-private void append(RMExcelSheet rmSheet, HSSFShapeContainer aParent, RMShape aShape)
+private void append(RMExcelSheet rmSheet, HSSFShapeContainer aParent, SGView aShape)
 {
     // If it's a sheet shape, it's already been processed (as have it's children)
     if(isSheetShape(aShape)) 
@@ -247,11 +247,11 @@ private void append(RMExcelSheet rmSheet, HSSFShapeContainer aParent, RMShape aS
     HSSFShape newShape = null;
     
     // Handle line segment
-    if(aShape instanceof RMLineShape)
+    if(aShape instanceof SGLine)
         newShape = rmSheet.addLine(aShape, aParent);
 
     // Handle RMImageShape (creates a new picture every time!!)
-    else if(aShape instanceof RMImageShape) { RMImageShape imgShape = (RMImageShape)aShape;
+    else if(aShape instanceof SGImage) { SGImage imgShape = (SGImage)aShape;
 
         // Get image data (if not available or invalid, just return)
         Image img = imgShape.getImage(); if(img==null) return;
@@ -274,7 +274,7 @@ private void append(RMExcelSheet rmSheet, HSSFShapeContainer aParent, RMShape aS
     }
     
     // Handle text
-    else if(aShape instanceof RMTextShape) { RMTextShape text = (RMTextShape)aShape;
+    else if(aShape instanceof SGText) { SGText text = (SGText)aShape;
         
         // POI does something weird with empty rich texts, so toss it
         if(text.length()>0) {
@@ -288,7 +288,7 @@ private void append(RMExcelSheet rmSheet, HSSFShapeContainer aParent, RMShape aS
     }
     
     // Handle rectangle
-    else if(aShape instanceof RMRectShape)
+    else if(aShape instanceof SGRect)
         newShape = rmSheet.addRect(aShape, aParent);
     
     // If shape isn't a table row, just recurse into children
@@ -349,8 +349,8 @@ public void appendCrossTab(RMExcelSheet aSheet, HSSFShapeContainer aParent, RMSh
                 }
                 
                 // Fill in the data and style
-                if(rmcell.getCellShape() instanceof RMTextShape)
-                    fillCell(row.getCell(colIndex), (RMTextShape)rmcell.getCellShape());
+                if(rmcell.getCellShape() instanceof SGText)
+                    fillCell(row.getCell(colIndex), (SGText)rmcell.getCellShape());
             }
         }
     }
@@ -359,7 +359,7 @@ public void appendCrossTab(RMExcelSheet aSheet, HSSFShapeContainer aParent, RMSh
 /** 
  * Fill a spreadsheet cell with the contents & attributes of an RMText shape
  */
-public void fillCell(HSSFCell aCell, RMTextShape aText)
+public void fillCell(HSSFCell aCell, SGText aText)
 {
     // Get plain string (replace any tabs with spaces (Excel doesn't like tabs)
     String string = aText.getText();
@@ -433,7 +433,7 @@ public void fillCell(HSSFCell aCell, RMTextShape aText)
 /**
  * Sets the fill and stroke attributes of the Excel shape from the shape's attributes.
  */
-public void setShapeFillAndStroke(HSSFShape hssfShape, RMShape aShape)
+public void setShapeFillAndStroke(HSSFShape hssfShape, SGView aShape)
 {
     // Set fill color (solid fill only). Shape has both index or arbitrary rgb colors
     if(aShape.getFill()!=null) {
@@ -454,7 +454,7 @@ public void setShapeFillAndStroke(HSSFShape hssfShape, RMShape aShape)
 /**
  * Returns a shared HSSFCellStyle for a given font, alignment and format string.
  */
-private HSSFCellStyle getWorkbookStyle(RMTextShape aText, String aFormat)
+private HSSFCellStyle getWorkbookStyle(SGText aText, String aFormat)
 {
     // Iterate over workbook styles and return first matching entry
     for(WorkbookStyle style : _styles)
@@ -510,7 +510,7 @@ public HSSFRichTextString createRichText(RichText aRichText)
 class WorkbookStyle {
 
     // The prototype text
-    RMTextShape    _text;
+    SGText _text;
     
     // The excel format
     String         _format;
@@ -521,12 +521,12 @@ class WorkbookStyle {
     /**
      * Creates a new workbook style.
      */
-    public WorkbookStyle(RMTextShape aText, String aFormat)  { _text = aText; _format = aFormat; }
+    public WorkbookStyle(SGText aText, String aFormat)  { _text = aText; _format = aFormat; }
     
     /**
      * Returns whether this style is a match for given text and format string.
      */
-    public boolean isMatch(RMTextShape aText, String aFormat)
+    public boolean isMatch(SGText aText, String aFormat)
     {
         if(!SnapUtils.equals(aText.getFont(), _text.getFont())) return false;
         if(aText.getAlignX()!=_text.getAlignX()) return false;

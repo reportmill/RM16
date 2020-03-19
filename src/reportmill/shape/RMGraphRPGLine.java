@@ -2,9 +2,9 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.shape;
-import rmdraw.shape.RMPolygonShape;
-import rmdraw.shape.RMRectShape;
-import rmdraw.shape.RMShape;
+import rmdraw.scene.SGPolygon;
+import rmdraw.scene.SGRect;
+import rmdraw.scene.SGView;
 import snap.geom.Path;
 import snap.geom.Rect;
 import snap.gfx.*;
@@ -61,7 +61,7 @@ public void addBars()
         }
         
         // Create line shape
-        RMPolygonShape lineShape = new RMPolygonShape(path);
+        SGPolygon lineShape = new SGPolygon(path);
         
         // If area or 3D line, set fill color and stroke to black
         Color color = getColor(i);
@@ -92,7 +92,7 @@ public void addBars()
             double lineY = barBounds.getMinY();
             
             // Create new linePointShape
-            RMShape linePointShape = new RMRectShape();
+            SGView linePointShape = new SGRect();
             
             // Get inset
             int inset = graphType==RMGraph.Type.Scatter? 4 : 2;

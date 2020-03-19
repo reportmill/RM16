@@ -2,7 +2,7 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.util;
-import rmdraw.shape.RMDocument;
+import rmdraw.scene.SGDoc;
 import java.util.*;
 import java.text.*;
 
@@ -65,9 +65,9 @@ public void setPattern(String aFormat)  { _fmt.applyPattern(aFormat); }
 public String format(Object anObj) 
 {
     // If locale hasn't been set, get it from RMDocument locale
-    if(_locale != RMDocument._locale) {
-        _locale = RMDocument._locale;
-        _fmt.setDateFormatSymbols(new DateFormatSymbols(RMDocument._locale));
+    if(_locale != SGDoc._locale) {
+        _locale = SGDoc._locale;
+        _fmt.setDateFormatSymbols(new DateFormatSymbols(SGDoc._locale));
     }
 
     // If object is date, return date format

@@ -14,7 +14,7 @@ import reportmill.shape.RMTableGroup;
 import reportmill.shape.RMTableRow;
 import reportmill.shape.RMSwitchShape;
 import reportmill.util.RMDataSource;
-import rmdraw.shape.RMTextShape;
+import rmdraw.scene.SGText;
 import snap.gfx.Image;
 import snap.gfx.Painter;
 import snap.geom.Rect;
@@ -133,7 +133,7 @@ public class RMEditor extends Editor {
         if (aClass==RMTable.class) return new RMTableTool();
         if (aClass==RMTableGroup.class) return new RMTableGroupTool();
         if (aClass==RMTableRow.class) return new RMTableRowTool();
-        if (aClass==RMTextShape.class) return new TableTextTool();
+        if (aClass== SGText.class) return new TableTextTool();
         if (aClass==RMPDFShape.class) return new RMPDFShapeTool();
         return super.createTool(aClass);
     }

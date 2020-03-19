@@ -6,7 +6,7 @@ import reportmill.shape.RMDocument2;
 import reportmill.shape.RMTable;
 import reportmill.shape.RMTableRow;
 import reportmill.util.*;
-import rmdraw.shape.*;
+import rmdraw.scene.*;
 import java.util.*;
 
 import snap.gfx.Font;
@@ -109,7 +109,7 @@ public static void main(String args[])
             // Iterate over remaining args (assuming they are all template paths)
             for(int j=i+1; j<args.length; j++) {
                 System.err.println("Resaving " + args[j]);
-                RMDocument doc = RMDocument.getDocFromSource(args[j]);
+                SGDoc doc = SGDoc.getDocFromSource(args[j]);
                 doc.write(args[j]);
             }
             
@@ -175,13 +175,13 @@ public static void main(String args[])
         
         // Generate reports, single threaded
         else for(int i=1; i<=count; i++) {
-            RMDocument report = template.generateReport(map, paginate.booleanValue());
+            SGDoc report = template.generateReport(map, paginate.booleanValue());
             
             // If table of contents is requested, generate toc report and append
             if(toc) {
                 RMTableOfContents toco = new RMTableOfContents(report);
                 RMDocument2 toct = getTableOfContentsTemplate();
-                RMDocument tocr = toct.generateReport(toco);
+                SGDoc tocr = toct.generateReport(toco);
                 tocr.addPages(report);
                 report = tocr;
             }
@@ -220,7 +220,7 @@ static class RPGThread extends Thread {
     public void run()
     {
         for(int i=1; i<=count; i++) {
-            RMDocument report = template.generateReport(data, paginate.booleanValue());
+            SGDoc report = template.generateReport(data, paginate.booleanValue());
             String out = StringUtils.replace(outfile, ".", "_" + id + "_" + (i<10?"0":"") + i + ".");
             report.write(out);
             if(count>1) System.err.println("Thread " + id + ": Generated Report #" + i);

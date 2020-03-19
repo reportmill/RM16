@@ -6,7 +6,7 @@ import reportmill.shape.RMTable;
 import reportmill.shape.RMTableGroup;
 import rmdraw.app.*;
 import rmdraw.apptools.RMParentShapeTool;
-import rmdraw.shape.*;
+import rmdraw.scene.*;
 import snap.util.StringUtils;
 import snap.view.*;
 
@@ -131,7 +131,7 @@ public void respondUI(ViewEvent anEvent)
         if(anEvent.isMouseRelease()) {
             if(anEvent.getClickCount()==2) {
                 RMTable table = (RMTable)anEvent.getSelItem();
-                getEditor().setSuperSelectedShape(table);
+                getEditor().setSuperSelView(table);
             }
         }
         
@@ -204,12 +204,12 @@ public String getWindowTitle()  { return "Table Group Inspector"; }
 /**
  * Overridden to make graph super-selectable.
  */
-public boolean isSuperSelectable(RMShape aShape)  { return true; }
+public boolean isSuperSelectable(SGView aShape)  { return true; }
 
 /**
  * Overridden to make graph not ungroupable.
  */
-public boolean isUngroupable(RMShape aShape)  { return false; }
+public boolean isUngroupable(SGView aShape)  { return false; }
 
 /**
  * Returns the main table for the current table group.
@@ -227,7 +227,7 @@ public void mousePressed(T aTableGroup, ViewEvent anEvent)
 {
     // If selected, forward on to main table, to potentially super select structured table row
     Editor editor = getEditor();
-    if(editor.getSelectedOrSuperSelectedShape()==aTableGroup) {
+    if(editor.getSelOrSuperSelView()==aTableGroup) {
         RMTable mainTable = aTableGroup.getMainTable();                // Get main table
         getTool(mainTable).processEvent(mainTable, anEvent);    // Forward on
     }

@@ -4,7 +4,7 @@
 package reportmill.apptools;
 import reportmill.util.RMGrouping;
 import reportmill.util.RMSort;
-import rmdraw.shape.*;
+import rmdraw.scene.*;
 import snap.gfx.Image;
 import snap.util.StringUtils;
 import snap.view.*;
@@ -39,7 +39,7 @@ public interface Owner {
     public void respondUI(ViewEvent anEvent);
     
     // Returns the selected shape that is being edited
-    public RMShape getSelectedShape();
+    public SGView getSelectedShape();
     
     // Returns the grouping that we modify
     public RMGrouping getGrouping();
@@ -107,7 +107,7 @@ public void respondUI(ViewEvent anEvent)
     _owner.respondUI(anEvent);
     
     // Get the selected shape
-    RMShape shape = _owner.getSelectedShape();
+    SGView shape = _owner.getSelectedShape();
     
     // Get current grouping
     RMGrouping grouping = _owner.getGrouping(); if(grouping==null) return;

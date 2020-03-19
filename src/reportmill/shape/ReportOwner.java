@@ -7,9 +7,9 @@ import reportmill.util.*;
 import java.util.*;
 import reportmill.util.RMHTMLParser;
 import reportmill.util.RMRTFParser;
-import rmdraw.shape.RMDocument;
-import rmdraw.shape.RMParentShape;
-import rmdraw.shape.RMShape;
+import rmdraw.scene.SGDoc;
+import rmdraw.scene.SGParent;
+import rmdraw.scene.SGView;
 import snap.text.*;
 import snap.util.*;
 import snap.web.WebURL;
@@ -20,7 +20,7 @@ import snap.web.WebURL;
 public class ReportOwner implements RMKeyChain.Get {
 
     // The template
-    RMDocument _template;
+    SGDoc _template;
     
     // The string used to represent null values
     String           _nstring;
@@ -46,7 +46,7 @@ public class ReportOwner implements RMKeyChain.Get {
 /**
  * Returns the template.
  */
-public RMDocument getTemplate()
+public SGDoc getTemplate()
 {
     return _template!=null? _template : (_template=createTemplate());
 }
@@ -54,16 +54,16 @@ public RMDocument getTemplate()
 /**
  * Creates the template.
  */
-protected RMDocument createTemplate()
+protected SGDoc createTemplate()
 {
     WebURL url = WebURL.getURL(getClass(), getClass().getSimpleName() + ".rpt");
-    return RMDocument.getDocFromSource(url);
+    return SGDoc.getDocFromSource(url);
 }
 
 /**
  * Sets the template.
  */
-public void setTemplate(RMDocument aDoc)
+public void setTemplate(SGDoc aDoc)
 {
     _template = aDoc;
 }
@@ -148,7 +148,7 @@ public RMDocument2 generateReport()
         addModelObject(new Object());
 
     // Generate report and return
-    RMDocument doc = getTemplate();
+    SGDoc doc = getTemplate();
     RMDocument2 report = (RMDocument2)rpg(doc, null);
     return report;
 }
@@ -156,9 +156,9 @@ public RMDocument2 generateReport()
 /**
  * Performs RPG on a given shape.
  */
-public RMShape rpg(RMShape aShape, RMShape aParent)
+public SGView rpg(SGView aShape, SGView aParent)
 {
-    RMShape rpg = ReportGen.rpgAllFor(aShape, this, aParent);
+    SGView rpg = ReportGen.rpgAllFor(aShape, this, aParent);
     if(_listener!=null) _listener.didFillShape(aShape, rpg);
     return rpg;
 }
@@ -166,7 +166,7 @@ public RMShape rpg(RMShape aShape, RMShape aParent)
 /**
  * Returns the list of page reference shapes.
  */
-public List <RMShape> getPageReferenceShapes()  { return _pageRefShapes; }
+public List <SGView> getPageReferenceShapes()  { return _pageRefShapes; }
 
 /**
  * Sets the list of page reference shapes.
@@ -176,7 +176,7 @@ public void setPageReferenceShapes(List aList)  { _pageRefShapes = aList; }
 /**
  * Registers a shape with a page key in it.
  */
-public void addPageReferenceShape(RMShape aShape)  { ListUtils.addUniqueId(_pageRefShapes, aShape); }
+public void addPageReferenceShape(SGView aShape)  { ListUtils.addUniqueId(_pageRefShapes, aShape); }
 
 /**
  * RMKeyChain.Get implementation to run against DataStack.
@@ -260,8 +260,8 @@ protected Object convertToStandardType(Object anObj)
 public void resolvePageReferences()
 {
     // Iterate over page reference shapes and have them resolve
-    List <RMShape> prshapes = getPageReferenceShapes();
-    for(int i=0, iMax=prshapes.size(); i<iMax; i++) { RMShape shape = prshapes.get(i);
+    List <SGView> prshapes = getPageReferenceShapes();
+    for(int i=0, iMax=prshapes.size(); i<iMax; i++) { SGView shape = prshapes.get(i);
         
         // Create page info map
         Map info = new HashMap();
@@ -283,7 +283,7 @@ public void resolvePageReferences()
 /**
  * Clones a RichText.
  */
-public RichText rpgCloneRichText(RichText aRichText, Object userInfo, RMShape aShape, boolean doCopy)
+public RichText rpgCloneRichText(RichText aRichText, Object userInfo, SGView aShape, boolean doCopy)
 {
     return rpgCloneRichText(aRichText, this, userInfo, aShape, doCopy);
 }
@@ -291,7 +291,7 @@ public RichText rpgCloneRichText(RichText aRichText, Object userInfo, RMShape aS
 /**
  * Clones a RichText.
  */
-public RichText rpgCloneRichText(RichText aRichText, ReportOwner anRptOwner, Object userInfo, RMShape aShape, boolean doCopy)
+public RichText rpgCloneRichText(RichText aRichText, ReportOwner anRptOwner, Object userInfo, SGView aShape, boolean doCopy)
 {
     // Declare local variable for resulting out-rtext and for whether something requested a recursive RPG run
     RichText outString = aRichText;
@@ -535,8 +535,8 @@ private Object getRMKey(String key)
 /**
  * A shape class to represent multiple pages of shapes.
  */
-public static class ShapeList extends RMParentShape {
-    public int removeChild(RMShape aChild)  { return -1; }
+public static class ShapeList extends SGParent {
+    public int removeChild(SGView aChild)  { return -1; }
 }
 
 }

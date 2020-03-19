@@ -6,7 +6,7 @@ import reportmill.util.DataUtils;
 import reportmill.util.RMGroup;
 import reportmill.util.RMGrouping;
 import reportmill.util.RMKeyChain;
-import rmdraw.shape.RMShape;
+import rmdraw.scene.SGView;
 
 import java.util.List;
 
@@ -18,11 +18,11 @@ class RMCrossTabRPG {
 /**
  * Sets a reportmill for this crosstab (which really gets the dataset and calls setObjects).
  */
-public RMShape rpgCrossTab(ReportOwner anRptOwner, RMShape aParent, RMCrossTab aCTab)
+public SGView rpgCrossTab(ReportOwner anRptOwner, SGView aParent, RMCrossTab aCTab)
 {
     // Get dataset: If parent TableRow available, get dataset from ReportOwner 
     List dataset = null;
-    RMShape parentTableRow = aCTab.getParent(RMTableRow.class);
+    SGView parentTableRow = aCTab.getParent(RMTableRow.class);
     if(parentTableRow!=null) {
         
         // If no dataset key, use last data bearing object if RMGroup

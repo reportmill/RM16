@@ -6,7 +6,7 @@ import reportmill.shape.*;
 import rmdraw.app.Editor;
 import rmdraw.app.Tool;
 import reportmill.util.RMGrouping;
-import rmdraw.shape.*;
+import rmdraw.scene.*;
 import java.util.*;
 import snap.util.SnapUtils;
 import snap.util.StringUtils;
@@ -155,12 +155,12 @@ public String getWindowTitle()  { return "Labels Inspector"; }
 /**
  * Overridden to make labels super-selectable.
  */
-public boolean isSuperSelectable(RMShape aShape)  { return true; }
+public boolean isSuperSelectable(SGView aShape)  { return true; }
 
 /**
  * Overridden to make labels not ungroupable.
  */
-public boolean isUngroupable(RMShape aShape)  { return false; }
+public boolean isUngroupable(SGView aShape)  { return false; }
 
 /**
  * Adds a new labels shape to editor.
@@ -172,10 +172,10 @@ public static void addLabels(Editor anEditor, String aKeyPath)
     anEditor.getSelPage().addChild(labels); // Add to selected page (use editor to get undo)
     labels.setName(aKeyPath); // Set labels name
     labels.setDatasetKey(aKeyPath); // Set labels dataset key
-    RMPage page = anEditor.getSelPage(); // Get selected page
+    SGPage page = anEditor.getSelPage(); // Get selected page
     labels.setXY((page.getWidth() - labels.getWidth())/2, (page.getHeight() - labels.getHeight())/2); // Set location
     anEditor.setCurrentToolToSelectTool(); // Reset tool to select tool
-    anEditor.setSelectedShape(labels); // Select labels
+    anEditor.setSelView(labels); // Select labels
 }
 
 /**

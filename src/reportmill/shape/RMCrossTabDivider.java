@@ -3,12 +3,12 @@
  */
 package reportmill.shape;
 
-import rmdraw.shape.RMLineShape;
+import rmdraw.scene.SGLine;
 
 /**
  * This class represents a line that divedes a cell row or cell column.
  */
-public class RMCrossTabDivider extends RMLineShape {
+public class RMCrossTabDivider extends SGLine {
 
     // The row or column this divider is associated with
     RMCrossTabSpan  _span;

@@ -2,14 +2,14 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.shape;
-import rmdraw.shape.RMShape;
+import rmdraw.scene.SGView;
 import snap.gfx.Font;
 import snap.util.*;
 
 /**
  * This shape is used by graph area to hold attributes of the value axis.
  */
-public class RMGraphPartLabelAxis extends RMShape {
+public class RMGraphPartLabelAxis extends SGView {
 
     // Whether to show axis labels
     boolean       _showAxisLabels = true;

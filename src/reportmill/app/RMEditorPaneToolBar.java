@@ -231,12 +231,8 @@ public class RMEditorPaneToolBar extends EditorPaneToolBar {
 
         // Handle FontFaceComboBox
         if (anEvent.equals("FontFaceComboBox")) {
-            String familyName = anEvent.getText();
-            String fontNames[] = Font.getFontNames(familyName);
-            if(fontNames==null || fontNames.length==0) return;
-            String fontName = fontNames[0];
-            Font font = Font.get(fontName, 12);
-            styler.setFontFamily(font);
+            String fname = anEvent.getText();
+            styler.setFontFamily(fname);
             editor.requestFocus();
         }
 

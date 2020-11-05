@@ -1,7 +1,7 @@
 package reportmill.shape;
-import reportmill.out.RMExcelWriter;
 import reportmill.out.RMRTFWriter;
 import reportmill.out.RMStringWriter;
+import reportmill.util.RMEnv;
 import reportmill.util.RMTableOfContents;
 import reportmill.out.RMHtmlFile;
 import reportmill.util.RMDataSource;
@@ -125,7 +125,7 @@ public class RMDoc extends SGDoc implements ReportGen.RPG {
      */
     public byte[] getBytesExcel()
     {
-        return new RMExcelWriter().getBytes(this);
+        return RMEnv.getEnv().getBytesExcel(this);
     }
 
     /**

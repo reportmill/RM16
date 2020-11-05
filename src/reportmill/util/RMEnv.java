@@ -3,9 +3,9 @@ import reportmill.shape.RMDoc;
 import snap.gfx.Font;
 import snap.text.RichText;
 import snap.text.TextLineStyle;
+import snap.util.SnapUtils;
 
 import java.lang.reflect.Method;
-import java.sql.ResultSet;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.List;
@@ -75,6 +75,6 @@ public class RMEnv {
     public static RMEnv getEnv()
     {
         if (_shared!=null) return _shared;
-        return _shared = new RMEnv();
+        return _shared = SnapUtils.isTeaVM ? new RMEnv() : new RMEnvSwing();
     }
 }

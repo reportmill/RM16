@@ -177,7 +177,7 @@ public class ReportMill {
         // Create evalShape license string in lower left corner
         evalShape = new SGText(richText);
         evalShape.setFrame(5, aShape.getHeight() - 20, 500, 18);
-        evalShape.setURL("http://www.reportmill.com");
+        evalShape.setURL("https://www.reportmill.com");
         aShape.addChild(evalShape);
     }
 

@@ -4,7 +4,6 @@ import snap.gfx.Font;
 import snap.text.RichText;
 import snap.text.TextLineStyle;
 import snap.util.SnapUtils;
-
 import java.lang.reflect.Method;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -75,6 +74,19 @@ public class RMEnv {
     public static RMEnv getEnv()
     {
         if (_shared!=null) return _shared;
-        return _shared = SnapUtils.isTeaVM ? new RMEnv() : new RMEnvSwing();
+
+        // Use generic for TEAVM, otherwise Swing version
+        String cname = SnapUtils.getPlatform()==SnapUtils.Platform.TEAVM ? "reportmill.util.RMEnv" : "reportmill.util.RMEnvSwing";
+
+        // Try to get/set class name instance
+        try
+        {
+            return _shared = (RMEnv) Class.forName(cname).newInstance();
+        }
+        catch(Exception e)
+        {
+            System.err.println("RMEnv.getEnv: Can't set env: " + cname + ", " + e);
+            return _shared = new RMEnv();
+        }
     }
 }

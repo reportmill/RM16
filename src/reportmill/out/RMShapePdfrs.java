@@ -4,14 +4,13 @@
 package reportmill.out;
 import reportmill.shape.RMPDFData;
 import reportmill.shape.RMPDFShape;
-import rmdraw.gfx3d.*;
 import rmdraw.scene.*;
 import java.util.*;
-
 import snap.geom.Insets;
 import snap.geom.Rect;
 import snap.geom.Shape;
 import snap.gfx.*;
+import snap.gfx3d.*;
 import snappdf.*;
 import snappdf.write.*;
 

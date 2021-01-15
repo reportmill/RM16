@@ -2,7 +2,6 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package reportmill.shape;
-import rmdraw.gfx3d.*;
 import java.util.*;
 import rmdraw.scene.SGLine;
 import rmdraw.scene.SGScene3D;
@@ -10,6 +9,7 @@ import rmdraw.scene.SGView;
 import snap.geom.Path;
 import snap.geom.Rect;
 import snap.gfx.*;
+import snap.gfx3d.*;
 
 /**
  * This class renders a bar graph in 3D.

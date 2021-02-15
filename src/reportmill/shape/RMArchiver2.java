@@ -36,6 +36,7 @@ public class RMArchiver2 extends RMArchiver {
         cmap.put("document", RMDoc.class);
         cmap.put("graph", RMGraph.class);
         cmap.put("graph-legend", RMGraphLegend.class);
+        cmap.put("image-shape", RMImageShape.class);
         cmap.put("label", RMLabel.class);
         cmap.put("labels", RMLabels.class);
         cmap.put("switchshape", RMSwitchShape.class);

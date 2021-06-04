@@ -373,16 +373,20 @@ static class PieGraphShape3D extends SGScene3D implements PieGraphShape {
         removeShapes();
         
         // Iterate over wedges and add them as 3D
-        for(int i=0, iMax=_wedges.size(); i<iMax; i++) { SGView wedge = _wedges.get(i);
-            addShapesForRMShape(wedge, 0, getDepth(), true); }
+        for(int i=0, iMax=_wedges.size(); i<iMax; i++) {
+            SGView wedge = _wedges.get(i);
+            addShapesForRMShape(wedge, 0, getDepth());
+        }
         
         // Iterate over lines and add them as 3D
         //for(int i=0, iMax=_lines.size(); i<iMax; i++) addChild3D(_lines.get(i), getDepth()/3-5, getDepth()/3-5);
         
         // Create label shapes
         boolean fullRender = true; // !isValueAdjusting()
-        for(int i=0, iMax=_labels.size(); i<iMax && fullRender; i++) { SGView label = _labels.get(i);
-            addShapesForRMShape(label, -5, -5, false); }
+        for(int i=0, iMax=_labels.size(); i<iMax && fullRender; i++) {
+            SGView label = _labels.get(i);
+            addShapesForRMShape(label, -5, -5);
+        }
     
         // Do normal version
         super.layoutImpl();

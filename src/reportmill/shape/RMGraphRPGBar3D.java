@@ -192,7 +192,7 @@ protected void layoutImpl()
     
     // Iterate over bars and add each bar shape at bar layer
     for(int i=0, iMax=_bars.size(); i<iMax; i++) { Bar bar = _bars.get(i);
-    addShapesForRMShape(bar.barShape, barMin + bar.layer*layerDepth, barMax + bar.layer*layerDepth, false); }
+    addShapesForRMShape(bar.barShape, barMin + bar.layer*layerDepth, barMax + bar.layer*layerDepth); }
     
     // Calculate whether back plane should be shifted to the front. Back normal = { 0, 0,-1 }.
     boolean shiftBack = isFacingAway(localToCameraForVector(0, 0, -1));
@@ -265,7 +265,7 @@ protected void layoutImpl()
 
         // Create axis label shapes
         for(int i=0, iMax=_axisLabels.size(); i<iMax && fullRender; i++)
-            addShapesForRMShape(_axisLabels.get(i), -.1f, -.1f, false);
+            addShapesForRMShape(_axisLabels.get(i), -.1f, -.1f);
     
         // Create bar label shapes
         for(int i=0, iMax=_barLabels.size(); i<iMax && fullRender; i++) {
@@ -276,10 +276,10 @@ protected void layoutImpl()
             // Handle outside labels
             if(_barLabelPositions.get(i)==RMGraphPartSeries.LabelPos.Above ||
                 _barLabelPositions.get(i)==RMGraphPartSeries.LabelPos.Below)
-                addShapesForRMShape(barLabel, depth/2, depth/2, false);
+                addShapesForRMShape(barLabel, depth/2, depth/2);
     
             // Handle inside
-            else addShapesForRMShape(barLabel, (depth - _barWidth)/2 - 5, (depth - _barWidth)/2 - 5, false);
+            else addShapesForRMShape(barLabel, (depth - _barWidth)/2 - 5, (depth - _barWidth)/2 - 5);
         }
     }
           

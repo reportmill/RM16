@@ -1,0 +1,35 @@
+{
+    "bin": {"rm16": "jdeploy-bundle/jdeploy.js"},
+    "author": "ReportMill Software, Inc.",
+    "description": "A report designer and framework for Java",
+    "main": "index.js",
+    "preferGlobal": true,
+    "repository": "",
+    "version": "2023.4.1",
+    "jdeploy": {
+        "jdk": false,
+        "javaVersion": "11",
+        "documentTypes": [{
+            "editor": true,
+            "extension": "rpt",
+            "custom": true,
+            "mimetype": "application/reportmill"
+        }],
+        "urlSchemes": ["reportmill:open"],
+        "jar": "build/libs/ReportMill16-2023.04.jar",
+        "javafx": false,
+        "title": "RMStudio 16"
+    },
+    "dependencies": {
+        "command-exists-promise": "^2.0.2",
+        "node-fetch": "2.6.7",
+        "tar": "^4.4.8",
+        "yauzl": "^2.10.0",
+        "shelljs": "^0.8.4"
+    },
+    "license": "",
+    "name": "reportmill16",
+    "files": ["jdeploy-bundle"],
+    "scripts": {"test": "echo \"Error: no test specified\" && exit 1"},
+    "homepage": "https://reportmill.com"
+}

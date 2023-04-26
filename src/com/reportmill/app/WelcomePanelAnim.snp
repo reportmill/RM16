@@ -10,7 +10,7 @@
         <font name="Futura Condensed Medium" size="18" />
         <pgraph align="center" />
         <outline color="#000000" />
-        <string>ReportMill 15</string>
+        <string>ReportMill 16</string>
       </RichText>
     </TextArea>
     <StackView>
@@ -22,7 +22,7 @@
           <outline color="#fcffff" />
           <pgraph align="CENTER" />
           <char-spacing value="-1.9" />
-          <string>RMStudio 15</string>
+          <string>RMStudio 16</string>
         </RichText>
       </TextArea>
     </StackView>

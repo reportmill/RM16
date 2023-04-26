@@ -105,7 +105,7 @@ tasks.register('buildInfo') {
     doLast {
 
         // Create BuildInfo text (date string) and write to file
-        String buildInfoText = new SimpleDateFormat("MMM-dd-yy HH:MM").format(new Date());
+        String buildInfoText = new SimpleDateFormat("MMM-dd-yy HH:mm").format(new Date());
         String buildInfoFilePathStr = buildDir.getAbsolutePath() + '/resources/main/com/reportmill/BuildInfo.txt';
         java.nio.file.Path buildInfoFilePath = java.nio.file.Paths.get(buildInfoFilePathStr);
         java.nio.file.Files.write(buildInfoFilePath, buildInfoText.getBytes());

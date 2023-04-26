@@ -5,7 +5,7 @@
     "main": "index.js",
     "preferGlobal": true,
     "repository": "",
-    "version": "2023.4.1",
+    "version": "2023.4.2",
     "jdeploy": {
         "jdk": false,
         "javaVersion": "11",
@@ -18,7 +18,7 @@
         "urlSchemes": ["reportmill:open"],
         "jar": "build/libs/ReportMill16-2023.04.jar",
         "javafx": false,
-        "title": "RMStudio 16"
+        "title": "RMStudio16"
     },
     "dependencies": {
         "command-exists-promise": "^2.0.2",

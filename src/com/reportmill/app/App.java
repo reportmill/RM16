@@ -5,9 +5,15 @@ package com.reportmill.app;
 import com.reportmill.base.ReportMill;
 import snap.gfx.GFXEnv;
 import snap.util.*;
+import snap.view.ViewUtils;
 import snap.view.WindowView;
 import snap.viewx.DialogBox;
 import snap.viewx.ExceptionReporter;
+import snap.web.WebFile;
+import snap.web.WebURL;
+import java.awt.*;
+import java.io.File;
+import java.util.List;
 
 /************************************* - All files should be 120 chars wide - *****************************************/
 
@@ -24,13 +30,13 @@ public class App {
      */
     public static void main(String[] args)
     {
-        new App(args);
+        ViewUtils.runLater(() -> initAppWithArgs(args));
     }
 
     /**
      * Creates a new app instance.
      */
-    public App(String[] args)
+    public static void initAppWithArgs(String[] args)
     {
         // Set app is true
         ReportMill.isApp = true;
@@ -39,9 +45,6 @@ public class App {
         Prefs prefs = Prefs.getPrefsForName("/com/reportmill");
         Prefs.setDefaultPrefs(prefs);
 
-        // Mac specific stuff
-        //if (SnapUtils.isMac) new AppleAppHandler().init();
-
         // Install Exception reporter
         ExceptionReporter er = new ExceptionReporter("ReportMill");
         er.setToAddress("support@reportmill.com");
@@ -49,7 +52,14 @@ public class App {
         Thread.setDefaultUncaughtExceptionHandler(er);
 
         // Run welcome panel
-        WelcomePanel.getShared().showPanel();
+        boolean didOpenFile = openFilesFromArgs(args);
+        if (!didOpenFile)
+            WelcomePanel.getShared().showPanel();
+
+        // Install OpenFiles Handler
+        Desktop.getDesktop().setOpenFileHandler(ofh -> ViewUtils.runLater(() -> openFiles(ofh.getFiles())));
+        Desktop.getDesktop().setPreferencesHandler(pe -> new PreferencesPanel().showPanel(null));
+        Desktop.getDesktop().setQuitHandler((qe,qr) -> { quitApp(); qr.performQuit(); });
     }
 
     /**
@@ -106,30 +116,37 @@ public class App {
         GFXEnv.getEnv().exit(0);
     }
 
-//    /**
-//     * A class to handle apple events.
-//     */
-//    private static class AppleAppHandler implements PreferencesHandler, QuitHandler, OpenFilesHandler {
-//
-//        public void init()
-//        {
-//            System.setProperty("apple.laf.useScreenMenuBar", "true"); // 1.4
-//            System.setProperty("com.apple.mrj.application.apple.menu.about.name", "RMStudio 14");
-//            Application app = Application.getApplication();
-//            app.setPreferencesHandler(this);
-//            app.setQuitHandler(this);
-//            app.setOpenFileHandler(this);
-//        }
-//
-//        public void handlePreferences(PreferencesEvent arg0) { new PreferencesPanel().showPanel(null); }
-//        public void openFiles(OpenFilesEvent anEvent)
-//        {
-//            java.io.File file = anEvent.getFiles().size() > 0 ? anEvent.getFiles().get(0) : null;
-//            if (file != null) SwingUtilities.invokeLater(() -> Welcome.getShared().open(file.getPath()));
-//        }
-//        public void handleQuitRequestWith(QuitEvent arg0, QuitResponse arg1)
-//        {
-//            App.quitApp(); if (_quiting) arg1.cancelQuit();
-//        }
-//    }
+    /**
+     * Opens files in given list.
+     */
+    private static void openFiles(List<File> theFiles)
+    {
+        for (var openFile : theFiles) {
+            WebURL openFileURL = WebURL.getURL(openFile);
+            if (openFileURL != null) {
+                WebFile openFileSnap = openFileURL.getFile();
+                if (openFileSnap != null)
+                    WelcomePanel.getShared().openFile(openFileSnap);
+            }
+        }
+    }
+
+    /**
+     * Opens files in given args list.
+     */
+    private static boolean openFilesFromArgs(String[] args)
+    {
+        boolean didOpenFile = false;
+        for (var arg : args) {
+            WebURL openFileURL = WebURL.getURL(arg);
+            WebFile openFile = openFileURL != null ? openFileURL.getFile() : null;
+            if (openFile != null) {
+                WelcomePanel.getShared().openFile(openFile);
+                didOpenFile = true;
+            }
+        }
+
+        // Return when did open file
+        return didOpenFile;
+    }
 }

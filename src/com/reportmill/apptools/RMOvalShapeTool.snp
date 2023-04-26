@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ColView Padding="30,15,0,15" Spacing="20" PrefWidth="275" PrefHeight="325">
+  <TitleView PrefWidth="250" PrefHeight="48" Title="Start Angle">
+    <RowView Padding="0,5,0,5" Spacing="5">
+      <ThumbWheel Name="StartThumb" GrowWidth="true" PrefHeight="16" max="360" round="1" />
+      <TextField Name="StartText" PrefWidth="50" PrefHeight="20" Align="CENTER" />
+    </RowView>
+  </TitleView>
+  <TitleView PrefWidth="250" PrefHeight="48" Title="Sweep Angle">
+    <RowView Padding="0,5,0,5" Spacing="5">
+      <ThumbWheel Name="SweepThumb" GrowWidth="true" PrefHeight="16" max="360" absmin="0" absmax="360" round="1" />
+      <TextField Name="SweepText" PrefWidth="50" PrefHeight="20" Align="CENTER" />
+    </RowView>
+  </TitleView>
+  <TitleView PrefWidth="250" PrefHeight="48" Title="Hole Ratio">
+    <RowView Padding="0,5,0,5" Spacing="5">
+      <Slider Name="HoleRatioSlider" GrowWidth="true" PrefHeight="16" Max="100" />
+      <TextField Name="HoleRatioText" PrefWidth="50" PrefHeight="20" Align="CENTER" />
+    </RowView>
+  </TitleView>
+</ColView>

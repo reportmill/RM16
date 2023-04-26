@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ColView Padding="10,5,5,5" FillWidth="true">
+  <ColView Spacing="2" FillWidth="true">
+    <RowView Spacing="10">
+      <CheckBox Name="StructuredCheckBox" text="Structured - number of columns:" />
+      <TextField Name="NumOfColumnsText" PrefWidth="50" PrefHeight="20" Align="CENTER" />
+    </RowView>
+    <CheckBox Name="SyncParentCheckBox" text="Sync column widths with row above" />
+    <CheckBox Name="SyncAlternatesCheckBox" text="Sync column widths with all versions" />
+    <RowView Spacing="10">
+      <CheckBox Name="StayWithChildrenCheckBox" text="Stay with this number of children:" />
+      <TextField Name="NumOfChildrenText" PrefWidth="50" PrefHeight="20" Align="CENTER" />
+    </RowView>
+    <CheckBox Name="ReprintCheckBox" text="Reprint when wrapped" />
+    <CheckBox Name="PrintIfNoObjectsCheckBox" text="Print even if no objects in group" />
+    <CheckBox Name="MoveToBottomCheckBox" text="Move row to bottom of page" />
+    <CheckBox Name="DeleteVSpansCheckBox" text="Delete vertical spans of hidden shapes" />
+    <CheckBox Name="ShiftShapesCheckBox" text="Shift shapes below hidden shapes up" />
+    <RowView Padding="2">
+      <Label PrefWidth="120" text="Min Split Height:" />
+      <TextField Name="MinSplitHeightText" PrefWidth="50" PrefHeight="20" Align="CENTER" />
+    </RowView>
+    <RowView Padding="2">
+      <Label PrefWidth="120" text="Min Remainder Height:" />
+      <TextField Name="MinRemainderHeightText" PrefWidth="50" PrefHeight="20" Align="CENTER" />
+    </RowView>
+  </ColView>
+  <ColView Padding="1" FillWidth="true">
+    <Label Padding="5,0,3,1" text="Table Row Version Key:" />
+    <TextView Name="VersionKeyText" PrefHeight="50" FireActionOnEnterKey="true" FireActionOnFocusLost="true" />
+    <Label Padding="5,0,3,1" text="Page Break Expression:" />
+    <TextView Name="PageBreakKeyText" PrefHeight="50" FireActionOnEnterKey="true" FireActionOnFocusLost="true" />
+  </ColView>
+</ColView>

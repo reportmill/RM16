@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ColView Padding="0,4,4,4" Spacing="4" GrowHeight="true" FillWidth="true">
+  <font name="Arial" size="11" />
+  <RowView Padding="4,10,5,10" GrowWidth="true">
+    <ToggleButton Name="AlignLeftButton" PrefWidth="26" PrefHeight="24" image="AlignLeft.png" Position="CENTER_LEFT" ToggleGroup="bg1" />
+    <ToggleButton Name="AlignCenterButton" PrefWidth="26" PrefHeight="24" image="AlignCenter.png" Position="CENTER" ToggleGroup="bg1" />
+    <ToggleButton Name="AlignRightButton" PrefWidth="26" PrefHeight="24" image="AlignRight.png" Position="CENTER" ToggleGroup="bg1" />
+    <ToggleButton Name="AlignFullButton" PrefWidth="26" PrefHeight="24" image="AlignFull.png" Position="CENTER_RIGHT" ToggleGroup="bg1" />
+    <ToggleButton Name="AlignTopButton" PrefWidth="26" PrefHeight="24" LeanX="RIGHT" image="AlignTop.png" Position="CENTER_LEFT" ToggleGroup="bg2" />
+    <ToggleButton Name="AlignMiddleButton" PrefWidth="26" PrefHeight="24" image="AlignMiddle.png" Position="CENTER" ToggleGroup="bg2" />
+    <ToggleButton Name="AlignBottomButton" PrefWidth="26" PrefHeight="24" image="AlignBottom.png" Position="CENTER_RIGHT" ToggleGroup="bg2" />
+  </RowView>
+  <TextView Name="TextView" MinHeight="40" GrowHeight="true" WrapText="true" />
+  <TitleView MinHeight="30" Padding="5,8,8,10" title="Margin" Collapsible="true" Expanded="true">
+    <ColView Spacing="4">
+      <RowView Spacing="4">
+        <Label text="Top, Lt, Btm, Rt:" />
+        <TextField Name="MarginText" PrefWidth="80" PrefHeight="22" Align="CENTER" />
+      </RowView>
+      <RowView Spacing="4">
+        <Label text="Rounding:" />
+        <ThumbWheel Name="RoundingThumb" PrefWidth="100" PrefHeight="16" max="20" absmin="0" round="1" />
+        <TextField Name="RoundingText" PrefWidth="40" PrefHeight="22" Align="CENTER" />
+      </RowView>
+    </ColView>
+  </TitleView>
+  <TitleView MinHeight="30" Padding="8,8,8,8" title="Misc. Options" Collapsible="true" Expanded="false">
+    <RowView Spacing="5">
+      <ColView Spacing="4">
+        <CheckBox Name="ShowBorderCheckBox" text="Always Show Border" />
+        <CheckBox Name="CoalesceNewlinesCheckBox" text="Coalesce Newlines" />
+        <CheckBox Name="PerformWrapCheckBox" text="Wrap around peers" />
+        <CheckBox Name="EditableCheckBox" text="PDF Editable" />
+        <CheckBox Name="MultilineCheckBox" text="PDF Multiline" />
+      </ColView>
+      <ColView Spacing="4">
+        <Label text="Overflow Behavior:" />
+        <RadioButton Name="GrowRadio" text="Grow (if in row)" ToggleGroup="bg3" />
+        <RadioButton Name="ShrinkRadio" text="Shrink Text to Fit" ToggleGroup="bg3" />
+        <RadioButton Name="PaginateRadio" text="Paginate (if in page)" ToggleGroup="bg3" />
+      </ColView>
+    </RowView>
+  </TitleView>
+  <TitleView MinHeight="30" Padding="8,8,8,8" title="Advanced Options" Collapsible="true" Expanded="false">
+    <ColView Spacing="4" FillWidth="true">
+      <RowView Spacing="4">
+        <Label PrefWidth="75" text="Char Spacing:" />
+        <Spinner Name="CharSpacingSpinner" PrefWidth="60" Align="CENTER" Step=".1" />
+      </RowView>
+      <RowView Spacing="4">
+        <Label PrefWidth="75" text="Line Spacing:" />
+        <Spinner Name="LineSpacingSpinner" PrefWidth="60" Align="CENTER" Step=".1" />
+        <Button Name="LineSpacingSingleButton" PrefWidth="20" PrefHeight="20" text="x1" />
+        <Button Name="LineSpacingDoubleButton" PrefWidth="20" PrefHeight="20" text="x2" />
+      </RowView>
+      <RowView Spacing="4">
+        <Label PrefWidth="75" text="Line Gap:" />
+        <Spinner Name="LineGapSpinner" PrefWidth="60" Align="CENTER" Step="1" />
+      </RowView>
+      <RowView>
+        <MenuButton Margin="8,0,0,0" PrefWidth="100" PrefHeight="22" LeanX="CENTER" text="Text Actions">
+          <MenuItem Name="MakeMinWidthMenuItem" text="Make Min Width" />
+          <MenuItem Name="MakeMinHeightMenuItem" text="Make Min Height" />
+          <MenuItem Name="TurnToPathMenuItem" text="Turn to Path" />
+          <MenuItem Name="TurnToCharsShapeMenuItem" text="Turn to Chars Shape" />
+          <MenuItem Name="LinkedTextMenuItem" text="Create Linked Text" />
+        </MenuButton>
+      </RowView>
+    </ColView>
+  </TitleView>
+</ColView>

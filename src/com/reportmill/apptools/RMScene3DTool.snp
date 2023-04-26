@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ColView Padding="10,4,4,4" Spacing="8" FillWidth="true">
+  <RowView Align="CENTER">
+    <ColView Spacing="8">
+      <RowView Spacing="5">
+        <Label PrefWidth="32" text="Yaw:" />
+        <Spinner Name="YawSpinner" PrefWidth="54" Value="0" />
+      </RowView>
+      <RowView Spacing="5">
+        <Label PrefWidth="32" text="Pitch:" />
+        <Spinner Name="PitchSpinner" PrefWidth="54" Value="0" />
+      </RowView>
+      <RowView Spacing="5">
+        <Label PrefWidth="32" text="Roll:" />
+        <Spinner Name="RollSpinner" PrefWidth="54" Value="0" />
+      </RowView>
+    </ColView>
+  </RowView>
+  <TitleView Title="Depth">
+    <RowView Padding="4" Spacing="5">
+      <Slider Name="DepthSlider" GrowWidth="true" Min="10" Max="200" />
+      <TextField Name="DepthText" PrefWidth="50" PrefHeight="20" Align="CENTER" />
+    </RowView>
+  </TitleView>
+  <TitleView Title="Focal Length (inches from screen to eye)">
+    <RowView Padding="4" Spacing="5">
+      <Slider Name="FOVSlider" GrowWidth="true" Min="6" Max="60" />
+      <TextField Name="FOVText" PrefWidth="50" PrefHeight="20" Align="CENTER" />
+    </RowView>
+  </TitleView>
+</ColView>

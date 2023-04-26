@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SpringView width="275" height="325" PrefWidth="275" PrefHeight="325">
+  <Label x="9" y="32" width="57" height="20" text="Layers:">
+    <font name="Arial Bold" size="11" />
+  </Label>
+  <Button Name="AllVisibleButton" x="106" y="30" width="26" height="26" image="LayerVisible.png" />
+  <Button Name="AllInvisibleButton" x="132" y="30" width="26" height="26" image="LayerInvisible.png" />
+  <Button Name="AllLockedButton" x="158" y="30" width="26" height="26" image="LayerLocked.png" />
+  <TableView Name="LayersTable" x="10" y="57" width="174" height="119" ShowHeader="false">
+    <TableCol GrowWidth="true" />
+    <TableCol PrefWidth="30" />
+  </TableView>
+  <Button Name="AddButton" x="186" y="57" width="89" height="25" text="Add" />
+  <Button Name="RemoveButton" x="186" y="86" width="89" height="25" text="Remove" />
+  <Button Name="RenameButton" x="186" y="115" width="89" height="25" text="Rename" />
+  <Button Name="MergeButton" x="186" y="144" width="89" height="25" text="Merge" />
+  <CheckBox Name="PaintBackCheckBox" x="54" y="184" width="138" height="22" text="Paint Background" />
+  <Label x="5" y="5" width="68" height="18" text="Dataset Key:" />
+  <TextField Name="DatasetKeyText" x="73" y="4" width="196" height="20" />
+</SpringView>

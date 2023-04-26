@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ColView FillWidth="true">
+  <RowView Padding="4" GrowWidth="true" Spacing="4">
+    <Label text="Series:" />
+    <ToggleButton Name="SeriesButton1" PrefWidth="22" PrefHeight="22" Padding="2" text="1" Selected="true" />
+    <ToggleButton Name="SeriesButton2" PrefWidth="22" PrefHeight="22" Padding="2" text="2" />
+    <ToggleButton Name="SeriesButton3" PrefWidth="22" PrefHeight="22" Padding="2" text="3" />
+  </RowView>
+  <RowView Padding="4" GrowWidth="true" Spacing="4">
+    <Label text="Title:" />
+    <TextField Name="TitleText" GrowWidth="true" />
+  </RowView>
+  <ColView Padding="4" GrowHeight="true" Spacing="4" FillWidth="true">
+    <Label text="Bar/Wedge Labels:" />
+    <ListView Name="LabelPositionsList" MinWidth="155" PrefHeight="80" GrowHeight="true">
+      <LineBorder Color="#c0c0c0" />
+      <font name="Arial" size="12" />
+    </ListView>
+  </ColView>
+  <RowView Padding="4" GrowWidth="true" Spacing="4">
+    <Label text="Text:" />
+    <TextField Name="SeriesText" GrowWidth="true" />
+  </RowView>
+  <RowView Padding="4" GrowWidth="true" Spacing="4">
+    <Label text="Rotation:" />
+    <Spinner Name="LabelRollSpinner" PrefWidth="75" Max="90" />
+  </RowView>
+</ColView>

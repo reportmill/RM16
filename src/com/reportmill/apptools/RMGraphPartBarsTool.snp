@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ColView>
+  <RowView Padding="4,4,4,4" Spacing="4">
+    <Label PrefWidth="49" text="Bar Gap:" />
+    <Spinner Name="BarGapSpinner" PrefWidth="60" Min="0" Max="1" Value="0" />
+    <Label text="(as fraction of bar width)" />
+  </RowView>
+  <RowView Padding="4,4,4,4" Spacing="4">
+    <Label x="8" y="77" width="49" height="18" text="Set Gap:" />
+    <Spinner Name="SetGapSpinner" PrefWidth="60" Min="0" Value="0" />
+    <Label text="(as fraction of bar width)" />
+  </RowView>
+  <RowView Padding="4,4,4,4" Spacing="4">
+    <Label text="Minimum Section Bar Count:" />
+    <Spinner Name="BarCountSpinner" PrefWidth="60" Min="0" Value="0" />
+  </RowView>
+</ColView>

@@ -1,0 +1,10 @@
+# Ignore build dirs and Gradle cache directory
+/bin/
+/build/
+/out/
+/target/
+/.idea/
+/.settings/
+.gradle
+
+.DS_Store

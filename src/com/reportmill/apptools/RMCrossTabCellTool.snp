@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ColView Padding="5,0,0,0" Spacing="5" FillWidth="true">
+  <font Name="Arial" size="11" />
+  <RowView Spacing="4">
+    <Label Name="GroupingKeyLabel" text="Grouping Key:" />
+    <TextField Name="GroupingKeyText" PrefWidth="190" PrefHeight="22" GrowWidth="true" />
+  </RowView>
+  <ColView>
+    <CheckBox Name="VisibleCheckBox" Padding="2,0,0,12" text="Visible" />
+    <RowView Padding="0,0,0,119">
+      <CheckBox Name="ShowTopBorderCheckBox" Padding="0,1,1,1" text="Top" />
+    </RowView>
+    <RowView Padding="0,0,0,10">
+      <Label PrefWidth="60" text="Borders:" />
+      <CheckBox Name="ShowLeftBorderCheckBox" Position="CENTER_RIGHT" text="Left" />
+      <CheckBox Padding="0,0,0,32" Name="ShowRightBorderCheckBox" text="Right" />
+    </RowView>
+    <RowView Padding="0,0,0,119">
+      <CheckBox Name="ShowBottomBorderCheckBox" Padding="1" text="Bottom" />
+    </RowView>
+  </ColView>
+  <Label text="Text:" />
+</ColView>

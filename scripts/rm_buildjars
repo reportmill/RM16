@@ -1,0 +1,40 @@
+
+echo "Buildjars RM15"
+RMHOME="/Users/jeff/Eclipse"
+cd $RMHOME/RM15/bin
+date "+%b-%d-%y %H:%M" > com/reportmill/BuildInfo.txt
+
+echo "Creating ReportMill15.jar"
+rm -rf ReportMill15.jar
+jar cf ReportMill15.jar \
+    -C ../../RM15/bin com/reportmill/Shell* \
+    -C ../../RM15/bin com/reportmill/BuildInfo.txt \
+    -C ../../RM15/bin com/reportmill/base \
+    -C ../../RM15/bin com/reportmill/examples \
+    -C ../../RM15/bin com/reportmill/gfx3d \
+    -C ../../RM15/bin com/reportmill/graphics \
+    -C ../../RM15/bin com/reportmill/out \
+    -C ../../RM15/bin com/reportmill/shape \
+    -C ../../SnapPDF/bin snappdf \
+    -C ../../SnapKit/bin snap/geom \
+    -C ../../SnapKit/bin snap/gfx \
+    -C ../../SnapKit/bin snap/parse \
+    -C ../../SnapKit/bin snap/swing \
+    -C ../../SnapKit/bin snap/text \
+    -C ../../SnapKit/bin snap/util \
+    -C ../../SnapKit/bin snap/view \
+    -C ../../SnapKit/bin snap/viewx \
+    -C ../../SnapKit/bin snap/web
+
+echo "Creating RMStudio15 Manifest"
+echo "Main-Class: com.reportmill.app.App" > MANIFEST.MF
+echo "Class-Path: spell.jar" >> MANIFEST.MF
+echo "Application-Name: RMStudio15" >> MANIFEST.MF
+echo "Permissions: all-permissions" >> MANIFEST.MF
+echo "Codebase: *" >> MANIFEST.MF
+
+echo "Creating RMStudio15.jar"
+jar cmf MANIFEST.MF RMStudio15.jar com -C ../../SnapKit/bin snap -C ../../SnapPDF/bin snappdf
+
+#echo "Creating RMStudio15.jar.pack.gz"
+#pack200 RMStudio15.jar.pack.gz RMStudio15.jar

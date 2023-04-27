@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<StackView PrefWidth="400" PrefHeight="240">
+<StackView PrefWidth="420" PrefHeight="240">
   <ImageView GrowWidth="true" GrowHeight="true" FillWidth="true" resource="1902610833" PreserveRatio="false">
     <EmbossEffect Altitude="90" />
   </ImageView>

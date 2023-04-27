@@ -9,6 +9,8 @@ import snap.view.*;
 import snap.viewx.FilePanel;
 import snap.web.*;
 
+import java.util.stream.Stream;
+
 /**
  * An implementation of a panel to manage/open user Snap sites (projects).
  */
@@ -88,6 +90,10 @@ public class WelcomePanel extends ViewOwner {
         _filePanel = createOpenPanel();
         View filePanelUI = _filePanel.getUI();
         filePanelUI.setGrowHeight(true);
+        _filePanel.addPropChangeListener(pc -> {
+            boolean minimize = !(_filePanel.getSelSite() instanceof RecentFilesSite);
+            setTopGraphicMinimized(minimize);
+        }, FilePanel.SelSite_Prop);
 
         // Add FilePanel.UI to ColView
         ColView topColView = (ColView) getUI();
@@ -206,23 +212,71 @@ public class WelcomePanel extends ViewOwner {
     {
         // Unarchive WelcomePaneAnim.snp as DocView
         WebURL url = WebURL.getURL(WelcomePanel.class, "WelcomePanelAnim.snp");
-        ChildView doc = (ChildView) new ViewArchiver().getViewForSource(url);
+        ChildView topGraphic = (ChildView) new ViewArchiver().getViewForSource(url);
 
         // Get page and clear border/shadow
-        ParentView page = (ParentView) doc.getChild(2);
+        ParentView page = (ParentView) topGraphic.getChild(2);
         page.setBorder(null);
         page.setFill(null);
         page.setEffect(null);
 
         // Set BuildText, JavaText, LicenseText
-        View buildText = doc.getChildForName("BuildText");
-        View jvmText = doc.getChildForName("JVMText");
-        View licText = doc.getChildForName("LicenseText");
+        View buildText = topGraphic.getChildForName("BuildText");
+        View jvmText = topGraphic.getChildForName("JVMText");
+        View licText = topGraphic.getChildForName("LicenseText");
         buildText.setText("Build: " + SnapUtils.getBuildInfo().trim());
         jvmText.setText("JVM: " + System.getProperty("java.runtime.version"));
         licText.setText(ReportMill.getLicense() == null ? "Unlicensed Copy" : "License: " + ReportMill.getLicense());
 
+        // Register to change on click
+        Stream.of(topGraphic.getChildren()).forEach(child -> child.setPickable(false));
+        topGraphic.addEventHandler(e -> setTopGraphicMinimized(!isTopGraphicMinimized()), View.MouseRelease);
+
         // Return
-        return doc;
+        return topGraphic;
+    }
+
+    /**
+     * Returns whether top graphic is minimized.
+     */
+    private boolean isTopGraphicMinimized()
+    {
+        ChildView mainView = getUI(ChildView.class);
+        View topGraphic = mainView.getChild(0);
+        return topGraphic.getHeight() < 200;
+    }
+
+    /**
+     * Toggles the top graphic.
+     */
+    private void setTopGraphicMinimized(boolean aValue)
+    {
+        // Just return if already set
+        if (aValue == isTopGraphicMinimized()) return;
+
+        // Get new TopGraphic and swap out old
+        ChildView mainView = getUI(ChildView.class);
+        StackView topGraphic = (StackView) getTopGraphic();
+        mainView.removeChild(0);
+        mainView.addChild(topGraphic, 0);
+
+        // Handle Minimize
+        if (aValue) {
+            topGraphic.removeChild(2);
+            ColView topGraphicColView = (ColView) topGraphic.getChild(1);
+            while (topGraphicColView.getChildCount() > 2)
+                topGraphicColView.removeChild(topGraphicColView.getChildCount() - 1);
+            topGraphic.getAnim(800).setPrefHeight(140);
+        }
+
+        // Handle normal
+        else {
+            topGraphic.setClipToBounds(true);
+            topGraphic.setPrefHeight(140);
+            topGraphic.getAnim(800).setPrefHeight(240);
+        }
+
+        // Start anim
+        topGraphic.playAnimDeep();
     }
 }

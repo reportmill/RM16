@@ -57,9 +57,13 @@ public class App {
             WelcomePanel.getShared().showPanel();
 
         // Install OpenFiles Handler
-        Desktop.getDesktop().setOpenFileHandler(ofh -> ViewUtils.runLater(() -> openFiles(ofh.getFiles())));
-        Desktop.getDesktop().setPreferencesHandler(pe -> new PreferencesPanel().showPanel(null));
-        Desktop.getDesktop().setQuitHandler((qe,qr) -> { quitApp(); qr.performQuit(); });
+        Desktop desktop = Desktop.getDesktop();
+        if (desktop.isSupported(Desktop.Action.APP_OPEN_FILE))
+            desktop.setOpenFileHandler(ofh -> ViewUtils.runLater(() -> openFiles(ofh.getFiles())));
+        if (desktop.isSupported(Desktop.Action.APP_PREFERENCES))
+            desktop.setPreferencesHandler(pe -> new PreferencesPanel().showPanel(null));
+        if (desktop.isSupported(Desktop.Action.APP_QUIT_HANDLER))
+            desktop.setQuitHandler((qe,qr) -> { quitApp(); qr.performQuit(); });
     }
 
     /**

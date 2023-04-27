@@ -2,7 +2,6 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package com.reportmill.app;
-import com.reportmill.base.ReportMill;
 import com.reportmill.base.Voucher;
 import snap.util.*;
 import snap.view.*;
@@ -14,7 +13,16 @@ import snap.viewx.DialogBox;
 public class PreferencesPanel extends ViewOwner {
 
     // The FormatPanel
-    FormatPanel _formatPanel = FormatPanel.get();
+    private FormatPanel _formatPanel;
+
+    /**
+     * Constructor.
+     */
+    public PreferencesPanel()
+    {
+        super();
+        _formatPanel = new FormatPanel(null);
+    }
 
     /**
      * Runs the panel.

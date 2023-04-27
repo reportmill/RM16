@@ -14,31 +14,26 @@ import java.util.*;
 public class FormatPanel extends RMEditorPane.SupportPane {
 
     // A list of standard number formats
-    List<RMNumberFormat> _numberFormats = new ArrayList();
+    private List<RMNumberFormat> _numberFormats = new ArrayList<>();
 
     // A list of standard date formats
-    List<RMDateFormat> _dateFormats = new ArrayList();
+    private List<RMDateFormat> _dateFormats = new ArrayList<>();
 
     // Sample date object to be used to display date formats
-    Date _sampleDate = new Date();
+    private Date _sampleDate = new Date();
 
     // Sample positive number to be used to display number formats
-    Float _sampleNumberPos = 1234.567f;
+    private Float _sampleNumberPos = 1234.567f;
 
     // Sample negative number to be used to display number formats
-    Float _sampleNumberNeg = -1234.567f;
-
-    // The shared instance
-    static FormatPanel _shared; // This should go
+    private Float _sampleNumberNeg = -1234.567f;
 
     /**
-     * Creates a new FormatPanel.
+     * Constructor.
      */
     public FormatPanel(RMEditorPane anEP)
     {
-        // Do normal version and set shared instance
         super(anEP);
-        _shared = this;
 
         // Load standard number formats from preferences
         String nums = Prefs.getDefaultPrefs().getString("NumberFormats", getDefaultNumberFormatsString());
@@ -285,7 +280,7 @@ public class FormatPanel extends RMEditorPane.SupportPane {
      */
     public String getNumberFormatsString()
     {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (int i = 0, iMax = getNumberFormatCount(); i < iMax; i++)
             sb.append(getNumberFormat(i).getPattern()).append('\n');
         sb.deleteCharAt(sb.length() - 1);
@@ -298,9 +293,9 @@ public class FormatPanel extends RMEditorPane.SupportPane {
     public void setNumberFormatsString(String aString)
     {
         _numberFormats.clear();
-        List fstrings = StringUtils.separate(aString, "\n");
-        for (int i = 0, iMax = fstrings.size(); i < iMax; i++)
-            _numberFormats.add(new RMNumberFormat(fstrings.get(i).toString()));
+        List<String> formatStrings = StringUtils.separate(aString, "\n");
+        for (String formatString : formatStrings)
+            _numberFormats.add(new RMNumberFormat(formatString));
     }
 
     /**
@@ -337,7 +332,7 @@ public class FormatPanel extends RMEditorPane.SupportPane {
     public String getDateFormatsString()
     {
         // Iterate over formats and add format pattern + newline to string buffer
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (int i = 0, iMax = getDateFormatCount(); i < iMax; i++)
             sb.append(getDateFormat(i).getPattern()).append('\n');
 
@@ -352,9 +347,9 @@ public class FormatPanel extends RMEditorPane.SupportPane {
     public void setDateFormatsString(String aString)
     {
         _dateFormats.clear();
-        List fstrings = StringUtils.separate(aString, "\n");
-        for (int i = 0, iMax = fstrings.size(); i < iMax; i++)
-            _dateFormats.add(new RMDateFormat(fstrings.get(i).toString()));
+        List<String> formatStrings = StringUtils.separate(aString, "\n");
+        for (String formatString : formatStrings)
+            _dateFormats.add(new RMDateFormat(formatString));
     }
 
     /**
@@ -394,17 +389,5 @@ public class FormatPanel extends RMEditorPane.SupportPane {
     /**
      * Returns the name for the attributes panel window.
      */
-    public String getWindowTitle()
-    {
-        return "Format Panel";
-    }
-
-    /**
-     * Returns the shared format panel.
-     */
-    public static FormatPanel get()
-    {
-        return _shared;
-    }
-
+    public String getWindowTitle()  { return "Format Panel"; }
 }

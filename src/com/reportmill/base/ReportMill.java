@@ -93,7 +93,7 @@ public class ReportMill {
     /**
      * Returns the ReportMill version.
      */
-    public static float getVersion()  { return 16; }
+    public static float getVersion()  { return 15; }
 
     /**
      * Returns a build date string (eg, "Jan-26-03") as generated into BuildInfo.txt at build time.

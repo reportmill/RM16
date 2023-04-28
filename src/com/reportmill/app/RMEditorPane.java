@@ -254,6 +254,16 @@ public class RMEditorPane extends RMViewerPane {
     }
 
     /**
+     * Called when editor pane is set showing.
+     */
+    @Override
+    protected void initShowing()
+    {
+        InspectorPanel inspectorPanel = getInspectorPanel();
+        inspectorPanel.showDocumentInspector();
+    }
+
+    /**
      * Updates the editor's UI panels.
      */
     protected void resetUI()

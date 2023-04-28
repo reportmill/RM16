@@ -9,8 +9,6 @@ import snap.view.*;
 import snap.viewx.FilePanel;
 import snap.web.*;
 
-import java.util.stream.Stream;
-
 /**
  * An implementation of a panel to manage/open user Snap sites (projects).
  */
@@ -149,10 +147,8 @@ public class WelcomePanel extends ViewOwner {
         // Get new editor pane
         RMEditorPane editorPane = new RMEditorPane().newDocument();
 
-        // Make editor window visible, show doc inspector, and order front after delay to get focus back from inspector
+        // Make editor window visible
         editorPane.setWindowVisible(true);
-        editorPane.getInspectorPanel().showDocumentInspector();
-        runLater(() -> editorPane.getWindow().toFront());
 
         // Show Samples or start SamplesButtonAnim
         if (showSamples) //editorPane = RMEditorPaneUtils.openSample("Movies");
@@ -169,17 +165,12 @@ public class WelcomePanel extends ViewOwner {
     public void openFile(WebFile aFile)
     {
         // Get the new editor pane that will open the document
-        RMEditorPane editorPane = new RMEditorPane();
-        editorPane = editorPane.openSource(aFile);
+        RMEditorPane editorPane = new RMEditorPane().openSource(aFile);
+        if (editorPane == null)
+            return;
 
-        // If no document opened, just return
-        if (editorPane == null) return;
-
-        // Make editor window visible, show doc inspector, and order front after delay to get focus back from inspector
+        // Make editor window visible
         editorPane.setWindowVisible(true);
-        editorPane.getInspectorPanel().showDocumentInspector();
-        RMEditorPane ep = editorPane;
-        runLater(() -> ep.getWindow().toFront());
 
         // Hide WelcomePanel
         hide();
@@ -228,8 +219,7 @@ public class WelcomePanel extends ViewOwner {
         jvmText.setText("JVM: " + (SnapUtils.isTeaVM ? "TeaVM" : System.getProperty("java.runtime.version")));
         licText.setText(ReportMill.getLicense() == null ? "Unlicensed Copy" : "License: " + ReportMill.getLicense());
 
-        // Register to change on click
-        Stream.of(topGraphic.getChildren()).forEach(child -> child.setPickable(false));
+        // Configure TopGraphic to call setTopGraphicMinimized() on click
         topGraphic.addEventHandler(e -> setTopGraphicMinimized(!isTopGraphicMinimized()), View.MouseRelease);
 
         // Return
@@ -266,12 +256,12 @@ public class WelcomePanel extends ViewOwner {
 
         // Handle Minimize: Size PrefHeight down
         if (aValue)
-            topGraphic.getAnimCleared(800).setPrefHeight(140);
+            topGraphic.getAnimCleared(600).setPrefHeight(140);
 
         // Handle normal: Size PrefHeight up
         else {
             topGraphic.setClipToBounds(true);
-            topGraphic.getAnimCleared(800).setPrefHeight(240);
+            topGraphic.getAnimCleared(600).setPrefHeight(240);
         }
 
         // Start anim

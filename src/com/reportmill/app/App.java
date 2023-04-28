@@ -23,7 +23,7 @@ import java.util.List;
 public class App {
 
     // Whether app is in process of quiting
-    static boolean _quiting;
+    private static boolean _quiting;
 
     /**
      * This is the static main method, called by Java when launching with com.reportmill.App.
@@ -63,7 +63,7 @@ public class App {
         if (desktop.isSupported(Desktop.Action.APP_PREFERENCES))
             desktop.setPreferencesHandler(pe -> new PreferencesPanel().showPanel(null));
         if (desktop.isSupported(Desktop.Action.APP_QUIT_HANDLER))
-            desktop.setQuitHandler((qe,qr) -> { quitApp(); qr.performQuit(); });
+            desktop.setQuitHandler((qe,qr) -> { quitApp(); qr.cancelQuit(); });
     }
 
     /**

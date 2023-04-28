@@ -254,26 +254,24 @@ public class WelcomePanel extends ViewOwner {
         // Just return if already set
         if (aValue == isTopGraphicMinimized()) return;
 
-        // Get new TopGraphic and swap out old
+        // Get TopGraphic
         ChildView mainView = getUI(ChildView.class);
-        StackView topGraphic = (StackView) getTopGraphic();
-        mainView.removeChild(0);
-        mainView.addChild(topGraphic, 0);
+        ChildView topGraphic = (ChildView) mainView.getChild(0);
 
-        // Handle Minimize
-        if (aValue) {
-            topGraphic.removeChild(2);
-            ColView topGraphicColView = (ColView) topGraphic.getChild(1);
-            while (topGraphicColView.getChildCount() > 2)
-                topGraphicColView.removeChild(topGraphicColView.getChildCount() - 1);
-            topGraphic.getAnim(800).setPrefHeight(140);
-        }
+        // Show/hide views below the minimize size
+        topGraphic.getChild(2).setVisible(!aValue);
+        ColView topGraphicColView = (ColView) topGraphic.getChild(1);
+        for (int i = 2; i < topGraphicColView.getChildCount(); i++)
+            topGraphicColView.getChild(i).setVisible(!aValue);
 
-        // Handle normal
+        // Handle Minimize: Size PrefHeight down
+        if (aValue)
+            topGraphic.getAnimCleared(800).setPrefHeight(140);
+
+        // Handle normal: Size PrefHeight up
         else {
             topGraphic.setClipToBounds(true);
-            topGraphic.setPrefHeight(140);
-            topGraphic.getAnim(800).setPrefHeight(240);
+            topGraphic.getAnimCleared(800).setPrefHeight(240);
         }
 
         // Start anim

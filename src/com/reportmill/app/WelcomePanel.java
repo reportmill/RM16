@@ -225,7 +225,7 @@ public class WelcomePanel extends ViewOwner {
         View jvmText = topGraphic.getChildForName("JVMText");
         View licText = topGraphic.getChildForName("LicenseText");
         buildText.setText("Build: " + SnapUtils.getBuildInfo().trim());
-        jvmText.setText("JVM: " + System.getProperty("java.runtime.version"));
+        jvmText.setText("JVM: " + (SnapUtils.isTeaVM ? "TeaVM" : System.getProperty("java.runtime.version")));
         licText.setText(ReportMill.getLicense() == null ? "Unlicensed Copy" : "License: " + ReportMill.getLicense());
 
         // Register to change on click

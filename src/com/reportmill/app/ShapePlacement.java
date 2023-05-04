@@ -297,7 +297,7 @@ public class ShapePlacement extends RMEditorPane.SupportPane {
             // Create images array and load images
             _images = new Image[imageNames.length];
             for (int i = 0; i < imageNames.length; ++i)
-                _images[i] = Image.get(getClass(), imageNames[i]);
+                _images[i] = Image.getImageForClassResource(getClass(), imageNames[i]);
 
             // Add mouse listener to send action
             setActionable(true);

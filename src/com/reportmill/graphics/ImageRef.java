@@ -79,7 +79,7 @@ public class ImageRef {
     {
         if (_image != null) return _image;
         Object source = getSource();
-        return _image = Image.get(source);
+        return _image = Image.getImageForSource(source);
     }
 
     /**

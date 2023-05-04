@@ -223,7 +223,7 @@ public class KeysPanel extends RMEditorPane.SupportPane {
             // Get event Clipboard and start drag
             Clipboard cboard = anEvent.getClipboard();
             cboard.addData(dragKeyFull);
-            cboard.setDragImage(ImageUtils.getImage(dragKeyFull, getSelectedShape().getDocument().getFont()));
+            cboard.setDragImage(ImageUtils.getImageForStringAndFont(dragKeyFull, getSelectedShape().getDocument().getFont()));
             cboard.startDrag();
 
             // Notify Attributes panel that dragging started
@@ -353,7 +353,7 @@ public class KeysPanel extends RMEditorPane.SupportPane {
     {
         // If double arrow icon hasn't been created, create it
         if (_doubleArrowImage != null) return _doubleArrowImage;
-        Image img = Image.get(16, 11, true);
+        Image img = Image.getImageForSize(16, 11, true);
         Polygon poly = new Polygon(1.5, 1.5, 7.5, 5.5, 1.5, 9.5);
         Painter pntr = img.getPainter();
         pntr.setColor(Color.BLACK);

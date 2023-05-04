@@ -260,7 +260,7 @@ public class RMShapeUtils {
 
         // If shape has no area, return empty image
         if (w == 0 || h == 0)
-            return Image.get(1, 1, false);
+            return Image.getImageForSize(1, 1, false);
 
         // Create new image
         Image img = Image.getImageForSizeAndScale(w, h, aColor == null || aColor.getAlphaInt() != 255, 2);

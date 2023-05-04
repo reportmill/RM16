@@ -340,7 +340,7 @@ public class SamplesPane extends ViewOwner {
         WebURL imgURL = WebURL.getURL(urls);
 
         // Create Image. Then make sure image is loaded by requesting Image.Native.
-        img = _docImages[anIndex] = Image.get(imgURL);
+        img = _docImages[anIndex] = Image.getImageForSource(imgURL);
         img.getNative();
         return img;
     }
@@ -407,7 +407,7 @@ public class SamplesPane extends ViewOwner {
     {
         // Create new image
         int w = (int) Math.round(aW), h = (int) Math.round(aH);
-        Image img = Image.get(w, h, false);
+        Image img = Image.getImageForSize(w, h, false);
 
         // Create painter and configure
         Painter pntr = img.getPainter();

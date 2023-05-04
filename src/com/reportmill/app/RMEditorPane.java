@@ -733,7 +733,7 @@ public class RMEditorPane extends RMViewerPane {
     private static Image getFrameIcon()
     {
         if (_frameImg != null) return _frameImg;
-        return _frameImg = Image.get(RMEditorPane.class, "ReportMill16x16.png");
+        return _frameImg = Image.getImageForClassResource(RMEditorPane.class, "ReportMill16x16.png");
     }
 
     /**

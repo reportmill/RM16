@@ -151,7 +151,7 @@ public class RMViewerBottomToolBar extends ViewOwner {
      */
     private static Image getImage(Shape aShape)
     {
-        Image img = Image.get(14, 22, true);
+        Image img = Image.getImageForSize(14, 22, true);
         Painter pntr = img.getPainter();
         pntr.setColor(Color.DARKGRAY);
         pntr.fill(aShape);

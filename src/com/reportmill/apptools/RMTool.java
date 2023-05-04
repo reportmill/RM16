@@ -36,7 +36,7 @@ public class RMTool<T extends RMShape> extends ViewOwner {
     static DecimalFormat _fmt = new DecimalFormat("0.##");
 
     // The image for a shape handle
-    static Image _handle = Image.get(RMEditor.class, "Handle8x8.png");
+    static Image _handle = Image.getImageForClassResource(RMEditor.class, "Handle8x8.png");
 
     // Handle constants
     public static final byte HandleWidth = 8;
@@ -1228,10 +1228,10 @@ public class RMTool<T extends RMShape> extends ViewOwner {
     {
         for (Class c = getClass(); c != RMTool.class; c = c.getSuperclass()) {
             String name = c.getSimpleName().replace("Tool", "") + ".png";
-            Image img = Image.get(c, name);
+            Image img = Image.getImageForClassResource(c, name);
             if (img != null) return img;
         }
-        return Image.get(RMTool.class, "RMShape.png");
+        return Image.getImageForClassResource(RMTool.class, "RMShape.png");
     }
 
     /**

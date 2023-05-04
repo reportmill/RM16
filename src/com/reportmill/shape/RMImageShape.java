@@ -377,7 +377,7 @@ public class RMImageShape extends RMRectShape {
         // Unarchive ImageName
         _imageName = anElement.getAttributeValue("ImageName");
         if (_imageName != null) {
-            Image img = Image.get(anArchiver.getSourceURL(), _imageName);
+            Image img = Image.getImageForUrlResource(anArchiver.getSourceURL(), _imageName);
             if (img != null)
                 _imgRef = ImageRef.getImageRef(img.getSource());
         }

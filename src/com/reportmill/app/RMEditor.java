@@ -60,7 +60,7 @@ public class RMEditor extends RMViewer implements DeepChangeListener {
     private RMTool<?>  _currentTool = getSelectTool();
 
     // Icon for XML image
-    private static Image _xmlImage = Image.get(RMEditor.class, "DS_XML.png");
+    private static Image _xmlImage = Image.getImageForClassResource(RMEditor.class, "DS_XML.png");
 
     // XML Image offset for animation
     private static double _xmlDX, _xmlDY;

@@ -3,6 +3,7 @@
  */
 package com.reportmill.app;
 import com.reportmill.base.ReportMill;
+import snap.props.PropChange;
 import snap.util.Prefs;
 import snap.util.SnapUtils;
 import snap.view.*;
@@ -84,14 +85,10 @@ public class WelcomePanel extends ViewOwner {
         getUI(ChildView.class).addChild(anim, 0);
         anim.playAnimDeep();
 
-        // Create OpenPanel
-        _filePanel = createOpenPanel();
+        // Create FilePanel
+        _filePanel = createFilePanel();
         View filePanelUI = _filePanel.getUI();
         filePanelUI.setGrowHeight(true);
-        _filePanel.addPropChangeListener(pc -> {
-            boolean minimize = !(_filePanel.getSelSite() instanceof RecentFilesSite);
-            setTopGraphicMinimized(minimize);
-        }, FilePanel.SelSite_Prop);
 
         // Add FilePanel.UI to ColView
         ColView topColView = (ColView) getUI();
@@ -121,12 +118,9 @@ public class WelcomePanel extends ViewOwner {
         if (anEvent.equals("NewButton"))
             newFile(false);
 
-        // Handle OpenPanelButton
-        //if (anEvent.equals("OpenPanelButton")) showOpenPanel();
-
         // Handle OpenButton
         if (anEvent.equals("OpenButton")) {
-            WebFile selFile = _filePanel.getSelFile();
+            WebFile selFile = _filePanel.getSelFileAndAddToRecentFiles();
             openFile(selFile);
         }
 
@@ -177,9 +171,9 @@ public class WelcomePanel extends ViewOwner {
     }
 
     /**
-     * Creates the OpenPanel to be added to WelcomePanel.
+     * Creates the FilePanel to be added to WelcomePanel.
      */
-    private FilePanel createOpenPanel()
+    private FilePanel createFilePanel()
     {
         // Add recent files
         WebSite recentFilesSite = RecentFilesSite.getShared();
@@ -192,8 +186,32 @@ public class WelcomePanel extends ViewOwner {
         filePanel.setSelSite(recentFilesSite);
         filePanel.setActionHandler(e -> WelcomePanel.this.fireActionEventForObject("OpenButton", e));
 
+        // Add PropChangeListener
+        filePanel.addPropChangeListener(pc -> filePanelDidPropChange(pc));
+
         // Return
         return filePanel;
+    }
+
+    /**
+     * Called when FilePanel does prop change.
+     */
+    private void filePanelDidPropChange(PropChange aPC)
+    {
+        String propName = aPC.getPropName();
+
+        // Handle SelSite change:
+        if (propName.equals(FilePanel.SelSite_Prop)) {
+            WebSite selSite = _filePanel.getSelSite();;
+            boolean minimize = !(selSite instanceof RecentFilesSite);
+            setTopGraphicMinimized(minimize);
+        }
+
+        // Handle SelFile change: Update OpenButton.Enabled
+        else if (propName.equals(FilePanel.SelFile_Prop)) {
+            boolean isOpenFileSet = _filePanel.getSelFile() != null;
+            getView("OpenButton").setEnabled(isOpenFileSet);
+        }
     }
 
     /**

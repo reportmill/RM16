@@ -57,13 +57,13 @@ public class App {
             WelcomePanel.getShared().showPanel();
 
         // Install OpenFiles Handler
-        Desktop desktop = Desktop.getDesktop();
-        if (desktop.isSupported(Desktop.Action.APP_OPEN_FILE))
-            desktop.setOpenFileHandler(ofh -> ViewUtils.runLater(() -> openFiles(ofh.getFiles())));
-        if (desktop.isSupported(Desktop.Action.APP_PREFERENCES))
-            desktop.setPreferencesHandler(pe -> new PreferencesPanel().showPanel(null));
-        if (desktop.isSupported(Desktop.Action.APP_QUIT_HANDLER))
-            desktop.setQuitHandler((qe,qr) -> { quitApp(); qr.cancelQuit(); });
+//        Desktop desktop = Desktop.getDesktop();
+//        if (desktop.isSupported(Desktop.Action.APP_OPEN_FILE))
+//            desktop.setOpenFileHandler(ofh -> ViewUtils.runLater(() -> openFiles(ofh.getFiles())));
+//        if (desktop.isSupported(Desktop.Action.APP_PREFERENCES))
+//            desktop.setPreferencesHandler(pe -> new PreferencesPanel().showPanel(null));
+//        if (desktop.isSupported(Desktop.Action.APP_QUIT_HANDLER))
+//            desktop.setQuitHandler((qe,qr) -> { quitApp(); qr.cancelQuit(); });
     }
 
     /**
@@ -125,7 +125,7 @@ public class App {
      */
     private static void openFiles(List<File> theFiles)
     {
-        for (var openFile : theFiles) {
+        for (File openFile : theFiles) {
             WebURL openFileURL = WebURL.getURL(openFile);
             if (openFileURL != null) {
                 WebFile openFileSnap = openFileURL.getFile();
@@ -141,7 +141,7 @@ public class App {
     private static boolean openFilesFromArgs(String[] args)
     {
         boolean didOpenFile = false;
-        for (var arg : args) {
+        for (String arg : args) {
             WebURL openFileURL = WebURL.getURL(arg);
             WebFile openFile = openFileURL != null ? openFileURL.getFile() : null;
             if (openFile != null) {

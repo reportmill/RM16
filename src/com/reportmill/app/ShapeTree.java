@@ -9,7 +9,7 @@ import snap.view.*;
 public class ShapeTree extends RMEditorPane.SupportPane {
 
     // The ShapeTree
-    TreeView _shapeTree;
+    private TreeView<RMShape> _shapeTree;
 
     /**
      * Creates a new ShapeFills pane.
@@ -25,13 +25,13 @@ public class ShapeTree extends RMEditorPane.SupportPane {
     protected View createUI()
     {
         if (_shapeTree != null) return _shapeTree;
-        TreeView tview = new TreeView();
-        tview.setName("ShapeTree");
-        tview.setGrowHeight(true);
-        tview.setBorder(Color.GRAY, 1);
-        tview.getScrollView().setBarSize(14);
-        tview.setResolver(new ShapeTreeResolver());
-        return _shapeTree = tview;
+        TreeView<RMShape> shapeTree = new TreeView<>();
+        shapeTree.setName("ShapeTree");
+        shapeTree.setGrowHeight(true);
+        shapeTree.setBorder(Color.GRAY, 1);
+        shapeTree.getScrollView().setBarSize(14);
+        shapeTree.setResolver(new ShapeTreeResolver());
+        return _shapeTree = shapeTree;
     }
 
     /**
@@ -47,7 +47,8 @@ public class ShapeTree extends RMEditorPane.SupportPane {
      */
     protected void resetUI()
     {
-        _shapeTree.setItems(getEditor().getDoc());
+        RMDocument doc = getEditor().getDoc();
+        _shapeTree.setItems(new RMShape[] { doc });
         _shapeTree.expandAll();
         _shapeTree.setSelItem(getEditor().getSelectedOrSuperSelectedShape());
     }

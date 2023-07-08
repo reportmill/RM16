@@ -52,7 +52,7 @@ public class RMPageTool<T extends RMPage> extends RMParentShapeTool<T> {
         setViewEnabled("MergeButton", page.getLayerCount() > 1 && page.getSelectedLayerIndex() > 0);
 
         // Update layers table selection
-        _layersTable.setItems(page.getLayers());
+        _layersTable.setItemsList(page.getLayers());
         _layersTable.setSelIndex(page.getSelectedLayerIndex());
     }
 

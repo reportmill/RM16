@@ -17,7 +17,7 @@ public class ViewShapeTool<T extends ViewShape> extends RMTool<T> {
     Tab _buttonTab;
 
     // The Type selection ListView
-    ListView _typeList;
+    private ListView<String> _typeList;
 
     // The TextView
     TextView _textView;
@@ -32,7 +32,8 @@ public class ViewShapeTool<T extends ViewShape> extends RMTool<T> {
         _buttonTab = _tabView.getTab(2);
 
         _typeList = getView("TypeListView", ListView.class);
-        _typeList.setItems("TextField", "Button", "RadioButton", "CheckBox", "ListView", "ComboBox");
+        String[] items = { "TextField", "Button", "RadioButton", "CheckBox", "ListView", "ComboBox"};
+        _typeList.setItems(items);
 
         _textView = getView("TextView", TextView.class);
         _textView.setFireActionOnFocusLost(true);

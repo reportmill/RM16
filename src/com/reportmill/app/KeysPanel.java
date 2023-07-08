@@ -177,7 +177,7 @@ public class KeysPanel extends RMEditorPane.SupportPane {
         if (entity != _entity) {
             _entity = entity;
             _rootItems = entity != null ? new KeyNode("Root").getChildren() : _builtInKeyNodes;
-            _keysBrowser.setItems(_rootItems);
+            _keysBrowser.setItemsList(_rootItems);
         }
 
         // Update BuiltInKeysButton
@@ -343,7 +343,7 @@ public class KeysPanel extends RMEditorPane.SupportPane {
 
         // Get/set items
         List items = getKeyPathItems(key);
-        _keysTable.setItems(items);
+        _keysTable.setItemsList(items);
     }
 
     /**

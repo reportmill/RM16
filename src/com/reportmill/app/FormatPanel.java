@@ -52,10 +52,10 @@ public class FormatPanel extends RMEditorPane.SupportPane {
         // Set table items and renderers
         TableView<RMNumberFormat> nfTable = getView("NumberFormatTable", TableView.class);
         nfTable.setCellConfigure(this::configNumberFormatTable);
-        nfTable.setItems(_numberFormats);
+        nfTable.setItemsList(_numberFormats);
         TableView<RMDateFormat> dfTable = getView("DateFormatTable", TableView.class);
         dfTable.setCellConfigure(this::configDateFormatTable);
-        dfTable.setItems(_dateFormats);
+        dfTable.setItemsList(_dateFormats);
     }
 
     /**

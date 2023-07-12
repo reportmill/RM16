@@ -1056,8 +1056,8 @@ public class RMEditor extends RMViewer implements DeepChangeListener {
         ViewAnim anim = getAnim(0);
         double time = anim.getTime(), maxTime = anim.getMaxTime();
         double ratio = time / maxTime;
-        _xmlDX = Convert.doubleValue(anim.interpolate(dx, 0, ratio));
-        _xmlDY = Convert.doubleValue(anim.interpolate(dy, 0, ratio));
+        _xmlDX = Convert.doubleValue(anim.interpolateValuesForRatio(dx, 0, ratio));
+        _xmlDY = Convert.doubleValue(anim.interpolateValuesForRatio(dy, 0, ratio));
         repaint();
     }
 

@@ -87,7 +87,7 @@ public class RMTextShapeUtils {
                     // If non-space character, create glyph shape
                     if (c != ' ') {
                         Rect glyphBounds = font.getCharBounds(c);
-                        RMXString gstring = aText.getXString().substring(run.getStart() + i, run.getStart() + i + 1);
+                        RMXString gstring = aText.getXString().substring(run.getStartCharIndex() + i, run.getStartCharIndex() + i + 1);
                         RMTextShape glyphShape = new RMTextShape(gstring);
                         glyphShape.setAutosizing("~-~,~-~");
 

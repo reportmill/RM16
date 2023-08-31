@@ -191,7 +191,7 @@ public class RMXString implements Cloneable, CharSequence, RMTypes, XMLArchiver.
      */
     public void addString(RMXString xStr, int anIndex)
     {
-        _richText.addTextDoc(xStr._richText, anIndex);
+        _richText.addTextBlock(xStr._richText, anIndex);
     }
 
     /**
@@ -200,7 +200,7 @@ public class RMXString implements Cloneable, CharSequence, RMTypes, XMLArchiver.
     public void replaceString(RMXString xStr, int aStart, int aEnd)
     {
         _richText.removeChars(aStart, aEnd);
-        _richText.addTextDoc(xStr._richText, aStart);
+        _richText.addTextBlock(xStr._richText, aStart);
     }
 
     /**

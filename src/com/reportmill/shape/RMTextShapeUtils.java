@@ -6,8 +6,8 @@ import com.reportmill.graphics.*;
 import snap.geom.*;
 import snap.gfx.*;
 import snap.text.TextBox;
-import snap.text.TextBoxLine;
-import snap.text.TextBoxRun;
+import snap.text.TextLine;
+import snap.text.TextRun;
 
 /**
  * Utility methods for some esoteric text functionality.
@@ -43,8 +43,8 @@ public class RMTextShapeUtils {
 
         // Iterate over text runs
         TextBox textBox = aText.getTextBox();
-        for (TextBoxLine line : textBox.getLines()) {
-            for (TextBoxRun run : line.getRuns()) { //if(run.length()==0 || run.isTab()) continue;
+        for (TextLine line : textBox.getLines()) {
+            for (TextRun run : line.getRuns()) { //if(run.length()==0 || run.isTab()) continue;
                 String str = run.getString();
                 Font font = run.getFont();
                 double charSpacing = run.getStyle().getCharSpacing();
@@ -68,8 +68,8 @@ public class RMTextShapeUtils {
 
         // Iterate over runs
         TextBox textBox = aText.getTextBox();
-        for (TextBoxLine line : textBox.getLines())
-            for (TextBoxRun run : line.getRuns()) { //if(run.length()==0 || run.isTab()) continue;
+        for (TextLine line : textBox.getLines())
+            for (TextRun run : line.getRuns()) { //if(run.length()==0 || run.isTab()) continue;
 
                 // Get run font and run bounds
                 Font font = run.getFont();

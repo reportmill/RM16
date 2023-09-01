@@ -14,8 +14,8 @@ import snap.geom.Rect;
 import snap.geom.Shape;
 import snap.gfx.*;
 import snap.text.TextBox;
-import snap.text.TextBoxLine;
-import snap.text.TextBoxRun;
+import snap.text.TextLine;
+import snap.text.TextRun;
 import snap.util.*;
 
 /**
@@ -473,8 +473,8 @@ public class RMHtmlFile {
 
             // Iterate over runs and create text spans
             TextBox tbox = aTextShape.getTextBox();
-            for (TextBoxLine line : tbox.getLines())
-                for (TextBoxRun run : line.getRuns()) {
+            for (TextLine line : tbox.getLines())
+                for (TextRun run : line.getRuns()) {
                     String str = run.getString();
                     Font rfont = run.getFont();
                     Color rcolor = run.getColor();

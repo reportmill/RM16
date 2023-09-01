@@ -192,7 +192,7 @@ public class RMTextEditor {
     /**
      * Returns the individual line at given index.
      */
-    public TextBoxLine getLine(int anIndex)
+    public TextLine getLine(int anIndex)
     {
         return getTextBox().getLine(anIndex);
     }
@@ -200,7 +200,7 @@ public class RMTextEditor {
     /**
      * Returns the line index for the given character index.
      */
-    public TextBoxLine getLineForCharIndex(int anIndex)
+    public TextLine getLineForCharIndex(int anIndex)
     {
         TextBox tbox = getTextBox();
         return tbox.getLineForCharIndex(anIndex - tbox.getStartCharIndex());
@@ -929,7 +929,7 @@ public class RMTextEditor {
 
             // Iterate over selected lines
             for (int i = startLineIndex; i <= endLineIndex; i++) {
-                TextBoxLine line = getLine(i);
+                TextLine line = getLine(i);
 
                 // Get the bounds of line
                 double x1 = line.getX();

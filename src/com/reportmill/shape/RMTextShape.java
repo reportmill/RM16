@@ -928,49 +928,13 @@ public class RMTextShape extends RMRectShape {
 
         // Paint TextEditor (if editing text)
         if (isTextEditorSet())
-            paintTextEditor(aPntr, getTextEditor());
+            getTextEditor().paintText(aPntr);
 
-        // Paint TextBox
-        getTextBox().paint(aPntr);
+        // Otherwise just paint TextBox
+        else getTextBox().paint(aPntr);
 
         // Restore
         aPntr.restore();
-    }
-
-    /**
-     * Paints a given TextEditor.
-     */
-    protected void paintTextEditor(Painter aPntr, RMTextEditor aTE)
-    {
-        // Get selection path
-        Shape path = aTE.getSelPath();
-
-        // If empty selection, draw caret
-        if (aTE.isSelEmpty() && path != null) {
-            aPntr.setColor(Color.BLACK);
-            aPntr.setStroke(Stroke.Stroke1); // Set color and stroke of cursor
-            aPntr.setAntialiasing(false);
-            aPntr.draw(path);
-            aPntr.setAntialiasing(true); // Draw cursor
-        }
-
-        // If selection, get selection path and fill
-        else {
-            aPntr.setColor(new Color(128, 128, 128, 128));
-            aPntr.fill(path);
-        }
-
-        // If spell checking, get path for misspelled words and draw
-        if (aTE.isSpellChecking() && aTE.length() > 0) {
-            Shape spath = aTE.getSpellingPath();
-            if (spath != null) {
-                aPntr.setColor(Color.RED);
-                aPntr.setStroke(Stroke.StrokeDash1);
-                aPntr.draw(spath);
-                aPntr.setColor(Color.BLACK);
-                aPntr.setStroke(Stroke.Stroke1);
-            }
-        }
     }
 
     /**

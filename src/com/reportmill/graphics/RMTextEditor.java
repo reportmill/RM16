@@ -897,6 +897,50 @@ public class RMTextEditor {
     }
 
     /**
+     * Paints a given TextEditor.
+     */
+    public void paintText(Painter aPntr)
+    {
+        // Get selection path
+        Shape path = getSelPath();
+
+        // If empty selection, draw caret
+        if (isSelEmpty() && path != null) {
+            aPntr.setColor(Color.BLACK);
+            aPntr.setStroke(Stroke.Stroke1); // Set color and stroke of cursor
+            aPntr.setAntialiasing(false);
+            aPntr.draw(path);
+            aPntr.setAntialiasing(true); // Draw cursor
+        }
+
+        // If selection, get selection path and fill
+        else {
+            aPntr.setColor(new Color(128, 128, 128, 128));
+            aPntr.fill(path);
+        }
+
+        // If spell checking, get path for misspelled words and draw
+        if (isSpellChecking() && length() > 0) {
+
+            // Set RM SpellCheck
+            snap.text.SpellCheck.setSharedClass(RMSpellCheck.class);
+
+            // Get spelling path
+            Shape spellingPath = snap.text.SpellCheck.getSpellingPath(getTextBox(), getSelStart());
+
+            // Paint spelling path
+            aPntr.setColor(Color.RED);
+            aPntr.setStroke(Stroke.StrokeDash1);
+            aPntr.draw(spellingPath);
+            aPntr.setColor(Color.BLACK);
+            aPntr.setStroke(Stroke.Stroke1);
+        }
+
+        // Paint TextBox
+        getTextBox().paint(aPntr);
+    }
+
+    /**
      * Returns a path for misspelled word underlining.
      */
     public Shape getSpellingPath()

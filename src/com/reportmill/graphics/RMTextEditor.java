@@ -4,7 +4,6 @@
 package com.reportmill.graphics;
 import com.reportmill.base.RMFormat;
 import com.reportmill.shape.RMArchiver;
-import snap.geom.Path2D;
 import snap.geom.Rect;
 import snap.geom.Shape;
 import snap.gfx.*;
@@ -179,31 +178,6 @@ public class RMTextEditor {
     public TextSel getSel(double p1x, double p1y, double p2x, double p2y)
     {
         return new TextSel(getTextBox(), p1x, p1y, p2x, p2y, _wordSel, _pgraphSel);
-    }
-
-    /**
-     * Returns the number of lines.
-     */
-    public int getLineCount()
-    {
-        return getTextBox().getLineCount();
-    }
-
-    /**
-     * Returns the individual line at given index.
-     */
-    public TextLine getLine(int anIndex)
-    {
-        return getTextBox().getLine(anIndex);
-    }
-
-    /**
-     * Returns the line index for the given character index.
-     */
-    public TextLine getLineForCharIndex(int anIndex)
-    {
-        TextBox tbox = getTextBox();
-        return tbox.getLineForCharIndex(anIndex - tbox.getStartCharIndex());
     }
 
     /**
@@ -938,64 +912,6 @@ public class RMTextEditor {
 
         // Paint TextBox
         getTextBox().paint(aPntr);
-    }
-
-    /**
-     * Returns a path for misspelled word underlining.
-     */
-    public Shape getSpellingPath()
-    {
-        // Set RM SpellCheck
-        snap.text.SpellCheck.setSharedClass(RMSpellCheck.class);
-
-        // Get text box and text string and path object
-        TextBox tbox = getTextBox();
-        String string = tbox.getString();
-        Path2D path = new Path2D();
-
-        // Iterate over text
-        for (RMSpellCheck.Word word = RMSpellCheck.getMisspelledWord(string, 0); word != null;
-             word = RMSpellCheck.getMisspelledWord(string, word.getEnd())) {
-
-            // Get word bounds
-            int start = word.getStart();
-            if (start >= tbox.getEndCharIndex()) break;
-            int end = word.getEnd();
-            if (end > tbox.getEndCharIndex()) end = tbox.getEndCharIndex();
-
-            // If text editor selection starts in word bounds, just continue - they are still working on this word
-            if (start <= getSelStart() && getSelStart() <= end)
-                continue;
-
-            // Get the selection's start line index and end line index
-            int startLineIndex = getLineForCharIndex(start).getIndex();
-            int endLineIndex = getLineForCharIndex(end).getIndex();
-
-            // Iterate over selected lines
-            for (int i = startLineIndex; i <= endLineIndex; i++) {
-                TextLine line = getLine(i);
-
-                // Get the bounds of line
-                double x1 = line.getX();
-                double x2 = line.getMaxX();
-                double y = line.getBaseline() + 3;
-
-                // If starting line, adjust x1 for starting character
-                if (i == startLineIndex)
-                    x1 = line.getXForCharIndex(start - line.getStartCharIndex() - tbox.getStartCharIndex());
-
-                // If ending line, adjust x2 for ending character
-                if (i == endLineIndex)
-                    x2 = line.getXForCharIndex(end - line.getStartCharIndex() - tbox.getStartCharIndex());
-
-                // Append rect for line to path
-                path.moveTo(x1, y);
-                path.lineTo(x2, y);
-            }
-        }
-
-        // Return path
-        return path;
     }
 
     /**

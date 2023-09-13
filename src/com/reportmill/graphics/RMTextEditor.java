@@ -56,11 +56,6 @@ public class RMTextEditor {
     }
 
     /**
-     * Returns the TextDoc.
-     */
-    public TextDoc getTextDoc()  { return _textDoc; }
-
-    /**
      * Returns the text box used to layout text.
      */
     public TextBox getTextBox()
@@ -76,11 +71,6 @@ public class RMTextEditor {
     {
         _textBox = aTextBox;
     }
-
-    /**
-     * Returns the xstring that is being edited.
-     */
-    public RMXString getXString()  { return _xstr; }
 
     /**
      * Sets the xstring that is to be edited.
@@ -189,10 +179,9 @@ public class RMTextEditor {
         if (_selStyle != null) return _selStyle;
 
         // Get style for selection
-        RMXString xString = getXString();
         int selStart = getSelStart();
         int selEnd = getSelEnd();
-        RMTextStyle textStyle = xString.getStyleForCharRange(selStart, selEnd);
+        RMTextStyle textStyle = _xstr.getStyleForCharRange(selStart, selEnd);
 
         // Set/return
         return _selStyle = textStyle;
@@ -209,7 +198,7 @@ public class RMTextEditor {
 
             // If selection is multiple chars, apply attribute to xstring, reset SelStyle and flush undo changes
         else {
-            getXString().setAttribute(aKey, aValue, getSelStart(), getSelEnd());
+            _xstr.setAttribute(aKey, aValue, getSelStart(), getSelEnd());
             _selStyle = null;
         }
     }
@@ -219,7 +208,7 @@ public class RMTextEditor {
      */
     public RMParagraph getInputParagraph()
     {
-        return getXString().getParagraphAt(getSelStart());
+        return _xstr.getParagraphAt(getSelStart());
     }
 
     /**
@@ -227,7 +216,7 @@ public class RMTextEditor {
      */
     public void setInputParagraph(RMParagraph ps)
     {
-        getXString().setParagraph(ps, getSelStart(), getSelEnd());
+        _xstr.setParagraph(ps, getSelStart(), getSelEnd());
     }
 
     /**
@@ -558,7 +547,7 @@ public class RMTextEditor {
         if (isSelEmpty()) return;
 
         // Get xstring for selected characters and get as XML string and plain string
-        RMXString xStr = getXString().substring(getSelStart(), getSelEnd());
+        RMXString xStr = _xstr.substring(getSelStart(), getSelEnd());
         String xmlStr = new XMLArchiver().toXML(xStr).toString();
         String str = xStr.getText();
 
@@ -694,14 +683,6 @@ public class RMTextEditor {
             int index = _textDoc.indexOfNewline(getSelStart());
             delete(getSelStart(), index >= 0 ? index : length(), true);
         }
-    }
-
-    /**
-     * Returns the width needed to display all characters.
-     */
-    public double getPrefWidth()
-    {
-        return getTextBox().getPrefWidth(-1);
     }
 
     /**
@@ -863,20 +844,12 @@ public class RMTextEditor {
     public void mouseReleased(ViewEvent anEvent)  { }
 
     /**
-     * Returns the path for the current selection.
-     */
-    public Shape getSelPath()
-    {
-        return getSel().getPath();
-    }
-
-    /**
      * Paints a given TextEditor.
      */
     public void paintText(Painter aPntr)
     {
         // Get selection path
-        Shape path = getSelPath();
+        Shape path = getSel().getPath();
 
         // If empty selection, draw caret
         if (isSelEmpty() && path != null) {

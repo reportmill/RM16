@@ -10,6 +10,7 @@ import snap.geom.*;
 import snap.gfx.*;
 import snap.props.PropChange;
 import snap.props.PropChangeListener;
+import snap.text.TextBlock;
 import snap.text.TextLine;
 import snap.text.TextRun;
 import snap.view.*;
@@ -65,9 +66,9 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
         RMParagraph pgraph = text.getXString().getParagraphAt(selStart);
 
         // If editor is text editing, get paragraph from text editor instead
-        RMTextEditor ted = editor.getTextEditor();
-        if (ted != null)
-            pgraph = ted.getInputParagraph();
+        RMTextEditor textEditor = editor.getTextEditor();
+        if (textEditor != null)
+            pgraph = textEditor.getInputParagraph();
 
         // Update AlignLeftButton, AlignCenterButton, AlignRightButton, AlignFullButton
         setViewValue("AlignLeftButton", pgraph.getAlignmentX() == RMTypes.AlignX.Left);
@@ -82,8 +83,13 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
 
         // Set TextView RichText and selection
         _textArea.setTextDoc(text.getRichText());
-        if (ted != null)
-            _textArea.setSel(ted.getSelStart(), ted.getSelEnd());
+        if (textEditor != null) {
+            TextBlock textBlock = textEditor.getTextBox();
+            int textStartCharIndex = textBlock.getStartCharIndex();
+            int selStartCharIndex = textEditor.getSelStart() + textStartCharIndex;
+            int selEndCharIndex = textEditor.getSelEnd() + textStartCharIndex;
+            _textArea.setSel(selStartCharIndex, selEndCharIndex);
+        }
 
         // Get text's background color and set in TextArea if found
         Color color = null;
@@ -261,9 +267,14 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
             editor.setSuperSelectedShape(textShape);
 
         // Get TextEditor and update sel from TextArea
-        RMTextEditor textEd = editor.getTextEditor();
-        if (textEd != null)
-            textEd.setSel(_textArea.getSelStart(), _textArea.getSelEnd());
+        RMTextEditor textEditor = editor.getTextEditor();
+        if (textEditor != null) {
+            TextBlock textBlock = textEditor.getTextBox();
+            int textStartCharIndex = textBlock.getStartCharIndex();
+            int selStartCharIndex = Math.max(_textArea.getSelStart() - textStartCharIndex, 0);
+            int selEndCharIndex = Math.max(_textArea.getSelEnd() - textStartCharIndex, 0);
+            textEditor.setSel(selStartCharIndex, selEndCharIndex);
+        }
 
         // ResetUI on MouseUp
         ViewUtils.runOnMouseUp(() -> getEditorPane().resetLater());
@@ -445,15 +456,16 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
 
             // Get structured text table row, child table rows and index of child
             RMParentShape tableRow = aTextShape.getParent();
-            List children = RMShapeUtils.getShapesSortedByX(tableRow.getChildren());
+            List<RMShape> children = RMShapeUtils.getShapesSortedByX(tableRow.getChildren());
             int index = children.indexOf(aTextShape);
 
             // If shift is down, get index to the left, wrapped, otherwise get index to the right, wrapped
-            if (anEvent.isShiftDown()) index = (index - 1 + children.size()) % children.size();
+            if (anEvent.isShiftDown())
+                index = (index - 1 + children.size()) % children.size();
             else index = (index + 1) % children.size();
 
             // Get next text and super-select
-            RMShape nextText = (RMShape) children.get(index);
+            RMShape nextText = children.get(index);
             getEditor().setSuperSelectedShape(nextText);
 
             // Consume event and return

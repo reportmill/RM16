@@ -13,6 +13,7 @@ import snap.gfx.*;
 import snap.props.PropChange;
 import snap.props.PropChangeListener;
 import snap.text.RichText;
+import snap.text.TextBlock;
 import snap.text.TextBox;
 import snap.text.TextStyle;
 import snap.util.*;
@@ -67,7 +68,7 @@ public class RMTextShape extends RMRectShape {
     TextBox _textBox;
 
     // The text editor, if one has been set
-    RMTextEditor _textEdtr;
+    RMTextEditor _textEditor;
 
     // The default text margin (top=1, left=2, bottom=0, right=2)
     static Insets _marginDefault = new Insets(1, 2, 0, 2);
@@ -133,7 +134,7 @@ public class RMTextShape extends RMRectShape {
         // Set value and fire property change, and reset cached HeightToFit
         firePropChange("XString", _xstr, _xstr = xString);
         _textBox = null;
-        _textEdtr = null;
+        _textEditor = null;
         revalidate();
         repaint();
     }
@@ -727,10 +728,15 @@ public class RMTextShape extends RMRectShape {
      */
     public TextBox getTextBox()
     {
+        // If already set, just return
         if (_textBox != null) return _textBox;
+
+        // Create and set
         _textBox = new TextBox();
         _textBox.setWrapLines(true);
         updateTextBox();
+
+        // Return
         return _textBox;
     }
 
@@ -739,13 +745,18 @@ public class RMTextShape extends RMRectShape {
      */
     protected void updateTextBox()
     {
-        _textBox.setTextDoc(getXString().getRichText());
+        // Get/set text block
+        RMXString xstr = getXString();
+        TextBlock textBlock = xstr.getRichText();
+        _textBox.setTextDoc(textBlock);
+
+        // Get/set text bounds
         Insets pad = getMargin();
-        double pl = pad.left, pr = pad.right, pt = pad.top, pb = pad.bottom;
-        double w = getWidth() - pl - pr, h = getHeight() - pt - pb;
-        if (w < 0) w = 0;
-        if (h < 0) h = 0;
-        _textBox.setBounds(pl, pt, w, h);
+        double textW = Math.max(getWidth() - pad.getWidth(), 0);
+        double textH = Math.max(getHeight() - pad.getHeight(), 0);
+        _textBox.setBounds(pad.left, pad.right, textW, textH);
+
+        // Set StartCharIndex
         _textBox.setStartCharIndex(getVisibleStart());
         _textBox.setLinked(getLinkedText() != null);
         _textBox.setAlignY(getAlignmentY().vpos());
@@ -766,7 +777,7 @@ public class RMTextShape extends RMRectShape {
      */
     public boolean isTextEditorSet()
     {
-        return _textEdtr != null;
+        return _textEditor != null;
     }
 
     /**
@@ -774,11 +785,16 @@ public class RMTextShape extends RMRectShape {
      */
     public RMTextEditor getTextEditor()
     {
-        if (_textEdtr != null) return _textEdtr;
-        _textEdtr = new RMTextEditor();
-        _textEdtr.setTextBox(getTextBox());
-        _textEdtr.setXString(getXString());
-        return _textEdtr;
+        // If already set, just return
+        if (_textEditor != null) return _textEditor;
+
+        // Create and set
+        _textEditor = new RMTextEditor();
+        _textEditor.setTextBox(getTextBox());
+        _textEditor.setXString(getXString());
+
+        // Return
+        return _textEditor;
     }
 
     /**
@@ -786,7 +802,7 @@ public class RMTextShape extends RMRectShape {
      */
     public void clearTextEditor()
     {
-        _textEdtr = null;
+        _textEditor = null;
     }
 
     /**
@@ -951,10 +967,15 @@ public class RMTextShape extends RMRectShape {
      */
     public void revalidate()
     {
-        if (_textBox != null) updateTextBox();
-        if (getLinkedText() != null) {
-            getLinkedText().revalidate();
-            getLinkedText().repaint();
+        // Update text
+        if (_textBox != null)
+            updateTextBox();
+
+        // Forward to linked text
+        RMLinkedText linkedText = getLinkedText();
+        if (linkedText != null) {
+            linkedText.revalidate();
+            linkedText.repaint();
         }
     }
 
@@ -967,9 +988,10 @@ public class RMTextShape extends RMRectShape {
         RMTextShape clone = (RMTextShape) super.clone();
         clone._xstr = null;
         clone._textBox = null;
-        clone._textEdtr = null;
+        clone._textEditor = null;
         clone._richTextLsnr = pc -> richTextDidPropChange(pc);
-        if (_xstr != null) clone.setXString(_xstr.clone());
+        if (_xstr != null)
+            clone.setXString(_xstr.clone());
         return clone;
     }
 
@@ -1111,5 +1133,4 @@ public class RMTextShape extends RMRectShape {
         string = string.substring(0, string.length() - 1);
         return string + ", \"" + getXString() + "\"]";
     }
-
 }

@@ -470,7 +470,7 @@ public class RMViewerEvents {
             Point p2 = getViewer().convertToShape(_dragPoint.x, _dragPoint.y, text);
 
             // Configure text editor for text
-            tbox.setTextDoc(text.getRichText());
+            tbox.setNextText(text.getRichText());
             tbox.setBounds(0, 0, text.getWidth(), text.getHeight());
 
             // Get text selection for point, path for selection (int viewer coords) and add

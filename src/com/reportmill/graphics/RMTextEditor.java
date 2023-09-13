@@ -18,7 +18,7 @@ import snap.view.*;
 public class RMTextEditor {
 
     // The TextDoc
-    private TextDoc  _textDoc;
+    private TextBlock  _textDoc;
 
     // The text box
     private TextBox  _textBox;

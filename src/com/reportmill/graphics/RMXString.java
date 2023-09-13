@@ -388,7 +388,8 @@ public class RMXString implements Cloneable, CharSequence, RMTypes, XMLArchiver.
      */
     public RMXString substring(int aStart, int aEnd)
     {
-        return new RMXString(_richText.copyForRange(aStart, aEnd));
+        RichText richTextCopy = (RichText) _richText.copyForRange(aStart, aEnd);
+        return new RMXString(richTextCopy);
     }
 
     /**
@@ -446,7 +447,7 @@ public class RMXString implements Cloneable, CharSequence, RMTypes, XMLArchiver.
         RMXString clone;
         try { clone = (RMXString) super.clone(); }
         catch (Exception e) { throw new RuntimeException(e); }
-        clone._richText = _richText.clone();
+        clone._richText = (RichText) _richText.clone();
         return clone;
     }
 

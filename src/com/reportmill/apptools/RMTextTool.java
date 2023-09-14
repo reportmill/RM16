@@ -82,7 +82,7 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
         setViewValue("AlignBottomButton", text.getAlignmentY() == RMTypes.AlignY.Bottom);
 
         // Set TextView RichText and selection
-        _textArea.setTextDoc(text.getRichText());
+        _textArea.setSourceText(text.getRichText());
         if (textEditor != null) {
             TextBlock textBlock = textEditor.getTextBox();
             int textStartCharIndex = textBlock.getStartCharIndex();

@@ -748,7 +748,7 @@ public class RMTextShape extends RMRectShape {
         // Get/set text block
         RMXString xstr = getXString();
         TextBlock textBlock = xstr.getRichText();
-        _textBox.setNextText(textBlock);
+        _textBox.setSourceText(textBlock);
 
         // Get/set text bounds
         Insets pad = getMargin();

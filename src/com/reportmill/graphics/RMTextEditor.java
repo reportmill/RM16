@@ -137,6 +137,7 @@ public class RMTextEditor {
     {
         _sel = new TextSel(getTextBox(), aStart, anEnd);
         _selStyle = null;
+        TextBlockUtils.setMouseY(getTextBox(), 0);
     }
 
     /**
@@ -817,6 +818,7 @@ public class RMTextEditor {
 
         // Set selection
         setSel(start, end);
+        TextBlockUtils.setMouseY(getTextBox(), anEvent.getY());
     }
 
     /**
@@ -836,6 +838,7 @@ public class RMTextEditor {
 
         // Set selection
         setSel(start, end);
+        TextBlockUtils.setMouseY(getTextBox(), anEvent.getY());
     }
 
     /**

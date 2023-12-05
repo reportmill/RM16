@@ -621,7 +621,7 @@ public class RMViewerEvents {
         // Get an image of the current page and sub-image
         RMShape page = getViewer().getDoc().getSelPage();
         Image img = RMShapeUtils.createImage(page, Color.WHITE);
-        Image img2 = img.getSubimage(_rect.getX(), _rect.getY(), _rect.getWidth(), _rect.getHeight());
+        Image img2 = img.cloneForCropRect(_rect.getX(), _rect.getY(), _rect.getWidth(), _rect.getHeight());
 
         // Get transferable and add to clipboard
         Clipboard.get().addData(img2);

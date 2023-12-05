@@ -263,7 +263,7 @@ public class RMShapeUtils {
             return Image.getImageForSize(1, 1, false);
 
         // Create new image
-        Image img = Image.getImageForSizeAndScale(w, h, aColor == null || aColor.getAlphaInt() != 255, 2);
+        Image img = Image.getImageForSizeAndDpiScale(w, h, aColor == null || aColor.getAlphaInt() != 255, 2);
 
         // Create painter and configure
         Painter pntr = img.getPainter();

@@ -589,7 +589,7 @@ public class RMEditorPane extends RMViewerPane {
             return;
 
         // Re-open filename
-        sourceURL.getFile().reload();
+        sourceURL.getFile().resetAndVerify();
         openSource(sourceURL);
     }
 

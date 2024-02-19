@@ -84,7 +84,7 @@ public class RMRTFParser {
                     // Handle size
                     if (attrName == "size") {
                         int size = (Integer) elem.getAttribute(attr);
-                        font = font.deriveFont(size);
+                        font = font.copyForSize(size);
                     }
 
                     // Handle font family

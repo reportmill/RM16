@@ -339,7 +339,7 @@ public class RMTool<T extends RMShape> extends ViewOwner {
 
                 // Get new font for name and current shape size and set
                 RMFont aFont = (RMFont) aVal;
-                RMFont font2 = font != null ? aFont.deriveFont(font.getSize()) : aFont;
+                RMFont font2 = font != null ? aFont.copyForSize(font.getSize()) : aFont;
                 setFont(anEditor, aShape, font2);
                 break;
             }
@@ -355,7 +355,7 @@ public class RMTool<T extends RMShape> extends ViewOwner {
                         font2 = font2.getBold();
                     if (font.isItalic() != font2.isItalic() && font2.getItalic() != null)
                         font2 = font2.getItalic();
-                    font2 = font2.deriveFont(font.getSize());
+                    font2 = font2.copyForSize(font.getSize());
                 }
                 setFont(anEditor, aShape, font2);
                 break;
@@ -367,7 +367,7 @@ public class RMTool<T extends RMShape> extends ViewOwner {
                 // Get new font for current shape font at new size and set
                 double aSize = Convert.doubleValue(aVal);
                 if (font == null) return;
-                RMFont font2 = font.deriveFont(aSize);
+                RMFont font2 = font.copyForSize(aSize);
                 setFont(anEditor, aShape, font2);
                 break;
             }
@@ -378,7 +378,7 @@ public class RMTool<T extends RMShape> extends ViewOwner {
                 // Get new font for current shape font at new size and set
                 double aSize = Convert.doubleValue(aVal);
                 if (font == null) return;
-                RMFont font2 = font.deriveFont(font.getSize() + aSize);
+                RMFont font2 = font.copyForSize(font.getSize() + aSize);
                 setFont(anEditor, aShape, font2);
                 break;
             }

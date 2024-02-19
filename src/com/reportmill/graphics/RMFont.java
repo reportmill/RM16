@@ -12,8 +12,8 @@ public class RMFont extends Font {
 
     // Some common fonts (using Arial since it seems more reliable on Windows & Mac)
     static public RMFont Helvetica10 = new RMFont("Arial", 10d);
-    static public RMFont Helvetica12 = Helvetica10.deriveFont(12d);
-    static public RMFont Helvetica14 = Helvetica10.deriveFont(14d);
+    static public RMFont Helvetica12 = Helvetica10.copyForSize(12d);
+    static public RMFont Helvetica14 = Helvetica10.copyForSize(14d);
 
     /**
      * Creates a new font (Arial 10).
@@ -73,17 +73,17 @@ public class RMFont extends Font {
     /**
      * Returns a font with the same family as the receiver but with the given size.
      */
-    public RMFont deriveFont(double aSize)
+    public RMFont copyForSize(double aSize)
     {
-        return get(super.deriveFont(aSize));
+        return get(super.copyForSize(aSize));
     }
 
     /**
      * Returns a font with the same family as the receiver but with size adjusted by given scale factor.
      */
-    public RMFont scaleFont(double aScale)
+    public RMFont copyForScale(double aScale)
     {
-        return get(super.scaleFont(aScale));
+        return get(super.copyForScale(aScale));
     }
 
     /**

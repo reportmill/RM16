@@ -193,7 +193,7 @@ public class RMHTMLParser {
                         int size = Math.abs(StringUtils.intValue(string));
                         float sizeFactor = size == 1 ? .5f : size == 2 ? .75f : size == 3 ? 1 : size == 4 ? 1.2f :
                                 size == 5 ? 1.4f : size == 6 ? 1.6f : size == 7 ? 2 : 1;
-                        font = font.scaleFont(sizeFactor);
+                        font = font.copyForScale(sizeFactor);
                     }
 
                     // Handle font face

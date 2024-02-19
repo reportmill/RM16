@@ -82,7 +82,7 @@ public class SamplesPane extends ViewOwner {
 
         // Add loading label
         Label loadLabel = new Label("Loading...");
-        loadLabel.setFont(Font.Arial16.deriveFont(32).getBold());
+        loadLabel.setFont(Font.Arial16.copyForSize(32).getBold());
         loadLabel.setTextFill(Color.GRAY);
         colView.addChild(loadLabel);
 
@@ -94,7 +94,7 @@ public class SamplesPane extends ViewOwner {
 
         // Create "Select template" label
         Label selectLabel = new Label("Select a template:");
-        selectLabel.setFont(Font.Arial16.deriveFont(20).getBold());
+        selectLabel.setFont(Font.Arial16.copyForSize(20).getBold());
 
         // Create silly DatasetButton to add movies dataset
         Button dsetButton = new Button("Add Movies Dataset");

@@ -173,7 +173,7 @@ public class AttributesPanel extends RMEditorPane.SupportPane {
         // Create/configure TabView
         _tabView = new TabView();
         _tabView.setGrowHeight(true);
-        _tabView.setFont(Font.Arial12.deriveFont(11d));
+        _tabView.setFont(Font.Arial12.copyForSize(11d));
 
         // Get inspectors and tab builder
         String[] names = getInspectorNames();

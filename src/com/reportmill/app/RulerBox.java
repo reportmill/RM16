@@ -136,7 +136,7 @@ public class RulerBox extends ParentView {
 
         // Ruler constants
         private static final int RULER_WIDTH = 20;
-        private static final Font RULER_FONT = Font.Arial10.deriveFont(8);
+        private static final Font RULER_FONT = Font.Arial10.copyForSize(8);
         private static final Stroke MOUSE_STROKE = Stroke.Stroke1.copyForDashes(2, 2);
 
         /**

@@ -1946,7 +1946,7 @@ public class RMShape implements Cloneable, RMTypes, Archivable, Key.GetSet {
                     font = new RMFont(fontStr, size);
 
                 // Get font at right size and apply it
-                font = font.deriveFont(size);
+                font = font.copyForSize(size);
                 aShapeRPG.setFont(font);
             }
 

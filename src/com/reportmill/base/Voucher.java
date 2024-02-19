@@ -118,7 +118,7 @@ public class Voucher {
     private static void addWatermark(RMParentShape aShape)
     {
         // Get attributed string with REPORTMILL in 72pt grey (with R & M in 100pt)
-        RMFont font72 = RMFont.getFont("Arial Bold", 72), font100 = font72.deriveFont(100);
+        RMFont font72 = RMFont.getFont("Arial Bold", 72), font100 = font72.copyForSize(100);
         RMXString xstring = new RMXString("REPORTMILL", font72, new RMColor(.9));
         xstring.setAttribute(font100, 0, 1);
         xstring.setAttribute(font100, 6, 7); // Set R & M in 100pt

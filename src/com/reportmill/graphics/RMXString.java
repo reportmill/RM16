@@ -133,7 +133,7 @@ public class RMXString implements Cloneable, CharSequence, RMTypes, XMLArchiver.
     public void addChars(CharSequence theChars, TextStyle aStyle, int anIndex)
     {
         if (theChars.length() == 0) return;
-        _richText.addChars(theChars, aStyle, anIndex);
+        _richText.addCharsWithStyle(theChars, aStyle, anIndex);
     }
 
     /**

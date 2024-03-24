@@ -220,7 +220,7 @@ class RMGraphRPGPie extends RMGraphRPG {
                     label.setXY(labelX, labelY);
 
                     // If wedgeLabelBounds intersects lastWedgeLabelBounds, scoot it up or down
-                    if (j > 0 && label.getFrame().getInsetRect(2).intersects(lastLabelBounds))
+                    if (j > 0 && label.getFrame().getInsetRect(2).intersectsShape(lastLabelBounds))
                         label.setY(angle >= 180 ? lastLabelBounds.y - label.getHeight() + 4 : lastLabelBounds.getMaxY() - 4);
 
                     // Add wedge label text to PieShape

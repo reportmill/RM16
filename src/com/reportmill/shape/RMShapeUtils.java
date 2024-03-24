@@ -210,7 +210,7 @@ public class RMShapeUtils {
         List<RMShape> shapes = theShapes;
         for (int i = shapes.size() - 1; i >= 0; i--) {
             RMShape shape = shapes.get(i);
-            if (!shape.getFrame().intersects(shape0Frame)) {
+            if (!shape.getFrame().intersectsShape(shape0Frame)) {
                 if (shapes == theShapes) shapes = new ArrayList(theShapes);
                 shapes.remove(i);
             }

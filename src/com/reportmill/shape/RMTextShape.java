@@ -650,7 +650,7 @@ public class RMTextShape extends RMRectShape {
         // Iterate over children and add any that intersect frame
         for (int i = 0, iMax = getParent().getChildCount(); i < iMax; i++) {
             RMShape child = getParent().getChild(i);
-            if (child != this && child.getFrame().intersects(getFrame())) {
+            if (child != this && child.getFrame().intersectsShape(getFrame())) {
                 if (list == null) list = new ArrayList<>();
                 list.add(child);
             }

@@ -372,7 +372,7 @@ public class RMPolygonShapeTool<T extends RMPolygonShape> extends RMTool<T> {
             _newPoint = getEditor().convertToShape(anEvent.getX(), anEvent.getY(), aPolyShape);
 
             // linewidth is probably in shape coords, and might need to get transformed to path coords here
-            if (path.intersects(_newPoint.x, _newPoint.y, Math.max(aPolyShape.getStrokeWidth(), 8))) {
+            if (path.intersectsXY(_newPoint.x, _newPoint.y, Math.max(aPolyShape.getStrokeWidth(), 8))) {
                 menuTitle = "Add Anchor Point";
                 menuName = "AddPointMenuItem";
             }

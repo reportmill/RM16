@@ -1680,7 +1680,7 @@ public class RMShape implements Cloneable, RMTypes, Archivable, Key.GetSet {
 
         // Get shape in bounds and return whether shape intersects given path
         Shape path = getPath();
-        return path.intersects(aPath, lineWidth);
+        return path.intersectsShape(aPath, lineWidth);
     }
 
     /**
@@ -2106,7 +2106,7 @@ public class RMShape implements Cloneable, RMTypes, Archivable, Key.GetSet {
 
         // If shape bounds don't intersect clip bounds, just return
         Rect cbounds = aPntr.getClipBounds();
-        if (cbounds != null && !getBoundsMarkedDeep().intersects(cbounds)) {
+        if (cbounds != null && !getBoundsMarkedDeep().intersectsShape(cbounds)) {
             aPntr.restore();
             return;
         }

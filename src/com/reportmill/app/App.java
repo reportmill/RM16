@@ -12,7 +12,6 @@ import snap.viewx.DialogBox;
 import snap.viewx.ExceptionReporter;
 import snap.web.WebFile;
 import snap.web.WebURL;
-import java.awt.*;
 import java.io.File;
 import java.util.List;
 
@@ -130,12 +129,9 @@ public class App {
     private static void openFiles(List<File> theFiles)
     {
         for (File openFile : theFiles) {
-            WebURL openFileURL = WebURL.getURL(openFile);
-            if (openFileURL != null) {
-                WebFile openFileSnap = openFileURL.getFile();
-                if (openFileSnap != null)
-                    WelcomePanel.getShared().openFile(openFileSnap);
-            }
+            WebFile openFileSnap = WebFile.getFileForJavaFile(openFile);
+            if (openFileSnap != null)
+                WelcomePanel.getShared().openFile(openFileSnap);
         }
     }
 

@@ -815,7 +815,7 @@ public class RMTextShape extends RMRectShape {
         if (length() == 0) return 0; // Zero instead of getMarginLeft() + getMarginRight() so empty texts are hidden
 
         // Get text box width (from first visible char) and return that plus margin
-        double pw = getRichText().getPrefWidth(getVisibleStart());
+        double pw = getRichText().getPrefWidthForStartCharIndex(getVisibleStart());
         return Math.ceil(getMarginLeft() + pw + getMarginRight());
     }
 

@@ -103,7 +103,7 @@ public class RMEditorPane extends RMViewerPane {
             getWindow().toFront();
 
         // Show KeysPanel (after delay, so XML icon animation can finish)
-        runDelayed(2000, () -> getAttributesPanel().setVisibleName(AttributesPanel.KEYS));
+        runDelayed(() -> getAttributesPanel().setVisibleName(AttributesPanel.KEYS), 2000);
     }
 
     /**

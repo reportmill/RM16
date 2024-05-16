@@ -146,7 +146,7 @@ public class WelcomePanel extends ViewOwner {
 
         // Show Samples or start SamplesButtonAnim
         if (showSamples) //editorPane = RMEditorPaneUtils.openSample("Movies");
-            runDelayed(300, () -> editorPane.showSamples());
+            runDelayed(() -> editorPane.showSamples(), 300);
         else runLater(() -> editorPane.getTopToolBar().startSamplesButtonAnim());
 
         // Hide WelcomePanel

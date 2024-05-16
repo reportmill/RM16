@@ -244,7 +244,7 @@ public class KeysPanel extends RMEditorPane.SupportPane {
         if (anEvent.equals("ShowKeysTableMenu")) {
             boolean show = !isShowKeysTable();
             setShowKeysTable(show);
-            runDelayed(600, () -> getEditorPane().getAttributesPanel().getDrawer().setMaximized(show));
+            runDelayed(() -> getEditorPane().getAttributesPanel().getDrawer().setMaximized(show), 600);
         }
     }
 

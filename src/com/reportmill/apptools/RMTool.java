@@ -1020,7 +1020,7 @@ public class RMTool<T extends RMShape> extends ViewOwner {
         }
 
         // Get path and extension (set to empty string if null)
-        String ext = aFile.getExtension();
+        String ext = aFile.getFileType();
         if (ext == null) return aPoint;
         ext = ext.toLowerCase();
 

@@ -483,7 +483,7 @@ public class RMTableTool<T extends RMTable> extends RMParentShapeTool<T> impleme
         RMTableRowTool tableRowTool = (RMTableRowTool) getTool(tableRow); // Get table row tool
         Menu pmenu = tableRowTool.getPopupMenu(tableRow); // Fill menu
         Point point = editor.convertFromShape(x, y, aShape); // Get point in editor
-        pmenu.show(editor, point.x, point.y); // Show popup menu
+        pmenu.showMenuAtXY(editor, point.x, point.y); // Show popup menu
     }
 
     /**

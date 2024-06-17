@@ -398,7 +398,7 @@ public class RMCrossTabTool<T extends RMCrossTab> extends RMTool<T> {
 
         // Run menu and consume event
         pmenu.setOwner(this);
-        pmenu.show(anEvent.getView(), anEvent.getX(), anEvent.getY());
+        pmenu.showMenuAtXY(anEvent.getView(), anEvent.getX(), anEvent.getY());
         anEvent.consume();
     }
 

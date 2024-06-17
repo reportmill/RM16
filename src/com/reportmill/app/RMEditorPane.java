@@ -711,7 +711,7 @@ public class RMEditorPane extends RMViewerPane {
 
         // Initialize popup menu items to send Events to menu bar
         popupMenu.setOwner(getMenuBar());
-        popupMenu.show(getEditor(), anEvent.getX(), anEvent.getY());
+        popupMenu.showMenuAtXY(getEditor(), anEvent.getX(), anEvent.getY());
         anEvent.consume();
     }
 

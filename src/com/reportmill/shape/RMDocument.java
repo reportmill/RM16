@@ -899,7 +899,7 @@ public class RMDocument extends RMParentShape {
 
         // Get directory, subreport filename and subreport document
         String dir = FilePathUtils.getParentPath(getFilename());
-        String subreportFilename = FilePathUtils.getChild(dir, aName);
+        String subreportFilename = FilePathUtils.getChildPath(dir, aName);
         try {
             return RMDocument.getDoc(subreportFilename);
         } catch (Exception e) {

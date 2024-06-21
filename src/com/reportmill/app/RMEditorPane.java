@@ -400,7 +400,7 @@ public class RMEditorPane extends RMViewerPane {
         WebURL sourceURL = getSourceURL();
         if (sourceURL != null) {
             String filename = sourceURL.getFilename();
-            String filePath = PathUtils.getParent(sourceURL.getPath());
+            String filePath = FilePathUtils.getParentPath(sourceURL.getPath());
             title = filename + " - " + filePath;
         }
 

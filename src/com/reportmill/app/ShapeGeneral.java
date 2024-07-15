@@ -31,7 +31,8 @@ public class ShapeGeneral extends RMEditorPane.SupportPane {
         _bindingsTable = getView("BindingsTable", TableView.class);
         _bindingsTable.setRowHeight(18);
         _bindingsTable.setCellConfigure(this::configureBindingsTable);
-        enableEvents(_bindingsTable, MouseRelease, DragDrop);
+        _bindingsTable.addEventHandler(this::handleBindingsTableMouseRelease, MouseRelease);
+        _bindingsTable.addEventHandler(this::handleBindingsTableDragDrop, DragDrop);
     }
 
     /**
@@ -77,30 +78,6 @@ public class ShapeGeneral extends RMEditorPane.SupportPane {
             for (RMShape shp : shapes) shp.setURL(value);
         }
 
-        // Handle BindingsTable
-        if (anEvent.equals("BindingsTable")) {
-
-            // Handle MouseRelease: Select text
-            if (anEvent.isMouseRelease()) {
-                requestFocus("BindingsText");
-                getView("BindingsText", TextView.class).selectAll();
-            }
-
-            // Handle DragDrop
-            if (anEvent.isDragDrop()) {
-                Clipboard dboard = anEvent.getClipboard();
-                anEvent.acceptDrag();
-                if (dboard.hasString()) {
-                    int row = _bindingsTable.getRowIndexForY(anEvent.getY());
-                    if (row < 0) return;
-                    String pname = shape.getPropNames()[row];
-                    String bkey = KeysPanel.getDragKey();
-                    shape.addBinding(pname, bkey);
-                }
-                anEvent.dropComplete();
-            }
-        }
-
         // Handle BindingsText
         if (anEvent.equals("BindingsText")) {
 
@@ -108,13 +85,41 @@ public class ShapeGeneral extends RMEditorPane.SupportPane {
             String pname = _bindingsTable.getSelItem();
             if (pname == null) return;
             String key = getViewStringValue("BindingsText");
-            if (key != null && key.length() == 0) key = null;
+            if (key != null && key.isEmpty()) key = null;
 
             // Remove previous binding and add new one (if valid)
             for (RMShape shp : shapes)
                 if (key != null) shp.addBinding(pname, key);
                 else shp.removeBinding(pname);
         }
+    }
+
+    /**
+     * Called when BindingsTable gets mouse release event.
+     */
+    private void handleBindingsTableMouseRelease(ViewEvent anEvent)
+    {
+        requestFocus("BindingsText");
+        getView("BindingsText", TextView.class).selectAll();
+    }
+
+    /**
+     * Called when BindingsTable gets drag drop event.
+     */
+    private void handleBindingsTableDragDrop(ViewEvent anEvent)
+    {
+        RMShape shape = getSelectedShape(); if (shape == null) return;
+
+        Clipboard dboard = anEvent.getClipboard();
+        anEvent.acceptDrag();
+        if (dboard.hasString()) {
+            int row = _bindingsTable.getRowIndexForY(anEvent.getY());
+            if (row < 0) return;
+            String pname = shape.getPropNames()[row];
+            String bkey = KeysPanel.getDragKey();
+            shape.addBinding(pname, bkey);
+        }
+        anEvent.dropComplete();
     }
 
     /**

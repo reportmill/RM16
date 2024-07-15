@@ -78,7 +78,7 @@ public class InspectorPanel extends RMEditorPane.SupportPane {
 
         // Get SelPathView and InspectorPanel
         _selPathView = getView("SelPathView", ChildView.class);
-        enableEvents(_selPathView, MouseRelease);
+        _selPathView.addEventHandler(e -> setVisible(9), MouseRelease);
         _shapeBtn = getView("ShapeSpecificButton", ToggleButton.class);
 
         // Get/configure ContentBox
@@ -167,10 +167,6 @@ public class InspectorPanel extends RMEditorPane.SupportPane {
         // Handle SelPath
         if (anEvent.getName().startsWith("SelPath"))
             popSelection(Convert.intValue(anEvent.getName()));
-
-        // Handle SelPathView
-        if (anEvent.equals("SelPathView") && anEvent.isMouseRelease())
-            setVisible(9);
     }
 
     /**

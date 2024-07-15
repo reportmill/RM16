@@ -39,7 +39,7 @@ public class ShapeTree extends RMEditorPane.SupportPane {
      */
     protected void initUI()
     {
-        enableEvents(_shapeTree, MouseRelease);
+        _shapeTree.addEventHandler(this::handleShapeTreeMouseRelease, MouseRelease);
     }
 
     /**
@@ -59,10 +59,15 @@ public class ShapeTree extends RMEditorPane.SupportPane {
     protected void respondUI(ViewEvent anEvent)
     {
         // Handle ShapeTree
-        if (anEvent.equals("ShapeTree") && anEvent.isActionEvent())
+        if (anEvent.equals("ShapeTree"))
             getEditor().setSelectedShape((RMShape) anEvent.getSelItem());
+    }
 
-        // Handle MouseClick
+    /**
+     * Called when ShapeTree gets mouse click.
+     */
+    private void handleShapeTreeMouseRelease(ViewEvent anEvent)
+    {
         if (anEvent.isMouseClick() && anEvent.getClickCount() == 2)
             getEditor().setSuperSelectedShape((RMShape) anEvent.getSelItem());
     }

@@ -98,17 +98,27 @@ public class WelcomePanel extends ViewOwner {
         // Hide ProgressBar
         getView("ProgressBar").setVisible(false);
 
-        // Configure Window: Add WindowListener to indicate app should exit when close button clicked
-        WindowView win = getWindow();
-        win.setTitle("Welcome");
-        enableEvents(win, WinClose);
+        // Make OpenButton default
         getView("OpenButton", Button.class).setDefaultButton(true);
+    }
+
+    /**
+     * Override to initialize window.
+     */
+    @Override
+    protected void initWindow(WindowView aWindow)
+    {
+        // Add WindowListener to indicate app should exit when close button clicked
+        WindowView window = getWindow();
+        window.setTitle("Welcome");
+        window.addEventHandler(e -> hide(), WinClose);
     }
 
     /**
      * Responds to UI changes.
      */
-    public void respondUI(ViewEvent anEvent)
+    @Override
+    protected void respondUI(ViewEvent anEvent)
     {
         // Handle SamplesButton
         if (anEvent.equals("SamplesButton"))
@@ -127,10 +137,6 @@ public class WelcomePanel extends ViewOwner {
         // Handle QuitButton
         if (anEvent.equals("QuitButton"))
             App.quitApp();
-
-        // Handle WinClosing
-        if (anEvent.isWinClose())
-            hide();
     }
 
     /**

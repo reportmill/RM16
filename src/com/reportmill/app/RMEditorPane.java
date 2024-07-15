@@ -11,7 +11,6 @@ import snap.view.*;
 import snap.viewx.*;
 import snap.web.*;
 import snap.util.*;
-
 import java.util.Objects;
 
 /**
@@ -232,25 +231,31 @@ public class RMEditorPane extends RMViewerPane {
     }
 
     /**
-     * Override to configure Window.
+     * Override to initialize UI.
      */
+    @Override
     protected void initUI()
     {
         // Do normal version
         super.initUI();
 
         // Enable Events for editor
-        enableEvents(getEditor(), MousePress, MouseRelease);
+        getEditor().addEventHandler(this::handleEditorMouseEvent, MousePress, MouseRelease);
 
         // Listen for Editor PropChanges
         getEditor().addPropChangeListener(pc -> editorDidPropChange(pc));
+    }
 
-        // Configure Window ClassName, Image and enable window events
+    /**
+     * Override to initialize Window.
+     */
+    @Override
+    protected void initWindow(WindowView aWindow)
+    {
         WindowView window = getWindow();
         window.setImage(getFrameIcon());
-        enableEvents(window, WinClose);
-        if (SnapUtils.isTeaVM || SnapUtils.isWebVM)
-            window.setMaximized(true);
+        window.addEventHandler(this::handleWindowCloseEvent, WinClose);
+        window.setMaximized(SnapUtils.isTeaVM || SnapUtils.isWebVM);
     }
 
     /**
@@ -297,12 +302,18 @@ public class RMEditorPane extends RMViewerPane {
 
         // Do normal version
         super.respondUI(anEvent);
+    }
 
+    /**
+     * Called when editor gets mouse event.
+     */
+    private void handleEditorMouseEvent(ViewEvent anEvent)
+    {
         // Handle PopupTrigger
         if (anEvent.isPopupTrigger() && !anEvent.isConsumed())
             runPopupMenu(anEvent);
 
-            // If Editor.MouseClick and DataSource is set and we're editing and DataSource icon clicked, show DS Inspector
+        // If Editor.MouseClick and DataSource is set and we're editing and DataSource icon clicked, show DS Inspector
         else if (anEvent.isMouseClick() && getDataSource() != null && isEditing()) {
             Rect r = getEditor().getVisRect(); // Get visible rect
             if (anEvent.getX() > r.getMaxX() - 53 && anEvent.getY() > r.getMaxY() - 53) { // If DataSource icon clicked
@@ -314,12 +325,15 @@ public class RMEditorPane extends RMViewerPane {
             else if (getInspectorPanel().isShowingDataSource())
                 getInspectorPanel().setVisible(0);
         }
+    }
 
-        // Handle WinClosing
-        else if (anEvent.isWinClose()) {
-            close();
-            anEvent.consume();
-        }
+    /**
+     * Called when Window get WinClose event.
+     */
+    private void handleWindowCloseEvent(ViewEvent anEvent)
+    {
+        close();
+        anEvent.consume();
         //else if(anEvent.isWinResized()) { //Dimension wsize=getWindow().getSize(), psize=getWindow().getPreferredSize();
         //if(Math.abs(wsize.width-psize.width)<=10) wsize.width = psize.width;
         //if(Math.abs(wsize.height-psize.height)<=10) wsize.height = psize.height;

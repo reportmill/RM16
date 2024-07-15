@@ -160,7 +160,9 @@ public class KeysPanel extends RMEditorPane.SupportPane {
         _keysBrowser.setCellConfigure(c -> configureKeysBrowserCell((ListCell) c));
 
         // Register KeysBrowser for click, drag
-        enableEvents(_keysBrowser, MouseRelease, DragGesture, ViewEvent.Type.DragSourceEnd);
+        _keysBrowser.addEventHandler(this::handleKeysBrowserMouseRelease, MouseRelease);
+        _keysBrowser.addEventHandler(this::handleKeysBrowserDragGesture, DragGesture);
+        _keysBrowser.addEventHandler(this::handleKeysBrowserDragSourceEnd, ViewEvent.Type.DragSourceEnd);
     }
 
     /**
@@ -193,49 +195,6 @@ public class KeysPanel extends RMEditorPane.SupportPane {
      */
     public void respondUI(ViewEvent anEvent)
     {
-        // Handle KeysBrowser (double-click - used to check anEvent.getClickCount()==2)
-        if (anEvent.equals("KeysBrowser") && anEvent.isMouseClick() && anEvent.getClickCount() == 2) {
-
-            // If double-click on RMTable, add grouping
-            RMEditor editor = getEditor();
-            if (getSelectedShape() instanceof RMTable) {
-                RMTableTool tool = (RMTableTool) editor.getTool(getSelectedShape());
-                tool.addGroupingKey(getKeysBrowserPath());
-            }
-
-            // If leaf click for RMText, add key
-            else if (isSelectedLeaf() && editor.getTextEditor() != null)
-                editor.getTextEditor().replace(getKeyPath());
-        }
-
-        // Handle DragGesture
-        if (anEvent.isDragGesture()) {
-
-            // If drag was in scrollbar, just return
-            if (ViewUtils.getDeepestChildAt(anEvent.getView(), anEvent.getX(), anEvent.getY(), ScrollBar.class) != null)
-                return;
-
-            // Set the drag key and get drag key with @-signs
-            _active = this;
-            _dragKey = getKeysBrowserPath();
-            String dragKeyFull = getKeyPath();
-
-            // Get event Clipboard and start drag
-            Clipboard cboard = anEvent.getClipboard();
-            cboard.addData(dragKeyFull);
-            cboard.setDragImage(ImageUtils.getImageForStringAndFont(dragKeyFull, getSelectedShape().getDocument().getFont()));
-            cboard.startDrag();
-
-            // Notify Attributes panel that dragging started
-            getEditorPane().getAttributesPanel().childDragStart();
-        }
-
-        // Handle KeysBrowser DragSourceEnd
-        if (anEvent.isDragSourceEnd()) {
-            _dragKey = null;
-            getEditorPane().getAttributesPanel().childDragStop();
-        }
-
         // Handle BuiltInKeysButton
         if (anEvent.equals("BuiltInKeysButton"))
             _showBuiltIn = anEvent.getBoolValue();
@@ -246,6 +205,60 @@ public class KeysPanel extends RMEditorPane.SupportPane {
             setShowKeysTable(show);
             runDelayed(() -> getEditorPane().getAttributesPanel().getDrawer().setMaximized(show), 600);
         }
+    }
+
+    /**
+     * Called when KeysBrowser gets MouseRelease event.
+     */
+    private void handleKeysBrowserMouseRelease(ViewEvent anEvent)
+    {
+        // Handle KeysBrowser (double-click - used to check anEvent.getClickCount()==2)
+        if (anEvent.isMouseClick() && anEvent.getClickCount() == 2) {
+
+            // If double-click on RMTable, add grouping
+            RMEditor editor = getEditor();
+            if (getSelectedShape() instanceof RMTable) {
+                RMTableTool<?> tool = (RMTableTool<?>) editor.getTool(getSelectedShape());
+                tool.addGroupingKey(getKeysBrowserPath());
+            }
+
+            // If leaf click for RMText, add key
+            else if (isSelectedLeaf() && editor.getTextEditor() != null)
+                editor.getTextEditor().replace(getKeyPath());
+        }
+    }
+
+    /**
+     * Called when KeysBrowser gets DragGesture event.
+     */
+    private void handleKeysBrowserDragGesture(ViewEvent anEvent)
+    {
+        // If drag was in scrollbar, just return
+        if (ViewUtils.getDeepestChildAt(anEvent.getView(), anEvent.getX(), anEvent.getY(), ScrollBar.class) != null)
+            return;
+
+        // Set the drag key and get drag key with @-signs
+        _active = this;
+        _dragKey = getKeysBrowserPath();
+        String dragKeyFull = getKeyPath();
+
+        // Get event Clipboard and start drag
+        Clipboard cboard = anEvent.getClipboard();
+        cboard.addData(dragKeyFull);
+        cboard.setDragImage(ImageUtils.getImageForStringAndFont(dragKeyFull, getSelectedShape().getDocument().getFont()));
+        cboard.startDrag();
+
+        // Notify Attributes panel that dragging started
+        getEditorPane().getAttributesPanel().childDragStart();
+    }
+
+    /**
+     * Called when KeysBrowser gets DragSourceEnd event.
+     */
+    private void handleKeysBrowserDragSourceEnd(ViewEvent anEvent)
+    {
+        _dragKey = null;
+        getEditorPane().getAttributesPanel().childDragStop();
     }
 
     /**

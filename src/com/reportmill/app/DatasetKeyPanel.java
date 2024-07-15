@@ -11,10 +11,10 @@ import snap.viewx.DialogBox;
 public class DatasetKeyPanel extends ViewOwner {
 
     // The selected dataset key element type
-    byte _selectedType = TABLE;
+    private byte _selectedType = TABLE;
 
     // The DialogBox
-    DialogBox _dbox = new DialogBox("Dataset Key Element");
+    private DialogBox _dialogBox = new DialogBox("Dataset Key Element");
 
     // Constants for Dataset Element Types
     public static final byte TABLE = 1;
@@ -27,36 +27,39 @@ public class DatasetKeyPanel extends ViewOwner {
      */
     public int showDatasetKeyPanel(View aView)
     {
-        _dbox.setContent(getUI());
-        return _dbox.showConfirmDialog(aView) ? _selectedType : 0;
+        _dialogBox.setContent(getUI());
+        return _dialogBox.showConfirmDialog(aView) ? _selectedType : 0;
     }
 
     /**
      * Initialize UI.
      */
-    public void initUI()
+    @Override
+    protected void initUI()
     {
         // Configure buttons to accept clicks so we can watch for double click
-        enableEvents("TableButton", MouseRelease);
-        enableEvents("LabelsButton", MouseRelease);
-        enableEvents("GraphButton", MouseRelease);
-        enableEvents("CrossTabButton", MouseRelease);
+        getView("TableButton").addEventHandler(this::handleButtonMouseRelease, MouseRelease);
+        getView("LabelsButton").addEventHandler(this::handleButtonMouseRelease, MouseRelease);
+        getView("GraphButton").addEventHandler(this::handleButtonMouseRelease, MouseRelease);
+        getView("CrossTabButton").addEventHandler(this::handleButtonMouseRelease, MouseRelease);
     }
 
     /**
      * Handles input from UI controls.
      */
-    public void respondUI(ViewEvent anEvent)
+    private void handleButtonMouseRelease(ViewEvent anEvent)
     {
-        // Handle TableButton, LabelsButton, GraphButton, CrossTabButton
-        if (anEvent.equals("TableButton")) _selectedType = TABLE;
-        if (anEvent.equals("LabelsButton")) _selectedType = LABELS;
-        if (anEvent.equals("GraphButton")) _selectedType = GRAPH;
-        if (anEvent.equals("CrossTabButton")) _selectedType = CROSSTAB;
+        switch (anEvent.getName()) {
+
+            // Handle TableButton, LabelsButton, GraphButton, CrossTabButton
+            case "TableButton": _selectedType = TABLE; break;
+            case "LabelsButton": _selectedType = LABELS; break;
+            case "GraphButton": _selectedType = GRAPH; break;
+            case "CrossTabButton": _selectedType = CROSSTAB; break;
+        }
 
         // Handle any double-click
         if (anEvent.getClickCount() > 1)
-            _dbox.confirm();
+            _dialogBox.confirm();
     }
-
 }

@@ -48,7 +48,7 @@ public class RMCrossTabCellTool<T extends RMCrossTabCell> extends RMTextTool<T> 
     protected void initUI()
     {
         super.initUI();
-        enableEvents("GroupingKeyText", DragDrop);
+        getView("GroupingKeyText").addEventHandler(this::handleGroupingKeyTextEvent, DragDrop);
     }
 
     /**
@@ -106,22 +106,8 @@ public class RMCrossTabCellTool<T extends RMCrossTabCell> extends RMTextTool<T> 
         List<RMCrossTabCell> cells = (List) getEditor().getSelectedOrSuperSelectedShapes();
 
         // Handle GroupingKeyText
-        if (anEvent.equals("GroupingKeyText")) {
-
-            // Get grouping key
-            String key = StringUtils.delete(anEvent.getStringValue(), "@");
-
-            // If no key, reset grouping
-            if (key == null || key.length() == 0)
-                cell.setGrouping(null);
-
-                // If cell grouping is null, create grouping
-            else if (cell.getGrouping() == null)
-                cell.setGrouping(new RMGrouping(key));
-
-                // Otherwise, just set cell grouping
-            else cell.getGrouping().setKey(key);
-        }
+        if (anEvent.equals("GroupingKeyText"))
+            handleGroupingKeyTextEvent(anEvent);
 
         // Handle VisibleCheckBox - Set visible on selected cells
         if (anEvent.equals("VisibleCheckBox"))
@@ -153,6 +139,30 @@ public class RMCrossTabCellTool<T extends RMCrossTabCell> extends RMTextTool<T> 
 
         // Do text tool respondUI
         super.respondUI(anEvent);
+    }
+
+    /**
+     * Called when GroupingKeyText gets event.
+     */
+    private void handleGroupingKeyTextEvent(ViewEvent anEvent)
+    {
+        RMCrossTabCell cell = getSelectedShape(); if (cell == null) return;
+
+        // Get grouping key
+        String key = StringUtils.delete(anEvent.getStringValue(), "@");
+
+        // If no key, reset grouping
+        if (key == null || key.length() == 0)
+            cell.setGrouping(null);
+
+        // If cell grouping is null, create grouping
+        else if (cell.getGrouping() == null)
+            cell.setGrouping(new RMGrouping(key));
+
+        // Otherwise, just set cell grouping
+        else cell.getGrouping().setKey(key);
+
+        resetLater();
     }
 
     /**

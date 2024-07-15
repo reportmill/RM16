@@ -101,6 +101,7 @@ public class ShapeGeneral extends RMEditorPane.SupportPane {
     {
         requestFocus("BindingsText");
         getView("BindingsText", TextView.class).selectAll();
+        resetLater();
     }
 
     /**
@@ -120,6 +121,7 @@ public class ShapeGeneral extends RMEditorPane.SupportPane {
             shape.addBinding(pname, bkey);
         }
         anEvent.dropComplete();
+        resetLater();
     }
 
     /**

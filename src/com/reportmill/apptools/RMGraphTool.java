@@ -28,16 +28,16 @@ public class RMGraphTool<T extends RMGraph> extends RMTool<T> implements RMSortP
     RMGraphPartPieTool _pieTool = new RMGraphPartPieTool();
 
     // Assistant tool for ValueAxis
-    RMGraphPartValueAxisTool _valueAxisTool = new RMGraphPartValueAxisTool();
+    RMGraphPartValueAxisTool<?> _valueAxisTool = new RMGraphPartValueAxisTool<>();
 
     // Assistant tool for LabelAxis
-    RMGraphPartLabelAxisTool _labelAxisTool = new RMGraphPartLabelAxisTool();
+    RMGraphPartLabelAxisTool<?> _labelAxisTool = new RMGraphPartLabelAxisTool<>();
 
     // Assistant tool for Series
-    RMGraphPartSeriesTool _seriesTool = new RMGraphPartSeriesTool();
+    RMGraphPartSeriesTool<?> _seriesTool = new RMGraphPartSeriesTool<>();
 
     // Assistant tool for 3D
-    RMScene3DTool _3dTool = new Scene3DTool();
+    RMScene3DTool<?> _3dTool = new Scene3DTool();
 
     // The last graph that was the selected graph
     RMGraph _lastSelGraph;
@@ -95,9 +95,9 @@ public class RMGraphTool<T extends RMGraph> extends RMTool<T> implements RMSortP
         setViewItems("ItemsLayoutList", RMGraph.ItemLayout.values());
 
         // Enable drop keys
-        enableEvents("ListKeyText", DragDrop);
-        enableEvents("FilterText", DragDrop);
-        enableEvents("KeysText", DragDrop);
+        addViewEventHandler("ListKeyText", this::handleListKeyTextEvent, DragDrop);
+        addViewEventHandler("FilterText", this::handleFilterTextEvent, DragDrop);
+        addViewEventHandler("KeysText", this::handleKeysTextEvent, DragDrop);
     }
 
     /**
@@ -106,8 +106,7 @@ public class RMGraphTool<T extends RMGraph> extends RMTool<T> implements RMSortP
     protected void resetUI()
     {
         // Get currently selected graph (just return if null)
-        RMGraph graph = getSelectedGraph();
-        if (graph == null) return;
+        RMGraph graph = getSelectedGraph(); if (graph == null) return;
 
         // If selected graph has changed, try to make Graph.ProxyShape consitent
         if (graph != _lastSelGraph)
@@ -127,7 +126,7 @@ public class RMGraphTool<T extends RMGraph> extends RMTool<T> implements RMSortP
         setViewValue("FilterText", graph.getFilterKey());
 
         // Update KeysText
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < graph.getKeyCount(); i++) {
             if (i > 0) sb.append(", ");
             sb.append(graph.getKey(i));
@@ -202,44 +201,23 @@ public class RMGraphTool<T extends RMGraph> extends RMTool<T> implements RMSortP
     public void respondUI(ViewEvent anEvent)
     {
         // Get currently selected graph (just return if null)
-        RMGraph graph = getSelectedGraph();
-        if (graph == null) return;
+        RMGraph graph = getSelectedGraph(); if (graph == null) return;
 
         // Handle ListKeyText
-        if (anEvent.equals("ListKeyText")) {
-            graph.setDatasetKey(StringUtils.delete(anEvent.getStringValue(), "@"));
-            if (anEvent.isDragDrop())
-                anEvent.dropComplete();
-        }
+        if (anEvent.equals("ListKeyText"))
+            handleListKeyTextEvent(anEvent);
 
         // Handle FilterText
         if (anEvent.equals("FilterText"))
-            graph.setFilterKey(StringUtils.delete(anEvent.getStringValue(), "@"));
+            handleFilterTextEvent(anEvent);
 
         // Handle KeysMenuItem
         if (anEvent.equals("KeysMenuItem"))
             getEditorPane().getAttributesPanel().setVisibleName(AttributesPanel.KEYS);
 
         // Handle KeysText
-        if (anEvent.equals("KeysText")) {
-
-            // Get Key string and key strings
-            String keysString = getViewStringValue("KeysText");
-            if (anEvent.isDragDrop()) {
-                if (keysString == null || keysString.length() == 0) keysString = anEvent.getStringValue();
-                else keysString += ',' + anEvent.getStringValue();
-                anEvent.dropComplete();
-            }
-            String keyStrings[] = keysString.split(",");
-
-            // Clear keys and (re)add
-            graph.clearKeys();
-            for (String ks : keyStrings) {
-                String key = ks.trim().replace("@", "");
-                if (key != null && key.length() > 0)
-                    graph.addKey(key);
-            }
-        }
+        if (anEvent.equals("KeysText"))
+            handleKeysTextEvent(anEvent);
 
         // Handle GraphTypeBarButton, GraphTypeBarHButton, GraphTypeAreaButton, GraphTypeLineButton, GraphTypeScatterButton
         if (anEvent.equals("GraphTypeBarButton")) graph.setType(RMGraph.Type.Bar);
@@ -262,7 +240,7 @@ public class RMGraphTool<T extends RMGraph> extends RMTool<T> implements RMSortP
             RMColor color = RMColor.get(cdock.getColor(index));
 
             // Get copy of graph colors and make sure they are at least as long as selected index
-            List<RMColor> colors = new ArrayList(graph.getColors());
+            List<RMColor> colors = new ArrayList<>(graph.getColors());
             while (colors.size() < index + 1) colors.add(RMColor.white);
 
             // Set color of selected index, remove trailing whites, and set new colors in graph
@@ -279,15 +257,67 @@ public class RMGraphTool<T extends RMGraph> extends RMTool<T> implements RMSortP
 
         // Handle ColorKeyText
         if (anEvent.equals("ColorKeyText")) {
-            String ckey = anEvent.getStringValue();
+            String colorKey = anEvent.getStringValue();
             graph.setColorKey(anEvent.getStringValue());
-            if (ckey != null && ckey.length() > 0)
+            if (colorKey != null && !colorKey.isEmpty())
                 graph.setColorItems(true);
         }
 
         // Handle any box click: Close other boxes
         if (anEvent.getName().endsWith("Box"))
             titleViewExpandedChanged(anEvent);
+    }
+
+    /**
+     * Called when ListKeyText gets Action or DragDrop event.
+     */
+    private void handleListKeyTextEvent(ViewEvent anEvent)
+    {
+        RMGraph graph = getSelectedGraph(); if (graph == null) return;
+        graph.setDatasetKey(anEvent.getStringValue().replace("@", ""));
+        if (anEvent.isDragDrop())
+            anEvent.dropComplete();
+        resetLater();
+    }
+
+    /**
+     * Called when FilterText gets Action or DragDrop event.
+     */
+    private void handleFilterTextEvent(ViewEvent anEvent)
+    {
+        RMGraph graph = getSelectedGraph(); if (graph == null) return;
+        graph.setFilterKey(anEvent.getStringValue().replace("@", ""));
+        if (anEvent.isDragDrop())
+            anEvent.dropComplete();
+        resetLater();
+    }
+
+    /**
+     * Called when KeysText gets Action or DragDrop event.
+     */
+    private void handleKeysTextEvent(ViewEvent anEvent)
+    {
+        RMGraph graph = getSelectedGraph(); if (graph == null) return;
+
+        // Get Key string and key strings
+        String keysString = getViewStringValue("KeysText");
+        if (anEvent.isDragDrop()) {
+            if (keysString == null || keysString.isEmpty())
+                keysString = anEvent.getStringValue();
+            else keysString += ',' + anEvent.getStringValue();
+            anEvent.dropComplete();
+        }
+        String[] keyStrings = keysString.split(",");
+
+        // Clear keys and (re)add
+        graph.clearKeys();
+        for (String ks : keyStrings) {
+            String key = ks.trim().replace("@", "");
+            if (!key.isEmpty())
+                graph.addKey(key);
+        }
+
+        resetLater();
     }
 
     /**
@@ -339,7 +369,7 @@ public class RMGraphTool<T extends RMGraph> extends RMTool<T> implements RMSortP
     }
 
     // Array of TitleView names
-    private String BoxNames[] = {"SortBox", "ViewBox", "TypeBox", "ValueAxisBox", "LabelAxisBox", "SeriesBox", "3DBox"};
+    private String[] BoxNames = {"SortBox", "ViewBox", "TypeBox", "ValueAxisBox", "LabelAxisBox", "SeriesBox", "3DBox"};
 
     /**
      * Called when the selected graph changes.
@@ -392,42 +422,27 @@ public class RMGraphTool<T extends RMGraph> extends RMTool<T> implements RMSortP
     /**
      * Returns the class this tool edits.
      */
-    public Class getShapeClass()
-    {
-        return RMGraph.class;
-    }
+    public Class<T> getShapeClass()  { return (Class<T>) RMGraph.class; }
 
     /**
      * Returns the name of the graph inspector.
      */
-    public String getWindowTitle()
-    {
-        return "Graph Inspector";
-    }
+    public String getWindowTitle()  { return "Graph Inspector"; }
 
     /**
      * Overridden to make graph super-selectable.
      */
-    public boolean isSuperSelectable(RMShape aShape)
-    {
-        return true;
-    }
+    public boolean isSuperSelectable(RMShape aShape)  { return true; }
 
     /**
      * Overridden to make graph accept children.
      */
-    public boolean getAcceptsChildren(RMShape aShape)
-    {
-        return true;
-    }
+    public boolean getAcceptsChildren(RMShape aShape)  { return true; }
 
     /**
      * Overridden to make graph not ungroupable.
      */
-    public boolean isUngroupable(RMShape aShape)
-    {
-        return false;
-    }
+    public boolean isUngroupable(RMShape aShape)  { return false; }
 
     /**
      * Override to suppress setting font on sample graph.

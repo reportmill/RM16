@@ -16,27 +16,11 @@ import snap.viewx.FilePanel;
 public class RMPDFShapeTool<T extends RMPDFShape> extends RMTool<T> {
 
     /**
-     * Returns the class that this tool is responsible for.
-     */
-    public Class getShapeClass()
-    {
-        return RMPDFShape.class;
-    }
-
-    /**
-     * Returns the string used for the inspector window title.
-     */
-    public String getWindowTitle()
-    {
-        return "PDF Shape Tool";
-    }
-
-    /**
      * Initialize UI.
      */
     protected void initUI()
     {
-        enableEvents("KeyText", DragDrop);
+        addViewEventHandler("KeyText", this::handleKeyTextEvent, DragDrop);
     }
 
     /**
@@ -71,13 +55,12 @@ public class RMPDFShapeTool<T extends RMPDFShape> extends RMTool<T> {
     public void respondUI(ViewEvent anEvent)
     {
         // Get selected image and images (just return if null)
-        RMPDFShape image = getSelectedShape();
-        if (image == null) return;
-        List<RMPDFShape> images = (List) getSelectedShapes();
+        RMPDFShape image = getSelectedShape(); if (image == null) return;
+        List<RMPDFShape> images = (List<RMPDFShape>) getSelectedShapes();
 
         // Handle KeyText
         if (anEvent.equals("KeyText"))
-            image.setKey(StringUtils.delete(anEvent.getStringValue(), "@"));
+            handleKeyTextEvent(anEvent);
 
         // Handle KeysButton
         if (anEvent.equals("KeysButton"))
@@ -107,11 +90,27 @@ public class RMPDFShapeTool<T extends RMPDFShape> extends RMTool<T> {
     }
 
     /**
-     * Returns the image used to represent shapes that this tool represents.
+     * Called when KeyText gets Action or DragDrop event.
      */
-    protected snap.gfx.Image getImageImpl()
+    private void handleKeyTextEvent(ViewEvent anEvent)
     {
-        return getToolForClass(RMImageShape.class).getImage();
+        RMPDFShape image = getSelectedShape(); if (image == null) return;
+        image.setKey(anEvent.getStringValue().replace("@", ""));
+        resetLater();
     }
 
+    /**
+     * Returns the image used to represent shapes that this tool represents.
+     */
+    protected snap.gfx.Image getImageImpl()  { return getToolForClass(RMImageShape.class).getImage(); }
+
+    /**
+     * Returns the class that this tool is responsible for.
+     */
+    public Class<T> getShapeClass()  { return (Class<T>) RMPDFShape.class; }
+
+    /**
+     * Returns the string used for the inspector window title.
+     */
+    public String getWindowTitle()  { return "PDF Shape Tool"; }
 }

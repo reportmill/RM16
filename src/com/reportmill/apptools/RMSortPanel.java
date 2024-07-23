@@ -16,17 +16,17 @@ import snap.viewx.DialogBox;
 public class RMSortPanel extends ViewOwner {
 
     // The owner of this sort panel
-    Owner _owner;
+    private Owner _owner;
 
     // The sorts table
-    TableView<RMSort> _sortsTable;
+    private TableView<RMSort> _sortsTable;
 
     // Images used for panel
-    Image SortAscIcon = getImage("SortAscending.png");
-    Image SortDescIcon = getImage("SortDescending.png");
+    private Image SortAscIcon = getImage("SortAscending.png");
+    private Image SortDescIcon = getImage("SortDescending.png");
 
     /**
-     * Creates a new sort panel instance.
+     * Constructor.
      */
     public RMSortPanel(Owner anOwner)
     {
@@ -56,11 +56,12 @@ public class RMSortPanel extends ViewOwner {
         // Get sorts table and configure
         _sortsTable = getView("SortsTable", TableView.class);
         _sortsTable.setCellConfigure(this::configureSortsTable);
-        enableEvents(_sortsTable, MouseRelease, DragDrop); // So we get called for click on sort order
+        addViewEventHandler(_sortsTable, this::handleSortsTableMouseRelease, MouseRelease); // So we get called for click on sort order
+        addViewEventHandler(_sortsTable, this::handleSortsTableDragDrop, DragDrop);
 
         // Configure TopNSortButton
-        enableEvents("TopNSortButton", MouseRelease);
-        enableEvents("TopNKeyText", DragDrop);
+        addViewEventHandler("TopNSortButton", this::handleTopNSortButtonMouseRelease, MouseRelease);
+        addViewEventHandler("TopNKeyText", this::handleTopNKeyTextEvent, DragDrop);
     }
 
     /**
@@ -111,12 +112,9 @@ public class RMSortPanel extends ViewOwner {
         // Forward on to tool respondUI
         _owner.respondUI(anEvent);
 
-        // Get the selected shape
+        // Get the selected shape and grouping
         RMShape shape = _owner.getSelectedShape();
-
-        // Get current grouping
-        RMGrouping grouping = _owner.getGrouping();
-        if (grouping == null) return;
+        RMGrouping grouping = _owner.getGrouping(); if (grouping == null) return;
 
         // Handle SortButton, TopNButton, ValuesButton
         if (anEvent.equals("SortButton")) setViewSelIndex("SortPanel", 0);
@@ -125,31 +123,8 @@ public class RMSortPanel extends ViewOwner {
 
         // Handle SortingTable
         if (anEvent.equals("SortsTable")) {
-
-            // Handle drop: Get drop string and add sort
-            if (anEvent.isDragDrop()) {    //int toRow = _sortsTable.rowAtPoint(anEvent.getLocation());
-                String string = anEvent.getClipboard().getString();
-                string = StringUtils.delete(string, "@");
-                shape.undoerSetUndoTitle("Add Sort Order");
-                grouping.addSort(new RMSort(string));
-                anEvent.dropComplete();
-            }
-
-            // Handle selection
-            else {
-
-                // Get row and column of SortingTable selection and set grouping SelectedSortIndex
-                int row = _sortsTable.getSelRowIndex();
-                int col = _sortsTable.getSelColIndex();
-                grouping.setSelectedSortIndex(row);
-
-                // If selected sort order column, flip selected sort
-                if (anEvent.isMouseRelease() && col == 1) {
-                    shape.undoerSetUndoTitle("Flip Sort Ordering");
-                    grouping.getSelectedSort().toggleOrder();
-                    _sortsTable.updateItems();
-                }
-            }
+            int row = _sortsTable.getSelRowIndex();
+            grouping.setSelectedSortIndex(row);
         }
 
         // Handle AddSortMenuItem
@@ -161,7 +136,7 @@ public class RMSortPanel extends ViewOwner {
             String key = dbox.showInputDialog(getUI(), null);
 
             // If key was entered, add it to grouping
-            if (key != null && key.length() > 0) {
+            if (key != null && !key.isEmpty()) {
                 shape.undoerSetUndoTitle("Add Sort Order");
                 grouping.addSort(new RMSort(key));
             }
@@ -188,14 +163,8 @@ public class RMSortPanel extends ViewOwner {
         }
 
         // Handle TopNKeyText
-        if (anEvent.equals("TopNKeyText")) {
-            shape.undoerSetUndoTitle("TopN Sort Change");
-            grouping.getTopNSort().setKey(StringUtils.delete(anEvent.getStringValue(), "@"));
-            if (grouping.getTopNSort().getCount() == 0)
-                grouping.getTopNSort().setCount(5);
-            if (anEvent.isDragDrop())
-                anEvent.dropComplete();
-        }
+        if (anEvent.equals("TopNKeyText"))
+            handleTopNKeyTextEvent(anEvent);
 
         // Handle TopNCountText
         if (anEvent.equals("TopNCountText")) {
@@ -203,15 +172,73 @@ public class RMSortPanel extends ViewOwner {
             grouping.getTopNSort().setCount(anEvent.getIntValue());
         }
 
-        // Handle TopNSortButton, TopNInclCheckBox, TopNPadCheckBox
-        if (anEvent.equals("TopNSortButton")) grouping.getTopNSort().toggleOrder();
-        if (anEvent.equals("TopNInclCheckBox")) grouping.getTopNSort().setIncludeOthers(anEvent.getBoolValue());
-        if (anEvent.equals("TopNPadCheckBox")) grouping.getTopNSort().setPad(anEvent.getBoolValue());
+        // Handle TopNInclCheckBox, TopNPadCheckBox
+        if (anEvent.equals("TopNInclCheckBox"))
+            grouping.getTopNSort().setIncludeOthers(anEvent.getBoolValue());
+        if (anEvent.equals("TopNPadCheckBox"))
+            grouping.getTopNSort().setPad(anEvent.getBoolValue());
 
         // Handle ValuesText, SortOnValuesCheckBox, IncludeValuesCheckBox
         if (anEvent.equals("ValuesText")) grouping.setValuesString(anEvent.getStringValue());
         if (anEvent.equals("SortOnValuesCheckBox")) grouping.setSortOnValues(anEvent.getBoolValue());
         if (anEvent.equals("IncludeValuesCheckBox")) grouping.setIncludeValues(anEvent.getBoolValue());
+    }
+
+    /**
+     * Called when SortsTable gets MouseRelease event.
+     */
+    private void handleSortsTableMouseRelease(ViewEvent anEvent)
+    {
+        RMShape shape = _owner.getSelectedShape();
+        RMGrouping grouping = _owner.getGrouping(); if (grouping == null) return;
+        int col = _sortsTable.getSelColIndex();
+
+        // If selected sort order column, flip selected sort
+        if (anEvent.isMouseRelease() && col == 1) {
+            shape.undoerSetUndoTitle("Flip Sort Ordering");
+            grouping.getSelectedSort().toggleOrder();
+            _sortsTable.updateItems();
+        }
+    }
+
+    /**
+     * Called when SortsTable gets DragDrop event.
+     */
+    private void handleSortsTableDragDrop(ViewEvent anEvent)
+    {
+        RMShape shape = _owner.getSelectedShape();
+        RMGrouping grouping = _owner.getGrouping(); if (grouping == null) return;
+        String string = anEvent.getClipboard().getString().replace("@", "");
+        shape.undoerSetUndoTitle("Add Sort Order");
+        grouping.addSort(new RMSort(string));
+        anEvent.dropComplete();
+        resetLater();
+    }
+
+    /**
+     * Called when TopNKeyText get Action or DragDrop event.
+     */
+    private void handleTopNKeyTextEvent(ViewEvent anEvent)
+    {
+        RMShape shape = _owner.getSelectedShape();
+        RMGrouping grouping = _owner.getGrouping(); if (grouping == null) return;
+        shape.undoerSetUndoTitle("TopN Sort Change");
+        grouping.getTopNSort().setKey(StringUtils.delete(anEvent.getStringValue(), "@"));
+        if (grouping.getTopNSort().getCount() == 0)
+            grouping.getTopNSort().setCount(5);
+        if (anEvent.isDragDrop())
+            anEvent.dropComplete();
+        resetLater();
+    }
+
+    /**
+     * Called when TopNSortButton gets MouseRelease.
+     */
+    private void handleTopNSortButtonMouseRelease(ViewEvent anEvent)
+    {
+        RMGrouping grouping = _owner.getGrouping(); if (grouping == null) return;
+        grouping.getTopNSort().toggleOrder();
+        resetLater();
     }
 
     /**
@@ -246,5 +273,4 @@ public class RMSortPanel extends ViewOwner {
             aCell.setText(null);
         }
     }
-
 }

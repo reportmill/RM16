@@ -16,7 +16,7 @@ public class RMGraphPartLabelAxisTool<T extends RMGraphPartLabelAxis> extends RM
      */
     protected void initUI()
     {
-        enableEvents("ItemKeyText", DragDrop);
+        addViewEventHandler("ItemKeyText", this::handleItemKeyTextDragDropEvent, DragDrop);
     }
 
     /**
@@ -25,8 +25,7 @@ public class RMGraphPartLabelAxisTool<T extends RMGraphPartLabelAxis> extends RM
     public void resetUI()
     {
         // Get the selected label axis
-        RMGraphPartLabelAxis labelAxis = getSelectedShape();
-        if (labelAxis == null) return;
+        RMGraphPartLabelAxis labelAxis = getSelectedShape(); if (labelAxis == null) return;
 
         // Update ShowLabelsCheckBox, ShowGridLinesCheckBox, ItemKeyText, LabelRollSpinner
         setViewValue("ShowLabelsCheckBox", labelAxis.getShowAxisLabels());
@@ -44,19 +43,30 @@ public class RMGraphPartLabelAxisTool<T extends RMGraphPartLabelAxis> extends RM
         RMGraphPartLabelAxis labelAxis = getSelectedShape();
 
         // Handle ShowLabelsCheckBox, ShowGridLinesCheckBox, ItemKeyText, LabelRollSpinner
-        if (anEvent.equals("ShowLabelsCheckBox")) labelAxis.setShowAxisLabels(anEvent.getBoolValue());
-        if (anEvent.equals("ShowGridLinesCheckBox")) labelAxis.setShowGridLines(anEvent.getBoolValue());
-        if (anEvent.equals("ItemKeyText")) labelAxis.setItemKey(anEvent.getStringValue());
-        if (anEvent.equals("LabelRollSpinner")) labelAxis.setRoll(anEvent.getFloatValue());
+        if (anEvent.equals("ShowLabelsCheckBox"))
+            labelAxis.setShowAxisLabels(anEvent.getBoolValue());
+        if (anEvent.equals("ShowGridLinesCheckBox"))
+            labelAxis.setShowGridLines(anEvent.getBoolValue());
+        if (anEvent.equals("ItemKeyText"))
+            labelAxis.setItemKey(anEvent.getStringValue());
+        if (anEvent.equals("LabelRollSpinner"))
+            labelAxis.setRoll(anEvent.getFloatValue());
+    }
+
+    /**
+     * Called when ItemKeyText gets DragDrop event.
+     */
+    private void handleItemKeyTextDragDropEvent(ViewEvent anEvent)
+    {
+        RMGraphPartLabelAxis labelAxis = getSelectedShape(); if (labelAxis == null) return;
+        labelAxis.setItemKey(anEvent.getStringValue());
+        resetLater();
     }
 
     /**
      * Override to return tool shape class.
      */
-    public Class<T> getShapeClass()
-    {
-        return (Class<T>) RMGraphPartLabelAxis.class;
-    }
+    public Class<T> getShapeClass()  { return (Class<T>) RMGraphPartLabelAxis.class; }
 
     /**
      * Returns the currently selected RMGraphPartBars.
@@ -72,8 +82,7 @@ public class RMGraphPartLabelAxisTool<T extends RMGraphPartLabelAxis> extends RM
      */
     public RMGraph getSelectedGraph()
     {
-        RMEditor e = getEditor();
-        if (e == null) return null;
+        RMEditor e = getEditor(); if (e == null) return null;
         RMShape selShape = e.getSelectedOrSuperSelectedShape();
         return selShape instanceof RMGraph ? (RMGraph) selShape : null;
     }
@@ -81,17 +90,10 @@ public class RMGraphPartLabelAxisTool<T extends RMGraphPartLabelAxis> extends RM
     /**
      * Returns the name of the graph inspector.
      */
-    public String getWindowTitle()
-    {
-        return "Graph Label Axis Inspector";
-    }
+    public String getWindowTitle()  { return "Graph Label Axis Inspector"; }
 
     /**
      * Override to remove handles.
      */
-    public int getHandleCount(T aShape)
-    {
-        return 0;
-    }
-
+    public int getHandleCount(T aShape)  { return 0; }
 }

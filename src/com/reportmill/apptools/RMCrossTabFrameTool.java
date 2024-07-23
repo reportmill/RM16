@@ -19,8 +19,8 @@ public class RMCrossTabFrameTool<T extends RMCrossTabFrame> extends RMTool<T> {
      */
     protected void initUI()
     {
-        enableEvents("DatasetKeyText", DragDrop);
-        enableEvents("FilterKeyText", DragDrop);
+        addViewEventHandler("DatasetKeyText", this::handleDatasetKeyTextDragDropEvent, DragDrop);
+        addViewEventHandler("FilterKeyText", this::handleFilterKeyTextDragDropEvent, DragDrop);
     }
 
     /**
@@ -29,8 +29,7 @@ public class RMCrossTabFrameTool<T extends RMCrossTabFrame> extends RMTool<T> {
     public void resetUI()
     {
         // Get the currently selected crosstab frame and table (just return if null)
-        RMCrossTabFrame tableFrame = getSelectedShape();
-        if (tableFrame == null) return;
+        RMCrossTabFrame tableFrame = getSelectedShape(); if (tableFrame == null) return;
         RMCrossTab table = tableFrame.getTable();
 
         // Update the DatasetKeyText, FilterKeyText, ReprintHeaderRowsCheckBox
@@ -45,14 +44,42 @@ public class RMCrossTabFrameTool<T extends RMCrossTabFrame> extends RMTool<T> {
     public void respondUI(ViewEvent anEvent)
     {
         // Get the currently selected crosstab frame and table (just return if null)
-        RMCrossTabFrame tableFrame = getSelectedShape();
-        if (tableFrame == null) return;
+        RMCrossTabFrame tableFrame = getSelectedShape(); if (tableFrame == null) return;
         RMCrossTab table = tableFrame.getTable();
 
-        // Handle DatasetKeyText, FilterKeyText, ReprintHeaderRowsCheckBox
-        if (anEvent.equals("DatasetKeyText")) table.setDatasetKey(StringUtils.delete(anEvent.getStringValue(), "@"));
-        if (anEvent.equals("FilterKeyText")) table.setFilterKey(StringUtils.delete(anEvent.getStringValue(), "@"));
-        if (anEvent.equals("ReprintHeaderRowsCheckBox")) tableFrame.setReprintHeaderRows(anEvent.getBoolValue());
+        switch (anEvent.getName()) {
+
+            // Handle DatasetKeyText
+            case "DatasetKeyText": table.setDatasetKey(anEvent.getStringValue().replace("@", "")); break;
+
+            // Handle FilterKeyText
+            case "FilterKeyText": table.setFilterKey(anEvent.getStringValue().replace("@", "")); break;
+
+            // Handle ReprintHeaderRowsCheckBox
+            case "ReprintHeaderRowsCheckBox": tableFrame.setReprintHeaderRows(anEvent.getBoolValue()); break;
+        }
+    }
+
+    /**
+     * Called when DatasetKeyText gets DragDrop event.
+     */
+    private void handleDatasetKeyTextDragDropEvent(ViewEvent anEvent)
+    {
+        RMCrossTabFrame tableFrame = getSelectedShape(); if (tableFrame == null) return;
+        RMCrossTab table = tableFrame.getTable();
+        table.setDatasetKey(StringUtils.delete(anEvent.getStringValue(), "@"));
+        resetLater();
+    }
+
+    /**
+     * Called when FilterKeyText gets DragDrop event.
+     */
+    private void handleFilterKeyTextDragDropEvent(ViewEvent anEvent)
+    {
+        RMCrossTabFrame tableFrame = getSelectedShape(); if (tableFrame == null) return;
+        RMCrossTab table = tableFrame.getTable();
+        table.setFilterKey(StringUtils.delete(anEvent.getStringValue(), "@"));
+        resetLater();
     }
 
     /**
@@ -117,5 +144,4 @@ public class RMCrossTabFrameTool<T extends RMCrossTabFrame> extends RMTool<T> {
         RMCrossTabFrame tframe = (RMCrossTabFrame) aShape; // Get crosstab frame
         return tframe.getTable().getDatasetEntity(); // Return entity of crosstab frame's table
     }
-
 }

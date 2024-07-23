@@ -25,8 +25,8 @@ public class RMGraphPartSeriesTool<T extends RMGraphPartSeries> extends RMTool<T
         ListView<LabelPos> labelPositionsList = getView("LabelPositionsList", ListView.class);
         labelPositionsList.setItems(RMGraphPartSeries.LabelPos.values());
         labelPositionsList.setCellConfigure(this::configureLabelsPositionListCell);
-        enableEvents("TitleText", DragDrop);
-        enableEvents("SeriesText", DragDrop);
+        addViewEventHandler("TitleText", this::handleTitleTextDragDropEvent, DragDrop);
+        addViewEventHandler("SeriesText", this::handleSeriesTextDragDropEvent, DragDrop);
     }
 
     /**
@@ -35,8 +35,7 @@ public class RMGraphPartSeriesTool<T extends RMGraphPartSeries> extends RMTool<T
     public void resetUI()
     {
         // Get the selected series shape
-        RMGraphPartSeries series = getSelectedShape();
-        if (series == null) return;
+        RMGraphPartSeries series = getSelectedShape(); if (series == null) return;
 
         // Update TitleText, LabelPositionsList
         setViewValue("TitleText", series.getTitle());
@@ -69,8 +68,7 @@ public class RMGraphPartSeriesTool<T extends RMGraphPartSeries> extends RMTool<T
     public void respondUI(ViewEvent anEvent)
     {
         // Get the selected series shape
-        RMGraphPartSeries series = getSelectedShape();
-        if (series == null) return;
+        RMGraphPartSeries series = getSelectedShape(); if (series == null) return;
 
         // Handle TitleText, SeriesText
         if (anEvent.equals("TitleText"))
@@ -100,14 +98,32 @@ public class RMGraphPartSeriesTool<T extends RMGraphPartSeries> extends RMTool<T
     }
 
     /**
+     * Called when TitleText gets DragDrop event.
+     */
+    private void handleTitleTextDragDropEvent(ViewEvent anEvent)
+    {
+        RMGraphPartSeries series = getSelectedShape(); if (series == null) return;
+        series.setTitle(anEvent.getStringValue());
+        resetLater();
+    }
+
+    /**
+     * Called when SeriesText gets DragDrop event.
+     */
+    private void handleSeriesTextDragDropEvent(ViewEvent anEvent)
+    {
+        RMGraphPartSeries series = getSelectedShape(); if (series == null) return;
+        series.setLabelText(series.getPosition(), anEvent.getStringValue());
+        resetLater();
+    }
+
+    /**
      * Override to customize KeyFramesList rendering.
      */
     private void configureLabelsPositionListCell(ListCell<LabelPos> aCell)
     {
-        LabelPos item = aCell.getItem();
-        if (item == null) return;
-        RMGraphPartSeries series = getSelectedShape();
-        if (series == null) return;
+        LabelPos item = aCell.getItem(); if (item == null) return;
+        RMGraphPartSeries series = getSelectedShape(); if (series == null) return;
         boolean active = series.getLabelShape(item).length() > 0;
         if (active) aCell.setFont(aCell.getFont().getBold());
     }
@@ -144,10 +160,8 @@ public class RMGraphPartSeriesTool<T extends RMGraphPartSeries> extends RMTool<T
      */
     public RMGraphPartSeries getSelSeries()
     {
-        RMGraph graph = getSelGraph();
-        if (graph == null) return null;
-        int ind = getSelSeriesIndex();
-        if (ind < 0) return null;
+        RMGraph graph = getSelGraph(); if (graph == null) return null;
+        int ind = getSelSeriesIndex(); if (ind < 0) return null;
         return graph.getSeries(ind);
     }
 
@@ -156,8 +170,7 @@ public class RMGraphPartSeriesTool<T extends RMGraphPartSeries> extends RMTool<T
      */
     public RMGraph getSelGraph()
     {
-        RMEditor e = getEditor();
-        if (e == null) return null;
+        RMEditor e = getEditor(); if (e == null) return null;
         RMShape selShape = e.getSelectedOrSuperSelectedShape();
         return selShape instanceof RMGraph ? (RMGraph) selShape : null;
     }
@@ -185,5 +198,4 @@ public class RMGraphPartSeriesTool<T extends RMGraphPartSeries> extends RMTool<T
     {
         return 0;
     }
-
 }

@@ -182,7 +182,7 @@ public class RMEditor extends RMViewer implements DeepChangeListener {
     /**
      * Selects the shapes in the given list.
      */
-    public void setSelectedShapes(List<RMShape> theShapes)
+    public void setSelectedShapes(List<? extends RMShape> theShapes)
     {
         // If shapes already set, just return
         if (ListUtils.equalsId(theShapes, _selShapes)) return;

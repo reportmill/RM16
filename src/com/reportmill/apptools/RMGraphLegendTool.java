@@ -15,7 +15,7 @@ public class RMGraphLegendTool<T extends RMGraphLegend> extends RMParentShapeToo
      */
     protected void initUI()
     {
-        enableEvents("LegendText", DragDrop);
+        addViewEventHandler("LegendText", this::handleLegendTextDragDropEvent, DragDrop);
     }
 
     /**
@@ -24,10 +24,10 @@ public class RMGraphLegendTool<T extends RMGraphLegend> extends RMParentShapeToo
     public void resetUI()
     {
         // Get selected legend
-        RMGraphLegend leg = getSelectedShape();
+        RMGraphLegend legend = getSelectedShape();
 
         // Update LegendText
-        setViewText("LegendText", leg.getLegendText());
+        setViewText("LegendText", legend.getLegendText());
     }
 
     /**
@@ -36,27 +36,30 @@ public class RMGraphLegendTool<T extends RMGraphLegend> extends RMParentShapeToo
     protected void respondUI(ViewEvent anEvent)
     {
         // Get selected legend
-        RMGraphLegend leg = getSelectedShape();
+        RMGraphLegend legend = getSelectedShape();
 
-        // Handle LegendText (Action and DragDrop)
+        // Handle LegendText
         if (anEvent.equals("LegendText"))
-            leg.setLegendText(anEvent.getStringValue());
+            legend.setLegendText(anEvent.getStringValue());
+    }
+
+    /**
+     * Called when LegendText gets DragDrop event.
+     */
+    private void handleLegendTextDragDropEvent(ViewEvent anEvent)
+    {
+        RMGraphLegend legend = getSelectedShape();
+        legend.setLegendText(anEvent.getStringValue());
+        resetLater();
     }
 
     /**
      * Returns the name of the graph inspector.
      */
-    public String getWindowTitle()
-    {
-        return "Graph Legend Inspector";
-    }
+    public String getWindowTitle()  { return "Graph Legend Inspector"; }
 
     /**
      * Override to make RMGraphLegend not super-selectable.
      */
-    public boolean isSuperSelectable(RMShape aShape)
-    {
-        return false;
-    }
-
+    public boolean isSuperSelectable(RMShape aShape)  { return false; }
 }

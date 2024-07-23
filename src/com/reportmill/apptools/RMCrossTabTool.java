@@ -28,8 +28,8 @@ public class RMCrossTabTool<T extends RMCrossTab> extends RMTool<T> {
      */
     protected void initUI()
     {
-        enableEvents("DatasetKeyText", DragDrop);
-        enableEvents("FilterKeyText", DragDrop);
+        addViewEventHandler("DatasetKeyText", this::handleDatasetKeyTextDragDropEvent, DragDrop);
+        addViewEventHandler("FilterKeyText", this::handleFilterKeyTextDragDropEvent, DragDrop);
     }
 
     /**
@@ -38,8 +38,7 @@ public class RMCrossTabTool<T extends RMCrossTab> extends RMTool<T> {
     public void resetUI()
     {
         // Get currently selected crosstab (just return if null)
-        RMCrossTab table = getTable();
-        if (table == null) return;
+        RMCrossTab table = getTable(); if (table == null) return;
 
         // Update DatasetKeyText, FilterKeyText, RowCountSpinner, ColCountSpinner, HeaderRow/HeaderColCountSpinner
         setViewValue("DatasetKeyText", table.getDatasetKey());
@@ -56,13 +55,14 @@ public class RMCrossTabTool<T extends RMCrossTab> extends RMTool<T> {
     public void respondUI(ViewEvent anEvent)
     {
         // Get currently selected CrossTab and cell (just return if null)
-        RMCrossTab ctab = getTable();
-        if (ctab == null) return;
+        RMCrossTab ctab = getTable(); if (ctab == null) return;
         RMCrossTabCell cell = getCell();
 
         // Handle DatasetKeyText, FilterKeyText
-        if (anEvent.equals("DatasetKeyText")) ctab.setDatasetKey(StringUtils.delete(anEvent.getStringValue(), "@"));
-        if (anEvent.equals("FilterKeyText")) ctab.setFilterKey(StringUtils.delete(anEvent.getStringValue(), "@"));
+        if (anEvent.equals("DatasetKeyText"))
+            ctab.setDatasetKey(anEvent.getStringValue().replace("@", ""));
+        if (anEvent.equals("FilterKeyText"))
+            ctab.setFilterKey(anEvent.getStringValue().replace("@", ""));
 
         // Handle RowsSpinner: Get count, make sure it's at least 1 and at least the number of header rows, and set
         if (anEvent.equals("RowCountSpinner")) {
@@ -134,6 +134,26 @@ public class RMCrossTabTool<T extends RMCrossTab> extends RMTool<T> {
         // Handle SplitCellMenuItem
         if (anEvent.equals("SplitCellMenuItem") && cell != null)
             ctab.splitCell((RMCrossTabCell) getEditor().getSelectedOrSuperSelectedShape());
+    }
+
+    /**
+     * Called when DatasetKeyText gets DragDrop event.
+     */
+    private void handleDatasetKeyTextDragDropEvent(ViewEvent anEvent)
+    {
+        RMCrossTab table = getTable(); if (table == null) return;
+        table.setDatasetKey(StringUtils.delete(anEvent.getStringValue(), "@"));
+        resetLater();
+    }
+
+    /**
+     * Called when FilterKeyText gets DragDrop event.
+     */
+    private void handleFilterKeyTextDragDropEvent(ViewEvent anEvent)
+    {
+        RMCrossTab table = getTable(); if (table == null) return;
+        table.setFilterKey(StringUtils.delete(anEvent.getStringValue(), "@"));
+        resetLater();
     }
 
     /**
@@ -216,12 +236,13 @@ public class RMCrossTabTool<T extends RMCrossTab> extends RMTool<T> {
 
             // Get event point int table coords and cell rect for DownPoint and EventPoint
             Point point = getEditor().convertToShape(anEvent.getX(), anEvent.getY(), aCTab);
-            Rect crect = getCellRect(aCTab, Rect.get(_downPoint, point));
-            crect.snap();
-            int cx = (int) crect.getX(), cy = (int) crect.getY(), cw = (int) crect.getWidth(), ch = (int) crect.getHeight();
+            Rect cellRect = getCellRect(aCTab, Rect.get(_downPoint, point));
+            cellRect.snap();
+            int cx = (int) cellRect.getX(), cy = (int) cellRect.getY();
+            int cw = (int) cellRect.getWidth(), ch = (int) cellRect.getHeight();
 
             // Create/fill list with selected cells (unique)
-            List cells = new ArrayList();
+            List<RMCrossTabCell> cells = new ArrayList<>();
             for (int i = cy; i <= cy + ch; i++)
                 for (int j = cx; j <= cx + cw; j++)
                     if (!cells.contains(aCTab.getCell(i, j)))
@@ -252,7 +273,8 @@ public class RMCrossTabTool<T extends RMCrossTab> extends RMTool<T> {
 
             // Get divider column and resize
             RMCrossTabCol column = _divider.getCol();
-            if (column.getIndex() >= 0) column.setWidth(column.getWidth() + delta);
+            if (column.getIndex() >= 0)
+                column.setWidth(column.getWidth() + delta);
         }
 
         // Register for layout/repaint

@@ -13,16 +13,16 @@ import snap.view.*;
 /**
  * A tool for UI editing of labels shape.
  */
-public class RMLabelsTool extends RMTool implements RMSortPanel.Owner {
+public class RMLabelsTool <T extends RMLabels> extends RMTool<T> implements RMSortPanel.Owner {
 
     // The sort panel
-    RMSortPanel _sortPanel;
+    private RMSortPanel _sortPanel;
 
     // The list of label formats
-    List _labelFormats;
+    private List<LabelFormat> _labelFormats;
 
     // The currently selected label format
-    LabelFormat _selectedLabelFormat;
+    private LabelFormat _selectedLabelFormat;
 
     /**
      * Initialize UI panel for this tool.
@@ -37,7 +37,7 @@ public class RMLabelsTool extends RMTool implements RMSortPanel.Owner {
         _sortPanel = new RMSortPanel(this);
         _sortPanel.getUI().setBounds(4, 163, 267, 100);
         getUI(ChildView.class).addChild(_sortPanel.getUI());
-        enableEvents("ListKeyText", DragDrop);
+        addViewEventHandler("ListKeyText", this::handleListKeyTextEvent, DragDrop);
     }
 
     /**
@@ -45,9 +45,7 @@ public class RMLabelsTool extends RMTool implements RMSortPanel.Owner {
      */
     public void resetUI()
     {
-        // Get currently selected labels shape (just return if null)
-        RMLabels labels = (RMLabels) getSelectedShape();
-        if (labels == null) return;
+        RMLabels labels = (RMLabels) getSelectedShape(); if (labels == null) return;
 
         // Update ListKeyText, NumRowsText, NumColumnsText
         setViewValue("ListKeyText", labels.getDatasetKey());
@@ -72,12 +70,11 @@ public class RMLabelsTool extends RMTool implements RMSortPanel.Owner {
      */
     public void respondUI(ViewEvent anEvent)
     {
-        // Get currently selected labels shape (just return if null)
-        RMLabels labels = (RMLabels) getSelectedShape();
-        if (labels == null) return;
+        RMLabels labels = getSelectedShape(); if (labels == null) return;
 
         // Handle ListKeyText
-        if (anEvent.equals("ListKeyText")) labels.setDatasetKey(StringUtils.delete(anEvent.getStringValue(), "@"));
+        if (anEvent.equals("ListKeyText"))
+            handleListKeyTextEvent(anEvent);
 
         // Handle NumRowsText, NumColumnsText
         if (anEvent.equals("NumRowsText")) {
@@ -150,6 +147,16 @@ public class RMLabelsTool extends RMTool implements RMSortPanel.Owner {
     }
 
     /**
+     * Called when ListKeyText gets Action or DragDrop event.
+     */
+    private void handleListKeyTextEvent(ViewEvent anEvent)
+    {
+        RMLabels labels = (RMLabels) getSelectedShape(); if (labels == null) return;
+        labels.setDatasetKey(anEvent.getStringValue().replace("@", ""));
+        resetLater();
+    }
+
+    /**
      * Returns the selected labels shape.
      */
     public RMLabels getLabels()
@@ -169,34 +176,22 @@ public class RMLabelsTool extends RMTool implements RMSortPanel.Owner {
     /**
      * Returns the shape class handled by this tool.
      */
-    public Class getShapeClass()
-    {
-        return RMLabels.class;
-    }
+    public Class<T> getShapeClass()  { return (Class<T>) RMLabels.class; }
 
     /**
      * Returns the window title for this tool.
      */
-    public String getWindowTitle()
-    {
-        return "Labels Inspector";
-    }
+    public String getWindowTitle()  { return "Labels Inspector"; }
 
     /**
      * Overridden to make labels super-selectable.
      */
-    public boolean isSuperSelectable(RMShape aShape)
-    {
-        return true;
-    }
+    public boolean isSuperSelectable(RMShape aShape)  { return true; }
 
     /**
      * Overridden to make labels not ungroupable.
      */
-    public boolean isUngroupable(RMShape aShape)
-    {
-        return false;
-    }
+    public boolean isUngroupable(RMShape aShape)  { return false; }
 
     /**
      * Adds a new labels shape to editor.
@@ -217,13 +212,13 @@ public class RMLabelsTool extends RMTool implements RMSortPanel.Owner {
     /**
      * Returns the list of standard Avery label formats.
      */
-    public List getLabelFormats()
+    private List<LabelFormat> getLabelFormats()
     {
         // If formats list has already been loaded, just return it
         if (_labelFormats != null) return _labelFormats;
 
         // Create new list with dummy "custom" format first
-        _labelFormats = new ArrayList();
+        _labelFormats = new ArrayList<>();
         _labelFormats.add(new LabelFormat("Custom", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
 
         // Load formats from avery-formats text file
@@ -232,24 +227,24 @@ public class RMLabelsTool extends RMTool implements RMSortPanel.Owner {
             System.err.println("RMLabelsTool: Couldn't read Formats.txt");
             return _labelFormats;
         }
-        String lines[] = text.split("\n");
+        String[] lines = text.split("\n");
 
         // Iterate over lines
         for (String line : lines) {
-            List lineParts = StringUtils.separate(line, ",");
-            String name = (String) lineParts.get(0);
-            float width = StringUtils.floatValue((String) lineParts.get(1));
-            float height = StringUtils.floatValue((String) lineParts.get(2));
-            float spaceWidth = StringUtils.floatValue((String) lineParts.get(3));
-            float spaceHeight = StringUtils.floatValue((String) lineParts.get(4));
+            List<String> lineParts = StringUtils.separate(line, ",");
+            String name = lineParts.get(0);
+            float width = StringUtils.floatValue(lineParts.get(1));
+            float height = StringUtils.floatValue(lineParts.get(2));
+            float spaceWidth = StringUtils.floatValue(lineParts.get(3));
+            float spaceHeight = StringUtils.floatValue(lineParts.get(4));
             int rows = Integer.parseInt((String) lineParts.get(5));
             int cols = Integer.parseInt((String) lineParts.get(6));
-            float pageWidth = StringUtils.floatValue((String) lineParts.get(7));
-            float pageHeight = StringUtils.floatValue((String) lineParts.get(8));
-            float topMargin = StringUtils.floatValue((String) lineParts.get(9));
-            float leftMargin = StringUtils.floatValue((String) lineParts.get(10));
-            float bottomMargin = StringUtils.floatValue((String) lineParts.get(11));
-            float rightMargin = StringUtils.floatValue((String) lineParts.get(12));
+            float pageWidth = StringUtils.floatValue(lineParts.get(7));
+            float pageHeight = StringUtils.floatValue(lineParts.get(8));
+            float topMargin = StringUtils.floatValue(lineParts.get(9));
+            float leftMargin = StringUtils.floatValue(lineParts.get(10));
+            float bottomMargin = StringUtils.floatValue(lineParts.get(11));
+            float rightMargin = StringUtils.floatValue(lineParts.get(12));
             LabelFormat newFormat = new LabelFormat(name, width, height, spaceWidth, spaceHeight, rows, cols,
                     pageWidth, pageHeight, topMargin, leftMargin, bottomMargin, rightMargin);
             _labelFormats.add(newFormat);
@@ -262,7 +257,7 @@ public class RMLabelsTool extends RMTool implements RMSortPanel.Owner {
     /**
      * An inner class to describe a label format.
      */
-    protected class LabelFormat {
+    protected static class LabelFormat {
 
         // Label width and label height
         float labelWidth, labelHeight;
@@ -306,10 +301,6 @@ public class RMLabelsTool extends RMTool implements RMSortPanel.Owner {
         /**
          * Returns string representation of label format (the format name).
          */
-        public String toString()
-        {
-            return formatName;
-        }
+        public String toString()  { return formatName; }
     }
-
 }

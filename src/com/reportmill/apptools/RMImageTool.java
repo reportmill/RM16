@@ -17,27 +17,11 @@ import snap.viewx.FilePanel;
 public class RMImageTool<T extends RMImageShape> extends RMTool<T> {
 
     /**
-     * Returns the class that this tool is responsible for.
-     */
-    public Class getShapeClass()
-    {
-        return RMImageShape.class;
-    }
-
-    /**
-     * Returns the string used for the inspector window title.
-     */
-    public String getWindowTitle()
-    {
-        return "Image Tool";
-    }
-
-    /**
      * Initialize UI.
      */
     protected void initUI()
     {
-        enableEvents("KeyText", DragDrop);
+        addViewEventHandler("KeyText", this::handleKeyTextEvent, DragDrop);
     }
 
     /**
@@ -77,13 +61,12 @@ public class RMImageTool<T extends RMImageShape> extends RMTool<T> {
     public void respondUI(ViewEvent anEvent)
     {
         // Get selected image shape and image shapes (just return if null)
-        RMImageShape imgShp = getSelectedShape();
-        if (imgShp == null) return;
+        RMImageShape imgShp = getSelectedShape(); if (imgShp == null) return;
         List<RMImageShape> images = (List) getSelectedShapes();
 
         // Handle KeyText
         if (anEvent.equals("KeyText"))
-            imgShp.setKey(StringUtils.delete(anEvent.getStringValue(), "@"));
+            handleKeyTextEvent(anEvent);
 
         // Handle KeysButton
         if (anEvent.equals("KeysButton"))
@@ -130,4 +113,23 @@ public class RMImageTool<T extends RMImageShape> extends RMTool<T> {
         }
     }
 
+    /**
+     * Called when KeyText gets Action or DragDrop event.
+     */
+    private void handleKeyTextEvent(ViewEvent anEvent)
+    {
+        RMImageShape imgShp = getSelectedShape(); if (imgShp == null) return;
+        imgShp.setKey(anEvent.getStringValue().replace("@", ""));
+        resetLater();
+    }
+
+    /**
+     * Returns the class that this tool is responsible for.
+     */
+    public Class<T> getShapeClass()  { return (Class<T>) RMImageShape.class; }
+
+    /**
+     * Returns the string used for the inspector window title.
+     */
+    public String getWindowTitle()  { return "Image Tool"; }
 }

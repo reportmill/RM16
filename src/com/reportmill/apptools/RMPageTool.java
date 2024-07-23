@@ -13,12 +13,12 @@ import snap.viewx.DialogBox;
 public class RMPageTool<T extends RMPage> extends RMParentShapeTool<T> {
 
     // The Layers table
-    TableView<RMPageLayer> _layersTable;
+    private TableView<RMPageLayer> _layersTable;
 
     // Icons
-    Image _visibleIcon = getImage("LayerVisible.png");
-    Image _invisibleIcon = getImage("LayerInvisible.png");
-    Image _lockedIcon = getImage("LayerLocked.png");
+    private Image _visibleIcon = getImage("LayerVisible.png");
+    private Image _invisibleIcon = getImage("LayerInvisible.png");
+    private Image _lockedIcon = getImage("LayerLocked.png");
 
     /**
      * Initialize UI panel for this tool.
@@ -28,8 +28,8 @@ public class RMPageTool<T extends RMPage> extends RMParentShapeTool<T> {
         // Configure LayersTable CellConfigure and MouseClicks
         _layersTable = getView("LayersTable", TableView.class);
         _layersTable.setCellConfigure(this::configureLayersTable);
-        enableEvents(_layersTable, MouseRelease);
-        enableEvents("DatasetKeyText", DragDrop);
+        addViewEventHandler(_layersTable, this::handleLayersTableMouseRelease, MouseRelease);
+        addViewEventHandler("DatasetKeyText", this::handleDatasetKeyTextEvent, DragDrop);
     }
 
     /**
@@ -37,9 +37,7 @@ public class RMPageTool<T extends RMPage> extends RMParentShapeTool<T> {
      */
     public void resetUI()
     {
-        // Get currently selected page (just return if null)
-        RMPage page = getSelectedShape();
-        if (page == null) return;
+        RMPage page = getSelectedShape(); if (page == null) return;
 
         // Update DatasetKeyText, PaintBackCheckBox
         setViewValue("DatasetKeyText", page.getDatasetKey());
@@ -61,13 +59,11 @@ public class RMPageTool<T extends RMPage> extends RMParentShapeTool<T> {
      */
     public void respondUI(ViewEvent anEvent)
     {
-        // Get currently selected page (just return if null)
-        RMPage page = getSelectedShape();
-        if (page == null) return;
+        RMPage page = getSelectedShape(); if (page == null) return;
 
         // Handle DatasetKeyText, PaintBackCheckBox
         if (anEvent.equals("DatasetKeyText"))
-            page.setDatasetKey(anEvent.getStringValue().replace("@", ""));
+            handleDatasetKeyTextEvent(anEvent);
         if (anEvent.equals("PaintBackCheckBox"))
             page.setPaintBackground(anEvent.getBoolValue());
 
@@ -104,28 +100,15 @@ public class RMPageTool<T extends RMPage> extends RMParentShapeTool<T> {
             DialogBox dbox = new DialogBox("Rename Layer");
             dbox.setQuestionMessage("Layer Name:");
             String newName = dbox.showInputDialog(getUI(), layer.getName());
-            if (newName != null && newName.length() > 0)
+            if (newName != null && !newName.isEmpty())
                 layer.setName(newName);
         }
 
         // Handle LayersTable
         if (anEvent.equals("LayersTable")) {
-
-            // Handle MouseClick event - have page select new table row
-            int row = _layersTable.getSelIndex();
-            if (row < 0) return;
+            int row = _layersTable.getSelIndex(); if (row < 0) return;
             RMPageLayer layer = page.getLayer(row);
             page.selectLayer(layer);
-
-            // If column one was selected, cycle through layer states
-            int col = _layersTable.getSelColIndex();
-            if (anEvent.isMouseClick() && col == 1) {
-                int state = layer.getLayerState();
-                if (state == RMPageLayer.StateVisible) layer.setLayerState(RMPageLayer.StateInvisible);
-                else if (state == RMPageLayer.StateInvisible) layer.setLayerState(RMPageLayer.StateLocked);
-                else layer.setLayerState(RMPageLayer.StateVisible);
-                _layersTable.updateItems();
-            }
         }
 
         // Handle AllVisibleButton
@@ -152,8 +135,7 @@ public class RMPageTool<T extends RMPage> extends RMParentShapeTool<T> {
         // Get page, cell row/col, page layer
         //RMPage page = getSelectedShape(); if(page==null) return;
         //int row = aCell.getRow(), col = aCell.getCol(); if(row<0 || row>=page.getLayerCount()) return;
-        RMPageLayer layer = aCell.getItem();
-        if (layer == null) return; //page.getLayer(row);
+        RMPageLayer layer = aCell.getItem(); if (layer == null) return; //page.getLayer(row);
         int col = aCell.getCol();
 
         // Handle column 0 (layer name)
@@ -163,36 +145,60 @@ public class RMPageTool<T extends RMPage> extends RMParentShapeTool<T> {
 
         // Handle column 1 (layer state image)
         if (col == 1) {
-            int state = layer != null ? layer.getLayerState() : -1;
-            if (state == RMPageLayer.StateVisible) aCell.setImage(_visibleIcon);
-            else if (state == RMPageLayer.StateInvisible) aCell.setImage(_invisibleIcon);
-            else if (state == RMPageLayer.StateLocked) aCell.setImage(_lockedIcon);
+            int state = layer.getLayerState();
+            if (state == RMPageLayer.StateVisible)
+                aCell.setImage(_visibleIcon);
+            else if (state == RMPageLayer.StateInvisible)
+                aCell.setImage(_invisibleIcon);
+            else if (state == RMPageLayer.StateLocked)
+                aCell.setImage(_lockedIcon);
             aCell.setText(null);
         }
     }
 
     /**
+     * Called when LayersTable gets MouseReleased event.
+     */
+    private void handleLayersTableMouseRelease(ViewEvent anEvent)
+    {
+        RMPage page = getSelectedShape(); if (page == null) return;
+        int col = _layersTable.getSelColIndex();
+
+        // If column one was selected, cycle through layer states
+        if (anEvent.isMouseClick() && col == 1) {
+            RMPageLayer layer = page.getSelectedLayer();
+            int state = layer.getLayerState();
+            if (state == RMPageLayer.StateVisible)
+                layer.setLayerState(RMPageLayer.StateInvisible);
+            else if (state == RMPageLayer.StateInvisible)
+                layer.setLayerState(RMPageLayer.StateLocked);
+            else layer.setLayerState(RMPageLayer.StateVisible);
+            _layersTable.updateItems();
+        }
+    }
+
+    /**
+     * Called when DatasetKeyText gets Action or DragDrop event.
+     */
+    private void handleDatasetKeyTextEvent(ViewEvent anEvent)
+    {
+        RMPage page = getSelectedShape(); if (page == null) return;
+        page.setDatasetKey(anEvent.getStringValue().replace("@", ""));
+        resetLater();
+    }
+
+    /**
      * Returns the shape class that this tool is responsible for.
      */
-    public Class getShapeClass()
-    {
-        return RMPage.class;
-    }
+    public Class<T> getShapeClass()  { return (Class<T>) RMPage.class; }
 
     /**
      * Returns the name to be used for this tool in the inspector window title.
      */
-    public String getWindowTitle()
-    {
-        return "Page Inspector";
-    }
+    public String getWindowTitle()  { return "Page Inspector"; }
 
     /**
      * Overrides tool method to declare that pages have no handles.
      */
-    public int getHandleCount(T aShape)
-    {
-        return 0;
-    }
-
+    public int getHandleCount(T aShape)  { return 0; }
 }

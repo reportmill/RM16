@@ -18,20 +18,20 @@ import snap.viewx.DialogBox;
 public class RMTableTool<T extends RMTable> extends RMParentShapeTool<T> implements RMSortPanel.Owner {
 
     // The grouping table
-    TableView<RMGrouping> _groupingTable;
+    private TableView<RMGrouping> _groupingTable;
 
     // The sort panel
-    RMSortPanel _sortPanel;
+    private RMSortPanel _sortPanel;
 
     // Used for splitshape editing in shape editing mouse loop
-    Point _lastMousePoint;
+    private Point _lastMousePoint;
 
     // Used for splitshape editing in shape editing mouse loop
-    int _resizeBarIndex;
+    private int _resizeBarIndex;
 
     // Constants for images used by inspector
-    Image PageBreakIcon = getImage("GroupPagebreak.png");
-    Image NoPageBreakIcon = getImage("GroupNobreak.png");
+    private Image PageBreakIcon = getImage("GroupPagebreak.png");
+    private Image NoPageBreakIcon = getImage("GroupNobreak.png");
 
     /**
      * Initialize UI panel.
@@ -41,7 +41,8 @@ public class RMTableTool<T extends RMTable> extends RMParentShapeTool<T> impleme
         // Get grouping and configure
         _groupingTable = getView("GroupingTable", TableView.class);
         _groupingTable.setCellConfigure(this::configureGroupingTable);
-        enableEvents(_groupingTable, MouseRelease, DragDrop); // So we get called for click on PageBreakIcon
+        addViewEventHandler(_groupingTable, this::handleGroupingTableMouseRelease, MouseRelease);
+        addViewEventHandler(_groupingTable, this::handleGroupingTableDragDrop, DragDrop);
 
         // Get SortPanel, configure and add
         _sortPanel = new RMSortPanel(this);
@@ -49,8 +50,8 @@ public class RMTableTool<T extends RMTable> extends RMParentShapeTool<T> impleme
         getUI(ChildView.class).addChild(_sortPanel.getUI());
 
         // Enable text drop string
-        enableEvents("ListKeyText", DragDrop);
-        enableEvents("FilterKeyText", DragDrop);
+        addViewEventHandler("ListKeyText", this::handleListKeyTextEvent, DragDrop);
+        addViewEventHandler("FilterKeyText", this::handleFilterKeyTextEvent, DragDrop);
     }
 
     /**
@@ -59,8 +60,7 @@ public class RMTableTool<T extends RMTable> extends RMParentShapeTool<T> impleme
     public void resetUI()
     {
         // Get currently selected table, grouper and grouping (just return if null)
-        RMTable table = getTable();
-        if (table == null) return;
+        RMTable table = getTable(); if (table == null) return;
         RMGrouper grouper = table.getGrouper();
         RMGrouping grouping = getGrouping();
 
@@ -93,24 +93,17 @@ public class RMTableTool<T extends RMTable> extends RMParentShapeTool<T> impleme
     public void respondUI(ViewEvent anEvent)
     {
         // Get currently selected table, grouper and grouping (just return if null)
-        RMTable table = getTable();
-        if (table == null) return;
+        RMTable table = getTable(); if (table == null) return;
         RMGrouper grouper = table.getGrouper();
         RMGrouping grouping = getGrouping();
 
         // Handle ListKeyText
-        if (anEvent.equals("ListKeyText")) {
-            table.setDatasetKey(StringUtils.delete(anEvent.getStringValue(), "@"));
-            if (anEvent.isDragDrop())
-                anEvent.dropComplete();
-        }
+        if (anEvent.equals("ListKeyText"))
+            handleListKeyTextEvent(anEvent);
 
         // Handle FilterKeyText
-        if (anEvent.equals("FilterKeyText")) {
-            table.setFilterKey(StringUtils.delete(anEvent.getStringValue(), "@"));
-            if (anEvent.isDragDrop())
-                anEvent.dropComplete();
-        }
+        if (anEvent.equals("FilterKeyText"))
+            handleFilterKeyTextEvent(anEvent);
 
         // Handle AddGroupMenuItem
         if (anEvent.equals("AddGroupMenuItem")) {
@@ -138,27 +131,8 @@ public class RMTableTool<T extends RMTable> extends RMParentShapeTool<T> impleme
 
         // Handle GroupingTable
         if (anEvent.equals("GroupingTable")) {
-
-            // Handle DropEvent: Get drop string and add grouping
-            if (anEvent.isDragDrop()) {  //int toRow = _groupingTable.rowAtPoint(anEvent.getLocation());
-                String string = anEvent.getClipboard().getString().replace("@", "");
-                addGroupingKey(string);
-                anEvent.dropComplete();
-            }
-
-            // Handle SelectionEvent and MouseClick
-            else {
-
-                // Update grouper SelectedGroupingIndex
-                int row = _groupingTable.getSelRowIndex();
-                int col = _groupingTable.getSelColIndex();
-                grouper.setSelectedGroupingIndex(row);
-
-                // If MouseClick, set or reset PageBreakGroupIndex
-                if (anEvent.isMouseClick() && col == 1)
-                    table.setPageBreakGroupIndex(row == table.getPageBreakGroupIndex() ? -1 : row);
-                _groupingTable.updateItems();
-            }
+            int row = _groupingTable.getSelRowIndex();
+            grouper.setSelectedGroupingIndex(row);
         }
 
         // Handle MoveGroupUpMenuItem
@@ -222,6 +196,55 @@ public class RMTableTool<T extends RMTable> extends RMParentShapeTool<T> impleme
     }
 
     /**
+     * Called when ListKeyText gets Action or DragDrop event.
+     */
+    private void handleListKeyTextEvent(ViewEvent anEvent)
+    {
+        RMTable table = getTable(); if (table == null) return;
+        table.setDatasetKey(anEvent.getStringValue().replace("@", ""));
+        if (anEvent.isDragDrop())
+            anEvent.dropComplete();
+        resetLater();
+    }
+
+    /**
+     * Called when FilterKeyText gets Action or DragDrop event.
+     */
+    private void handleFilterKeyTextEvent(ViewEvent anEvent)
+    {
+        RMTable table = getTable(); if (table == null) return;
+        table.setFilterKey(anEvent.getStringValue().replace("@", ""));
+        if (anEvent.isDragDrop())
+            anEvent.dropComplete();
+        resetLater();
+    }
+
+    /**
+     * Called when GroupingTable gets MouseRelease event to handle click on PageBreakIcon.
+     */
+    private void handleGroupingTableMouseRelease(ViewEvent anEvent)
+    {
+        RMTable table = getTable(); if (table == null) return;
+        int row = _groupingTable.getSelRowIndex();
+        int col = _groupingTable.getSelColIndex();
+        if (anEvent.isMouseClick() && col == 1)
+            table.setPageBreakGroupIndex(row == table.getPageBreakGroupIndex() ? -1 : row);
+        _groupingTable.updateItems();
+        resetLater();
+    }
+
+    /**
+     * Called when GroupingTable gets DragDrop event.
+     */
+    private void handleGroupingTableDragDrop(ViewEvent anEvent)
+    {
+        String string = anEvent.getClipboard().getString().replace("@", "");
+        addGroupingKey(string);
+        anEvent.dropComplete();
+        resetLater();
+    }
+
+    /**
      * Returns the selected table.
      */
     public RMTable getTable()
@@ -273,34 +296,22 @@ public class RMTableTool<T extends RMTable> extends RMParentShapeTool<T> impleme
     /**
      * Returns the shape class this tool edits (RMTable).
      */
-    public Class getShapeClass()
-    {
-        return RMTable.class;
-    }
+    public Class<T> getShapeClass()  { return (Class<T>) RMTable.class; }
 
     /**
      * Returns the display name for this tool ("Table Inspector").
      */
-    public String getWindowTitle()
-    {
-        return "Table Inspector";
-    }
+    public String getWindowTitle()  { return "Table Inspector"; }
 
     /**
      * Overridden to make table super-selectable.
      */
-    public boolean isSuperSelectable(RMShape aShape)
-    {
-        return true;
-    }
+    public boolean isSuperSelectable(RMShape aShape)  { return true; }
 
     /**
      * Overridden to make table not ungroupable.
      */
-    public boolean isUngroupable(RMShape aShape)
-    {
-        return false;
-    }
+    public boolean isUngroupable(RMShape aShape)  { return false; }
 
     /**
      * Adds a grouping key to the currently selected table.
@@ -480,7 +491,7 @@ public class RMTableTool<T extends RMTable> extends RMParentShapeTool<T> impleme
     {
         RMEditor editor = getEditor(); // Get editor
         RMTableRow tableRow = (RMTableRow) editor.getSuperSelectedShape(); // Get table row
-        RMTableRowTool tableRowTool = (RMTableRowTool) getTool(tableRow); // Get table row tool
+        RMTableRowTool<?> tableRowTool = (RMTableRowTool<?>) getTool(tableRow); // Get table row tool
         Menu pmenu = tableRowTool.getPopupMenu(tableRow); // Fill menu
         Point point = editor.convertFromShape(x, y, aShape); // Get point in editor
         pmenu.showMenuAtXY(editor, point.x, point.y); // Show popup menu
@@ -493,5 +504,4 @@ public class RMTableTool<T extends RMTable> extends RMParentShapeTool<T> impleme
     {
         return aShape.getParent() instanceof RMTableGroup ? 0 : super.getHandleCount(aShape);
     }
-
 }

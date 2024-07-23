@@ -20,8 +20,8 @@ public class RMTableRowTool<T extends RMTableRow> extends RMParentShapeTool<T> {
      */
     protected void initUI()
     {
-        enableEvents("VersionKeyText", DragDrop);
-        enableEvents("PageBreakKeyText", DragDrop);
+        addViewEventHandler("VersionKeyText", this::handleVersionKeyTextEvent, DragDrop);
+        addViewEventHandler("PageBreakKeyText", this::handlePageBreakKeyTextEvent, DragDrop);
     }
 
     /**
@@ -29,9 +29,7 @@ public class RMTableRowTool<T extends RMTableRow> extends RMParentShapeTool<T> {
      */
     public void resetUI()
     {
-        // Get selected table row (just return if null)
-        RMTableRow trow = getSelectedShape();
-        if (trow == null) return;
+        RMTableRow trow = getSelectedShape(); if (trow == null) return;
 
         // Update StructuredCheckBox
         setViewValue("StructuredCheckBox", trow.isStructured());
@@ -76,9 +74,7 @@ public class RMTableRowTool<T extends RMTableRow> extends RMParentShapeTool<T> {
      */
     public void respondUI(ViewEvent anEvent)
     {
-        // Get currently selected table row (just return if null)
-        RMTableRow trow = getSelectedShape();
-        if (trow == null) return;
+        RMTableRow trow = getSelectedShape(); if (trow == null) return;
         trow.repaint();
 
         // Handle StructuredCheckBox
@@ -111,13 +107,14 @@ public class RMTableRowTool<T extends RMTableRow> extends RMParentShapeTool<T> {
             trow.setMinSplitRemainderHeight(getPointsFromUnits(anEvent.getFloatValue()));
 
         // Handle VersionKeyText, PageBreakKeyText, DeleteVSpansCheckBox, ShiftShapesCheckBox
-        if (anEvent.equals("VersionKeyText")) {
-            String value = anEvent.getStringValue().replace("@", "");
-            trow.setVersionKey(value);
-        }
-        if (anEvent.equals("PageBreakKeyText")) trow.setPageBreakKey(anEvent.getStringValue());
-        if (anEvent.equals("DeleteVSpansCheckBox")) trow.setDeleteVerticalSpansOfHiddenShapes(anEvent.getBoolValue());
-        if (anEvent.equals("ShiftShapesCheckBox")) trow.setShiftShapesBelowHiddenShapesUp(anEvent.getBoolValue());
+        if (anEvent.equals("VersionKeyText"))
+            handleVersionKeyTextEvent(anEvent);
+        if (anEvent.equals("PageBreakKeyText"))
+            handlePageBreakKeyTextEvent(anEvent);
+        if (anEvent.equals("DeleteVSpansCheckBox"))
+            trow.setDeleteVerticalSpansOfHiddenShapes(anEvent.getBoolValue());
+        if (anEvent.equals("ShiftShapesCheckBox"))
+            trow.setShiftShapesBelowHiddenShapesUp(anEvent.getBoolValue());
 
         // Handle PopupMenu
         if (anEvent.equals("SetVersionMenuItem")) setVersionFromMenu(anEvent.getText());
@@ -129,6 +126,27 @@ public class RMTableRowTool<T extends RMTableRow> extends RMParentShapeTool<T> {
     }
 
     /**
+     * Called when VersionKeyText gets Action or DragDrop event.
+     */
+    private void handleVersionKeyTextEvent(ViewEvent anEvent)
+    {
+        RMTableRow tableRow = getSelectedShape(); if (tableRow == null) return;
+        String value = anEvent.getStringValue().replace("@", "");
+        tableRow.setVersionKey(value);
+        resetLater();
+    }
+
+    /**
+     * Called when PageBreakKeyText gets Action or DragDrop event.
+     */
+    private void handlePageBreakKeyTextEvent(ViewEvent anEvent)
+    {
+        RMTableRow tableRow = getSelectedShape(); if (tableRow == null) return;
+        tableRow.setPageBreakKey(anEvent.getStringValue());
+        resetLater();
+    }
+
+    /**
      * Loads a popup menu with menus specific for currently selected table row.
      */
     public Menu getPopupMenu(RMTableRow aTableRow)
@@ -137,8 +155,9 @@ public class RMTableRowTool<T extends RMTableRow> extends RMParentShapeTool<T> {
         Menu menu = new Menu();
 
         // Get list of alternates names. Make sure it has current mode
-        List<String> names = aTableRow.getAlternates() != null ? new ArrayList(aTableRow.getAlternates().keySet()) :
-                new ArrayList();
+        Map<String,RMSwitchShape> alternates =  aTableRow.getAlternates();
+        if (alternates == null) alternates = Collections.EMPTY_MAP;
+        List<String> names = new ArrayList<>(alternates.keySet());
 
         // Make sure names array has current version
         if (!names.contains(aTableRow.getVersion()))
@@ -167,7 +186,7 @@ public class RMTableRowTool<T extends RMTableRow> extends RMParentShapeTool<T> {
         menu.addItem(item);
 
         // Add AddVersionMenuItem(s) for versions that aren't present
-        String namesAll[] = {"First Only", "Reprint", "Alternate", "Running", "TopN Others", "Split Header", "Custom..."};
+        String[] namesAll = {"First Only", "Reprint", "Alternate", "Running", "TopN Others", "Split Header", "Custom..."};
         for (String name : namesAll) {
             if (names.contains(name)) continue;
             item = new MenuItem();
@@ -283,26 +302,17 @@ public class RMTableRowTool<T extends RMTableRow> extends RMParentShapeTool<T> {
     /**
      * Returns the class that this tool is responsible for (RMTableRow).
      */
-    public Class getShapeClass()
-    {
-        return RMTableRow.class;
-    }
+    public Class<T> getShapeClass()  { return (Class<T>) RMTableRow.class; }
 
     /**
      * Returns the name that should be used in the inspector window.
      */
-    public String getWindowTitle()
-    {
-        return "Table Row Inspector";
-    }
+    public String getWindowTitle()  { return "Table Row Inspector"; }
 
     /**
      * Overridden to make table row not ungroupable.
      */
-    public boolean isUngroupable(RMShape aShape)
-    {
-        return false;
-    }
+    public boolean isUngroupable(RMShape aShape)  { return false; }
 
     /**
      * MouseMoved implementation to update cursor for resize bars.
@@ -358,9 +368,5 @@ public class RMTableRowTool<T extends RMTableRow> extends RMParentShapeTool<T> {
     /**
      * Overrides tool method to declare that table rows have no handles.
      */
-    public int getHandleCount(T aShape)
-    {
-        return 0;
-    }
-
+    public int getHandleCount(T aShape)  { return 0; }
 }

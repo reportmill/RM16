@@ -19,12 +19,11 @@ public class RMTableGroupTool<T extends RMTableGroup> extends RMParentShapeTool<
     protected void initUI()
     {
         // Get TableTree and configure
-        TreeView tablesTree = getView("TablesTree", TreeView.class);
-        enableEvents(tablesTree, DragEvents);
-        enableEvents(tablesTree, MouseRelease);
-        //renderer.setClosedIcon(null); renderer.setOpenIcon(null); renderer.setLeafIcon(null);
-        enableEvents("DatasetKeyText", DragDrop);
-        enableEvents("MainTableNameText", DragDrop);
+        TreeView<?> tablesTree = getView("TablesTree", TreeView.class);
+        addViewEventHandler(tablesTree, this::handleTablesTreeDragEvent, DragEvents);
+        addViewEventHandler(tablesTree, this::handleTablesTreeMouseRelease, MouseRelease);
+        addViewEventHandler("DatasetKeyText", this::handleDatasetKeyTextEvent, DragDrop);
+        addViewEventHandler("MainTableNameText", this::handleMainTableNameTextEvent, DragDrop);
     }
 
     /**
@@ -32,9 +31,7 @@ public class RMTableGroupTool<T extends RMTableGroup> extends RMParentShapeTool<
      */
     public void resetUI()
     {
-        // Get currently selected table group (just return if null)
-        RMTableGroup tableGroup = getSelectedShape();
-        if (tableGroup == null) return;
+        RMTableGroup tableGroup = getSelectedShape(); if (tableGroup == null) return;
         RMTable mainTable = tableGroup.getMainTable();
 
         // Create root node for table group and add child tables to it
@@ -55,20 +52,16 @@ public class RMTableGroupTool<T extends RMTableGroup> extends RMParentShapeTool<
      */
     public void respondUI(ViewEvent anEvent)
     {
-        // Get currently selected table group and main table (just return if null)
-        RMTableGroup tableGroup = getSelectedShape();
-        if (tableGroup == null) return;
+        RMTableGroup tableGroup = getSelectedShape(); if (tableGroup == null) return;
         RMTable mainTable = tableGroup.getMainTable();
 
         // Handle DatasetKeyText, StartOnNewPageCheckBox, MainTableNameText
-        if (anEvent.equals("DatasetKeyText")) {
-            String value = anEvent.getStringValue().replace("@", "");
-            mainTable.setDatasetKey(value);
-        }
+        if (anEvent.equals("DatasetKeyText"))
+            handleDatasetKeyTextEvent(anEvent);
         if (anEvent.equals("StartOnNewPageCheckBox"))
             mainTable.setStartingPageBreak(anEvent.getBoolValue());
         if (anEvent.equals("MainTableNameText"))
-            mainTable.setName(anEvent.getStringValue());
+            handleMainTableNameTextEvent(anEvent);
 
         // Handle MainTableNameText
         if (anEvent.equals("MainTableNameText") && anEvent.isDragDrop())
@@ -133,36 +126,63 @@ public class RMTableGroupTool<T extends RMTableGroup> extends RMParentShapeTool<
 
         // Handle TableTree
         if (anEvent.equals("TablesTree")) {
+            RMTable table = (RMTable) anEvent.getSelItem();
+            tableGroup.setMainTable(table);
+        }
+    }
 
-            // Handle MouseRelease
-            if (anEvent.isMouseRelease()) {
-                if (anEvent.getClickCount() == 2) {
-                    RMTable table = (RMTable) anEvent.getSelItem();
-                    getEditor().setSuperSelectedShape(table);
-                }
+    /**
+     * Called when DatasetKeyText gets Action or DragDrop event.
+     */
+    private void handleDatasetKeyTextEvent(ViewEvent anEvent)
+    {
+        RMTableGroup tableGroup = getSelectedShape(); if (tableGroup == null) return;
+        RMTable mainTable = tableGroup.getMainTable();
+        String value = anEvent.getStringValue().replace("@", "");
+        mainTable.setDatasetKey(value);
+        resetLater();
+    }
+
+    /**
+     * Called when MainTableNameText gets Action or DragDrop event.
+     */
+    private void handleMainTableNameTextEvent(ViewEvent anEvent)
+    {
+        RMTableGroup tableGroup = getSelectedShape(); if (tableGroup == null) return;
+        RMTable mainTable = tableGroup.getMainTable();
+        mainTable.setName(anEvent.getStringValue());
+        resetLater();
+    }
+
+    /**
+     * Called when TablesTree gets MouseRelease event.
+     */
+    private void handleTablesTreeMouseRelease(ViewEvent anEvent)
+    {
+        if (anEvent.getClickCount() == 2) {
+            RMTable table = (RMTable) anEvent.getSelItem();
+            getEditor().setSuperSelectedShape(table);
+            resetLater();
+        }
+    }
+
+    /**
+     * Called when TablesTree gets Drag event.
+     */
+    private void handleTablesTreeDragEvent(ViewEvent anEvent)
+    {
+        anEvent.acceptDrag(); // DnDConstants.ACTION_COPY_OR_MOVE
+        if (anEvent.isDragDrop()) {
+
+            // If drag is String, accept text
+            if (anEvent.getClipboard().hasString()) {
+                String dropString = anEvent.getClipboard().getString();
+                dropString = StringUtils.delete(dropString, "@"); // Bogus - delete @ signs
+                addChildTable(getMainTable(), null, dropString);
+                anEvent.dropComplete();  // Register drop complete
+                resetLater();
             }
-
-            // Handle TableTree DragEvent
-            else if (anEvent.isDragEvent()) {
-                anEvent.acceptDrag(); // DnDConstants.ACTION_COPY_OR_MOVE
-                if (anEvent.isDragDrop()) {
-
-                    // If drag is String, accept text
-                    if (anEvent.getClipboard().hasString()) {
-                        String dropString = anEvent.getClipboard().getString();
-                        dropString = StringUtils.delete(dropString, "@"); // Bogus - delete @ signs
-                        addChildTable(getMainTable(), null, dropString);
-                        anEvent.dropComplete();  // Register drop complete
-                    }
-                    // If not StringFlavor, reject drop //else dtde.rejectDrop();
-                }
-            }
-
-            // Handle TableTree selection event: Get selected table node and set table for node
-            else {
-                RMTable table = (RMTable) anEvent.getSelItem();
-                tableGroup.setMainTable(table);
-            }
+            // If not StringFlavor, reject drop //else dtde.rejectDrop();
         }
     }
 
@@ -201,34 +221,22 @@ public class RMTableGroupTool<T extends RMTableGroup> extends RMParentShapeTool<
     /**
      * Returns the shape class for this tool (table group).
      */
-    public Class getShapeClass()
-    {
-        return RMTableGroup.class;
-    }
+    public Class<T> getShapeClass()  { return (Class<T>) RMTableGroup.class; }
 
     /**
      * Returns the display name for this inspector.
      */
-    public String getWindowTitle()
-    {
-        return "Table Group Inspector";
-    }
+    public String getWindowTitle()  { return "Table Group Inspector"; }
 
     /**
      * Overridden to make graph super-selectable.
      */
-    public boolean isSuperSelectable(RMShape aShape)
-    {
-        return true;
-    }
+    public boolean isSuperSelectable(RMShape aShape)  { return true; }
 
     /**
      * Overridden to make graph not ungroupable.
      */
-    public boolean isUngroupable(RMShape aShape)
-    {
-        return false;
-    }
+    public boolean isUngroupable(RMShape aShape)  { return false; }
 
     /**
      * Returns the given shape's dataset entity.
@@ -299,7 +307,7 @@ public class RMTableGroupTool<T extends RMTableGroup> extends RMParentShapeTool<
         }
 
         /**
-         * Over ride to return child tables as TreeItem array.
+         * Override to return child tables as TreeItem array.
          */
         public RMTable[] getChildren(RMTable aTable)
         {

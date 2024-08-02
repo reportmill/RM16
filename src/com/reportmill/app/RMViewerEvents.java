@@ -460,7 +460,7 @@ public class RMViewerEvents {
     private Shape getTextSelectionArea()
     {
         // Iterate over texts and create composite shape
-        TextBox tbox = new TextBox();
+        TextBox tbox = new TextBox(true);
         Shape area = new Rect();
         for (int i = 0, iMax = _selectedTexts.size(); i < iMax; i++) {
             RMTextShape text = _selectedTexts.get(i);

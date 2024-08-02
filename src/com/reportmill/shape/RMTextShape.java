@@ -267,7 +267,7 @@ public class RMTextShape extends RMRectShape {
     {
         if (isTextEditorSet())
             getTextEditor().setUnderlined(aFlag);
-        else getRichText().setStyleValue(TextStyle.UNDERLINE_KEY, aFlag ? 1 : 0, 0, length());
+        else getRichText().setStyleValue(TextStyle.Underline_Prop, aFlag ? 1 : 0, 0, length());
     }
 
     /**
@@ -287,7 +287,7 @@ public class RMTextShape extends RMRectShape {
     {
         if (isTextEditorSet())
             getTextEditor().setTextBorder(aBorder);
-        else getRichText().setStyleValue(TextStyle.BORDER_KEY, aBorder, 0, length());
+        else getRichText().setStyleValue(TextStyle.Border_Prop, aBorder, 0, length());
     }
 
     /**
@@ -731,7 +731,7 @@ public class RMTextShape extends RMRectShape {
         if (_textBox != null) return _textBox;
 
         // Create and set
-        _textBox = new TextBox();
+        _textBox = new TextBox(true);
         _textBox.setWrapLines(true);
         updateTextBox();
 

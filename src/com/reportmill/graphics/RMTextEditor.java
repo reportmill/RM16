@@ -61,7 +61,7 @@ public class RMTextEditor {
     public TextBox getTextBox()
     {
         if (_textBox != null) return _textBox;
-        return _textBox = new TextBox();
+        return _textBox = new TextBox(true);
     }
 
     /**

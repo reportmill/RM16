@@ -15,14 +15,13 @@ public class RMTextStyle implements Cloneable {
     TextStyle _style;
 
     // Constants for style attribute keys
-    public static final String FONT_KEY = TextStyle.FONT_KEY;
-    public static final String COLOR_KEY = TextStyle.COLOR_KEY;
-    public static final String FORMAT_KEY = TextStyle.FORMAT_KEY;
-    public static final String UNDERLINE_KEY = TextStyle.UNDERLINE_KEY;
-    public static final String BORDER_KEY = TextStyle.BORDER_KEY;
-    public static final String OUTLINE_KEY = TextStyle.BORDER_KEY;
-    public static final String SCRIPTING_KEY = TextStyle.SCRIPTING_KEY;
-    public static final String CHAR_SPACING_KEY = TextStyle.CHAR_SPACING_KEY;
+    public static final String FONT_KEY = TextStyle.Font_Prop;
+    public static final String COLOR_KEY = TextStyle.Color_Prop;
+    public static final String FORMAT_KEY = TextStyle.Format_Prop;
+    public static final String UNDERLINE_KEY = TextStyle.Underline_Prop;
+    public static final String BORDER_KEY = TextStyle.Border_Prop;
+    public static final String SCRIPTING_KEY = TextStyle.Scripting_Prop;
+    public static final String CHAR_SPACING_KEY = TextStyle.CharSpacing_Prop;
 
     /**
      * Creates a new RMTextStyle.

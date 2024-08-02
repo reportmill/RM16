@@ -12,7 +12,6 @@ import snap.geom.Shape;
 import snap.gfx.*;
 import snap.props.PropChange;
 import snap.props.PropChangeListener;
-import snap.text.RichText;
 import snap.text.TextBlock;
 import snap.text.TextBox;
 import snap.text.TextStyle;
@@ -142,7 +141,7 @@ public class RMTextShape extends RMRectShape {
     /**
      * Returns the RichText.
      */
-    public RichText getRichText()
+    public TextBlock getRichText()
     {
         return getXString().getRichText();
     }

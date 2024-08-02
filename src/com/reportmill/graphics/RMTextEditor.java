@@ -505,7 +505,7 @@ public class RMTextEditor {
     /**
      * Replaces the current selection with the given xstring.
      */
-    public void replace(RichText aRichText)
+    public void replace(TextBlock aRichText)
     {
         replace(aRichText, getSelStart(), getSelEnd(), true);
     }
@@ -513,7 +513,7 @@ public class RMTextEditor {
     /**
      * Replaces the current selection with the given xstring.
      */
-    public void replace(RichText aRichText, int aStart, int anEnd, boolean doUpdateSel)
+    public void replace(TextBlock aRichText, int aStart, int anEnd, boolean doUpdateSel)
     {
         // Iterate over string runs and do replace for each one individually
         int start = aStart, end = anEnd;

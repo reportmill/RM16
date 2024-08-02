@@ -4,7 +4,7 @@
     <EmbossEffect Altitude="90" />
   </ImageView>
   <ColView PrefWidth="400" PrefHeight="240" Align="TOP_CENTER">
-    <TextArea Margin="8,0,0,0" Align="CENTER" Opacity="0.6">
+    <TextArea Margin="8,0,0,0" Align="CENTER" Opacity="0.6" Rich="true">
       <ShadowEffect Color="#fcfffb" Radius="5" DX="2" DY="2" />
       <RichText>
         <font name="Futura Condensed Medium" size="18" />
@@ -20,7 +20,7 @@
       </ImageView>
     </BoxView>
     <StackView>
-      <TextArea WrapText="true">
+      <TextArea WrapText="true" Rich="true">
         <BlurEffect Radius="6" />
         <RichText>
           <font name="Arial Bold" size="16" />
@@ -28,7 +28,7 @@
           <string>The Premier Java Reporting System</string>
         </RichText>
       </TextArea>
-      <TextArea WrapText="true">
+      <TextArea WrapText="true" Rich="true">
         <RichText>
           <font name="Arial Bold" size="16" />
           <color value="#ffffff" />

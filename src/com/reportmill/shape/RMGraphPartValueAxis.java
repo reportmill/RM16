@@ -39,9 +39,7 @@ public class RMGraphPartValueAxis extends RMTextShape {
      */
     public RMGraphPartValueAxis()
     {
-        TextStyle dstyle = getRichText().getDefaultStyle();
-        TextStyle dstyle2 = dstyle.copyFor(RMFont.Helvetica10);
-        getRichText().setDefaultStyle(dstyle2);
+        getRichText().setDefaultFont(RMFont.Helvetica10);
     }
 
     /**

@@ -520,7 +520,7 @@ public class RMTextEditor {
         for (TextLine line : aRichText.getLines()) {
             TextRun[] lineRuns = line.getRuns();
             for (TextRun run : lineRuns) {
-                replace(run.getString(), run.getStyle(), start, end, false);
+                replace(run.getString(), run.getTextStyle(), start, end, false);
                 start = end = start + run.length();
             }
         }

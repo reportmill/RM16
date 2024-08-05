@@ -141,7 +141,7 @@ public class RMXString implements Cloneable, CharSequence, RMTypes, XMLArchiver.
      */
     public void addChars(CharSequence theChars, Object... theAttrs)
     {
-        TextStyle style = _richText.getStyleForCharIndex(length());
+        TextStyle style = _richText.getTextStyleForCharIndex(length());
         Object attr0 = theAttrs != null && theAttrs.length > 0 ? theAttrs[0] : null;
         if (attr0 instanceof TextStyle) style = (TextStyle) attr0;
         else if (attr0 instanceof RMTextStyle) style = ((RMTextStyle) attr0)._style;
@@ -155,7 +155,7 @@ public class RMXString implements Cloneable, CharSequence, RMTypes, XMLArchiver.
     public void addChars(CharSequence theChars, Map theAttrs)
     {
         int index = length();
-        TextStyle style = _richText.getStyleForCharIndex(index);
+        TextStyle style = _richText.getTextStyleForCharIndex(index);
         if (theAttrs != null) style = style.copyFor(theAttrs);
         addChars(theChars, style, index);
     }
@@ -297,7 +297,7 @@ public class RMXString implements Cloneable, CharSequence, RMTypes, XMLArchiver.
      */
     public void setStyle(RMTextStyle aStyle, int aStart, int anEnd)
     {
-        _richText.setStyle(aStyle._style, aStart, anEnd);
+        _richText.setTextStyle(aStyle._style, aStart, anEnd);
     }
 
     /**

@@ -35,7 +35,7 @@ public class RMXStringRun implements CharSequence {
         _textLine = aRun.getLine();
         _start = _textLine.getStartCharIndex() + aRun.getStartCharIndex();
         _end = _textLine.getStartCharIndex() + aRun.getEndCharIndex();
-        _style = aRun.getStyle();
+        _style = aRun.getTextStyle();
     }
 
     /**

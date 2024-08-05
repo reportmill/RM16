@@ -47,7 +47,7 @@ public class RMTextShapeUtils {
             for (TextRun run : line.getRuns()) { //if(run.length()==0 || run.isTab()) continue;
                 String str = run.getString();
                 Font font = run.getFont();
-                double charSpacing = run.getStyle().getCharSpacing();
+                double charSpacing = run.getTextStyle().getCharSpacing();
                 Shape runOutlineShape = font.getOutline(str, run.getX(), line.getBaseline(), charSpacing);
                 outlineShape.appendShape(runOutlineShape);
             }

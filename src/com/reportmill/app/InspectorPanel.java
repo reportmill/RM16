@@ -74,7 +74,7 @@ public class InspectorPanel extends RMEditorPane.SupportPane {
     {
         // Get/configure TitleLabel
         _titleLabel = getView("TitleLabel", Label.class);
-        _titleLabel.setTextFill(Color.GRAY);
+        _titleLabel.setTextColor(Color.GRAY);
 
         // Get SelPathView and InspectorPanel
         _selPathView = getView("SelPathView", ChildView.class);

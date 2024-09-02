@@ -83,7 +83,7 @@ public class SamplesPane extends ViewOwner {
         // Add loading label
         Label loadLabel = new Label("Loading...");
         loadLabel.setFont(Font.Arial16.copyForSize(32).getBold());
-        loadLabel.setTextFill(Color.GRAY);
+        loadLabel.setTextColor(Color.GRAY);
         colView.addChild(loadLabel);
 
         // Create ScrollView
@@ -219,7 +219,7 @@ public class SamplesPane extends ViewOwner {
             label.setLeanY(VPos.BOTTOM);
             if (i == 0) {
                 label.setFill(Color.BLUE);
-                label.setTextFill(Color.WHITE);
+                label.setTextColor(Color.WHITE);
             }
 
             // Create/add ItemBox for Sample and add ImageView + Label
@@ -255,13 +255,13 @@ public class SamplesPane extends ViewOwner {
         oldItemBox.getChild(0).setEffect(SHADOW);
         Label oldLabel = (Label) oldItemBox.getChild(1);
         oldLabel.setFill(null);
-        oldLabel.setTextFill(null);
+        oldLabel.setTextColor(null);
 
         // Set attributes of new selection to selected effect
         anItemBox.getChild(0).setEffect(SHADOW_SEL);
         Label newLabel = (Label) anItemBox.getChild(1);
         newLabel.setFill(Color.BLUE);
-        newLabel.setTextFill(Color.WHITE);
+        newLabel.setTextColor(Color.WHITE);
 
         // Set new index
         _selIndex = index;

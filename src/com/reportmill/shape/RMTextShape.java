@@ -267,7 +267,7 @@ public class RMTextShape extends RMRectShape {
     {
         if (isTextEditorSet())
             getTextEditor().setUnderlined(aFlag);
-        else getRichText().setStyleValue(TextStyle.Underline_Prop, aFlag ? 1 : 0, 0, length());
+        else getRichText().setTextStyleValue(TextStyle.Underline_Prop, aFlag ? 1 : 0, 0, length());
     }
 
     /**
@@ -287,7 +287,7 @@ public class RMTextShape extends RMRectShape {
     {
         if (isTextEditorSet())
             getTextEditor().setTextBorder(aBorder);
-        else getRichText().setStyleValue(TextStyle.Border_Prop, aBorder, 0, length());
+        else getRichText().setTextStyleValue(TextStyle.Border_Prop, aBorder, 0, length());
     }
 
     /**

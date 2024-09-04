@@ -330,7 +330,7 @@ public class RMXString implements Cloneable, CharSequence, RMTypes, XMLArchiver.
      */
     public void setAttribute(String aKey, Object aVal, int aStart, int aEnd)
     {
-        _richText.setStyleValue(aKey, aVal, aStart, aEnd);
+        _richText.setTextStyleValue(aKey, aVal, aStart, aEnd);
     }
 
     /**

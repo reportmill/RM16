@@ -705,7 +705,7 @@ public class RMEditorPane extends RMViewerPane {
             // Get editor pane format menu and add menu items to popup
             Menu formatMenu = getMenuBar().getView("FormatMenu", Menu.class);
             Menu formatMenuCopy = (Menu) formatMenu.clone();
-            for (MenuItem m : formatMenuCopy.getItems())
+            for (MenuItem m : formatMenuCopy.getMenuItems())
                 popupMenu.addItem(m);
 
             // If structured tablerow, add AddColumnMenuItem and SplitColumnMenuItem
@@ -720,7 +720,7 @@ public class RMEditorPane extends RMViewerPane {
         // Get copy of shapes menu and add menu items to popup
         Menu shapesMenu = getMenuBar().getView("ShapesMenu", Menu.class);
         Menu shapesMenuCopy = (Menu) shapesMenu.clone();
-        for (MenuItem m : shapesMenuCopy.getItems())
+        for (MenuItem m : shapesMenuCopy.getMenuItems())
             popupMenu.addItem(m);
 
         // Initialize popup menu items to send Events to menu bar

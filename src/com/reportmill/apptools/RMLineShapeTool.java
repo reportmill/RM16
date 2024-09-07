@@ -135,21 +135,18 @@ public class RMLineShapeTool<T extends RMLineShape> extends RMTool<T> {
         MenuButton menuButton = getView("ArrowsMenuButton", MenuButton.class);
 
         // Add arrows menu button
-        RMShape arrowHeads[] = getArrowHeads();
+        RMShape[] arrowHeads = getArrowHeads();
+        ViewBuilder<MenuItem> menuBuilder = new ViewBuilder<>(MenuItem.class);
         for (int i = 0; i < arrowHeads.length; i++) {
             RMShape ahead = arrowHeads[i];
             Image image = RMShapeUtils.createImage(ahead, null);
-            MenuItem mi = new MenuItem();
-            mi.setImage(image);
-            mi.setName("ArrowsMenuButtonMenuItem" + i);
-            menuButton.addItem(mi);
+            menuBuilder.name("ArrowsMenuButtonMenuItem" + i).save().setImage(image);
         }
 
         // Add "None" menu item
-        MenuItem mi = new MenuItem();
-        mi.setText("None");
-        mi.setName("ArrowsMenuButtonMenuItem 999");
-        menuButton.addItem(mi);
+        menuBuilder.name("ArrowsMenuButtonMenuItem 999").text("None").save();
+        MenuItem[] menuItems = menuBuilder.buildAll();
+        //menuButton.addItem(mi);
     }
 
     /**

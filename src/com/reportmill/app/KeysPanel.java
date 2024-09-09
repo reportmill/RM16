@@ -304,7 +304,8 @@ public class KeysPanel extends RMEditorPane.SupportPane {
         if (aValue == isShowKeysTable()) return;
 
         // Get SplitView
-        SplitView split = getView("SplitView", SplitView.class);
+        SplitView splitView = getView("SplitView", SplitView.class);
+        splitView.setBorder(null);
 
         // If showing
         if (aValue) {
@@ -320,11 +321,11 @@ public class KeysPanel extends RMEditorPane.SupportPane {
             }
 
             // Add KeysTable to split
-            split.addItemWithAnim(_keysTable, 100);
+            splitView.addItemWithAnim(_keysTable, 100);
         }
 
         // If hiding
-        else split.removeItemWithAnim(_keysTable);
+        else splitView.removeItemWithAnim(_keysTable);
     }
 
     /**

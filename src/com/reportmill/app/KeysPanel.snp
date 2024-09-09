@@ -8,7 +8,6 @@
     </MenuButton>
   </RowView>
   <SplitView Name="SplitView" Vertical="true" GrowHeight="true">
-    <Border />
     <BrowserView Name="KeysBrowser" GrowHeight="true" />
   </SplitView>
 </ColView>

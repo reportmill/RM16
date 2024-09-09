@@ -45,6 +45,7 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
     {
         // Get the TextView and register to update selection
         TextView textView = getView("TextView", TextView.class);
+        textView.getTextBlock().setRichText(true);
         textView.getScrollView().setBarSize(12);
         _textArea = textView.getTextArea();
         _textArea.addPropChangeListener(pc -> textAreaChangedSel(), TextArea.Selection_Prop);

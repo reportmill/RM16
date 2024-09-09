@@ -10,7 +10,7 @@
     <ToggleButton Name="AlignMiddleButton" PrefWidth="26" PrefHeight="24" image="AlignMiddle.png" Position="CENTER" ToggleGroup="bg2" />
     <ToggleButton Name="AlignBottomButton" PrefWidth="26" PrefHeight="24" image="AlignBottom.png" Position="CENTER_RIGHT" ToggleGroup="bg2" />
   </RowView>
-  <TextView Name="TextView" MinHeight="40" GrowHeight="true" WrapText="true" Rich="true" />
+  <TextView Name="TextView" MinHeight="40" GrowHeight="true" WrapText="true" />
   <TitleView MinHeight="30" Padding="5,8,8,10" title="Margin" Collapsible="true" Expanded="true">
     <ColView Spacing="4">
       <RowView Spacing="4">

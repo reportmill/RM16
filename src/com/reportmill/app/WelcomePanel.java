@@ -2,10 +2,8 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package com.reportmill.app;
-import com.reportmill.base.ReportMill;
 import snap.props.PropChange;
 import snap.util.Prefs;
-import snap.util.SnapUtils;
 import snap.view.*;
 import snap.viewx.FilePanel;
 import snap.web.*;
@@ -21,6 +19,9 @@ public class WelcomePanel extends ViewOwner {
     // The FilePanel
     private FilePanel  _filePanel;
 
+    // The WelcomePanelAnim
+    private WelcomePanelAnim _welcomePanelAnim;
+
     // The shared instance
     private static WelcomePanel _shared;
 
@@ -33,8 +34,9 @@ public class WelcomePanel extends ViewOwner {
      */
     protected WelcomePanel()
     {
-        // Set as Shared (there should only be one instance)
+        super();
         _shared = this;
+        _welcomePanelAnim = new WelcomePanelAnim();
     }
 
     /**
@@ -81,9 +83,9 @@ public class WelcomePanel extends ViewOwner {
     protected void initUI()
     {
         // Add WelcomePaneAnim view
-        View anim = getTopGraphic();
-        getUI(ChildView.class).addChild(anim, 0);
-        anim.playAnimDeep();
+        View animView = _welcomePanelAnim.getUI();
+        getUI(ChildView.class).addChild(animView, 0);
+        animView.playAnimDeep();
 
         // Create FilePanel
         _filePanel = createFilePanel();
@@ -210,7 +212,7 @@ public class WelcomePanel extends ViewOwner {
         if (propName.equals(FilePanel.SelSite_Prop)) {
             WebSite selSite = _filePanel.getSelSite();;
             boolean minimize = !(selSite instanceof RecentFilesSite);
-            setTopGraphicMinimized(minimize);
+            _welcomePanelAnim.setMinimized(minimize);
         }
 
         // Handle SelFile change: Update OpenButton.Enabled
@@ -218,77 +220,5 @@ public class WelcomePanel extends ViewOwner {
             boolean isOpenFileSet = _filePanel.getSelFile() != null;
             getView("OpenButton").setEnabled(isOpenFileSet);
         }
-    }
-
-    /**
-     * Load/configure top graphic WelcomePaneAnim.snp.
-     */
-    private View getTopGraphic()
-    {
-        // Unarchive WelcomePaneAnim.snp as DocView
-        WebURL url = WebURL.getURL(WelcomePanel.class, "WelcomePanelAnim.snp");
-        ChildView topGraphic = (ChildView) new ViewArchiver().getViewForSource(url);
-
-        // Get page and clear border/shadow
-        ParentView page = (ParentView) topGraphic.getChild(2);
-        page.setBorder(null);
-        page.setFill(null);
-        page.setEffect(null);
-
-        // Set BuildText, JavaText, LicenseText
-        View buildText = topGraphic.getChildForName("BuildText");
-        View jvmText = topGraphic.getChildForName("JVMText");
-        View licText = topGraphic.getChildForName("LicenseText");
-        buildText.setText("Build: " + SnapUtils.getBuildInfo().trim());
-        jvmText.setText("JVM: " + (SnapUtils.isTeaVM ? "TeaVM" : System.getProperty("java.runtime.version")));
-        licText.setText(ReportMill.getLicense() == null ? "Unlicensed Copy" : "License: " + ReportMill.getLicense());
-
-        // Configure TopGraphic to call setTopGraphicMinimized() on click
-        topGraphic.addEventHandler(e -> setTopGraphicMinimized(!isTopGraphicMinimized()), View.MouseRelease);
-
-        // Return
-        return topGraphic;
-    }
-
-    /**
-     * Returns whether top graphic is minimized.
-     */
-    private boolean isTopGraphicMinimized()
-    {
-        ChildView mainView = getUI(ChildView.class);
-        View topGraphic = mainView.getChild(0);
-        return topGraphic.getHeight() < 200;
-    }
-
-    /**
-     * Toggles the top graphic.
-     */
-    private void setTopGraphicMinimized(boolean aValue)
-    {
-        // Just return if already set
-        if (aValue == isTopGraphicMinimized()) return;
-
-        // Get TopGraphic
-        ChildView mainView = getUI(ChildView.class);
-        ChildView topGraphic = (ChildView) mainView.getChild(0);
-
-        // Show/hide views below the minimize size
-        topGraphic.getChild(2).setVisible(!aValue);
-        ColView topGraphicColView = (ColView) topGraphic.getChild(1);
-        for (int i = 2; i < topGraphicColView.getChildCount(); i++)
-            topGraphicColView.getChild(i).setVisible(!aValue);
-
-        // Handle Minimize: Size PrefHeight down
-        if (aValue)
-            topGraphic.getAnimCleared(600).setPrefHeight(140);
-
-        // Handle normal: Size PrefHeight up
-        else {
-            topGraphic.setClipToBounds(true);
-            topGraphic.getAnimCleared(600).setPrefHeight(240);
-        }
-
-        // Start anim
-        topGraphic.playAnimDeep();
     }
 }

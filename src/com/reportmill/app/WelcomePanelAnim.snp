@@ -4,14 +4,8 @@
     <EmbossEffect Altitude="90" />
   </ImageView>
   <ColView PrefWidth="400" PrefHeight="240" Align="TOP_CENTER">
-    <TextArea Margin="8,0,0,0" Align="CENTER" Opacity="0.6" Rich="true">
+    <TextArea Name="MainTitleText" Margin="8,0,0,0" Align="CENTER" Opacity="0.6">
       <ShadowEffect Color="#fcfffb" Radius="5" DX="2" DY="2" />
-      <RichText>
-        <font name="Futura Condensed Medium" size="18" />
-        <pgraph align="center" />
-        <outline color="#000000" />
-        <string>ReportMill 16</string>
-      </RichText>
     </TextArea>
     <BoxView>
       <ReflectionEffect Gap="-25" />
@@ -20,48 +14,15 @@
       </ImageView>
     </BoxView>
     <StackView>
-      <TextArea WrapText="true" Rich="true">
+      <TextArea Name="TagLineText" ALIGN="TOP_CENTER">
         <BlurEffect Radius="6" />
-        <RichText>
-          <font name="Arial Bold" size="16" />
-          <pgraph align="CENTER" />
-          <string>The Premier Java Reporting System</string>
-        </RichText>
       </TextArea>
-      <TextArea WrapText="true" Rich="true">
-        <RichText>
-          <font name="Arial Bold" size="16" />
-          <color value="#ffffff" />
-          <pgraph align="CENTER" />
-          <string>The Premier Java Reporting System</string>
-        </RichText>
-      </TextArea>
+      <TextArea Name="TagLineText2" ALIGN="TOP_CENTER" />
     </StackView>
     <ColView Margin="20,0,0,0" Align="CENTER">
-      <TextArea Name="JVMText" Rich="true">
-        <RichText>
-          <font name="Arial Bold" size="10" />
-          <color value="#ffffff" />
-          <pgraph align="CENTER" />
-          <string>JVM: XXX</string>
-        </RichText>
-      </TextArea>
-      <TextArea Name="BuildText" Rich="true">
-        <RichText>
-          <font name="Arial Bold" size="10" />
-          <color value="#ffffff" />
-          <pgraph align="CENTER" />
-          <string>Build: XXX</string>
-        </RichText>
-      </TextArea>
-      <TextArea Name="LicenseText" Rich="true">
-        <RichText>
-          <font name="Arial Bold" size="10" />
-          <color value="#ffffff" />
-          <pgraph align="CENTER" />
-          <string>License: XXX</string>
-        </RichText>
-      </TextArea>
+      <TextArea Name="JVMText" />
+      <TextArea Name="BuildText" />
+      <TextArea Name="LicenseText" />
     </ColView>
   </ColView>
   <SpringView Width="400" Height="220" PrefWidth="400" PrefHeight="220" LeanX="CENTER" LeanY="CENTER">

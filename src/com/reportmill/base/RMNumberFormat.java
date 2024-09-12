@@ -406,7 +406,7 @@ public class RMNumberFormat implements RMFormat, Cloneable {
     {
         Number num = getNumber(anObj);
         if (num != null && num.doubleValue() < 0 && _negativeInRed)
-            return TextStyle.DEFAULT.copyFor(RMColor.red);
+            return TextStyle.DEFAULT.copyForStyleValue(RMColor.red);
         return null;
     }
 

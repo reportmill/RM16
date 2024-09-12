@@ -495,7 +495,7 @@ public class RMTextEditor {
     {
         // Do replace in xstring with given string and given SelStyle
         TextStyle style = aStyle != null ? aStyle : getSelStyle()._style;
-        _textDoc.replaceChars(aString, style, aStart, anEnd);
+        _textDoc.replaceCharsWithStyle(aString, style, aStart, anEnd);
 
         // Update selection to be at end of new string
         if (doUpdateSel)

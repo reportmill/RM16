@@ -93,7 +93,7 @@ public class RMTextStyle implements Cloneable {
     public RMTextStyle copyFor(Object... theVals)
     {
         RMTextStyle cln = clone();
-        cln._style = _style.copyFor(theVals);
+        cln._style = _style.copyForStyleValues(theVals);
         return cln;
     }
 

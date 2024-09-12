@@ -53,7 +53,7 @@ public class RMHTMLParser {
         RMXString _string = new RMXString();
 
         // The current set of attributes (during parsing)
-        Map _attrs = new Hashtable();
+        Map<String,Object> _attrs = new Hashtable<>();
 
         // The current paragraph attributes
         RMParagraph _pgraph;

@@ -103,7 +103,7 @@ public class RMTextStyle implements Cloneable {
     public RMTextStyle copyFor(String aKey, Object aValue)
     {
         RMTextStyle clone = clone(); //if(aKey.equals(OUTLINE_KEY)) clone._outline = (Outline)aValue;
-        clone._style = _style.copyFor(aKey, aValue);
+        clone._style = _style.copyForStyleKeyValue(aKey, aValue);
         return clone;
     }
 

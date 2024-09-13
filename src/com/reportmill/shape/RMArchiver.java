@@ -13,6 +13,9 @@ import snap.web.WebURL;
  */
 public class RMArchiver extends XMLArchiver {
 
+    // Class map
+    private static Map<String, Class<?>> _rmCM;
+
     /**
      * Returns a parent shape for source.
      */
@@ -31,12 +34,12 @@ public class RMArchiver extends XMLArchiver {
 
         // Get URL and/or bytes (complain if not found)
         WebURL url = WebURL.getURL(aSource);
-        byte bytes[] = url != null ? url.getBytes() : SnapUtils.getBytes(aSource);
+        byte[] bytes = url != null ? url.getBytes() : SnapUtils.getBytes(aSource);
         if (bytes == null)
             throw new RuntimeException("RMArchiver.getDoc: Cannot read source: " + (url != null ? url : aSource));
 
         // If PDF, return PDF Doc
-        if (bytes != null && RMPDFData.canRead(bytes))
+        if (RMPDFData.canRead(bytes))
             return RMPDFShape.getDocPDF(url != null ? url : bytes, aBaseDoc);
 
         // Create archiver, read, set source and return
@@ -52,20 +55,18 @@ public class RMArchiver extends XMLArchiver {
     /**
      * Returns the class map.
      */
-    public Map<String, Class> getClassMap()
+    public Map<String, Class<?>> getClassMap()
     {
         return _rmCM != null ? _rmCM : (_rmCM = createClassMap());
     }
 
-    static Map<String, Class> _rmCM;
-
     /**
      * Creates the class map.
      */
-    protected Map<String, Class> createClassMap()
+    protected Map<String, Class<?>> createClassMap()
     {
         // Create class map and add classes
-        Map classMap = new HashMap();
+        Map<String,Class<?>> classMap = new HashMap<>();
 
         // Shape classes
         classMap.put("arrow-head", RMLineShape.ArrowHead.class);
@@ -105,25 +106,24 @@ public class RMArchiver extends XMLArchiver {
         // Strokes
         classMap.put("stroke", RMStroke.class);
         classMap.put("double-stroke", RMStroke.class);
-        classMap.put("border-stroke", "com.reportmill.graphics.RMBorderStroke");
+        classMap.put("border-stroke", com.reportmill.graphics.RMBorderStroke.class);
 
         // Fills
         classMap.put("fill", RMFill.class);
         classMap.put("gradient-fill", RMGradientFill.class);
         classMap.put("radial-fill", RMGradientFill.class);
         classMap.put("image-fill", RMImageFill.class);
-        classMap.put("contour-fill", "com.reportmill.graphics.RMContourFill");
 
         // Effects
-        classMap.put("blur-effect", "snap.gfx.BlurEffect");
-        classMap.put("shadow-effect", "snap.gfx.ShadowEffect");
-        classMap.put("reflection-effect", "snap.gfx.ReflectEffect");
-        classMap.put("emboss-effect", "snap.gfx.EmbossEffect");
+        classMap.put("blur-effect", snap.gfx.BlurEffect.class);
+        classMap.put("shadow-effect", snap.gfx.ShadowEffect.class);
+        classMap.put("reflection-effect", snap.gfx.ReflectEffect.class);
+        classMap.put("emboss-effect", snap.gfx.EmbossEffect.class);
 
         // Sorts, Grouping
-        classMap.put("sort", "com.reportmill.base.RMSort");
-        classMap.put("top-n-sort", "com.reportmill.base.RMTopNSort");
-        classMap.put("value-sort", "com.reportmill.base.RMValueSort");
+        classMap.put("sort", com.reportmill.base.RMSort.class);
+        classMap.put("top-n-sort", com.reportmill.base.RMTopNSort.class);
+        classMap.put("value-sort", com.reportmill.base.RMValueSort.class);
         classMap.put("grouper", RMGrouper.class);
         classMap.put("grouping", RMGrouping.class);
 
@@ -149,9 +149,8 @@ public class RMArchiver extends XMLArchiver {
             String type = anElmnt.getAttributeValue("type", "");
             if (type.equals("number")) return anArchiver.fromXML(anElmnt, RMNumberFormat.class, null);
             if (type.equals("date")) return anArchiver.fromXML(anElmnt, RMDateFormat.class, null);
-            if (type.length() > 0) System.err.println("RMFormatStub: Unknown format type " + type);
+            if (!type.isEmpty()) System.err.println("RMFormatStub: Unknown format type " + type);
             return null;
         }
     }
-
 }

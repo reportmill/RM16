@@ -9,7 +9,7 @@
   <TextField Name="PaddingText" x="60" y="35" width="72" height="20" Align="CENTER" />
   <CheckBox Name="GrowToFitCheckBox" x="10" y="65" width="200" height="20" text="Grow to Fit" />
   <CheckBox Name="PreserveRatioCheckBox" x="10" y="85" width="200" height="20" text="Preserve Image Aspect Ratio" />
-  <TitleView x="6" y="115" width="260" height="48" Title="Rounding Radius">
+  <TitleView x="6" y="115" width="260" height="48" Text="Rounding Radius">
     <SpringView width="260" height="48" PrefWidth="260" PrefHeight="48">
       <ThumbWheel Name="RoundingThumb" x="14" y="7" width="180" height="16" absmin="0" round="1" />
       <TextField Name="RoundingText" x="199" y="5" width="50" height="20" Align="CENTER" />

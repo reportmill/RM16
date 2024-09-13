@@ -16,13 +16,13 @@
       </RowView>
     </ColView>
   </RowView>
-  <TitleView Title="Depth">
+  <TitleView Text="Depth">
     <RowView Padding="4" Spacing="5">
       <Slider Name="DepthSlider" GrowWidth="true" Min="10" Max="200" />
       <TextField Name="DepthText" PrefWidth="50" PrefHeight="20" Align="CENTER" />
     </RowView>
   </TitleView>
-  <TitleView Title="Focal Length (inches from screen to eye)">
+  <TitleView Text="Focal Length (inches from screen to eye)">
     <RowView Padding="4" Spacing="5">
       <Slider Name="FOVSlider" GrowWidth="true" Min="6" Max="60" />
       <TextField Name="FOVText" PrefWidth="50" PrefHeight="20" Align="CENTER" />

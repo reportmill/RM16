@@ -11,7 +11,7 @@
     <ToggleButton Name="AlignBottomButton" PrefWidth="26" PrefHeight="24" image="AlignBottom.png" Position="CENTER_RIGHT" ToggleGroup="bg2" />
   </RowView>
   <TextView Name="TextView" MinHeight="40" GrowHeight="true" WrapLines="true" />
-  <TitleView MinHeight="30" Padding="5,8,8,10" title="Margin" Collapsible="true" Expanded="true">
+  <TitleView MinHeight="30" Padding="5,8,8,10" Text="Margin" Collapsible="true" Expanded="true">
     <ColView Spacing="4">
       <RowView Spacing="4">
         <Label text="Top, Lt, Btm, Rt:" />
@@ -24,7 +24,7 @@
       </RowView>
     </ColView>
   </TitleView>
-  <TitleView MinHeight="30" Padding="8,8,8,8" title="Misc. Options" Collapsible="true" Expanded="false">
+  <TitleView MinHeight="30" Padding="8,8,8,8" Text="Misc. Options" Collapsible="true" Expanded="false">
     <RowView Spacing="5">
       <ColView Spacing="4">
         <CheckBox Name="ShowBorderCheckBox" text="Always Show Border" />
@@ -41,7 +41,7 @@
       </ColView>
     </RowView>
   </TitleView>
-  <TitleView MinHeight="30" Padding="8,8,8,8" title="Advanced Options" Collapsible="true" Expanded="false">
+  <TitleView MinHeight="30" Padding="8,8,8,8" Text="Advanced Options" Collapsible="true" Expanded="false">
     <ColView Spacing="4" FillWidth="true">
       <RowView Spacing="4">
         <Label PrefWidth="75" text="Char Spacing:" />

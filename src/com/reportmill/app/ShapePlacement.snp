@@ -20,13 +20,13 @@
     <ThumbWheel Name="HThumb" x="145" y="105" width="108" height="16" type="linear" min="-50" max="50" round="1" />
   </SpringView>
   <ColView Padding="5,5,5,5" Spacing="6" FillWidth="true">
-    <TitleView Padding="5,8,9,18" Title="Rotation">
+    <TitleView Padding="5,8,9,18" Text="Rotation">
       <RowView Spacing="4">
         <ThumbWheel Name="RotationThumb" GrowWidth="true" PrefHeight="16" min="-90" max="90" round="1" />
         <TextField Name="RotationText" PrefWidth="50" PrefHeight="20" Align="CENTER" />
       </RowView>
     </TitleView>
-    <TitleView Padding="5,8,5,8" Title="Scale">
+    <TitleView Padding="5,8,5,8" Text="Scale">
       <ColView Spacing="5" FillWidth="true">
         <RowView Spacing="4">
           <Label text="X:" />
@@ -41,7 +41,7 @@
         <CheckBox Name="ScaleSymetricCheckBox" text="Scale Symetrically" Selected="true" />
       </ColView>
     </TitleView>
-    <TitleView Padding="5,8,9,8" Title="Skew" Collapsible="true" Expanded="false">
+    <TitleView Padding="5,8,9,8" Text="Skew" Collapsible="true" Expanded="false">
       <ColView Spacing="5" FillWidth="true">
         <RowView Spacing="4">
           <Label text="X:" />
@@ -55,7 +55,7 @@
         </RowView>
       </ColView>
     </TitleView>
-    <TitleView Padding="5,8,8,8" Title="Autosizing" Collapsible="true" Expanded="false">
+    <TitleView Padding="5,8,8,8" Text="Autosizing" Collapsible="true" Expanded="false">
       <ColView FillWidth="true">
         <RowView Padding="6,5,12,5" Spacing="30">
           <ColView Spacing="2" Align="TOP_CENTER">

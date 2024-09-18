@@ -13,7 +13,7 @@
       <Label Text="Key Bindings" />
       <Label LeanX="RIGHT" Text="(enter key in text)" />
     </RowView>
-    <TableView Name="BindingsTable" GridColor="#c9c9c9">
+    <TableView Name="BindingsTable">
       <TableCol PrefWidth="80" />
       <TableCol GrowWidth="true" />
     </TableView>

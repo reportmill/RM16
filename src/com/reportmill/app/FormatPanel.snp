@@ -18,9 +18,9 @@
         <Button Name="DecimalRemoveButton" ToolTip="Remove Decimal" ImageName="Format_DecimalRemove.png" />
       </RowView>
       <TableView Name="NumberFormatTable" GrowHeight="true">
-        <TableCol PrefWidth="90" GrowWidth="true" Header="Positive" />
-        <TableCol PrefWidth="90" GrowWidth="true" Header="Negative" />
-        <TableCol PrefWidth="70" GrowWidth="true" Header="Format" />
+        <TableCol PrefWidth="90" GrowWidth="true" HeaderText="Positive" />
+        <TableCol PrefWidth="90" GrowWidth="true" HeaderText="Negative" />
+        <TableCol PrefWidth="70" GrowWidth="true" HeaderText="Format" />
       </TableView>
       <RowView>
         <Label Text=" Format: " />
@@ -34,8 +34,8 @@
     </ColView>
     <ColView Name="DateFormatPane" Spacing="4" FillWidth="true">
       <TableView Name="DateFormatTable" GrowHeight="true">
-        <TableCol PrefWidth="140" GrowWidth="true" Header="Date" />
-        <TableCol PrefWidth="110" GrowWidth="true" Header="Format" />
+        <TableCol PrefWidth="140" GrowWidth="true" HeaderText="Date" />
+        <TableCol PrefWidth="110" GrowWidth="true" HeaderText="Format" />
       </TableView>
       <RowView Spacing="4">
         <Label PrefWidth="70" Align="CENTER_RIGHT" Text="Custom:" />

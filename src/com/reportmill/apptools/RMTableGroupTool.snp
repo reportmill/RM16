@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<SpringView width="275" height="325" PrefWidth="275" PrefHeight="325">
-  <MenuButton x="5" y="5" width="140" height="20" text="Table Group Options">
-    <MenuItem Name="AddPeerMenuItem" text="Add Peer Table" />
-    <MenuItem Name="AddChildMenuItem" text="Add Child Table" />
-    <MenuItem Name="RemoveTableMenuItem" text="Remove Table" />
-    <MenuItem Name="PasteTableMenuItem" text="Paste Table" />
-    <MenuItem text="separator" />
-    <MenuItem Name="MoveUpMenuItem" text="Move Up" />
-    <MenuItem Name="MoveDownMenuItem" text="Move Down" />
-    <MenuItem Name="MoveInMenuItem" text="Move In" />
-    <MenuItem Name="MoveOutMenuItem" text="Move Out" />
+<SpringView Width="275" Height="325" PrefWidth="275" PrefHeight="325">
+  <MenuButton X="5" Y="5" Width="140" Height="20" Text="Table Group Options">
+    <MenuItem Name="AddPeerMenuItem" Text="Add Peer Table" />
+    <MenuItem Name="AddChildMenuItem" Text="Add Child Table" />
+    <MenuItem Name="RemoveTableMenuItem" Text="Remove Table" />
+    <MenuItem Name="PasteTableMenuItem" Text="Paste Table" />
+    <MenuItem Text="separator" />
+    <MenuItem Name="MoveUpMenuItem" Text="Move Up" />
+    <MenuItem Name="MoveDownMenuItem" Text="Move Down" />
+    <MenuItem Name="MoveInMenuItem" Text="Move In" />
+    <MenuItem Name="MoveOutMenuItem" Text="Move Out" />
   </MenuButton>
-  <Button Name="KeysButton" x="210" y="5" width="60" height="20" text="Keys..." />
-  <TreeView Name="TablesTree" x="5" y="30" width="265" height="215" />
-  <Label x="5" y="275" width="40" height="20" text="Key:" />
-  <TextField Name="DatasetKeyText" x="45" y="275" width="225" height="20" />
-  <CheckBox Name="StartOnNewPageCheckBox" x="57" y="300" width="200" height="20" text="Start on new page" />
-  <Label x="5" y="250" width="40" height="20" text="Name:" />
-  <TextField Name="MainTableNameText" x="45" y="250" width="225" height="20" />
+  <Button Name="KeysButton" X="210" Y="5" Width="60" Height="20" Text="Keys..." />
+  <TreeView Name="TablesTree" X="5" Y="30" Width="265" Height="215" />
+  <Label X="5" Y="275" Width="40" Height="20" Text="Key:" />
+  <TextField Name="DatasetKeyText" X="45" Y="275" Width="225" Height="20" />
+  <CheckBox Name="StartOnNewPageCheckBox" X="57" Y="300" Width="200" Height="20" Text="Start on new page" />
+  <Label X="5" Y="250" Width="40" Height="20" Text="Name:" />
+  <TextField Name="MainTableNameText" X="45" Y="250" Width="225" Height="20" />
 </SpringView>

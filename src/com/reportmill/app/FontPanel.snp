@@ -1,34 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ColView PrefWidth="275" PrefHeight="260" Padding="4,4,8,4" Spacing="4" FillWidth="true">
   <RowView Align="CENTER" Padding="4,4,2,4" Spacing="5">
-    <Button Name="FontSizeUpButton" PrefWidth="24" PrefHeight="24" ToolTip="Increase Font Size" image="Format_IncreaseFont.png" />
-    <Button Name="FontSizeDownButton" PrefWidth="24" PrefHeight="24" ToolTip="Decrease Font Size" image="Format_DecreaseFont.png" />
+    <Button Name="FontSizeUpButton" PrefWidth="24" PrefHeight="24" ToolTip="Increase Font Size" ImageName="Format_IncreaseFont.png" />
+    <Button Name="FontSizeDownButton" PrefWidth="24" PrefHeight="24" ToolTip="Decrease Font Size" ImageName="Format_DecreaseFont.png" />
     <Label Name="Separator" PrefWidth="8" PrefHeight="8" />
-    <ToggleButton Name="BoldButton" PrefWidth="24" PrefHeight="24" ToolTip="Make Bold" image="Format_Bold.png" />
-    <ToggleButton Name="ItalicButton" PrefWidth="24" PrefHeight="24" ToolTip="Make Italic" image="Format_Italic.png" />
-    <ToggleButton Name="UnderlineButton" PrefWidth="24" PrefHeight="24" ToolTip="Make Underline" image="Format_Underline.png" />
-    <ToggleButton Name="OutlineButton" PrefWidth="24" PrefHeight="24" ToolTip="Make Outline" text="O">
-      <font name="Arial Bold" size="16" />
-    </ToggleButton>
+    <ToggleButton Name="BoldButton" PrefWidth="24" PrefHeight="24" ToolTip="Make Bold" ImageName="Format_Bold.png" />
+    <ToggleButton Name="ItalicButton" PrefWidth="24" PrefHeight="24" ToolTip="Make Italic" ImageName="Format_Italic.png" />
+    <ToggleButton Name="UnderlineButton" PrefWidth="24" PrefHeight="24" ToolTip="Make Underline" ImageName="Format_Underline.png" />
+    <ToggleButton Name="OutlineButton" PrefWidth="24" PrefHeight="24" Font="Arial Bold 16" ToolTip="Make Outline" Text="O" />
     <Label Name="Separator" PrefWidth="8" PrefHeight="8" />
-    <Button Name="FontPickerButton" PrefWidth="24" PrefHeight="24" ToolTip="Show Font Picker" image="/snap/viewx/pkg.images/Find.png" />
+    <Button Name="FontPickerButton" PrefWidth="24" PrefHeight="24" ToolTip="Show Font Picker" ImageName="/snap/viewx/pkg.images/Find.png" />
   </RowView>
-  <RowView GrowHeight="true" Spacing="4" FillHeight="true">
-    <ColView GrowWidth="true" Spacing="2" FillWidth="true">
+  <RowView Spacing="4" GrowHeight="true" FillHeight="true">
+    <ColView Spacing="2" GrowWidth="true" FillWidth="true">
       <RowView Padding="0,4,0,0">
-        <Label text=" Family" PrefHeight="14" />
-        <ToggleButton Name="AllButton" PrefWidth="28" PrefHeight="14" LeanX="RIGHT" text="ALL" Position="CENTER_LEFT" Selected="true" ToggleGroup="bg1">
-          <Font name="Arial" size="9" />
-        </ToggleButton>
-        <ToggleButton Name="PDFButton" PrefWidth="28" PrefHeight="14" LeanX="RIGHT" text="PDF" Position="CENTER_RIGHT" ToggleGroup="bg1">
-          <Font name="Arial" size="9" />
-        </ToggleButton>
+        <Label PrefHeight="14" Text=" Family" />
+        <ToggleButton Name="AllButton" PrefWidth="28" PrefHeight="14" Font="Arial 9" LeanX="RIGHT" Text="ALL" Position="CENTER_LEFT" Selected="true" GroupName="bg1" />
+        <ToggleButton Name="PDFButton" PrefWidth="28" PrefHeight="14" Font="Arial 9" LeanX="RIGHT" Text="PDF" Position="CENTER_RIGHT" GroupName="bg1" />
       </RowView>
       <ListView Name="FamilyList" GrowHeight="true" />
       <ComboBox Name="FamilyComboBox" ShowTextField="true" ShowButton="false" FilterList="true" />
     </ColView>
     <ColView PrefWidth="60" Spacing="2" FillWidth="true">
-      <Label text=" Sizes" PrefHeight="14" />
+      <Label PrefHeight="14" Text=" Sizes" />
       <ListView Name="SizesList" GrowHeight="true" />
       <TextField Name="SizeText" />
     </ColView>

@@ -1,69 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ColView Padding="0,4,4,4" Spacing="4" GrowHeight="true" FillWidth="true">
-  <font name="Arial" size="11" />
   <RowView Padding="4,10,5,10" GrowWidth="true">
-    <ToggleButton Name="AlignLeftButton" PrefWidth="26" PrefHeight="24" image="AlignLeft.png" Position="CENTER_LEFT" ToggleGroup="bg1" />
-    <ToggleButton Name="AlignCenterButton" PrefWidth="26" PrefHeight="24" image="AlignCenter.png" Position="CENTER" ToggleGroup="bg1" />
-    <ToggleButton Name="AlignRightButton" PrefWidth="26" PrefHeight="24" image="AlignRight.png" Position="CENTER" ToggleGroup="bg1" />
-    <ToggleButton Name="AlignFullButton" PrefWidth="26" PrefHeight="24" image="AlignFull.png" Position="CENTER_RIGHT" ToggleGroup="bg1" />
-    <ToggleButton Name="AlignTopButton" PrefWidth="26" PrefHeight="24" LeanX="RIGHT" image="AlignTop.png" Position="CENTER_LEFT" ToggleGroup="bg2" />
-    <ToggleButton Name="AlignMiddleButton" PrefWidth="26" PrefHeight="24" image="AlignMiddle.png" Position="CENTER" ToggleGroup="bg2" />
-    <ToggleButton Name="AlignBottomButton" PrefWidth="26" PrefHeight="24" image="AlignBottom.png" Position="CENTER_RIGHT" ToggleGroup="bg2" />
+    <ToggleButton Name="AlignLeftButton" PrefWidth="26" PrefHeight="24" ImageName="AlignLeft.png" Position="CENTER_LEFT" GroupName="bg1" />
+    <ToggleButton Name="AlignCenterButton" PrefWidth="26" PrefHeight="24" ImageName="AlignCenter.png" Position="CENTER" GroupName="bg1" />
+    <ToggleButton Name="AlignRightButton" PrefWidth="26" PrefHeight="24" ImageName="AlignRight.png" Position="CENTER" GroupName="bg1" />
+    <ToggleButton Name="AlignFullButton" PrefWidth="26" PrefHeight="24" ImageName="AlignFull.png" Position="CENTER_RIGHT" GroupName="bg1" />
+    <ToggleButton Name="AlignTopButton" PrefWidth="26" PrefHeight="24" LeanX="RIGHT" ImageName="AlignTop.png" Position="CENTER_LEFT" GroupName="bg2" />
+    <ToggleButton Name="AlignMiddleButton" PrefWidth="26" PrefHeight="24" ImageName="AlignMiddle.png" Position="CENTER" GroupName="bg2" />
+    <ToggleButton Name="AlignBottomButton" PrefWidth="26" PrefHeight="24" ImageName="AlignBottom.png" Position="CENTER_RIGHT" GroupName="bg2" />
   </RowView>
   <TextView Name="TextView" MinHeight="40" GrowHeight="true" WrapLines="true" />
-  <TitleView MinHeight="30" Padding="5,8,8,10" Text="Margin" Collapsible="true" Expanded="true">
+  <TitleView MinHeight="30" Padding="5,8,8,10" Text="Margin" Collapsible="true">
     <ColView Spacing="4">
       <RowView Spacing="4">
-        <Label text="Top, Lt, Btm, Rt:" />
+        <Label Text="Top, Lt, Btm, Rt:" />
         <TextField Name="MarginText" PrefWidth="80" PrefHeight="22" Align="CENTER" />
       </RowView>
       <RowView Spacing="4">
-        <Label text="Rounding:" />
-        <ThumbWheel Name="RoundingThumb" PrefWidth="100" PrefHeight="16" max="20" absmin="0" round="1" />
+        <Label Text="Rounding:" />
+        <ThumbWheel Name="RoundingThumb" PrefWidth="100" PrefHeight="16" Max="20" AbsMin="0" Round="1" />
         <TextField Name="RoundingText" PrefWidth="40" PrefHeight="22" Align="CENTER" />
       </RowView>
     </ColView>
   </TitleView>
-  <TitleView MinHeight="30" Padding="8,8,8,8" Text="Misc. Options" Collapsible="true" Expanded="false">
+  <TitleView MinHeight="30" Padding="8" Text="Misc. Options" Collapsible="true" Expanded="false">
     <RowView Spacing="5">
       <ColView Spacing="4">
-        <CheckBox Name="ShowBorderCheckBox" text="Always Show Border" />
-        <CheckBox Name="CoalesceNewlinesCheckBox" text="Coalesce Newlines" />
-        <CheckBox Name="PerformWrapCheckBox" text="Wrap around peers" />
-        <CheckBox Name="EditableCheckBox" text="PDF Editable" />
-        <CheckBox Name="MultilineCheckBox" text="PDF Multiline" />
+        <CheckBox Name="ShowBorderCheckBox" Text="Always Show Border" />
+        <CheckBox Name="CoalesceNewlinesCheckBox" Text="Coalesce Newlines" />
+        <CheckBox Name="PerformWrapCheckBox" Text="Wrap around peers" />
+        <CheckBox Name="EditableCheckBox" Text="PDF Editable" />
+        <CheckBox Name="MultilineCheckBox" Text="PDF Multiline" />
       </ColView>
       <ColView Spacing="4">
-        <Label text="Overflow Behavior:" />
-        <RadioButton Name="GrowRadio" text="Grow (if in row)" ToggleGroup="bg3" />
-        <RadioButton Name="ShrinkRadio" text="Shrink Text to Fit" ToggleGroup="bg3" />
-        <RadioButton Name="PaginateRadio" text="Paginate (if in page)" ToggleGroup="bg3" />
+        <Label Text="Overflow Behavior:" />
+        <RadioButton Name="GrowRadio" Text="Grow (if in row)" GroupName="bg3" />
+        <RadioButton Name="ShrinkRadio" Text="Shrink Text to Fit" GroupName="bg3" />
+        <RadioButton Name="PaginateRadio" Text="Paginate (if in page)" GroupName="bg3" />
       </ColView>
     </RowView>
   </TitleView>
-  <TitleView MinHeight="30" Padding="8,8,8,8" Text="Advanced Options" Collapsible="true" Expanded="false">
+  <TitleView MinHeight="30" Padding="8" Text="Advanced Options" Collapsible="true" Expanded="false">
     <ColView Spacing="4" FillWidth="true">
       <RowView Spacing="4">
-        <Label PrefWidth="75" text="Char Spacing:" />
-        <Spinner Name="CharSpacingSpinner" PrefWidth="60" Align="CENTER" Step=".1" />
+        <Label PrefWidth="75" Text="Char Spacing:" />
+        <Spinner Name="CharSpacingSpinner" PrefWidth="60" Align="CENTER" Step="0.1" />
       </RowView>
       <RowView Spacing="4">
-        <Label PrefWidth="75" text="Line Spacing:" />
-        <Spinner Name="LineSpacingSpinner" PrefWidth="60" Align="CENTER" Step=".1" />
-        <Button Name="LineSpacingSingleButton" PrefWidth="20" PrefHeight="20" text="x1" />
-        <Button Name="LineSpacingDoubleButton" PrefWidth="20" PrefHeight="20" text="x2" />
+        <Label PrefWidth="75" Text="Line Spacing:" />
+        <Spinner Name="LineSpacingSpinner" PrefWidth="60" Align="CENTER" Step="0.1" />
+        <Button Name="LineSpacingSingleButton" PrefWidth="20" PrefHeight="20" Text="x1" />
+        <Button Name="LineSpacingDoubleButton" PrefWidth="20" PrefHeight="20" Text="x2" />
       </RowView>
       <RowView Spacing="4">
-        <Label PrefWidth="75" text="Line Gap:" />
-        <Spinner Name="LineGapSpinner" PrefWidth="60" Align="CENTER" Step="1" />
+        <Label PrefWidth="75" Text="Line Gap:" />
+        <Spinner Name="LineGapSpinner" PrefWidth="60" Align="CENTER" />
       </RowView>
       <RowView>
-        <MenuButton Margin="8,0,0,0" PrefWidth="100" PrefHeight="22" LeanX="CENTER" text="Text Actions">
-          <MenuItem Name="MakeMinWidthMenuItem" text="Make Min Width" />
-          <MenuItem Name="MakeMinHeightMenuItem" text="Make Min Height" />
-          <MenuItem Name="TurnToPathMenuItem" text="Turn to Path" />
-          <MenuItem Name="TurnToCharsShapeMenuItem" text="Turn to Chars Shape" />
-          <MenuItem Name="LinkedTextMenuItem" text="Create Linked Text" />
+        <MenuButton PrefWidth="100" PrefHeight="22" Margin="8,0,0,0" LeanX="CENTER" Text="Text Actions">
+          <MenuItem Name="MakeMinWidthMenuItem" Text="Make Min Width" />
+          <MenuItem Name="MakeMinHeightMenuItem" Text="Make Min Height" />
+          <MenuItem Name="TurnToPathMenuItem" Text="Turn to Path" />
+          <MenuItem Name="TurnToCharsShapeMenuItem" Text="Turn to Chars Shape" />
+          <MenuItem Name="LinkedTextMenuItem" Text="Create Linked Text" />
         </MenuButton>
       </RowView>
     </ColView>

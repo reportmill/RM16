@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ColView PrefWidth="275" PrefHeight="260" Padding="8,4,4,4" Spacing="5" FillWidth="true">
   <RowView Align="CENTER" Spacing="10">
-    <ToggleButton Name="NoFormatButton" PrefWidth="40" PrefHeight="30" image="FormatNone.png" ToggleGroup="bg1" />
-    <ToggleButton Name="NumberFormatButton" PrefWidth="40" PrefHeight="30" image="FormatNumber.png" ToggleGroup="bg1" />
-    <ToggleButton Name="DateFormatButton" PrefWidth="40" PrefHeight="30" image="FormatDate.png" ToggleGroup="bg1" />
+    <ToggleButton Name="NoFormatButton" PrefWidth="40" PrefHeight="30" ImageName="FormatNone.png" GroupName="bg1" />
+    <ToggleButton Name="NumberFormatButton" PrefWidth="40" PrefHeight="30" ImageName="FormatNumber.png" GroupName="bg1" />
+    <ToggleButton Name="DateFormatButton" PrefWidth="40" PrefHeight="30" ImageName="FormatDate.png" GroupName="bg1" />
   </RowView>
   <SwitchView Name="PickerPanel" GrowHeight="true">
     <ColView Align="CENTER">
-      <Label text="Selection has no format" />
+      <Label Text="Selection has no format" />
     </ColView>
     <ColView Name="NumberFormatPane" Spacing="4" FillWidth="true">
       <RowView Padding="4,2,0,2" Spacing="2">
-        <ToggleButton Name="MoneyButton" ToolTip="Money Format" image="Format_Money.png" />
-        <ToggleButton Name="PercentButton" ToolTip="Percent Format" image="Format_Percent.png" />
-        <ToggleButton Name="CommaButton" ToolTip="Comma Format" image="Format_Comma.png" />
-        <Button Name="DecimalAddButton" LeanX="RIGHT" ToolTip="Add Decimal" image="Format_DecimalAdd.png" />
-        <Button Name="DecimalRemoveButton" ToolTip="Remove Decimal" image="Format_DecimalRemove.png" />
+        <ToggleButton Name="MoneyButton" ToolTip="Money Format" ImageName="Format_Money.png" />
+        <ToggleButton Name="PercentButton" ToolTip="Percent Format" ImageName="Format_Percent.png" />
+        <ToggleButton Name="CommaButton" ToolTip="Comma Format" ImageName="Format_Comma.png" />
+        <Button Name="DecimalAddButton" LeanX="RIGHT" ToolTip="Add Decimal" ImageName="Format_DecimalAdd.png" />
+        <Button Name="DecimalRemoveButton" ToolTip="Remove Decimal" ImageName="Format_DecimalRemove.png" />
       </RowView>
       <TableView Name="NumberFormatTable" GrowHeight="true">
         <TableCol PrefWidth="90" GrowWidth="true" Header="Positive" />
@@ -23,12 +23,12 @@
         <TableCol PrefWidth="70" GrowWidth="true" Header="Format" />
       </TableView>
       <RowView>
-        <Label text=" Format: " />
+        <Label Text=" Format: " />
         <TextField Name="NumberFormatText" GrowWidth="true" />
       </RowView>
       <RowView Spacing="4">
-        <CheckBox Name="NegativeInRedCheckBox" text="Negative in Red" />
-        <Label LeanX="RIGHT" text="String for Null:" />
+        <CheckBox Name="NegativeInRedCheckBox" Text="Negative in Red" />
+        <Label LeanX="RIGHT" Text="String for Null:" />
         <TextField Name="NumberNullStringText" PrefWidth="75" />
       </RowView>
     </ColView>
@@ -38,11 +38,11 @@
         <TableCol PrefWidth="110" GrowWidth="true" Header="Format" />
       </TableView>
       <RowView Spacing="4">
-        <Label PrefWidth="70" Align="CENTER_RIGHT" text="Custom:" />
+        <Label PrefWidth="70" Align="CENTER_RIGHT" Text="Custom:" />
         <TextField Name="DateFormatText" GrowWidth="true" />
       </RowView>
       <RowView Spacing="4">
-        <Label PrefWidth="70" Align="CENTER_RIGHT" text="String for Null:" />
+        <Label PrefWidth="70" Align="CENTER_RIGHT" Text="String for Null:" />
         <TextField Name="DateNullStringText" GrowWidth="true" />
       </RowView>
     </ColView>

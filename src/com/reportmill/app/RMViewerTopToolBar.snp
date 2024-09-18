@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<SpringView width="400" height="30" PrefWidth="400" PrefHeight="30">
-  <Button x="4" y="2" width="4" height="24" image="ToolBar.png" ShowBorder="false" />
-  <Button Name="SaveButton" x="10" y="3" width="22" height="22" ToolTip="Save" image="File_Save.png" ShowBorder="false" />
-  <Button Name="PreviewPDFButton" x="32" y="3" width="22" height="22" ToolTip="Preview PDF" image="Preview_PDF.png" ShowBorder="false" />
-  <Button Name="PrintButton" x="54" y="3" width="22" height="22" ToolTip="Print" image="File_Print.png" ShowBorder="false" />
-  <Button Name="CopyButton" x="76" y="3" width="22" height="22" ToolTip="Copy" image="Edit_Copy.png" ShowBorder="false" />
-  <ToggleButton Name="MoveButton" x="282" y="3" width="25" height="25" ToolTip="Move" image="Move.png" Selected="true" ToggleGroup="bg1" />
-  <ToggleButton Name="TextButton" x="307" y="3" width="25" height="25" ToolTip="Text " image="Text.png" ToggleGroup="bg1" />
-  <ToggleButton Name="SelectButton" x="332" y="3" width="25" height="25" ToolTip="Select" image="Select.png" ToggleGroup="bg1" />
+<SpringView Width="400" Height="30" PrefWidth="400" PrefHeight="30">
+  <Button X="4" Y="2" Width="4" Height="24" ImageName="ToolBar.png" ShowArea="false" />
+  <Button Name="SaveButton" X="10" Y="3" Width="22" Height="22" ToolTip="Save" ImageName="File_Save.png" ShowArea="false" />
+  <Button Name="PreviewPDFButton" X="32" Y="3" Width="22" Height="22" ToolTip="Preview PDF" ImageName="Preview_PDF.png" ShowArea="false" />
+  <Button Name="PrintButton" X="54" Y="3" Width="22" Height="22" ToolTip="Print" ImageName="File_Print.png" ShowArea="false" />
+  <Button Name="CopyButton" X="76" Y="3" Width="22" Height="22" ToolTip="Copy" ImageName="Edit_Copy.png" ShowArea="false" />
+  <ToggleButton Name="MoveButton" X="282" Y="3" Width="25" Height="25" ToolTip="Move" ImageName="Move.png" Selected="true" GroupName="bg1" />
+  <ToggleButton Name="TextButton" X="307" Y="3" Width="25" Height="25" ToolTip="Text " ImageName="Text.png" GroupName="bg1" />
+  <ToggleButton Name="SelectButton" X="332" Y="3" Width="25" Height="25" ToolTip="Select" ImageName="Select.png" GroupName="bg1" />
 </SpringView>

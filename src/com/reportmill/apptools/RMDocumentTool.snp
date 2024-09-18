@@ -1,68 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ColView FillWidth="true">
-  <SpringView Name="BasicPanel" width="275" height="300" PrefWidth="275" PrefHeight="325">
-    <TitleView x="2" width="170" height="150" Text="Paper Size">
-      <SpringView width="170" height="150" PrefWidth="170" PrefHeight="150">
-        <View Name="PageSizeView" x="4" y="2" width="162" height="108" Class="com.reportmill.apptools.RMDocumentTool$PageSizeView" />
-        <Label x="2" y="110" width="36" height="18" Align="CENTER_RIGHT" text="Width:" />
-        <TextField Name="PageWidthText" x="38" y="110" width="44" height="18" Align="CENTER" />
-        <Label x="84" y="110" width="36" height="18" Align="CENTER_RIGHT" text="Height:" />
-        <TextField Name="PageHeightText" x="120" y="110" width="44" height="18" Align="CENTER" />
+  <SpringView Name="BasicPanel" Width="275" Height="300" PrefWidth="275" PrefHeight="300">
+    <TitleView X="2" Width="170" Height="150" Text="Paper Size">
+      <SpringView Width="170" Height="150" PrefWidth="170" PrefHeight="150">
+        <View Name="PageSizeView" X="4" Y="2" Width="162" Height="108" Class="com.reportmill.apptools.RMDocumentTool$PageSizeView" />
+        <Label X="2" Y="110" Width="36" Height="18" Align="CENTER_RIGHT" Text="Width:" />
+        <TextField Name="PageWidthText" X="38" Y="110" Width="44" Height="18" Align="CENTER" />
+        <Label X="84" Y="110" Width="36" Height="18" Align="CENTER_RIGHT" Text="Height:" />
+        <TextField Name="PageHeightText" X="120" Y="110" Width="44" Height="18" Align="CENTER" />
       </SpringView>
     </TitleView>
-    <TitleView x="174" width="99" height="42" Text="Paper Size">
-      <SpringView width="99" height="42" PrefWidth="99" PrefHeight="42">
-        <ComboBox Name="PaperSizeComboBox" x="3" width="87" height="20" />
+    <TitleView X="174" Width="99" Height="42" Text="Paper Size">
+      <SpringView Width="99" Height="42" PrefWidth="99" PrefHeight="42">
+        <ComboBox Name="PaperSizeComboBox" X="3" Width="87" Height="20" />
       </SpringView>
     </TitleView>
-    <TitleView x="174" y="44" width="99" height="42" Text="Units">
-      <SpringView width="99" height="42" PrefWidth="99" PrefHeight="42">
-        <ComboBox Name="UnitComboBox" x="3" width="87" height="20" />
+    <TitleView X="174" Y="44" Width="99" Height="42" Text="Units">
+      <SpringView Width="99" Height="42" PrefWidth="99" PrefHeight="42">
+        <ComboBox Name="UnitComboBox" X="3" Width="87" Height="20" />
       </SpringView>
     </TitleView>
-    <TitleView x="174" y="88" width="99" height="62" Text="Orientation">
-      <SpringView width="99" height="62" PrefWidth="99" PrefHeight="62">
-        <RadioButton Name="PortraitRadioButton" x="1" width="91" height="20" text="Portrait" ToggleGroup="orbg" />
-        <RadioButton Name="LandscapeRadioButton" x="1" y="20" width="91" height="20" text="Landscape" ToggleGroup="orbg" />
+    <TitleView X="174" Y="88" Width="99" Height="62" Text="Orientation">
+      <SpringView Width="99" Height="62" PrefWidth="99" PrefHeight="62">
+        <RadioButton Name="PortraitRadioButton" X="1" Width="91" Height="20" Text="Portrait" GroupName="orbg" />
+        <RadioButton Name="LandscapeRadioButton" X="1" Y="20" Width="91" Height="20" Text="Landscape" GroupName="orbg" />
       </SpringView>
     </TitleView>
-    <TitleView x="2" y="152" width="170" height="80" Text="Margins">
-      <SpringView width="170" height="80" PrefWidth="170" PrefHeight="80">
-        <Label width="36" height="18" Align="CENTER_RIGHT" text="Left:" />
-        <TextField Name="LeftMarginText" x="36" width="44" height="18" Align="CENTER" />
-        <Label y="20" width="36" height="18" Align="CENTER_RIGHT" text="Right:" />
-        <TextField Name="RightMarginText" x="36" y="20" width="44" height="18" Align="CENTER" />
-        <Label x="82" width="36" height="18" Align="CENTER_RIGHT" text="Top:" />
-        <TextField Name="TopMarginText" x="118" width="44" height="18" Align="CENTER" />
-        <Label x="82" y="20" width="36" height="18" Align="CENTER_RIGHT" text="Botm:" />
-        <TextField Name="BottomMarginText" x="118" y="20" width="44" height="18" Align="CENTER" />
-        <CheckBox Name="DrawMarginCheckBox" x="18" y="42" width="70" height="18" text="Show" />
-        <CheckBox Name="SnapMarginCheckBox" x="98" y="42" width="60" height="18" text="Snap" />
+    <TitleView X="2" Y="152" Width="170" Height="80" Text="Margins">
+      <SpringView Width="170" Height="80" PrefWidth="170" PrefHeight="80">
+        <Label Width="36" Height="18" Align="CENTER_RIGHT" Text="Left:" />
+        <TextField Name="LeftMarginText" X="36" Width="44" Height="18" Align="CENTER" />
+        <Label Y="20" Width="36" Height="18" Align="CENTER_RIGHT" Text="Right:" />
+        <TextField Name="RightMarginText" X="36" Y="20" Width="44" Height="18" Align="CENTER" />
+        <Label X="82" Width="36" Height="18" Align="CENTER_RIGHT" Text="Top:" />
+        <TextField Name="TopMarginText" X="118" Width="44" Height="18" Align="CENTER" />
+        <Label X="82" Y="20" Width="36" Height="18" Align="CENTER_RIGHT" Text="Botm:" />
+        <TextField Name="BottomMarginText" X="118" Y="20" Width="44" Height="18" Align="CENTER" />
+        <CheckBox Name="DrawMarginCheckBox" X="18" Y="42" Width="70" Height="18" Text="Show" />
+        <CheckBox Name="SnapMarginCheckBox" X="98" Y="42" Width="60" Height="18" Text="Snap" />
       </SpringView>
     </TitleView>
-    <TitleView x="174" y="152" width="99" height="80" Text="Grid">
-      <SpringView width="99" height="80" PrefWidth="99" PrefHeight="80">
-        <CheckBox Name="ShowGridCheckBox" x="2" width="91" height="20" text="Show" />
-        <CheckBox Name="SnapGridCheckBox" x="2" y="20" width="91" height="20" text="Snap" />
-        <TextField Name="GridSpacingText" x="6" y="40" width="85" height="18" Align="CENTER" />
+    <TitleView X="174" Y="152" Width="99" Height="80" Text="Grid">
+      <SpringView Width="99" Height="80" PrefWidth="99" PrefHeight="80">
+        <CheckBox Name="ShowGridCheckBox" X="2" Width="91" Height="20" Text="Show" />
+        <CheckBox Name="SnapGridCheckBox" X="2" Y="20" Width="91" Height="20" Text="Snap" />
+        <TextField Name="GridSpacingText" X="6" Y="40" Width="85" Height="18" Align="CENTER" />
       </SpringView>
     </TitleView>
-    <TitleView x="2" y="234" width="271" height="60" Text="Page Layout">
-      <SpringView width="271" height="60" PrefWidth="271" PrefHeight="60">
-        <RadioButton Name="SingleRadio" x="2" width="120" height="20" text="Single Page" />
-        <RadioButton Name="DoubleRadio" x="2" y="20" width="120" height="20" text="Double Page" />
-        <RadioButton Name="FacingRadio" x="128" width="100" height="20" text="Facing" />
-        <RadioButton Name="ContinuousRadio" x="128" y="20" width="100" height="20" text="Continuous" />
+    <TitleView X="2" Y="234" Width="271" Height="60" Text="Page Layout">
+      <SpringView Width="271" Height="60" PrefWidth="271" PrefHeight="60">
+        <RadioButton Name="SingleRadio" X="2" Width="120" Height="20" Text="Single Page" />
+        <RadioButton Name="DoubleRadio" X="2" Y="20" Width="120" Height="20" Text="Double Page" />
+        <RadioButton Name="FacingRadio" X="128" Width="100" Height="20" Text="Facing" />
+        <RadioButton Name="ContinuousRadio" X="128" Y="20" Width="100" Height="20" Text="Continuous" />
       </SpringView>
     </TitleView>
   </SpringView>
   <ColView Name="AdvancedPanel" Padding="5" Spacing="5" FillWidth="true">
     <RowView Padding="0,0,3,3" Spacing="4">
-      <Label text="String for Null:" />
-      <TextField Name="NullStringText" GrowWidth="true" Align="CENTER" />
+      <Label Text="String for Null:" />
+      <TextField Name="NullStringText" Align="CENTER" GrowWidth="true" />
     </RowView>
-    <CheckBox Name="ProximityGuideCheckBox" PrefHeight="20" text="Proximity Guide" />
-    <CheckBox Name="PaginateCheckBox" PrefHeight="20" text="Paginate" />
-    <CheckBox Name="CompressCheckBox" PrefHeight="20" text="Compress" />
+    <CheckBox Name="ProximityGuideCheckBox" PrefHeight="20" Text="Proximity Guide" />
+    <CheckBox Name="PaginateCheckBox" PrefHeight="20" Text="Paginate" />
+    <CheckBox Name="CompressCheckBox" PrefHeight="20" Text="Compress" />
   </ColView>
 </ColView>

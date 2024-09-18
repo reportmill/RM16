@@ -3,16 +3,16 @@
   <RowView Align="CENTER">
     <ColView Spacing="8">
       <RowView Spacing="5">
-        <Label PrefWidth="32" text="Yaw:" />
-        <Spinner Name="YawSpinner" PrefWidth="54" Value="0" />
+        <Label PrefWidth="32" Text="Yaw:" />
+        <Spinner Name="YawSpinner" PrefWidth="54" />
       </RowView>
       <RowView Spacing="5">
-        <Label PrefWidth="32" text="Pitch:" />
-        <Spinner Name="PitchSpinner" PrefWidth="54" Value="0" />
+        <Label PrefWidth="32" Text="Pitch:" />
+        <Spinner Name="PitchSpinner" PrefWidth="54" />
       </RowView>
       <RowView Spacing="5">
-        <Label PrefWidth="32" text="Roll:" />
-        <Spinner Name="RollSpinner" PrefWidth="54" Value="0" />
+        <Label PrefWidth="32" Text="Roll:" />
+        <Spinner Name="RollSpinner" PrefWidth="54" />
       </RowView>
     </ColView>
   </RowView>

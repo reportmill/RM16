@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<SpringView width="275" height="325" PrefWidth="275" PrefHeight="325">
-  <Label x="5" y="5" width="68" height="18" text="Dataset Key:" />
-  <TextField Name="ListKeyText" x="73" y="4" width="196" height="20" />
-  <Label x="5" y="29" width="62" height="18" text="Filter Expr:" />
-  <TextField Name="FilterKeyText" x="63" y="28" width="206" height="20" />
-  <Label x="4" y="54" width="90" height="18" text="Grouping:" />
-  <MenuButton Name="GroupKeysMenuButton" x="203" y="53" width="66" height="18" text="Keys...">
-    <MenuItem Name="AddGroupMenuItem" text="Add..." />
-    <MenuItem Name="RemoveGroupMenuItem" text="Remove" />
-    <MenuItem Name="MoveGroupUpMenuItem" text="Move Group Up" />
-    <MenuItem Name="MoveGroupDownMenuItem" text="Move Group Down" />
+<SpringView Width="275" Height="325" PrefWidth="275" PrefHeight="325">
+  <Label X="5" Y="5" Width="68" Height="18" Text="Dataset Key:" />
+  <TextField Name="ListKeyText" X="73" Y="4" Width="196" Height="20" />
+  <Label X="5" Y="29" Width="62" Height="18" Text="Filter Expr:" />
+  <TextField Name="FilterKeyText" X="63" Y="28" Width="206" Height="20" />
+  <Label X="4" Y="54" Width="90" Height="18" Text="Grouping:" />
+  <MenuButton Name="GroupKeysMenuButton" X="203" Y="53" Width="66" Height="18" Text="Keys...">
+    <MenuItem Name="AddGroupMenuItem" Text="Add..." />
+    <MenuItem Name="RemoveGroupMenuItem" Text="Remove" />
+    <MenuItem Name="MoveGroupUpMenuItem" Text="Move Group Up" />
+    <MenuItem Name="MoveGroupDownMenuItem" Text="Move Group Down" />
   </MenuButton>
-  <TableView Name="GroupingTable" x="4" y="72" width="267" height="75" ShowHeader="false" RowHeight="20">
+  <TableView Name="GroupingTable" X="4" Y="72" Width="267" Height="75" RowHeight="20">
     <TableCol GrowWidth="true" />
     <TableCol PrefWidth="28" />
   </TableView>
-  <CheckBox Name="HeaderCheckBox" x="25" y="150" width="70" height="16" text="Header" />
-  <CheckBox Name="DetailsCheckBox" x="100" y="150" width="70" height="16" text="Details" />
-  <CheckBox Name="SummaryCheckBox" x="175" y="150" width="94" height="16" text="Summary" />
-  <Label x="4" y="278" width="127" height="18" text="Number of Columns:" />
-  <TextField Name="NumColumnsText" x="113" y="278" width="35" height="20" Align="CENTER" />
-  <Label x="4" y="302" width="120" height="18" text="Inter-column Spacing:" />
-  <TextField Name="ColumnSpacingText" x="113" y="302" width="35" height="20" Align="CENTER" />
-  <Button Name="TableGroupButton" x="153" y="302" width="117" height="20" text="Make TableGroup" />
+  <CheckBox Name="HeaderCheckBox" X="25" Y="150" Width="70" Height="16" Text="Header" />
+  <CheckBox Name="DetailsCheckBox" X="100" Y="150" Width="70" Height="16" Text="Details" />
+  <CheckBox Name="SummaryCheckBox" X="175" Y="150" Width="94" Height="16" Text="Summary" />
+  <Label X="4" Y="278" Width="127" Height="18" Text="Number of Columns:" />
+  <TextField Name="NumColumnsText" X="113" Y="278" Width="35" Height="20" Align="CENTER" />
+  <Label X="4" Y="302" Width="120" Height="18" Text="Inter-column Spacing:" />
+  <TextField Name="ColumnSpacingText" X="113" Y="302" Width="35" Height="20" Align="CENTER" />
+  <Button Name="TableGroupButton" X="153" Y="302" Width="117" Height="20" Text="Make TableGroup" />
 </SpringView>

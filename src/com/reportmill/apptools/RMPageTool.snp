@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<SpringView width="275" height="325" PrefWidth="275" PrefHeight="325">
-  <Label x="9" y="32" width="57" height="20" text="Layers:">
-    <font name="Arial Bold" size="11" />
-  </Label>
-  <Button Name="AllVisibleButton" x="106" y="30" width="26" height="26" image="LayerVisible.png" />
-  <Button Name="AllInvisibleButton" x="132" y="30" width="26" height="26" image="LayerInvisible.png" />
-  <Button Name="AllLockedButton" x="158" y="30" width="26" height="26" image="LayerLocked.png" />
-  <TableView Name="LayersTable" x="10" y="57" width="174" height="119" ShowHeader="false">
+<SpringView Width="275" Height="325" PrefWidth="275" PrefHeight="325">
+  <Label X="9" Y="32" Width="57" Height="20" Font="Arial Bold 11" Text="Layers:" />
+  <Button Name="AllVisibleButton" X="106" Y="30" Width="26" Height="26" ImageName="LayerVisible.png" />
+  <Button Name="AllInvisibleButton" X="132" Y="30" Width="26" Height="26" ImageName="LayerInvisible.png" />
+  <Button Name="AllLockedButton" X="158" Y="30" Width="26" Height="26" ImageName="LayerLocked.png" />
+  <TableView Name="LayersTable" X="10" Y="57" Width="174" Height="119">
     <TableCol GrowWidth="true" />
     <TableCol PrefWidth="30" />
   </TableView>
-  <Button Name="AddButton" x="186" y="57" width="89" height="25" text="Add" />
-  <Button Name="RemoveButton" x="186" y="86" width="89" height="25" text="Remove" />
-  <Button Name="RenameButton" x="186" y="115" width="89" height="25" text="Rename" />
-  <Button Name="MergeButton" x="186" y="144" width="89" height="25" text="Merge" />
-  <CheckBox Name="PaintBackCheckBox" x="54" y="184" width="138" height="22" text="Paint Background" />
-  <Label x="5" y="5" width="68" height="18" text="Dataset Key:" />
-  <TextField Name="DatasetKeyText" x="73" y="4" width="196" height="20" />
+  <Button Name="AddButton" X="186" Y="57" Width="89" Height="25" Text="Add" />
+  <Button Name="RemoveButton" X="186" Y="86" Width="89" Height="25" Text="Remove" />
+  <Button Name="RenameButton" X="186" Y="115" Width="89" Height="25" Text="Rename" />
+  <Button Name="MergeButton" X="186" Y="144" Width="89" Height="25" Text="Merge" />
+  <CheckBox Name="PaintBackCheckBox" X="54" Y="184" Width="138" Height="22" Text="Paint Background" />
+  <Label X="5" Y="5" Width="68" Height="18" Text="Dataset Key:" />
+  <TextField Name="DatasetKeyText" X="73" Y="4" Width="196" Height="20" />
 </SpringView>

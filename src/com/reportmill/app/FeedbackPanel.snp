@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<SpringView width="450" height="435" PrefWidth="450" PrefHeight="435">
-  <Label x="10" y="10" width="380" height="25" text="Use this form to send feedback to ReportMill Software.">
-    <font name="Arial Bold" size="12" />
-  </Label>
-  <Label x="10" y="40" width="40" height="25" text="Name:" />
-  <TextField Name="UserText" x="52" y="40" width="138" height="25" />
-  <Label x="200" y="40" width="35" height="25" text="Email:" />
-  <TextField Name="EmailText" x="235" y="40" width="195" height="25" />
-  <Label x="10" y="70" width="90" height="25" text="Feedback Type:" />
-  <ComboBox Name="TypeComboBox" x="90" y="70" width="200" height="20" />
-  <Label x="10" y="95" width="90" height="20" text="Severity:" />
-  <ComboBox Name="SeverityComboBox" x="90" y="95" width="200" height="20" />
-  <Label x="10" y="120" width="90" height="20" text="Module:" />
-  <ComboBox Name="ModuleComboBox" x="90" y="120" width="200" height="20" />
-  <Label x="10" y="150" width="40" height="25" text="Title:" />
-  <TextField Name="TitleText" x="55" y="150" width="375" height="25" />
-  <Label x="10" y="180" width="430" height="25" text="Detailed Description of Problem/Enhancement:" />
-  <TextView Name="DescriptionText" x="10" y="200" width="425" height="230" />
+<SpringView Width="450" Height="435" PrefWidth="450" PrefHeight="435">
+  <Label X="10" Y="10" Width="380" Height="25" Font="Arial Bold 12" Text="Use this form to send feedback to ReportMill Software." />
+  <Label X="10" Y="40" Width="40" Height="25" Text="Name:" />
+  <TextField Name="UserText" X="52" Y="40" Width="138" Height="25" />
+  <Label X="200" Y="40" Width="35" Height="25" Text="Email:" />
+  <TextField Name="EmailText" X="235" Y="40" Width="195" Height="25" />
+  <Label X="10" Y="70" Width="90" Height="25" Text="Feedback Type:" />
+  <ComboBox Name="TypeComboBox" X="90" Y="70" Width="200" Height="20" />
+  <Label X="10" Y="95" Width="90" Height="20" Text="Severity:" />
+  <ComboBox Name="SeverityComboBox" X="90" Y="95" Width="200" Height="20" />
+  <Label X="10" Y="120" Width="90" Height="20" Text="Module:" />
+  <ComboBox Name="ModuleComboBox" X="90" Y="120" Width="200" Height="20" />
+  <Label X="10" Y="150" Width="40" Height="25" Text="Title:" />
+  <TextField Name="TitleText" X="55" Y="150" Width="375" Height="25" />
+  <Label X="10" Y="180" Width="430" Height="25" Text="Detailed Description of Problem/Enhancement:" />
+  <TextView Name="DescriptionText" X="10" Y="200" Width="425" Height="230" />
 </SpringView>

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<SpringView width="275" height="325" PrefWidth="275" PrefHeight="325">
-  <Label x="92" y="67" width="74" height="22" Align="CENTER" text="Arrow Head:" />
-  <MenuButton Name="ArrowsMenuButton" x="113" y="95" width="36" height="24" />
-  <TitleView x="58" y="181" width="152" height="85" Text="Scale">
-    <SpringView width="152" height="85" PrefWidth="152" PrefHeight="85">
-      <ThumbWheel Name="ScaleThumbWheel" x="24" y="35" width="100" height="16" type="linear" max="4" absmin="0" />
-      <TextField Name="ScaleText" x="24" y="8" width="100" height="22" Align="CENTER" text="1" />
+<SpringView Width="275" Height="325" PrefWidth="275" PrefHeight="325">
+  <Label X="92" Y="67" Width="74" Height="22" Align="CENTER" Text="Arrow Head:" />
+  <MenuButton Name="ArrowsMenuButton" X="113" Y="95" Width="36" Height="24" />
+  <TitleView X="58" Y="181" Width="152" Height="85" Text="Scale">
+    <SpringView Width="152" Height="85" PrefWidth="152" PrefHeight="85">
+      <ThumbWheel Name="ScaleThumbWheel" X="24" Y="35" Width="100" Height="16" Type="linear" Max="4" AbsMin="0" />
+      <TextField Name="ScaleText" X="24" Y="8" Width="100" Height="22" Align="CENTER" Text="1" />
     </SpringView>
   </TitleView>
 </SpringView>

@@ -1,73 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ColView FillWidth="true">
-  <font name="Arial" size="12" />
+<ColView Font="Arial 12" FillWidth="true">
   <RowView PrefHeight="40" Align="CENTER" Padding="2,4,3,4" FillHeight="true">
-    <ToggleButton Name="GraphTypeBarButton" PrefWidth="36" Padding="4" ToolTip="Bar Graph" image="Graph_Bar.png" Position="CENTER_LEFT" Group="gtypebg" />
-    <ToggleButton Name="GraphTypeBarHButton" PrefWidth="36" Padding="4" ToolTip="Horizontal Bar Graph" image="Graph_BarHorz.png" Position="CENTER" Group="gtypebg" />
-    <ToggleButton Name="GraphTypeAreaButton" PrefWidth="36" Padding="4" ToolTip="Area Graph" image="Graph_Area.png" Position="CENTER" Group="gtypebg" />
-    <ToggleButton Name="GraphTypeLineButton" PrefWidth="36" Padding="4" ToolTip="Line Graph" image="Graph_Line.png" Position="CENTER" Group="gtypebg" />
-    <ToggleButton Name="GraphTypeScatterButton" PrefWidth="36" Padding="4" ToolTip="Scatter Graph" image="Graph_Scatter.png" Position="CENTER" Group="gtypebg" />
-    <ToggleButton Name="GraphTypePieButton" PrefWidth="36" Padding="4" ToolTip="Pie Graph" image="Graph_Pie.png" Position="CENTER_RIGHT" Group="gtypebg" />
+    <ToggleButton Name="GraphTypeBarButton" PrefWidth="36" Padding="4" ToolTip="Bar Graph" ImageName="Graph_Bar.png" Position="CENTER_LEFT" GroupName="gtypebg" />
+    <ToggleButton Name="GraphTypeBarHButton" PrefWidth="36" Padding="4" ToolTip="Horizontal Bar Graph" ImageName="Graph_BarHorz.png" Position="CENTER" GroupName="gtypebg" />
+    <ToggleButton Name="GraphTypeAreaButton" PrefWidth="36" Padding="4" ToolTip="Area Graph" ImageName="Graph_Area.png" Position="CENTER" GroupName="gtypebg" />
+    <ToggleButton Name="GraphTypeLineButton" PrefWidth="36" Padding="4" ToolTip="Line Graph" ImageName="Graph_Line.png" Position="CENTER" GroupName="gtypebg" />
+    <ToggleButton Name="GraphTypeScatterButton" PrefWidth="36" Padding="4" ToolTip="Scatter Graph" ImageName="Graph_Scatter.png" Position="CENTER" GroupName="gtypebg" />
+    <ToggleButton Name="GraphTypePieButton" PrefWidth="36" Padding="4" ToolTip="Pie Graph" ImageName="Graph_Pie.png" Position="CENTER_RIGHT" GroupName="gtypebg" />
   </RowView>
   <RowView Padding="3,4,3,4" Spacing="3">
-    <Label PrefWidth="68" PrefHeight="18" text="Dataset Key:" />
+    <Label PrefWidth="68" PrefHeight="18" Text="Dataset Key:" />
     <TextField Name="ListKeyText" PrefHeight="20" GrowWidth="true" />
   </RowView>
   <RowView Padding="3,4,3,4" Spacing="3">
-    <Label PrefWidth="62" PrefHeight="18" text="Filter Expr:" />
+    <Label PrefWidth="62" PrefHeight="18" Text="Filter Expr:" />
     <TextField Name="FilterText" PrefHeight="20" GrowWidth="true" />
   </RowView>
   <RowView Padding="3,4,3,4">
-    <Label PrefWidth="100" PrefHeight="18" text="Key(s):" />
-    <Label PrefWidth="145" PrefHeight="18" Align="CENTER_RIGHT" LeanX="RIGHT" text="(Comma Separated)" />
+    <Label PrefWidth="100" PrefHeight="18" Text="Key(s):" />
+    <Label PrefWidth="145" PrefHeight="18" Align="CENTER_RIGHT" LeanX="RIGHT" Text="(Comma Separated)" />
   </RowView>
   <BoxView Padding="0,4,3,4" FillWidth="true">
-    <TextView Name="KeysText" PrefHeight="50" FireActionOnEnterKey="true">
-      <font name="Arial" size="11" />
-    </TextView>
+    <TextView Name="KeysText" PrefHeight="50" Font="Arial 11" FireActionOnEnterKey="true" />
   </BoxView>
-  <TitleView Name="SortBox" Margin="3,4,2,4" Padding="2" Text="Sorting" TitleStyle="Button" Collapsible="true" Expanded="false" />
-  <TitleView Name="ViewBox" Margin="0,4,2,4" Padding="2" Text="View Options" TitleStyle="Button" Collapsible="true">
-    <ColView Padding="0,4,5,4" Spacing="4" FillWidth="true">
-      <font name="Arial" size="10" />
+  <TitleView Name="SortBox" Margin="3,4,2,4" Text="Sorting" TitleStyle="Button" Collapsible="true" Expanded="false" />
+  <TitleView Name="ViewBox" Margin="0,4,2,4" Text="View Options" TitleStyle="Button" Collapsible="true">
+    <ColView Padding="0,4,5,4" Spacing="4" Font="Arial 10" FillWidth="true">
       <RowView Spacing="10">
         <ColorDock Name="ColorDock" PrefWidth="109" PrefHeight="44" />
         <ColView>
-          <CheckBox Name="ShowLegendCheckBox" text="Show Legend" />
-          <CheckBox Name="ColorItemsCheckBox" text="Color Items" />
-          <CheckBox Name="Draw3DCheckBox" text="Draw 3D" />
+          <CheckBox Name="ShowLegendCheckBox" Text="Show Legend" />
+          <CheckBox Name="ColorItemsCheckBox" Text="Color Items" />
+          <CheckBox Name="Draw3DCheckBox" Text="Draw 3D" />
         </ColView>
       </RowView>
       <RowView Spacing="3">
-        <Label text="Color Key:" />
+        <Label Text="Color Key:" />
         <TextField Name="ColorKeyText" GrowWidth="true" />
       </RowView>
     </ColView>
   </TitleView>
-  <TitleView Name="MultiKeyLayoutBox" Margin="2,4,2,4" Padding="2" Text="Multi-Key Layout" TitleStyle="Button" Collapsible="true">
+  <TitleView Name="MultiKeyLayoutBox" Margin="2,4,2,4" Text="Multi-Key Layout" TitleStyle="Button" Collapsible="true">
     <RowView Padding="2,5,5,5" Spacing="8">
       <ColView GrowWidth="true" FillWidth="true">
-        <Label PrefHeight="14" text=" Series">
-          <font name="Arial" size="10" />
-        </Label>
-        <ListView Name="SectionLayoutList" PrefWidth="80" PrefHeight="58">
-          <LineBorder Color="#c0c0c0" />
-        </ListView>
+        <Label PrefHeight="14" Font="Arial 10" Text=" Series" />
+        <ListView Name="SectionLayoutList" PrefWidth="80" PrefHeight="58" />
       </ColView>
       <ColView GrowWidth="true" FillWidth="true">
-        <Label PrefHeight="14" text=" Items">
-          <font name="Arial" size="10" />
-        </Label>
-        <ListView Name="ItemsLayoutList" PrefWidth="80" PrefHeight="58">
-          <LineBorder Color="#c0c0c0" />
-        </ListView>
+        <Label PrefHeight="14" Font="Arial 10" Text=" Items" />
+        <ListView Name="ItemsLayoutList" PrefWidth="80" PrefHeight="58" />
       </ColView>
     </RowView>
   </TitleView>
-  <TitleView Name="TypeBox" Margin="0,4,2,4" Padding="2" Text="Bars" TitleStyle="Button" Collapsible="true" Expanded="false" />
-  <TitleView Name="ValueAxisBox" Margin="0,4,2,4" Padding="2" Text="Value Axis" TitleStyle="Button" Collapsible="true" Expanded="false" />
-  <TitleView Name="LabelAxisBox" Margin="0,4,2,4" Padding="2" Text="Label Axis" TitleStyle="Button" Collapsible="true" Expanded="false" />
-  <TitleView Name="SeriesBox" Margin="0,4,2,4" Padding="2" Text="Series" TitleStyle="Button" Collapsible="true" Expanded="false" />
-  <TitleView Name="3DBox" Margin="0,4,2,4" Padding="2" Text="3D" TitleStyle="Button" Collapsible="true" Expanded="false" />
-  <Label Name="ProxyLabel" Align="CENTER" Padding="2" LeanY="BOTTOM" text="Font/Color changes now apply to Graph" Spacing="0" />
+  <TitleView Name="TypeBox" Margin="0,4,2,4" Text="Bars" TitleStyle="Button" Collapsible="true" Expanded="false" />
+  <TitleView Name="ValueAxisBox" Margin="0,4,2,4" Text="Value Axis" TitleStyle="Button" Collapsible="true" Expanded="false" />
+  <TitleView Name="LabelAxisBox" Margin="0,4,2,4" Text="Label Axis" TitleStyle="Button" Collapsible="true" Expanded="false" />
+  <TitleView Name="SeriesBox" Margin="0,4,2,4" Text="Series" TitleStyle="Button" Collapsible="true" Expanded="false" />
+  <TitleView Name="3DBox" Margin="0,4,2,4" Text="3D" TitleStyle="Button" Collapsible="true" Expanded="false" />
+  <Label Name="ProxyLabel" Align="CENTER" Padding="2" Spacing="0" LeanY="BOTTOM" Text="Font/Color changes now apply to Graph" />
 </ColView>

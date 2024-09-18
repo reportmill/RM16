@@ -1,26 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<TabView PrefWidth="350" PrefHeight="360" GrowHeight="true">
-  <font name="Arial" size="12" />
-  <LineBorder Color="#C0" />
+<TabView PrefWidth="350" PrefHeight="360" Border="#C0 1" Font="Arial 12" GrowHeight="true">
   <ColView Align="TOP_CENTER" Padding="50,5,5,5" Spacing="40" title="License">
     <RowView Spacing="10">
-      <Label text="License Key:" />
+      <Label Text="License Key:" />
       <TextField Name="LicenseText" PrefWidth="210" />
     </RowView>
-    <CheckBox Name="EnableExceptionsCheckBox" text="Enable Exception Reporting" />
+    <CheckBox Name="EnableExceptionsCheckBox" Text="Enable Exception Reporting" />
   </ColView>
   <RowView Padding="15,5,10,5" Spacing="10" FillHeight="true" title="Formats">
-    <ColView PrefWidth="150" GrowWidth="true" Spacing="4" FillWidth="true">
+    <ColView PrefWidth="150" Spacing="4" GrowWidth="true" FillWidth="true">
       <RowView>
-        <Label text="Number Formats:" />
-        <Button Name="ResetNumbersButton" PrefWidth="40" PrefHeight="18" LeanX="RIGHT" text="Reset" />
+        <Label Text="Number Formats:" />
+        <Button Name="ResetNumbersButton" PrefWidth="40" PrefHeight="18" LeanX="RIGHT" Text="Reset" />
       </RowView>
       <TextView Name="NumberFormatsText" GrowHeight="true" />
     </ColView>
-    <ColView PrefWidth="150" GrowWidth="true" Spacing="4" FillWidth="true">
+    <ColView PrefWidth="150" Spacing="4" GrowWidth="true" FillWidth="true">
       <RowView>
-      <Label text="Date Formats:" />
-      <Button Name="ResetDatesButton" PrefWidth="40" PrefHeight="18" LeanX="RIGHT" text="Reset" />
+        <Label Text="Date Formats:" />
+        <Button Name="ResetDatesButton" PrefWidth="40" PrefHeight="18" LeanX="RIGHT" Text="Reset" />
       </RowView>
       <TextView Name="DateFormatsText" GrowHeight="true" />
     </ColView>

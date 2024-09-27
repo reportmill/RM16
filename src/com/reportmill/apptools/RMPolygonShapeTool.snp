@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ColView PrefWidth="275" PrefHeight="325">
   <Label Padding="5" Text="Path" />
-  <TextView Name="PathText" PrefHeight="400" Margin="0,8,5,5" GrowWidth="true" />
+  <TextField Name="PathText" PrefHeight="400" Margin="0,8,5,5" GrowWidth="true" Multiline="true" />
   <Button Name="MakeSimpleButton" PrefWidth="120" PrefHeight="24" Margin="5" Text="Make Simple Polygon" />
 </ColView>

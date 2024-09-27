@@ -4,7 +4,7 @@
     <Label Text="Control Type:" />
     <ListView Name="TypeListView" MinWidth="120" PrefHeight="60" GrowHeight="true" />
     <Label Text="Default text:" />
-    <TextView Name="TextView" PrefHeight="100" />
+    <TextField Name="TextView" PrefHeight="100" Multiline="true" />
   </ColView>
   <ColView MinWidth="200" MinHeight="200" Padding="12" Spacing="6" FillWidth="true" title="TextField">
     <CheckBox Name="MultilineCheckBox" Text="Multi-line Text" />

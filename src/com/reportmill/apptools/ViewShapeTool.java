@@ -8,19 +8,24 @@ import snap.view.*;
 public class ViewShapeTool<T extends ViewShape> extends RMTool<T> {
 
     // The main TabView
-    TabView _tabView;
+    private TabView _tabView;
 
     // The Text tab
-    Tab _textFieldTab;
+    private Tab _textFieldTab;
 
     // The Button tab
-    Tab _buttonTab;
+    private Tab _buttonTab;
 
     // The Type selection ListView
     private ListView<String> _typeList;
 
-    // The TextView
-    TextView _textView;
+    /**
+     * Constructor.
+     */
+    public ViewShapeTool()
+    {
+        super();
+    }
 
     /**
      * Override to customize UI.
@@ -34,9 +39,6 @@ public class ViewShapeTool<T extends ViewShape> extends RMTool<T> {
         _typeList = getView("TypeListView", ListView.class);
         String[] items = { "TextField", "Button", "RadioButton", "CheckBox", "ListView", "ComboBox"};
         _typeList.setItems(items);
-
-        _textView = getView("TextView", TextView.class);
-        _textView.setFireActionOnFocusLost(true);
     }
 
     /**
@@ -51,7 +53,7 @@ public class ViewShapeTool<T extends ViewShape> extends RMTool<T> {
 
         _textFieldTab.setVisible(type.equals(ViewShape.TextField_Type));
         _buttonTab.setVisible(type.equals(ViewShape.Button_Type));
-        _textView.setText(vshape.getText());
+        setViewValue("TextView", vshape.getText());
     }
 
     /**
@@ -62,17 +64,16 @@ public class ViewShapeTool<T extends ViewShape> extends RMTool<T> {
         ViewShape vshape = getSelectedShape();
 
         // Handle TypeListView
-        if (anEvent.equals(_typeList)) {
+        if (anEvent.equals("TypeListView")) {
             String type = anEvent.getStringValue();
             vshape.setViewType(type);
             vshape.setStandardSize();
         }
 
         // Handle TextView
-        if (anEvent.equals("TextView")) {
+        else if (anEvent.equals("TextView")) {
             String text = anEvent.getStringValue();
             vshape.setText(text);
         }
     }
-
 }

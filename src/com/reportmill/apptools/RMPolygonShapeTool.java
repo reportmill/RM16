@@ -30,11 +30,11 @@ public class RMPolygonShapeTool<T extends RMPolygonShape> extends RMTool<T> {
     public static int _selectedPointIndex = 0;
 
     /**
-     * Initialize UI.
+     * Constructor.
      */
-    protected void initUI()
+    public RMPolygonShapeTool()
     {
-        getView("PathText", TextView.class).setFireActionOnFocusLost(true);
+        super();
     }
 
     /**

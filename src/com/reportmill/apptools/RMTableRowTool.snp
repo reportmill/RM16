@@ -27,8 +27,8 @@
   </ColView>
   <ColView Padding="1" FillWidth="true">
     <Label Padding="5,0,3,1" Text="Table Row Version Key:" />
-    <TextView Name="VersionKeyText" PrefHeight="50" FireActionOnEnterKey="true" FireActionOnFocusLost="true" />
+    <TextField Name="VersionKeyText" PrefHeight="50" Multiline="true" />
     <Label Padding="5,0,3,1" Text="Page Break Expression:" />
-    <TextView Name="PageBreakKeyText" PrefHeight="50" FireActionOnEnterKey="true" FireActionOnFocusLost="true" />
+    <TextField Name="PageBreakKeyText" PrefHeight="50" Multiline="true" />
   </ColView>
 </ColView>

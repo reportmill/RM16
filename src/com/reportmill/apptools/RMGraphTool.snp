@@ -21,7 +21,7 @@
     <Label PrefWidth="145" PrefHeight="18" Align="CENTER_RIGHT" LeanX="RIGHT" Text="(Comma Separated)" />
   </RowView>
   <BoxView Padding="0,4,3,4" FillWidth="true">
-    <TextView Name="KeysText" PrefHeight="50" Font="Arial 11" FireActionOnEnterKey="true" />
+    <TextField Name="KeysText" PrefHeight="50" Font="Arial 11" Multiline="true" />
   </BoxView>
   <TitleView Name="SortBox" Margin="3,4,2,4" Text="Sorting" TitleStyle="Button" Collapsible="true" Expanded="false" />
   <TitleView Name="ViewBox" Margin="0,4,2,4" Text="View Options" TitleStyle="Button" Collapsible="true">

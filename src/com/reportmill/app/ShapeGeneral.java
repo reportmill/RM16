@@ -100,7 +100,7 @@ public class ShapeGeneral extends RMEditorPane.SupportPane {
     private void handleBindingsTableMouseRelease(ViewEvent anEvent)
     {
         requestFocus("BindingsText");
-        getView("BindingsText", TextView.class).selectAll();
+        getView("BindingsText", TextField.class).selectAll();
         resetLater();
     }
 

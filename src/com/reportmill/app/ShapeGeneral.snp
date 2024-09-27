@@ -6,7 +6,7 @@
   </RowView>
   <ColView FillWidth="true">
     <Label Text="URL:" />
-    <TextView Name="UrlText" PrefHeight="60" FireActionOnEnterKey="true" FireActionOnFocusLost="true" />
+    <TextField Name="UrlText" PrefHeight="60" Multiline="true" />
   </ColView>
   <ColView Spacing="3" GrowHeight="true" FillWidth="true">
     <RowView>
@@ -17,6 +17,6 @@
       <TableCol PrefWidth="80" />
       <TableCol GrowWidth="true" />
     </TableView>
-    <TextView Name="BindingsText" PrefHeight="80" GrowHeight="true" FireActionOnEnterKey="true" FireActionOnFocusLost="true" />
+    <TextField Name="BindingsText" PrefHeight="80" GrowHeight="true" Multiline="true" />
   </ColView>
 </ColView>

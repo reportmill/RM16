@@ -20,23 +20,23 @@ import snap.view.*;
  */
 public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
 
-    // The TextArea
-    TextArea _textArea;
+    // The TextView
+    private TextView _textView;
 
     // The shape hit by text tool on mouse down
-    RMShape _downShape;
+    private RMShape _downShape;
 
     // Whether editor should resize RMText whenever text changes
-    boolean _updatingSize = false;
+    private boolean _updatingSize = false;
 
     // The minimum height of the RMText when editor text editor is updating size
-    double _updatingMinHeight = 0;
+    private double _updatingMinHeight = 0;
 
     // Whether current mouse drag should be moving table column
-    boolean _moveTableColumn;
+    private boolean _moveTableColumn;
 
     // A Listener for RichText PropChange
-    PropChangeListener _richTextLsnr = pc -> richTextDidPropChange(pc);
+    private PropChangeListener _richTextLsnr = this::handleTextShapeTextBlockPropChange;
 
     /**
      * Initialize UI panel.
@@ -44,11 +44,9 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
     protected void initUI()
     {
         // Get the TextView and register to update selection
-        TextView textView = getView("TextView", TextView.class);
-        textView.getTextBlock().setRichText(true);
-        textView.getScrollView().setBarSize(12);
-        _textArea = textView.getTextArea();
-        _textArea.addPropChangeListener(pc -> textAreaChangedSel(), TextArea.Selection_Prop);
+        _textView = getView("TextView", TextView.class);
+        _textView.setRichText(true);
+        _textView.addPropChangeListener(pc -> handleTextViewSelectionChange(), TextArea.Selection_Prop);
     }
 
     /**
@@ -63,7 +61,7 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
 
         // Get paragraph from text
         int selStart = 0;
-        if (_textArea.isFocused()) selStart = _textArea.getSelStart();
+        if (_textView.isFocused()) selStart = _textView.getSelStart();
         RMParagraph pgraph = text.getXString().getParagraphAt(selStart);
 
         // If editor is text editing, get paragraph from text editor instead
@@ -83,29 +81,29 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
         setViewValue("AlignBottomButton", text.getAlignmentY() == RMTypes.AlignY.Bottom);
 
         // Set TextView RichText and selection
-        _textArea.setSourceText(text.getRichText());
+        _textView.setSourceText(text.getRichText());
         if (textEditor != null) {
             TextBlock textBlock = textEditor.getTextBox();
             int textStartCharIndex = textBlock.getStartCharIndex();
             int selStartCharIndex = textEditor.getSelStart() + textStartCharIndex;
             int selEndCharIndex = textEditor.getSelEnd() + textStartCharIndex;
-            _textArea.setSel(selStartCharIndex, selEndCharIndex);
+            _textView.setSel(selStartCharIndex, selEndCharIndex);
         }
 
-        // Get text's background color and set in TextArea if found
+        // Get text's background color and set in TextView if found
         Color color = null;
         for (RMShape shape = text; color == null && shape != null; ) {
             if (shape.getFill() == null) shape = shape.getParent();
             else color = shape.getFill().getColor();
         }
-        _textArea.setFill(color == null ? Color.WHITE : color);
+        _textView.setFill(color == null ? Color.WHITE : color);
 
         // Get xstring font size and scale up to 12pt if any string run is smaller
         double fsize = 12;
         for (TextLine line : text.getRichText().getLines())
             for (TextRun run : line.getRuns())
                 fsize = Math.min(fsize, run.getFont().getSize());
-        _textArea.setFontScale(fsize < 12 ? 12 / fsize : 1);
+        _textView.setFontScale(fsize < 12 ? 12 / fsize : 1);
 
         // Update MarginText, RoundingThumb, RoundingText
         setViewValue("MarginText", text.getMarginString());
@@ -252,9 +250,9 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
     }
 
     /**
-     * Called when TextArea changes selection.
+     * Called when TextView.Selection changes.
      */
-    private void textAreaChangedSel()
+    private void handleTextViewSelectionChange()
     {
         // If in resetUI, just return
         if (isSendEventDisabled()) return;
@@ -267,13 +265,13 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
         if (textShape != editor.getSuperSelectedShape())
             editor.setSuperSelectedShape(textShape);
 
-        // Get TextEditor and update sel from TextArea
+        // Get TextEditor and update selection from TextView
         RMTextEditor textEditor = editor.getTextEditor();
         if (textEditor != null) {
             TextBlock textBlock = textEditor.getTextBox();
             int textStartCharIndex = textBlock.getStartCharIndex();
-            int selStartCharIndex = Math.max(_textArea.getSelStart() - textStartCharIndex, 0);
-            int selEndCharIndex = Math.max(_textArea.getSelEnd() - textStartCharIndex, 0);
+            int selStartCharIndex = Math.max(_textView.getSelStart() - textStartCharIndex, 0);
+            int selEndCharIndex = Math.max(_textView.getSelEnd() - textStartCharIndex, 0);
             textEditor.setSel(selStartCharIndex, selEndCharIndex);
         }
 
@@ -569,7 +567,7 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
     /**
      * Handle changes to Selected TextShape.RichText
      */
-    protected void richTextDidPropChange(PropChange aPC)
+    protected void handleTextShapeTextBlockPropChange(PropChange aPC)
     {
         // If updating size, reset text width & height to accommodate text
         if (_updatingSize) {

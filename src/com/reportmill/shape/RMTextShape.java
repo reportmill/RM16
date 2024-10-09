@@ -731,7 +731,9 @@ public class RMTextShape extends RMRectShape {
         if (_textBox != null) return _textBox;
 
         // Create and set
-        _textBox = new TextBox(true);
+        RMXString xstr = getXString();
+        TextBlock textBlock = xstr.getRichText();
+        _textBox = new TextBox(textBlock);
         _textBox.setWrapLines(true);
         updateTextBox();
 
@@ -744,11 +746,6 @@ public class RMTextShape extends RMRectShape {
      */
     protected void updateTextBox()
     {
-        // Get/set text block
-        RMXString xstr = getXString();
-        TextBlock textBlock = xstr.getRichText();
-        _textBox.setSourceText(textBlock);
-
         // Get/set text bounds
         Insets pad = getMargin();
         double textW = Math.max(getWidth() - pad.getWidth(), 0);
@@ -784,16 +781,8 @@ public class RMTextShape extends RMRectShape {
      */
     public RMTextEditor getTextEditor()
     {
-        // If already set, just return
         if (_textEditor != null) return _textEditor;
-
-        // Create and set
-        _textEditor = new RMTextEditor();
-        _textEditor.setTextBox(getTextBox());
-        _textEditor.setXString(getXString());
-
-        // Return
-        return _textEditor;
+        return _textEditor = new RMTextEditor(getTextBox());
     }
 
     /**

@@ -932,7 +932,7 @@ public class RMTextShape extends RMRectShape {
 
         // Paint TextEditor (if editing text)
         if (isTextEditorSet())
-            getTextEditor().paintText(aPntr);
+            getTextEditor().paintAll(aPntr);
 
         // Otherwise just paint TextBox
         else getTextBox().paint(aPntr);

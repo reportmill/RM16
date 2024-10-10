@@ -258,32 +258,39 @@ public class RMTextEditor extends TextAdapter {
     public double getPrefHeight()  { return getPrefHeight(-1); }
 
     /**
-     * Paints a given TextEditor.
+     * Override to support spell check paint.
      */
-    public void paintText(Painter aPntr)
+    @Override
+    public void paintAll(Painter aPntr)
     {
         // Paint selection
         paintSel(aPntr);
 
-        // If spell checking, get path for misspelled words and draw
-        if (isSpellChecking() && length() > 0) {
+        // Paint spell check
+        if (isSpellChecking() && length() > 0)
+            paintSpellCheck(aPntr);
 
-            // Set RM SpellCheck
-            snap.text.SpellCheck.setSharedClass(RMSpellCheck.class);
+        // Paint Text
+        paintText(aPntr);
+    }
 
-            // Get spelling path
-            Shape spellingPath = snap.text.SpellCheck.getSpellingPath(getTextBox(), getSelStart());
+    /**
+     * Paints spell check.
+     */
+    private void paintSpellCheck(Painter aPntr)
+    {
+        // Set RM SpellCheck
+        snap.text.SpellCheck.setSharedClass(RMSpellCheck.class);
 
-            // Paint spelling path
-            aPntr.setColor(Color.RED);
-            aPntr.setStroke(Stroke.StrokeDash1);
-            aPntr.draw(spellingPath);
-            aPntr.setColor(Color.BLACK);
-            aPntr.setStroke(Stroke.Stroke1);
-        }
+        // Get spelling path
+        Shape spellingPath = snap.text.SpellCheck.getSpellingPath(_textBlock, getSelStart());
 
-        // Paint TextBox
-        _textBlock.paint(aPntr);
+        // Paint spelling path
+        aPntr.setColor(Color.RED);
+        aPntr.setStroke(Stroke.StrokeDash1);
+        aPntr.draw(spellingPath);
+        aPntr.setColor(Color.BLACK);
+        aPntr.setStroke(Stroke.Stroke1);
     }
 
     /**

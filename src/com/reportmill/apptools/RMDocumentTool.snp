@@ -1,61 +1,89 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ColView FillWidth="true">
-  <SpringView Name="BasicPanel" Width="275" Height="300" PrefWidth="275" PrefHeight="300">
-    <TitleView X="2" Width="170" Height="150" Text="Paper Size">
-      <SpringView Width="170" Height="150" PrefWidth="170" PrefHeight="150">
-        <View Name="PageSizeView" X="4" Y="2" Width="162" Height="108" Class="com.reportmill.apptools.RMDocumentTool$PageSizeView" />
-        <Label X="2" Y="110" Width="36" Height="18" Align="CENTER_RIGHT" Text="Width:" />
-        <TextField Name="PageWidthText" X="38" Y="110" Width="44" Height="18" Align="CENTER" />
-        <Label X="84" Y="110" Width="36" Height="18" Align="CENTER_RIGHT" Text="Height:" />
-        <TextField Name="PageHeightText" X="120" Y="110" Width="44" Height="18" Align="CENTER" />
-      </SpringView>
-    </TitleView>
-    <TitleView X="174" Width="99" Height="42" Text="Paper Size">
-      <SpringView Width="99" Height="42" PrefWidth="99" PrefHeight="42">
-        <ComboBox Name="PaperSizeComboBox" X="3" Width="87" Height="20" />
-      </SpringView>
-    </TitleView>
-    <TitleView X="174" Y="44" Width="99" Height="42" Text="Units">
-      <SpringView Width="99" Height="42" PrefWidth="99" PrefHeight="42">
-        <ComboBox Name="UnitComboBox" X="3" Width="87" Height="20" />
-      </SpringView>
-    </TitleView>
-    <TitleView X="174" Y="88" Width="99" Height="62" Text="Orientation">
-      <SpringView Width="99" Height="62" PrefWidth="99" PrefHeight="62">
-        <RadioButton Name="PortraitRadioButton" X="1" Width="91" Height="20" Text="Portrait" GroupName="orbg" />
-        <RadioButton Name="LandscapeRadioButton" X="1" Y="20" Width="91" Height="20" Text="Landscape" GroupName="orbg" />
-      </SpringView>
-    </TitleView>
-    <TitleView X="2" Y="152" Width="170" Height="80" Text="Margins">
-      <SpringView Width="170" Height="80" PrefWidth="170" PrefHeight="80">
-        <Label Width="36" Height="18" Align="CENTER_RIGHT" Text="Left:" />
-        <TextField Name="LeftMarginText" X="36" Width="44" Height="18" Align="CENTER" />
-        <Label Y="20" Width="36" Height="18" Align="CENTER_RIGHT" Text="Right:" />
-        <TextField Name="RightMarginText" X="36" Y="20" Width="44" Height="18" Align="CENTER" />
-        <Label X="82" Width="36" Height="18" Align="CENTER_RIGHT" Text="Top:" />
-        <TextField Name="TopMarginText" X="118" Width="44" Height="18" Align="CENTER" />
-        <Label X="82" Y="20" Width="36" Height="18" Align="CENTER_RIGHT" Text="Botm:" />
-        <TextField Name="BottomMarginText" X="118" Y="20" Width="44" Height="18" Align="CENTER" />
-        <CheckBox Name="DrawMarginCheckBox" X="18" Y="42" Width="70" Height="18" Text="Show" />
-        <CheckBox Name="SnapMarginCheckBox" X="98" Y="42" Width="60" Height="18" Text="Snap" />
-      </SpringView>
-    </TitleView>
-    <TitleView X="174" Y="152" Width="99" Height="80" Text="Grid">
-      <SpringView Width="99" Height="80" PrefWidth="99" PrefHeight="80">
-        <CheckBox Name="ShowGridCheckBox" X="2" Width="91" Height="20" Text="Show" />
-        <CheckBox Name="SnapGridCheckBox" X="2" Y="20" Width="91" Height="20" Text="Snap" />
-        <TextField Name="GridSpacingText" X="6" Y="40" Width="85" Height="18" Align="CENTER" />
-      </SpringView>
-    </TitleView>
-    <TitleView X="2" Y="234" Width="271" Height="60" Text="Page Layout">
-      <SpringView Width="271" Height="60" PrefWidth="271" PrefHeight="60">
-        <RadioButton Name="SingleRadio" X="2" Width="120" Height="20" Text="Single Page" />
-        <RadioButton Name="DoubleRadio" X="2" Y="20" Width="120" Height="20" Text="Double Page" />
-        <RadioButton Name="FacingRadio" X="128" Width="100" Height="20" Text="Facing" />
+<ColView Padding="4" FillWidth="true">
+  <TitleView Margin="2" Padding="2,6,6,6" Text="Paper Size">
+    <ColView>
+      <RowView>
+        <View Name="PageSizeView" PrefWidth="100" PrefHeight="100" Margin="5" Class="com.reportmill.apptools.RMDocumentTool$PageSizeView" />
+        <ColView Margin="0,0,0,10">
+          <Label Text="Orientation:" />
+          <RadioButton Name="PortraitRadioButton" Text="Portrait" GroupName="orbg" />
+          <RadioButton Name="LandscapeRadioButton" Text="Landscape" GroupName="orbg" />
+        </ColView>
+      </RowView>
+      <RowView>
+        <ColView Align="TOP_RIGHT" Margin="0,0,0,8" Spacing="4">
+          <RowView Align="CENTER_RIGHT">
+            <Label Margin="4" Text="Size:" />
+            <ComboBox Name="PaperSizeComboBox" MinWidth="70" />
+          </RowView>
+          <RowView Align="CENTER_RIGHT">
+            <Label Margin="4" Text="Width:" />
+            <TextField Name="PageWidthText" PrefWidth="60" Align="CENTER" />
+          </RowView>
+        </ColView>
+        <ColView Align="TOP_RIGHT" Margin="0,0,0,12" Spacing="4">
+          <RowView Align="CENTER_RIGHT">
+            <Label Margin="4" Text="Units:" />
+            <ComboBox Name="UnitComboBox" MinWidth="70" />
+          </RowView>
+          <RowView Align="CENTER_RIGHT">
+            <Label Margin="4" Text="Height:" />
+            <TextField Name="PageHeightText" PrefWidth="60" Align="CENTER" />
+          </RowView>
+        </ColView>
+      </RowView>
+    </ColView>
+  </TitleView>
+  <TitleView Margin="2" Padding="6" Text="Margins">
+    <RowView>
+      <ColView Align="TOP_RIGHT" Margin="0,0,0,8" Spacing="4">
+        <RowView Align="CENTER_RIGHT">
+          <Label Margin="4" Text="Top:" />
+          <TextField Name="TopMarginText" PrefWidth="50" Align="CENTER" />
+        </RowView>
+        <RowView Align="CENTER_RIGHT">
+          <Label Margin="4" Text="Left:" />
+          <TextField Name="LeftMarginText" PrefWidth="50" Align="CENTER" />
+        </RowView>
+        <CheckBox Name="DrawMarginCheckBox" Margin="4" LeanX="CENTER" Text="Show" />
+      </ColView>
+      <ColView Align="TOP_RIGHT" Margin="0,0,0,12" Spacing="4">
+        <RowView Align="CENTER_RIGHT">
+          <Label Margin="4" Text="Bottom:" />
+          <TextField Name="BottomMarginText" PrefWidth="50" Align="CENTER" />
+        </RowView>
+        <RowView Align="CENTER_RIGHT">
+          <Label Margin="4" Text="Right:" />
+          <TextField Name="RightMarginText" PrefWidth="50" Align="CENTER" />
+        </RowView>
+        <CheckBox Name="SnapMarginCheckBox" Margin="4" LeanX="CENTER" Text="Snap" />
+      </ColView>
+    </RowView>
+  </TitleView>
+  <TitleView Margin="2" Padding="6" Text="Grid">
+    <RowView Align="TOP_LEFT">
+      <ColView Margin="0,0,0,8">
+        <CheckBox Name="ShowGridCheckBox" Margin="4" Text="Show" />
+        <CheckBox Name="SnapGridCheckBox" Margin="4" Text="Snap" />
+      </ColView>
+      <RowView Margin="0,0,0,20">
+        <Label Margin="4" Text="Spacing:" />
+        <TextField Name="GridSpacingText" Align="CENTER" Margin="4" PrefWidth="50" />
+      </RowView>
+    </RowView>
+  </TitleView>
+  <TitleView Margin="2" Padding="6" Text="Page Layout">
+    <RowView>
+      <ColView Margin="0,0,0,8" Spacing="2">
+        <RadioButton Name="SingleRadio" Text="Single Page" />
+        <RadioButton Name="DoubleRadio" Text="Double Page" />
+      </ColView>
+      <ColView Margin="0,0,0,10" Spacing="2">
+        <RadioButton Name="FacingRadio" Text="Facing" />
         <RadioButton Name="ContinuousRadio" X="128" Y="20" Width="100" Height="20" Text="Continuous" />
-      </SpringView>
-    </TitleView>
-  </SpringView>
+      </ColView>
+    </RowView>
+  </TitleView>
   <ColView Name="AdvancedPanel" Padding="5" Spacing="5" FillWidth="true">
     <RowView Padding="0,0,3,3" Spacing="4">
       <Label Text="String for Null:" />

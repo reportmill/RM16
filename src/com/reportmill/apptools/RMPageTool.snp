@@ -1,18 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<SpringView Width="275" Height="325" PrefWidth="275" PrefHeight="325">
-  <Label X="9" Y="32" Width="57" Height="20" Font="Arial Bold 11" Text="Layers:" />
-  <Button Name="AllVisibleButton" X="106" Y="30" Width="26" Height="26" ImageName="LayerVisible.png" />
-  <Button Name="AllInvisibleButton" X="132" Y="30" Width="26" Height="26" ImageName="LayerInvisible.png" />
-  <Button Name="AllLockedButton" X="158" Y="30" Width="26" Height="26" ImageName="LayerLocked.png" />
-  <TableView Name="LayersTable" X="10" Y="57" Width="174" Height="119">
-    <TableCol GrowWidth="true" />
-    <TableCol PrefWidth="30" />
-  </TableView>
-  <Button Name="AddButton" X="186" Y="57" Width="89" Height="25" Text="Add" />
-  <Button Name="RemoveButton" X="186" Y="86" Width="89" Height="25" Text="Remove" />
-  <Button Name="RenameButton" X="186" Y="115" Width="89" Height="25" Text="Rename" />
-  <Button Name="MergeButton" X="186" Y="144" Width="89" Height="25" Text="Merge" />
-  <CheckBox Name="PaintBackCheckBox" X="54" Y="184" Width="138" Height="22" Text="Paint Background" />
-  <Label X="5" Y="5" Width="68" Height="18" Text="Dataset Key:" />
-  <TextField Name="DatasetKeyText" X="73" Y="4" Width="196" Height="20" />
-</SpringView>
+<ColView Spacing="5" FillWidth="true">
+  <RowView Margin="4">
+    <Label Margin="4" Text="Dataset Key:" />
+    <TextField Name="DatasetKeyText" GrowWidth="true" />
+  </RowView>
+  <RowView>
+    <ColView Margin="4" Spacing="4" GrowWidth="true" FillWidth="true">
+      <RowView>
+        <Label Font="Arial Bold 11" Text="Layers:" />
+        <Button Name="AllVisibleButton" PrefWidth="26" PrefHeight="26" LeanX="RIGHT" ImageName="LayerVisible.png" />
+        <Button Name="AllInvisibleButton" PrefWidth="26" PrefHeight="26" ImageName="LayerInvisible.png" />
+        <Button Name="AllLockedButton" PrefWidth="26" PrefHeight="26" ImageName="LayerLocked.png" />
+      </RowView>
+      <TableView Name="LayersTable" PrefHeight="120">
+        <TableCol GrowWidth="true" />
+        <TableCol PrefWidth="30" />
+      </TableView>
+      <CheckBox Name="PaintBackCheckBox" Align="CENTER" Text="Paint Background" />
+    </ColView>
+    <ColView Margin="4" Spacing="4">
+      <Button Name="AddButton" PrefWidth="80" Height="25" Text="Add" />
+      <Button Name="RemoveButton" PrefWidth="80" Text="Remove" />
+      <Button Name="RenameButton" PrefWidth="80" Text="Rename" />
+      <Button Name="MergeButton" PrefWidth="80" Text="Merge" />
+    </ColView>
+  </RowView>
+</ColView>

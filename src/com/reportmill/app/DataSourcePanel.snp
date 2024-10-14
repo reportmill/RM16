@@ -1,22 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<SpringView Width="275" Height="325" PrefWidth="275" PrefHeight="325">
-  <Label Name="DSLabel" X="4" Y="4" Width="228" Height="18" Font="Arial Bold 14" Text="XXX DataSource" />
-  <Label X="10" Y="24" Width="130" Height="16" Text="Entities" />
-  <Label X="145" Y="24" Width="130" Height="16" Text="Properties" />
-  <ListView Name="EntitiesList" X="5" Y="40" Width="130" Height="170" />
-  <ListView Name="PropertiesList" X="140" Y="40" Width="130" Height="170" />
-  <SwitchView Name="CardPanel" Y="210" Width="275" Height="115">
-    <SpringView Name="EntityPanel" Width="275" Height="115" PrefWidth="275" PrefHeight="115">
-      <Label X="5" Y="5" Width="100" Height="15" Text="Entity Attributes" />
-    </SpringView>
-    <SpringView Name="PropertyPanel" Width="275" Height="115" PrefWidth="275" PrefHeight="115">
-      <Label X="5" Y="5" Width="100" Height="15" Text="Property Attributes" />
-      <Label X="55" Y="27" Width="50" Height="15" Text="Type:" />
-      <ComboBox Name="TypeComboBox" X="105" Y="26" Width="140" Height="20" />
-      <Label X="55" Y="49" Width="50" Height="15" Text="Subtype:" />
-      <ComboBox Name="SubtypeComboBox" X="105" Y="48" Width="140" Height="20" />
-      <CheckBox Name="PrimaryCheckBox" X="55" Y="70" Width="150" Height="20" Text="Primary" />
-      <CheckBox Name="PrivateCheckBox" X="55" Y="90" Width="150" Height="20" Text="Private" />
-    </SpringView>
+<ColView PrefWidth="275">
+  <Label Name="DSLabel" Margin="8" Font="Arial Bold 14" Text="XXX DataSource" />
+  <RowView>
+    <ColView Margin="4" Spacing="2">
+      <Label Text="Entities" />
+      <ListView Name="EntitiesList" PrefWidth="130" PrefHeight="170" />
+    </ColView>
+    <ColView Margin="4" Spacing="2">
+      <Label Text="Properties" />
+      <ListView Name="PropertiesList" PrefWidth="130" PrefHeight="170" />
+    </ColView>
+  </RowView>
+  <SwitchView Name="CardPanel" PrefWidth="275" PrefHeight="140">
+    <Label Align="CENTER" Padding="5" Text="Entity Attributes" />
+    <ColView Name="PropertyPanel" Padding="8" Spacing="4">
+      <Label Margin="5" Text="Property Attributes" />
+      <RowView>
+        <Label Margin="4" Text="Type:" />
+        <ComboBox Name="TypeComboBox" PrefWidth="140" />
+      </RowView>
+      <RowView>
+        <Label Margin="4" Text="Subtype:" />
+        <ComboBox Name="SubtypeComboBox" PrefWidth="140" />
+      </RowView>
+      <CheckBox Name="PrimaryCheckBox" Margin="4" Text="Primary" />
+      <CheckBox Name="PrivateCheckBox" Margin="4" Text="Private" />
+    </ColView>
   </SwitchView>
-</SpringView>
+</ColView>

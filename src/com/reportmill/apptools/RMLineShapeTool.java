@@ -7,6 +7,7 @@ import java.util.*;
 import snap.geom.Point;
 import snap.gfx.*;
 import snap.util.Convert;
+import snap.util.ListUtils;
 import snap.view.*;
 import snap.web.WebURL;
 
@@ -19,27 +20,20 @@ public class RMLineShapeTool<T extends RMLineShape> extends RMTool<T> {
     boolean _hysteresis = false;
 
     // The list of arrow head shapes
-    static RMShape _arrowHeads[];
+    static RMShape[] _arrowHeads;
 
     // Constants for line segment points
-    public static final byte HandleStartPoint = 0;
     public static final byte HandleEndPoint = 1;
 
     /**
      * Returns the shape class that this tool is responsible for.
      */
-    public Class getShapeClass()
-    {
-        return RMLineShape.class;
-    }
+    public Class<T> getShapeClass()  { return (Class<T>) RMLineShape.class; }
 
     /**
      * Returns the name of this tool to be displayed by inspector.
      */
-    public String getWindowTitle()
-    {
-        return "Line Inspector";
-    }
+    public String getWindowTitle()  { return "Line Inspector"; }
 
     /**
      * Event handling - overridden to install cross-hair cursor.
@@ -86,10 +80,7 @@ public class RMLineShapeTool<T extends RMLineShape> extends RMTool<T> {
     /**
      * Editor method (returns the number of handles).
      */
-    public int getHandleCount(T aShape)
-    {
-        return 2;
-    }
+    public int getHandleCount(T aShape)  { return 2; }
 
     /**
      * Editor method.
@@ -121,9 +112,7 @@ public class RMLineShapeTool<T extends RMLineShape> extends RMTool<T> {
 
         // Extract lines and heads and return array of heads
         List<RMLineShape> lines = doc.getChildrenWithClass(RMLineShape.class);
-        List<RMShape> heads = new ArrayList(lines.size());
-        for (RMLineShape ln : lines) heads.add(ln.getArrowHead());
-        return _arrowHeads = heads.toArray(new RMShape[lines.size()]);
+        return ListUtils.mapToArray(lines, line -> line.getArrowHead(), RMShape.class);
     }
 
     /**
@@ -146,7 +135,7 @@ public class RMLineShapeTool<T extends RMLineShape> extends RMTool<T> {
         // Add "None" menu item
         menuBuilder.name("ArrowsMenuButtonMenuItem 999").text("None").save();
         MenuItem[] menuItems = menuBuilder.buildAll();
-        //menuButton.addItem(mi);
+        menuButton.setMenuItems(menuItems);
     }
 
     /**
@@ -190,5 +179,4 @@ public class RMLineShapeTool<T extends RMLineShape> extends RMTool<T> {
             line.setArrowHead(ahead != null ? (RMLineShape.ArrowHead) ahead.clone() : null);
         }
     }
-
 }

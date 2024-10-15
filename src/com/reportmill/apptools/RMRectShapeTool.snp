@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<SpringView Width="275" Height="325" PrefWidth="275" PrefHeight="325">
-  <TitleView X="13" Y="26" Width="250" Height="48" Text="Rounding Radius">
-    <SpringView Width="250" Height="48" PrefWidth="250" PrefHeight="48">
-      <ThumbWheel Name="RoundingThumb" X="5" Y="7" Width="180" Height="16" AbsMin="0" Round="1" />
-      <TextField Name="RoundingText" X="190" Y="5" Width="50" Height="20" Align="CENTER" />
-    </SpringView>
+<ColView Align="TOP_CENTER">
+  <TitleView PrefWidth="250" PrefHeight="48" Margin="20,0,0,0" Padding="8" Text="Rounding Radius">
+    <RowView Align="CENTER" Spacing="4">
+      <ThumbWheel Name="RoundingThumb" PrefWidth="160" PrefHeight="16" AbsMin="0" Round="1" />
+      <TextField Name="RoundingText" PrefWidth="50" Align="CENTER" />
+    </RowView>
   </TitleView>
-</SpringView>
+</ColView>

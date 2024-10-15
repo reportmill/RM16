@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<SpringView Width="275" Height="325" PrefWidth="275" PrefHeight="325">
-  <Label X="92" Y="67" Width="74" Height="22" Align="CENTER" Text="Arrow Head:" />
-  <MenuButton Name="ArrowsMenuButton" X="113" Y="95" Width="36" Height="24" />
-  <TitleView X="58" Y="181" Width="152" Height="85" Text="Scale">
-    <SpringView Width="152" Height="85" PrefWidth="152" PrefHeight="85">
-      <ThumbWheel Name="ScaleThumbWheel" X="24" Y="35" Width="100" Height="16" Type="linear" Max="4" AbsMin="0" />
-      <TextField Name="ScaleText" X="24" Y="8" Width="100" Height="22" Align="CENTER" Text="1" />
-    </SpringView>
+<ColView Align="TOP_CENTER">
+  <Label Margin="20,8,8,8" Text="Arrow Head:" />
+  <MenuButton Name="ArrowsMenuButton" PrefWidth="36" PrefHeight="24" />
+  <TitleView PrefWidth="152" PrefHeight="85" Margin="20,8,8,8" Text="Scale">
+    <ColView Align="CENTER" Spacing="4">
+      <ThumbWheel Name="ScaleThumbWheel" PrefWidth="100" PrefHeight="16" Type="linear" Max="4" AbsMin="0" />
+      <TextField Name="ScaleText" PrefWidth="100" Align="CENTER" Text="1" />
+    </ColView>
   </TitleView>
-</SpringView>
+</ColView>

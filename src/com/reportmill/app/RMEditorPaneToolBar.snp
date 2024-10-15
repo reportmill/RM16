@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ColView FillWidth="true">
   <RowView Padding="6,10,4,10" Spacing="1">
-    <Button Name="NewButton" PrefWidth="22" PrefHeight="22" Padding="0" ToolTip="New" ImageName="File_New.png" ShowArea="false" />
-    <Button Name="OpenButton" PrefWidth="22" PrefHeight="22" Padding="0" ToolTip="Open" ImageName="File_Open.png" ShowArea="false" />
-    <Button Name="SaveButton" PrefWidth="22" PrefHeight="22" Padding="0" ToolTip="Save" ImageName="File_Save.png" ShowArea="false" />
-    <Button Name="PrintButton" PrefWidth="22" PrefHeight="22" Padding="0" ToolTip="Print" ImageName="File_Print.png" ShowArea="false" />
+    <Button Name="NewButton" PrefWidth="24" PrefHeight="24" Padding="0" ToolTip="New" ImageName="File_New.png" ShowArea="false" />
+    <Button Name="OpenButton" PrefWidth="24" PrefHeight="24" Padding="0" ToolTip="Open" ImageName="File_Open.png" ShowArea="false" />
+    <Button Name="SaveButton" PrefWidth="24" PrefHeight="24" Padding="0" ToolTip="Save" ImageName="File_Save.png" ShowArea="false" />
+    <Button Name="PrintButton" PrefWidth="24" PrefHeight="24" Padding="0" ToolTip="Print" ImageName="File_Print.png" ShowArea="false" />
     <Separator PrefWidth="8" PrefHeight="18" Vertical="true" />
-    <Button Name="CutButton" PrefWidth="22" PrefHeight="22" Padding="0" ToolTip="Cut" ImageName="Edit_Cut.png" ShowArea="false" />
-    <Button Name="CopyButton" PrefWidth="22" PrefHeight="22" Padding="0" ToolTip="Copy" ImageName="Edit_Copy.png" ShowArea="false" />
-    <Button Name="PasteButton" PrefWidth="22" PrefHeight="22" Padding="0" ToolTip="Paste" ImageName="Edit_Paste.png" ShowArea="false" />
-    <Button Name="DeleteButton" PrefWidth="22" PrefHeight="22" Padding="0" ToolTip="Delete" ImageName="Edit_Delete.png" ShowArea="false" />
+    <Button Name="CutButton" PrefWidth="24" PrefHeight="24" Padding="0" ToolTip="Cut" ImageName="Edit_Cut.png" ShowArea="false" />
+    <Button Name="CopyButton" PrefWidth="24" PrefHeight="24" Padding="0" ToolTip="Copy" ImageName="Edit_Copy.png" ShowArea="false" />
+    <Button Name="PasteButton" PrefWidth="24" PrefHeight="24" Padding="0" ToolTip="Paste" ImageName="Edit_Paste.png" ShowArea="false" />
+    <Button Name="DeleteButton" PrefWidth="24" PrefHeight="24" Padding="0" ToolTip="Delete" ImageName="Edit_Delete.png" ShowArea="false" />
     <Separator PrefWidth="8" PrefHeight="18" Vertical="true" />
-    <Button Name="UndoButton" PrefWidth="22" PrefHeight="22" Padding="0" ToolTip="Undo" ImageName="Edit_Undo.png" ShowArea="false" />
-    <Button Name="RedoButton" PrefWidth="22" PrefHeight="22" Padding="0" ToolTip="Redo" ImageName="Edit_Redo.png" ShowArea="false" />
+    <Button Name="UndoButton" PrefWidth="24" PrefHeight="24" Padding="0" ToolTip="Undo" ImageName="Edit_Undo.png" ShowArea="false" />
+    <Button Name="RedoButton" PrefWidth="24" PrefHeight="24" Padding="0" ToolTip="Redo" ImageName="Edit_Redo.png" ShowArea="false" />
     <Separator PrefWidth="14" PrefHeight="18" Vertical="true" />
-    <ColorButton Name="FillColorButton" PrefWidth="32" PrefHeight="22" ToolTip="Set Fill Color" Title="Fill Color" />
-    <ColorButton Name="StrokeColorButton" PrefWidth="32" PrefHeight="22" ToolTip="Set Stroke Color" Title="Stroke Color" />
-    <ColorButton Name="TextColorButton" PrefWidth="32" PrefHeight="22" ToolTip="Set Text Color" Title="Text Color" />
+    <ColorButton Name="FillColorButton" PrefWidth="32" PrefHeight="24" ToolTip="Set Fill Color" Title="Fill Color" />
+    <ColorButton Name="StrokeColorButton" PrefWidth="32" PrefHeight="24" ToolTip="Set Stroke Color" Title="Stroke Color" />
+    <ColorButton Name="TextColorButton" PrefWidth="32" PrefHeight="24" ToolTip="Set Text Color" Title="Text Color" />
     <Separator PrefWidth="8" PrefHeight="18" Vertical="true" />
-    <ToggleButton Name="MoneyButton" PrefWidth="22" PrefHeight="22" Padding="0" ToolTip="Money Format" ImageName="Format_Money.png" ShowArea="false" />
-    <ToggleButton Name="PercentButton" PrefWidth="22" PrefHeight="22" Padding="0" ToolTip="Percent Format" ImageName="Format_Percent.png" ShowArea="false" />
-    <Button Name="DecimalAddButton" PrefWidth="22" PrefHeight="22" Padding="0" ToolTip="Add Decimal" ImageName="Format_DecimalAdd.png" ShowArea="false" />
-    <Button Name="DecimalRemoveButton" PrefWidth="22" PrefHeight="22" Padding="0" ToolTip="Remove Decimal" ImageName="Format_DecimalRemove.png" ShowArea="false" />
+    <ToggleButton Name="MoneyButton" PrefWidth="24" PrefHeight="24" Padding="0" ToolTip="Money Format" ImageName="Format_Money.png" ShowArea="false" />
+    <ToggleButton Name="PercentButton" PrefWidth="24" PrefHeight="24" Padding="0" ToolTip="Percent Format" ImageName="Format_Percent.png" ShowArea="false" />
+    <Button Name="DecimalAddButton" PrefWidth="24" PrefHeight="24" Padding="0" ToolTip="Add Decimal" ImageName="Format_DecimalAdd.png" ShowArea="false" />
+    <Button Name="DecimalRemoveButton" PrefWidth="24" PrefHeight="24" Padding="0" ToolTip="Remove Decimal" ImageName="Format_DecimalRemove.png" ShowArea="false" />
     <Button Name="SamplesButton" PrefWidth="60" PrefHeight="22" Padding="0" LeanX="CENTER" ToolTip="Show Samples" Text="Samples" />
-    <Button Name="PreviewHTMLButton" PrefWidth="22" PrefHeight="22" Padding="0" LeanX="RIGHT" ToolTip="Preview HTML" ImageName="Preview_HTML.png" ShowArea="false" />
-    <Button Name="PreviewPDFButton" PrefWidth="22" PrefHeight="22" Padding="0" ToolTip="Preview PDF" ImageName="Preview_PDF.png" ShowArea="false" />
+    <Button Name="PreviewHTMLButton" PrefWidth="24" PrefHeight="24" Padding="0" LeanX="RIGHT" ToolTip="Preview HTML" ImageName="Preview_HTML.png" ShowArea="false" />
+    <Button Name="PreviewPDFButton" PrefWidth="24" PrefHeight="24" Padding="0" ToolTip="Preview PDF" ImageName="Preview_PDF.png" ShowArea="false" />
   </RowView>
   <RowView Padding="4,0,6,10" Spacing="1">
     <ToggleButton Name="PreviewEditButton" PrefWidth="84" PrefHeight="24" Text="Preview" />
@@ -42,9 +42,9 @@
     <ComboBox Name="FontFaceComboBox" MinWidth="80" PrefHeight="22" ShowTextField="true" ShowButton="false" FilterList="true" />
     <Label PrefWidth="1" PrefHeight="8" />
     <ComboBox Name="FontSizeComboBox" MinWidth="35" PrefHeight="22" ShowTextField="true" ShowButton="false" />
-    <Button Name="FontSizeUpButton" PrefWidth="22" PrefHeight="22" Padding="0" ToolTip="Increase Font Size" ImageName="Format_IncreaseFont.png" ShowArea="false" />
-    <Button Name="FontSizeDownButton" PrefWidth="22" PrefHeight="22" Padding="0" ToolTip="Decrease Font Size" ImageName="Format_DecreaseFont.png" ShowArea="false" />
-    <ToggleButton Name="BoldButton" PrefWidth="22" PrefHeight="22" Padding="0" ToolTip="Make Bold" ImageName="Format_Bold.png" ShowArea="false" />
+    <Button Name="FontSizeUpButton" PrefWidth="24" PrefHeight="24" Padding="0" ToolTip="Increase Font Size" ImageName="Format_IncreaseFont.png" ShowArea="false" />
+    <Button Name="FontSizeDownButton" PrefWidth="24" PrefHeight="24" Padding="0" ToolTip="Decrease Font Size" ImageName="Format_DecreaseFont.png" ShowArea="false" />
+    <ToggleButton Name="BoldButton" PrefWidth="24" PrefHeight="24" Padding="0" ToolTip="Make Bold" ImageName="Format_Bold.png" ShowArea="false" />
     <Separator PrefWidth="8" PrefHeight="18" Vertical="true" />
     <MenuButton Name="AddShapesMenuButton" PrefWidth="33" PrefHeight="24" Padding="0" ToolTip="Add Shapes" ImageName="AddShapes.png" ShowArea="false" ShowArrow="false">
       <MenuItem Name="AddTableButton" Text="Table" ImageName="/com/reportmill/apptools/RMTable.png" />

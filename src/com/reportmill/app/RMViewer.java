@@ -346,7 +346,7 @@ public class RMViewer extends ParentView {
      */
     public Rect getZoomFocusRect()
     {
-        return getVisRect();
+        return getVisibleBounds();
     }
 
     /**

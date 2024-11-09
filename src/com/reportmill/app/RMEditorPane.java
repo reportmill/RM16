@@ -315,7 +315,7 @@ public class RMEditorPane extends RMViewerPane {
 
         // If Editor.MouseClick and DataSource is set and we're editing and DataSource icon clicked, show DS Inspector
         else if (anEvent.isMouseClick() && getDataSource() != null && isEditing()) {
-            Rect r = getEditor().getVisRect(); // Get visible rect
+            Rect r = getEditor().getVisibleBounds(); // Get visible rect
             if (anEvent.getX() > r.getMaxX() - 53 && anEvent.getY() > r.getMaxY() - 53) { // If DataSource icon clicked
                 if (anEvent.isShortcutDown()) setDataSource(null); // If cmd key down, clear the DataSource
                 else getInspectorPanel().setVisible(7); // otherwise show DataSource inspector

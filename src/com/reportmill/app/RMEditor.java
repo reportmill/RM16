@@ -917,7 +917,7 @@ public class RMEditor extends RMViewer implements DeepChangeListener {
     public Rect getZoomFocusRect()
     {
         Rect sbounds = getSelectedShapesBounds();
-        Rect vrect = getVisRect();
+        Rect vrect = getVisibleBounds();
         sbounds.inset((sbounds.getWidth() - vrect.getWidth()) / 2, (sbounds.getHeight() - vrect.getHeight()) / 2);
         return sbounds;
     }
@@ -941,7 +941,7 @@ public class RMEditor extends RMViewer implements DeepChangeListener {
         if (getDataSource() != null && isEditing()) {
 
             // Get visible rect and image X & Y
-            Rect vrect = getVisRect();
+            Rect vrect = getVisibleBounds();
             int x = (int) vrect.getMaxX() - 53;
             int y = (int) vrect.getMaxY() - 53;
 
@@ -994,7 +994,7 @@ public class RMEditor extends RMViewer implements DeepChangeListener {
             if (isZoomToFactor()) {
                 if (!getSize().equals(getPrefSize()))
                     relayout();
-                if (!getVisRect().contains(getSelectedShapesBounds()) &&
+                if (!getVisibleBounds().contains(getSelectedShapesBounds()) &&
                         getSelectTool().getDragMode() == RMSelectTool.DragMode.Move)
                     scrollToVisible(getSelectedShapesBounds());
             }
@@ -1041,7 +1041,7 @@ public class RMEditor extends RMViewer implements DeepChangeListener {
 
         // If valid drop point, animate into place
         if (aX > 0) {
-            Rect vrect = getVisRect();
+            Rect vrect = getVisibleBounds();
             double dx = aX - (vrect.getMaxX() - 53);
             double dy = aY - (vrect.getMaxY() - 53);
             getAnimCleared(1800).setOnFrame(() -> setDataSourceAnimFrame(dx, dy)).play();

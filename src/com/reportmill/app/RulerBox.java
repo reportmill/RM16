@@ -203,7 +203,7 @@ public class RulerBox extends ParentView {
         protected void paintHor(Painter aPntr)
         {
             // Get ruler bounds in doc coords
-            Rect vrect = _editor.getVisRect();
+            Rect vrect = _editor.getVisibleBounds();
             Rect bnds = new Rect(vrect.x - RULER_WIDTH, 0, getWidth(), RULER_WIDTH);
             bnds = _editor.convertToShape(bnds, _doc).getBounds();
 
@@ -257,7 +257,7 @@ public class RulerBox extends ParentView {
         protected void paintVer(Painter aPntr)
         {
             // Get ruler bounds in doc coords
-            Rect vrect = _editor.getVisRect();
+            Rect vrect = _editor.getVisibleBounds();
             Rect bnds = new Rect(0, vrect.y, RULER_WIDTH, getHeight());
             bnds = _editor.convertToShape(bnds, _doc).getBounds();
 

@@ -1,6 +1,5 @@
 package com.reportmill.app;
 import com.reportmill.shape.*;
-import snap.gfx.Color;
 import snap.view.*;
 
 /**
@@ -28,8 +27,6 @@ public class ShapeTree extends RMEditorPane.SupportPane {
         TreeView<RMShape> shapeTree = new TreeView<>();
         shapeTree.setName("ShapeTree");
         shapeTree.setGrowHeight(true);
-        shapeTree.setBorder(Color.GRAY, 1);
-        shapeTree.getScrollView().setBarSize(14);
         shapeTree.setResolver(new ShapeTreeResolver());
         return _shapeTree = shapeTree;
     }

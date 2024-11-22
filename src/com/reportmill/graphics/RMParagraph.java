@@ -165,8 +165,8 @@ public class RMParagraph implements Cloneable, RMTypes, XMLArchiver.Archivable {
     public RMParagraph deriveAligned(AlignX anAlign)
     {
         RMParagraph ps = clone();
-        if (anAlign == AlignX.Full) ps._lstyle = _lstyle.copyFor(TextLineStyle.JUSTIFY_KEY, true);
-        else ps._lstyle = _lstyle.copyFor(anAlign.hpos());
+        if (anAlign == AlignX.Full) ps._lstyle = _lstyle.copyForPropKeyValue(TextLineStyle.Justify_Prop, true);
+        else ps._lstyle = _lstyle.copyForAlign(anAlign.hpos());
         return ps;
     }
 
@@ -176,9 +176,9 @@ public class RMParagraph implements Cloneable, RMTypes, XMLArchiver.Archivable {
     public RMParagraph deriveIndent(double firstIndent, double leftIndent, double rightIndent)
     {
         RMParagraph ps = clone();
-        ps._lstyle = ps._lstyle.copyFor(TextLineStyle.FIRST_INDENT_KEY, firstIndent);
-        ps._lstyle = ps._lstyle.copyFor(TextLineStyle.LEFT_INDENT_KEY, leftIndent);
-        ps._lstyle = ps._lstyle.copyFor(TextLineStyle.RIGHT_INDENT_KEY, rightIndent);
+        ps._lstyle = ps._lstyle.copyForPropKeyValue(TextLineStyle.FirstIndent_Prop, firstIndent);
+        ps._lstyle = ps._lstyle.copyForPropKeyValue(TextLineStyle.LeftIndent_Prop, leftIndent);
+        ps._lstyle = ps._lstyle.copyForPropKeyValue(TextLineStyle.RightIndent_Prop, rightIndent);
         return ps;
     }
 
@@ -188,7 +188,7 @@ public class RMParagraph implements Cloneable, RMTypes, XMLArchiver.Archivable {
     public RMParagraph deriveLineSpacing(float aHeight)
     {
         RMParagraph ps = clone();
-        ps._lstyle = _lstyle.copyFor(TextLineStyle.SPACING_FACTOR_KEY, aHeight);
+        ps._lstyle = _lstyle.copyForPropKeyValue(TextLineStyle.SpacingFactor_Prop, aHeight);
         return ps;
     }
 
@@ -198,7 +198,7 @@ public class RMParagraph implements Cloneable, RMTypes, XMLArchiver.Archivable {
     public RMParagraph deriveLineGap(float aHeight)
     {
         RMParagraph ps = clone();
-        ps._lstyle = _lstyle.copyFor(TextLineStyle.SPACING_KEY, aHeight);
+        ps._lstyle = _lstyle.copyForPropKeyValue(TextLineStyle.Spacing_Prop, aHeight);
         return ps;
     }
 
@@ -208,7 +208,7 @@ public class RMParagraph implements Cloneable, RMTypes, XMLArchiver.Archivable {
     public RMParagraph deriveLineHeightMin(float aHeight)
     {
         RMParagraph ps = clone();
-        ps._lstyle = _lstyle.copyFor(TextLineStyle.MIN_HEIGHT_KEY, aHeight);
+        ps._lstyle = _lstyle.copyForPropKeyValue(TextLineStyle.MinHeight_Prop, aHeight);
         return ps;
     }
 
@@ -218,7 +218,7 @@ public class RMParagraph implements Cloneable, RMTypes, XMLArchiver.Archivable {
     public RMParagraph deriveLineHeightMax(float aHeight)
     {
         RMParagraph ps = clone();
-        ps._lstyle = _lstyle.copyFor(TextLineStyle.MAX_HEIGHT_KEY, aHeight);
+        ps._lstyle = _lstyle.copyForPropKeyValue(TextLineStyle.MaxHeight_Prop, aHeight);
         return ps;
     }
 

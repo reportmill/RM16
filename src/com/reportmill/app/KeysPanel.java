@@ -433,9 +433,9 @@ public class KeysPanel extends RMEditorPane.SupportPane {
         /**
          * Returns the specific child of the given browser node at the given index.
          */
-        public KeyNode[] getChildren(KeyNode anItem)
+        public List<KeyNode> getChildren(KeyNode anItem)
         {
-            return anItem.getChildren().toArray(new KeyNode[0]);
+            return anItem.getChildren();
         }
 
         // The text of given item

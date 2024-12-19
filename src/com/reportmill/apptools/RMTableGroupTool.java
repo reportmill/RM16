@@ -7,6 +7,7 @@ import com.reportmill.base.Entity;
 import com.reportmill.shape.*;
 import snap.util.StringUtils;
 import snap.view.*;
+import java.util.List;
 
 /**
  * This class handles UI editing of table groups.
@@ -309,9 +310,9 @@ public class RMTableGroupTool<T extends RMTableGroup> extends RMParentShapeTool<
         /**
          * Override to return child tables as TreeItem array.
          */
-        public RMTable[] getChildren(RMTable aTable)
+        public List<RMTable> getChildren(RMTable aTable)
         {
-            return _tgroup.getChildTables(aTable).toArray(new RMTable[0]);
+            return _tgroup.getChildTables(aTable);
         }
 
         // The name of given item

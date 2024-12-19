@@ -2,6 +2,8 @@ package com.reportmill.app;
 import com.reportmill.shape.*;
 import snap.view.*;
 
+import java.util.List;
+
 /**
  * An inspector to show ShapeTree.
  */
@@ -94,10 +96,10 @@ public class ShapeTree extends RMEditorPane.SupportPane {
         /**
          * Returns the children.
          */
-        public RMShape[] getChildren(RMShape aParent)
+        public List<RMShape> getChildren(RMShape aParent)
         {
             RMParentShape par = (RMParentShape) aParent;
-            return par.getChildArray();
+            return par.getChildren();
         }
 
         /**

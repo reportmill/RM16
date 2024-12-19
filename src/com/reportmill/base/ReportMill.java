@@ -131,7 +131,7 @@ public class ReportMill {
         String javaVers = System.getProperty("java.version");
         String user = System.getProperty("user.name");
         String info = String.format("Build Date: %s, Version %.1f, JVM %s, User %s", buildInfo, rmVers, javaVers, user);
-        System.err.println("Initializing ReportMill (" + info + ")");
+        System.out.println("Initializing ReportMill (" + info + ")");
 
         // Set headless
         GFXUtils.setHeadless();

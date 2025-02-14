@@ -171,7 +171,7 @@ public class RMViewerBottomToolBar extends ViewOwner {
         {
             setPrefHeight(aRV.getPrefHeight());
             setPadding(aRV.getPadding());
-            setChildren(aRV.getChildren());
+            setChildren(aRV.getChildrenArray());
         }
 
         /**

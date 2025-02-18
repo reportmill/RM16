@@ -5,10 +5,10 @@
     "main": "index.js",
     "preferGlobal": true,
     "repository": "",
-    "version": "2025.1.22",
+    "version": "2025.2.18",
     "jdeploy": {
         "jdk": false,
-        "javaVersion": "17",
+        "javaVersion": "21",
         "documentTypes": [{
             "editor": true,
             "extension": "rpt",
@@ -16,7 +16,7 @@
             "mimetype": "application/reportmill"
         }],
         "urlSchemes": ["reportmill:open"],
-        "jar": "build/libs/ReportMill16-2025.01.jar",
+        "jar": "build/libs/ReportMill16-2025.02.jar",
         "javafx": false,
         "title": "RMStudio16"
     },

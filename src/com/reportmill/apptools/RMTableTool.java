@@ -76,7 +76,7 @@ public class RMTableTool<T extends RMTable> extends RMParentShapeTool<T> impleme
         setViewValue("SummaryCheckBox", grouping.getHasSummary());
 
         // Update GroupingTable
-        _groupingTable.setItemsList(grouper.getGroupings());
+        _groupingTable.setItems(grouper.getGroupings());
         _groupingTable.setSelIndex(grouper.getSelectedGroupingIndex());
 
         // Update TableGroupButton text

@@ -38,7 +38,7 @@ public class RMTableGroupTool<T extends RMTableGroup> extends RMParentShapeTool<
         // Create root node for table group and add child tables to it
         TreeView tablesTree = getView("TablesTree", TreeView.class);
         tablesTree.setResolver(new TGTreeResolver(tableGroup));
-        tablesTree.setItemsList(tableGroup.getChildTables());
+        tablesTree.setItems(tableGroup.getChildTables());
         tablesTree.expandAll();
         tablesTree.setSelItem(getMainTable());
 

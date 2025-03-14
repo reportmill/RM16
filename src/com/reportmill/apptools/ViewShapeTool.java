@@ -1,6 +1,9 @@
 package com.reportmill.apptools;
 import com.reportmill.shape.ViewShape;
+import snap.util.ListUtils;
 import snap.view.*;
+
+import java.util.List;
 
 /**
  * An RMTool subclass to edit ViewShape.
@@ -37,7 +40,7 @@ public class ViewShapeTool<T extends ViewShape> extends RMTool<T> {
         _buttonTab = _tabView.getTab(2);
 
         _typeList = getView("TypeListView", ListView.class);
-        String[] items = { "TextField", "Button", "RadioButton", "CheckBox", "ListView", "ComboBox"};
+        List<String> items = ListUtils.of("TextField", "Button", "RadioButton", "CheckBox", "ListView", "ComboBox");
         _typeList.setItems(items);
     }
 

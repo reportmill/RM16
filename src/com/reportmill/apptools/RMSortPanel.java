@@ -85,7 +85,7 @@ public class RMSortPanel extends ViewOwner {
         setViewValue("ValuesButton", sp_index == 2);
 
         // Update SortingTable
-        _sortsTable.setItemsList(grouping.getSorts());
+        _sortsTable.setItems(grouping.getSorts());
         _sortsTable.setSelIndex(grouping.getSelectedSortIndex()); //_sortsTable.repaint();
 
         // Update TopNKeyText, TopNCountText, TopNInclCheckBox, TopNPadCheckBox

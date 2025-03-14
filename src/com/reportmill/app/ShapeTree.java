@@ -1,5 +1,6 @@
 package com.reportmill.app;
 import com.reportmill.shape.*;
+import snap.util.ListUtils;
 import snap.view.*;
 
 import java.util.List;
@@ -47,7 +48,7 @@ public class ShapeTree extends RMEditorPane.SupportPane {
     protected void resetUI()
     {
         RMDocument doc = getEditor().getDoc();
-        _shapeTree.setItems(new RMShape[] { doc });
+        _shapeTree.setItems(ListUtils.of(doc));
         _shapeTree.expandAll();
         _shapeTree.setSelItem(getEditor().getSelectedOrSuperSelectedShape());
     }

@@ -1167,7 +1167,7 @@ public class RMTool<T extends RMShape> extends ViewOwner {
         RMDocument doc = RMDocument.getDoc(aFile.getBytes());
 
         // If TeaVM, replace report file instead
-        if (SnapUtils.isTeaVM) {
+        if (SnapEnv.isTeaVM) {
             editor.setDoc(doc);
             editor.requestFocus();
             return;

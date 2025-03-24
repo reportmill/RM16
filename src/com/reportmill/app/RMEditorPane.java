@@ -255,7 +255,7 @@ public class RMEditorPane extends RMViewerPane {
         WindowView window = getWindow();
         window.setImage(getFrameIcon());
         window.addEventHandler(this::handleWindowCloseEvent, WinClose);
-        window.setMaximized(SnapUtils.isTeaVM || SnapUtils.isWebVM);
+        window.setMaximized(SnapEnv.isTeaVM || SnapEnv.isWebVM);
     }
 
     /**

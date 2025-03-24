@@ -66,7 +66,7 @@ public class RMNumberFormat implements RMFormat, Cloneable {
         // If DefaultLocale, create and set DecimalFormatSymbols
         if (_defaultLocale != null)
             setDecimalFormatSymbols(new DecimalFormatSymbols(_defaultLocale));
-        else if (SnapUtils.isTeaVM)
+        else if (SnapEnv.isTeaVM)
             _fmt = (DecimalFormat) NumberFormat.getInstance(Locale.ENGLISH);
 
         // Get FormatSymbols
@@ -468,7 +468,7 @@ public class RMNumberFormat implements RMFormat, Cloneable {
      */
     void setDecimalFormatSymbols(DecimalFormatSymbols aDFS)
     {
-        if (SnapUtils.isTeaVM) return;
+        if (SnapEnv.isTeaVM) return;
         _fmt.setDecimalFormatSymbols(aDFS);
     }
 

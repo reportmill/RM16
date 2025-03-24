@@ -1,5 +1,6 @@
 package com.reportmill.app;
 import com.reportmill.base.ReportMill;
+import snap.util.SnapEnv;
 import snap.util.SnapUtils;
 import snap.view.*;
 
@@ -45,7 +46,7 @@ public class WelcomePanelAnim extends ViewOwner {
         // Configure JVMText
         TextArea jvmText = getView("JVMText", TextArea.class);
         jvmText.setDefaultTextStyleString("Font: Arial Bold 10; Color: #FF");
-        jvmText.addChars("JVM: " + (SnapUtils.isTeaVM ? "TeaVM" : System.getProperty("java.runtime.version")));
+        jvmText.addChars("JVM: " + (SnapEnv.isTeaVM ? "TeaVM" : System.getProperty("java.runtime.version")));
 
         // Configure BuildText
         TextArea buildText = getView("BuildText", TextArea.class);

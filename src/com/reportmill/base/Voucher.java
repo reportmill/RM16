@@ -6,10 +6,7 @@ import com.reportmill.graphics.RMXString;
 import com.reportmill.shape.RMDocument;
 import com.reportmill.shape.RMParentShape;
 import com.reportmill.shape.RMTextShape;
-import snap.util.ASCIICodec;
-import snap.util.Prefs;
-import snap.util.SnapUtils;
-import snap.util.StringUtils;
+import snap.util.*;
 
 /**
  * Perform checks.
@@ -95,7 +92,7 @@ public class Voucher {
     public static void lc(RMDocument aDoc)
     {
         // If licenced, just return
-        if (isLicensed() || SnapUtils.isTeaVM) return;
+        if (isLicensed() || SnapEnv.isTeaVM) return;
 
         // Add watermark/unlicensed message to each report page
         for (int i = 0; i < aDoc.getPages().size(); i++) addWatermark(aDoc.getPage(i));

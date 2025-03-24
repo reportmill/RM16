@@ -3,7 +3,7 @@ import com.reportmill.graphics.RMFont;
 import com.reportmill.graphics.RMParagraph;
 import com.reportmill.graphics.RMXString;
 import com.reportmill.shape.RMDocument;
-import snap.util.SnapUtils;
+import snap.util.SnapEnv;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
@@ -69,7 +69,7 @@ public class RMEnv {
         if (_shared != null) return _shared;
 
         // Use generic for TeaVM, otherwise Swing version
-        String className = SnapUtils.isTeaVM ? "com.reportmill.base.RMEnv" : "com.reportmill.base.RMEnvSwing";
+        String className = SnapEnv.isTeaVM ? "com.reportmill.base.RMEnv" : "com.reportmill.base.RMEnvSwing";
 
         // Try to get/set class name instance
         try { return _shared = (RMEnv) Class.forName(className).newInstance(); }

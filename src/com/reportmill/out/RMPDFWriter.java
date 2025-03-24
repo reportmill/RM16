@@ -95,7 +95,7 @@ public class RMPDFWriter extends PDFWriter {
         _pfile._catalogDict.put("ViewerPreferences", PDFWriter.getViewerPreferencesDefault());
 
         // Get doc pdf attributes
-        _compress = aDoc.getCompress() && !snap.util.SnapUtils.isTeaVM;
+        _compress = aDoc.getCompress() && !snap.util.SnapEnv.isTeaVM;
 
         // Set PDF file author / creator
         if (_pfile.getAuthor() == null)

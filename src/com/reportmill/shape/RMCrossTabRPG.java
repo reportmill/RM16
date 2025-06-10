@@ -22,7 +22,7 @@ class RMCrossTabRPG {
         if (parentTableRow != null) {
 
             // If no dataset key, use last data bearing object if RMGroup
-            if (aCTab.getDatasetKey() == null || aCTab.getDatasetKey().length() == 0) {
+            if (aCTab.getDatasetKey() == null || aCTab.getDatasetKey().isEmpty()) {
                 RMGroup tableRowGroup = (RMGroup) anRptOwner.peekDataStack();
                 dataset = tableRowGroup.cloneDeep(); // Make dataset a copy of table row group
             }
@@ -40,9 +40,9 @@ class RMCrossTabRPG {
         // Apply filter key to dataset
         if (dataset != null) {
             String filterKey = aCTab.getFilterKey();
-            if (filterKey != null && filterKey.length() > 0) {
+            if (filterKey != null && !filterKey.isEmpty()) {
                 RMKeyChain keyChain = RMKeyChain.getKeyChain(filterKey);
-                dataset = ListUtils.getFiltered(dataset, item -> RMKeyChain.getBoolValue(item, keyChain));
+                dataset = ListUtils.filter(dataset, item -> RMKeyChain.getBoolValue(item, keyChain));
             }
         }
 

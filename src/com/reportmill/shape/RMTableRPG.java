@@ -132,9 +132,9 @@ public class RMTableRPG extends RMParentShape {
 
         // Filter if needed
         String filterKey = aTable.getFilterKey();
-        if (filterKey != null && filterKey.length() > 0) {
+        if (filterKey != null && !filterKey.isEmpty()) {
             RMKeyChain keyChain = RMKeyChain.getKeyChain(filterKey);
-            dataset = ListUtils.getFiltered(dataset, item -> RMKeyChain.getBoolValue(item, keyChain));
+            dataset = ListUtils.filter(dataset, item -> RMKeyChain.getBoolValue(item, keyChain));
         }
 
         // Do grouping

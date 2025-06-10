@@ -51,7 +51,7 @@ abstract class RMGraphRPG {
         if (parentTableRow != null) {
 
             // If no dataset key, use last data bearing object if RMGroup
-            if (datasetKey == null || datasetKey.length() == 0) {
+            if (datasetKey == null || datasetKey.isEmpty()) {
 
                 // Get table row group from ReportMill's data bearing objects list
                 RMGroup tableRowGroup = (RMGroup) anRptOwner.peekDataStack();
@@ -75,9 +75,9 @@ abstract class RMGraphRPG {
         List<?> filteredList = dataset;
         if (dataset != null) {
             String filterKey = _graph.getFilterKey();
-            if (filterKey != null && filterKey.length() > 0) {
+            if (filterKey != null && !filterKey.isEmpty()) {
                 RMKeyChain keyChain = RMKeyChain.getKeyChain(filterKey);
-                filteredList = ListUtils.getFiltered(filteredList, item -> RMKeyChain.getBoolValue(item, keyChain));
+                filteredList = ListUtils.filter(filteredList, item -> RMKeyChain.getBoolValue(item, keyChain));
             }
         }
 

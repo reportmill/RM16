@@ -603,7 +603,7 @@ public class RMEditorPane extends RMViewerPane {
             return;
 
         // Re-open filename
-        sourceURL.getFile().resetAndVerify();
+        sourceURL.getFile().reset();
         openSource(sourceURL);
     }
 

@@ -82,7 +82,7 @@ public class RMDataSource implements XMLArchiver.Archivable {
         }
 
         // Get bytes (if null, set stuff and bail)
-        datasetFile.resetAndVerify();
+        datasetFile.reset();
         byte[] bytes = datasetFile.getBytes();
         if (bytes == null) {
             _schema = new Schema("root");

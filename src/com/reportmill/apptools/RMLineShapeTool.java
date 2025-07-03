@@ -107,7 +107,7 @@ public class RMLineShapeTool<T extends RMLineShape> extends RMTool<T> {
         if (_arrowHeads != null) return _arrowHeads;
 
         // Load document with defined arrow heads
-        WebURL url = WebURL.getURL(RMLineShapeTool.class, "RMLineShapeToolArrowHeads.rpt");
+        WebURL url = WebURL.getResourceUrl(RMLineShapeTool.class, "RMLineShapeToolArrowHeads.rpt");
         RMDocument doc = new RMDocument(url);
 
         // Extract lines and heads and return array of heads

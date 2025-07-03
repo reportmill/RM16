@@ -145,7 +145,7 @@ public class RMDataSource implements XMLArchiver.Archivable {
 
             // If dataset file was found, reset URL
             if (datasetFile != null)
-                _url = datasetFile.getURL();
+                _url = datasetFile.getUrl();
         }
 
         // Return
@@ -197,7 +197,7 @@ public class RMDataSource implements XMLArchiver.Archivable {
     {
         // Unarchive URL for xml file
         String urls = anElement.getAttributeValue("source");
-        _url = WebURL.getURL(urls);
+        _url = WebURL.getUrl(urls);
 
         // If custom schema element present, unarchive schema
         XMLElement schema = anElement.get("custom-schema");

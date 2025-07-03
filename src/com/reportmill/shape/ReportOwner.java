@@ -49,7 +49,7 @@ public class ReportOwner implements RMKeyChain.Get {
      */
     protected RMDocument createTemplate()
     {
-        WebURL url = WebURL.getURL(getClass(), getClass().getSimpleName() + ".rpt");
+        WebURL url = WebURL.getResourceUrl(getClass(), getClass().getSimpleName() + ".rpt");
         return RMDocument.getDoc(url);
     }
 
@@ -332,7 +332,7 @@ public class ReportOwner implements RMKeyChain.Get {
         if (key.equals("RMHTML")) return "<html><b>Howdy Doody</b></html>";
         if (key.equals("RMJapanese"))
             return new String("\u3053\u3093\u306b\u3061\u306f\u3001\u4e16\u754c\u306e\u4eba\u3005\uff01");
-        if (key.equals("RMFlowers")) return WebURL.getURL(getClass(), "/snap/viewx/pkg.images/tulips.jpg");
+        if (key.equals("RMFlowers")) return WebURL.getResourceUrl(getClass(), "/snap/viewx/pkg.images/tulips.jpg");
         return null;
     }
 

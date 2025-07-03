@@ -55,7 +55,7 @@ public class ImageRef {
     protected void setSource(Object aSource)
     {
         // Get URL, source, modified time
-        WebURL url = WebURL.getURL(aSource);
+        WebURL url = WebURL.getUrl(aSource);
         _source = url != null ? url : aSource;
         _modTime = url != null ? url.getLastModTime() : System.currentTimeMillis();
 
@@ -140,7 +140,7 @@ public class ImageRef {
         }
 
         // Get url for source - if found, return ImageRef for URL
-        WebURL url = WebURL.getURL(aSource);
+        WebURL url = WebURL.getUrl(aSource);
         if (url != null)
             return getImageRef(url);
 

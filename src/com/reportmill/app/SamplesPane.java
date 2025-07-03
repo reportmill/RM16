@@ -132,7 +132,7 @@ public class SamplesPane extends ViewOwner {
      */
     private void loadIndexFile()
     {
-        WebURL url = WebURL.getURL(SAMPLES_ROOT + "index.txt");
+        WebURL url = WebURL.getUrl(SAMPLES_ROOT + "index.txt");
         url.getResponseAndCall(resp -> indexFileLoaded(resp));
     }
 
@@ -302,7 +302,7 @@ public class SamplesPane extends ViewOwner {
     {
         String name = getDocName(anIndex);
         String urls = SAMPLES_ROOT + name + '/' + name + ".rpt";
-        return WebURL.getURL(urls);
+        return WebURL.getUrl(urls);
     }
 
     /**
@@ -337,7 +337,7 @@ public class SamplesPane extends ViewOwner {
         // Get image name, URL string, and URL
         String name = getDocName(anIndex);
         String urls = SAMPLES_ROOT + name + '/' + name + ".png";
-        WebURL imgURL = WebURL.getURL(urls);
+        WebURL imgURL = WebURL.getUrl(urls);
 
         // Create Image. Then make sure image is loaded by requesting Image.Native.
         img = _docImages[anIndex] = Image.getImageForSource(imgURL);

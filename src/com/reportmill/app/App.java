@@ -142,7 +142,7 @@ public class App {
     {
         boolean didOpenFile = false;
         for (String arg : args) {
-            WebURL openFileURL = WebURL.getURL(arg);
+            WebURL openFileURL = WebURL.getUrl(arg);
             WebFile openFile = openFileURL != null ? openFileURL.getFile() : null;
             if (openFile != null) {
                 WelcomePanel.getShared().openFile(openFile);

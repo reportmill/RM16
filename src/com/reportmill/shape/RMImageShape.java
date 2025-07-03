@@ -229,7 +229,7 @@ public class RMImageShape extends RMRectShape {
             Object value = RMKeyChain.getValue(aRptOwner, key);
             if (value instanceof RMKeyChain)
                 value = ((RMKeyChain) value).getValue();
-            WebURL url = WebURL.getURL(value);
+            WebURL url = WebURL.getUrl(value);
             if (url != null)
                 value = url;
 

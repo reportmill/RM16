@@ -278,7 +278,7 @@ public class RMImageFill extends RMFill {
     public static Image getEmptyImage()
     {
         if (_emptyImage != null) return _emptyImage;
-        WebURL url = WebURL.getURL(RMImageFill.class, "DefaultImage.png");
+        WebURL url = WebURL.getResourceUrl(RMImageFill.class, "DefaultImage.png");
         return _emptyImage = Image.getImageForSource(url);
     }
 

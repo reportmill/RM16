@@ -20,7 +20,7 @@ public class RMExtras {
      */
     public static WebURL getHollywoodURL()
     {
-        return WebURL.getURL(RMExtras.class, "/com/reportmill/examples/HollywoodDB.xml");
+        return WebURL.getResourceUrl(RMExtras.class, "/com/reportmill/examples/HollywoodDB.xml");
     }
 
     /**
@@ -28,7 +28,7 @@ public class RMExtras {
      */
     public static WebURL getMoviesURL()
     {
-        return WebURL.getURL(RMExtras.class, "/com/reportmill/examples/Movies.rpt");
+        return WebURL.getResourceUrl(RMExtras.class, "/com/reportmill/examples/Movies.rpt");
     }
 
     /**

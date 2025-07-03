@@ -63,7 +63,7 @@ public class RMPDFData implements Cloneable {
         }
 
         // Get URL, source, modified time
-        WebURL url = WebURL.getURL(aSource);
+        WebURL url = WebURL.getUrl(aSource);
         _source = url != null ? url : aSource;
         _modTime = url != null ? url.getLastModTime() : System.currentTimeMillis();
 
@@ -278,7 +278,7 @@ public class RMPDFData implements Cloneable {
         if (aSource instanceof RMPDFData) return (RMPDFData) aSource;
 
         // Get source url
-        WebURL url = WebURL.getURL(aSource);
+        WebURL url = WebURL.getUrl(aSource);
 
         // Iterate over image list and see if any match source
         for (int i = _cache.size() - 1; i >= 0; i--) {

@@ -459,7 +459,7 @@ public class RMEditorPane extends RMViewerPane {
         if (aSource == null) return null;
 
         // Get Source URL
-        WebURL sourceURL = WebURL.getURL(aSource);
+        WebURL sourceURL = WebURL.getUrl(aSource);
 
         // If source is already opened, return editor pane
         if (!Objects.equals(sourceURL, getSourceURL())) {
@@ -527,7 +527,7 @@ public class RMEditorPane extends RMViewerPane {
 
         // Set URL and save
         RMDocument doc = getDoc();
-        WebURL docURL = WebURL.getURL(path);
+        WebURL docURL = WebURL.getUrl(path);
         doc.setSourceURL(docURL);
         save();
     }

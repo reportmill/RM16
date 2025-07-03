@@ -33,7 +33,7 @@ public class RMArchiver extends XMLArchiver {
         if (aSource instanceof RMDocument) return (RMDocument) aSource;
 
         // Get URL and/or bytes (complain if not found)
-        WebURL url = WebURL.getURL(aSource);
+        WebURL url = WebURL.getUrl(aSource);
         byte[] bytes = url != null ? url.getBytes() : SnapUtils.getBytes(aSource);
         if (bytes == null)
             throw new RuntimeException("RMArchiver.getDoc: Cannot read source: " + (url != null ? url : aSource));

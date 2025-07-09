@@ -9,7 +9,7 @@ import snap.geom.Point;
 import snap.geom.Rect;
 import snap.geom.Shape;
 import snap.gfx.*;
-import snap.text.TextBox;
+import snap.text.TextModelX;
 import snap.text.TextSel;
 import snap.util.ListUtils;
 import snap.view.*;
@@ -460,7 +460,7 @@ public class RMViewerEvents {
     private Shape getTextSelectionArea()
     {
         // Iterate over texts and create composite shape
-        TextBox tbox = new TextBox(true);
+        TextModelX tbox = new TextModelX(true);
         Shape area = new Rect();
         for (int i = 0, iMax = _selectedTexts.size(); i < iMax; i++) {
             RMTextShape text = _selectedTexts.get(i);

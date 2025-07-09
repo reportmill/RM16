@@ -22,21 +22,21 @@ import snap.util.*;
  */
 public class RMXString implements Cloneable, CharSequence, RMTypes, XMLArchiver.Archivable {
 
-    // The TextBlock
-    private TextBlock _richText;
+    // The TextModel
+    private TextModel _richText;
 
     /**
      * Creates an empty RMXString.
      */
     public RMXString()
     {
-        _richText = new TextBlock(true);
+        _richText = new TextModel(true);
     }
 
     /**
      * Creates an empty RMXString.
      */
-    public RMXString(TextBlock richText)
+    public RMXString(TextModel richText)
     {
         _richText = richText;
     }
@@ -62,7 +62,7 @@ public class RMXString implements Cloneable, CharSequence, RMTypes, XMLArchiver.
     /**
      * Returns the RichText.
      */
-    public TextBlock getRichText()  { return _richText; }
+    public TextModel getRichText()  { return _richText; }
 
     /**
      * Returns the simple String represented by this RMXString.
@@ -191,7 +191,7 @@ public class RMXString implements Cloneable, CharSequence, RMTypes, XMLArchiver.
      */
     public void addString(RMXString xStr, int anIndex)
     {
-        _richText.addTextBlock(xStr._richText, anIndex);
+        _richText.addTextModel(xStr._richText, anIndex);
     }
 
     /**
@@ -200,7 +200,7 @@ public class RMXString implements Cloneable, CharSequence, RMTypes, XMLArchiver.
     public void replaceString(RMXString xStr, int aStart, int aEnd)
     {
         _richText.removeChars(aStart, aEnd);
-        _richText.addTextBlock(xStr._richText, aStart);
+        _richText.addTextModel(xStr._richText, aStart);
     }
 
     /**
@@ -388,7 +388,7 @@ public class RMXString implements Cloneable, CharSequence, RMTypes, XMLArchiver.
      */
     public RMXString substring(int aStart, int aEnd)
     {
-        TextBlock richTextCopy = _richText.copyForRange(aStart, aEnd);
+        TextModel richTextCopy = _richText.copyForRange(aStart, aEnd);
         return new RMXString(richTextCopy);
     }
 

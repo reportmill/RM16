@@ -12,8 +12,8 @@ import snap.geom.Shape;
 import snap.gfx.*;
 import snap.props.PropChange;
 import snap.props.PropChangeListener;
-import snap.text.TextBlock;
-import snap.text.TextBox;
+import snap.text.TextModel;
+import snap.text.TextModelX;
 import snap.text.TextStyle;
 import snap.util.*;
 
@@ -64,7 +64,7 @@ public class RMTextShape extends RMRectShape {
     RMLinkedText _linkedText;
 
     // A text box to manage RichText in shape bounds
-    TextBox _textBox;
+    TextModelX _textModel;
 
     // The text editor, if one has been set
     RMTextEditor _textEditor;
@@ -132,7 +132,7 @@ public class RMTextShape extends RMRectShape {
 
         // Set value and fire property change, and reset cached HeightToFit
         firePropChange("XString", _xstr, _xstr = xString);
-        _textBox = null;
+        _textModel = null;
         _textEditor = null;
         revalidate();
         repaint();
@@ -141,7 +141,7 @@ public class RMTextShape extends RMRectShape {
     /**
      * Returns the RichText.
      */
-    public TextBlock getRichText()
+    public TextModel getRichText()
     {
         return getXString().getRichText();
     }
@@ -725,20 +725,20 @@ public class RMTextShape extends RMRectShape {
     /**
      * Returns a text layout.
      */
-    public TextBox getTextBox()
+    public TextModelX getTextBox()
     {
         // If already set, just return
-        if (_textBox != null) return _textBox;
+        if (_textModel != null) return _textModel;
 
         // Create and set
         RMXString xstr = getXString();
-        TextBlock textBlock = xstr.getRichText();
-        _textBox = new TextBox(textBlock);
-        _textBox.setWrapLines(true);
+        TextModel textModel = xstr.getRichText();
+        _textModel = new TextModelX(textModel);
+        _textModel.setWrapLines(true);
         updateTextBox();
 
         // Return
-        return _textBox;
+        return _textModel;
     }
 
     /**
@@ -750,21 +750,21 @@ public class RMTextShape extends RMRectShape {
         Insets pad = getMargin();
         double textW = Math.max(getWidth() - pad.getWidth(), 0);
         double textH = Math.max(getHeight() - pad.getHeight(), 0);
-        _textBox.setBounds(pad.left, pad.right, textW, textH);
+        _textModel.setBounds(pad.left, pad.right, textW, textH);
 
         // Set StartCharIndex
-        _textBox.setStartCharIndex(getVisibleStart());
-        _textBox.setLinked(getLinkedText() != null);
-        _textBox.setAlignY(getAlignmentY().vpos());
-        _textBox.setBoundsPath(!(getPath() instanceof Rect) || getPerformsWrap() ? getPath() : null);
-        _textBox.setHyphenate(RMTextEditor.isHyphenating());
-        _textBox.setFontScale(1);
+        _textModel.setStartCharIndex(getVisibleStart());
+        _textModel.setLinked(getLinkedText() != null);
+        _textModel.setAlignY(getAlignmentY().vpos());
+        _textModel.setBoundsPath(!(getPath() instanceof Rect) || getPerformsWrap() ? getPath() : null);
+        _textModel.setHyphenate(RMTextEditor.isHyphenating());
+        _textModel.setFontScale(1);
 
         // Handle FitText: With hack to avoid text wrapping for data columns
         if (_fitText) {
             if (getHeight() < 50 && getWidth() > getHeight() * 3)
-                _textBox.setWrapLines(false);
-            _textBox.scaleTextToFit();
+                _textModel.setWrapLines(false);
+            _textModel.scaleTextToFit();
         }
     }
 
@@ -956,7 +956,7 @@ public class RMTextShape extends RMRectShape {
     public void revalidate()
     {
         // Update text
-        if (_textBox != null)
+        if (_textModel != null)
             updateTextBox();
 
         // Forward to linked text
@@ -975,7 +975,7 @@ public class RMTextShape extends RMRectShape {
         // Get normal shape clone, clone XString, clear layout and return
         RMTextShape clone = (RMTextShape) super.clone();
         clone._xstr = null;
-        clone._textBox = null;
+        clone._textModel = null;
         clone._textEditor = null;
         clone._richTextLsnr = pc -> richTextDidPropChange(pc);
         if (_xstr != null)

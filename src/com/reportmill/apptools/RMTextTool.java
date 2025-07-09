@@ -10,7 +10,7 @@ import snap.geom.*;
 import snap.gfx.*;
 import snap.props.PropChange;
 import snap.props.PropChangeListener;
-import snap.text.TextBlock;
+import snap.text.TextModel;
 import snap.text.TextLine;
 import snap.text.TextRun;
 import snap.view.*;
@@ -36,7 +36,7 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
     private boolean _moveTableColumn;
 
     // A Listener for RichText PropChange
-    private PropChangeListener _richTextLsnr = this::handleTextShapeTextBlockPropChange;
+    private PropChangeListener _richTextLsnr = this::handleTextShapeTextModelPropChange;
 
     /**
      * Initialize UI panel.
@@ -83,8 +83,8 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
         // Set TextView RichText and selection
         _textView.setSourceText(text.getRichText());
         if (textEditor != null) {
-            TextBlock textBlock = textEditor.getTextBox();
-            int textStartCharIndex = textBlock.getStartCharIndex();
+            TextModel textModel = textEditor.getTextBox();
+            int textStartCharIndex = textModel.getStartCharIndex();
             int selStartCharIndex = textEditor.getSelStart() + textStartCharIndex;
             int selEndCharIndex = textEditor.getSelEnd() + textStartCharIndex;
             _textView.setSel(selStartCharIndex, selEndCharIndex);
@@ -268,8 +268,8 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
         // Get TextEditor and update selection from TextView
         RMTextEditor textEditor = editor.getTextEditor();
         if (textEditor != null) {
-            TextBlock textBlock = textEditor.getTextBox();
-            int textStartCharIndex = textBlock.getStartCharIndex();
+            TextModel textModel = textEditor.getTextBox();
+            int textStartCharIndex = textModel.getStartCharIndex();
             int selStartCharIndex = Math.max(_textView.getSelStart() - textStartCharIndex, 0);
             int selEndCharIndex = Math.max(_textView.getSelEnd() - textStartCharIndex, 0);
             textEditor.setSel(selStartCharIndex, selEndCharIndex);
@@ -567,7 +567,7 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
     /**
      * Handle changes to Selected TextShape.RichText
      */
-    protected void handleTextShapeTextBlockPropChange(PropChange aPC)
+    protected void handleTextShapeTextModelPropChange(PropChange aPC)
     {
         // If updating size, reset text width & height to accommodate text
         if (_updatingSize) {

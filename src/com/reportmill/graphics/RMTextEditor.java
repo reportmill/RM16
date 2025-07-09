@@ -19,9 +19,9 @@ public class RMTextEditor extends TextAdapter {
     /**
      * Constructor.
      */
-    public RMTextEditor(TextBlock textBlock)
+    public RMTextEditor(TextModel textModel)
     {
-        super(textBlock);
+        super(textModel);
         setEditable(true);
         setShowCaret(true);
     }
@@ -29,7 +29,7 @@ public class RMTextEditor extends TextAdapter {
     /**
      * Returns the text box used to layout text.
      */
-    public TextBlock getTextBox()  { return _textBlock; }
+    public TextModel getTextBox()  { return _textModel; }
 
     /**
      * Returns the text style applied to any input characters.
@@ -63,7 +63,7 @@ public class RMTextEditor extends TextAdapter {
      */
     public void setInputParagraph(RMParagraph ps)
     {
-        _textBlock.setLineStyle(ps._lstyle, getSelStart(), getSelEnd());
+        _textModel.setLineStyle(ps._lstyle, getSelStart(), getSelEnd());
     }
 
     /**
@@ -118,7 +118,7 @@ public class RMTextEditor extends TextAdapter {
     public void setFormat(RMFormat aFormat)
     {
         // Get format selection range and select it (if non-null)
-        TextSel sel = TextBlockUtils.smartFindFormatRange(getTextBlock(), getSelStart(), getSelEnd());
+        TextSel sel = TextModelUtils.smartFindFormatRange(getTextModel(), getSelStart(), getSelEnd());
         if (sel != null)
             setSel(sel.getStart(), sel.getEnd());
 
@@ -283,7 +283,7 @@ public class RMTextEditor extends TextAdapter {
         snap.text.SpellCheck.setSharedClass(RMSpellCheck.class);
 
         // Get spelling path
-        Shape spellingPath = snap.text.SpellCheck.getSpellingPath(_textBlock, getSelStart());
+        Shape spellingPath = snap.text.SpellCheck.getSpellingPath(_textModel, getSelStart());
 
         // Paint spelling path
         aPntr.setColor(Color.RED);

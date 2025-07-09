@@ -2,7 +2,6 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package com.reportmill.out;
-import com.reportmill.base.ReportMill;
 import com.reportmill.base.Voucher;
 import com.reportmill.graphics.*;
 import com.reportmill.shape.*;
@@ -13,7 +12,7 @@ import snap.geom.PathIter;
 import snap.geom.Rect;
 import snap.geom.Shape;
 import snap.gfx.*;
-import snap.text.TextBox;
+import snap.text.TextModelX;
 import snap.text.TextLine;
 import snap.text.TextRun;
 import snap.util.*;
@@ -472,7 +471,7 @@ public class RMHtmlFile {
             XMLElement text = new XMLElement("text");
 
             // Iterate over runs and create text spans
-            TextBox tbox = aTextShape.getTextBox();
+            TextModelX tbox = aTextShape.getTextBox();
             for (TextLine line : tbox.getLines())
                 for (TextRun run : line.getRuns()) {
                     String str = run.getString();

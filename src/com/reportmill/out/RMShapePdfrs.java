@@ -54,7 +54,7 @@ public class RMShapePdfrs {
 
             // If not editable, just write out text and return
             if (!aTextShape.isEditable()) {
-                PDFWriterText.writeText(aWriter, aTextShape.getTextBox());
+                PDFWriterText.writeText(aWriter, aTextShape.getTextModel());
                 return;
             }
 

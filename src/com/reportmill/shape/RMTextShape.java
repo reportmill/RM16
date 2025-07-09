@@ -54,7 +54,7 @@ public class RMTextShape extends RMRectShape {
     // Whether text should draw box around itself even if there's no stroke
     boolean _drawsSelectionRect;
 
-    // PDF option: Whether text box is editable in PDF
+    // PDF option: Whether text is editable in PDF
     boolean _editable;
 
     // PDF option: Whether text is multiline when editable in PDF
@@ -63,7 +63,7 @@ public class RMTextShape extends RMRectShape {
     // The linked text shape for rendering overflow, if there is one
     RMLinkedText _linkedText;
 
-    // A text box to manage RichText in shape bounds
+    // A text model to manage text in shape bounds
     TextModelX _textModel;
 
     // The text editor, if one has been set
@@ -183,7 +183,7 @@ public class RMTextShape extends RMRectShape {
      */
     public int getVisibleEnd()
     {
-        return getTextBox().getEndCharIndex();
+        return getTextModel().getEndCharIndex();
     }
 
     /**
@@ -191,7 +191,7 @@ public class RMTextShape extends RMRectShape {
      */
     public boolean isAllTextVisible()
     {
-        return !getTextBox().isTextOutOfBounds();
+        return !getTextModel().isTextOutOfBounds();
     }
 
     /**
@@ -366,12 +366,12 @@ public class RMTextShape extends RMRectShape {
     public void setDrawsSelectionRect(boolean aValue)  { _drawsSelectionRect = aValue; }
 
     /**
-     * Returns whether text box is editable in PDF.
+     * Returns whether text is editable in PDF.
      */
     public boolean isEditable()  { return _editable; }
 
     /**
-     * Sets whether text box is editable in PDF.
+     * Sets whether text is editable in PDF.
      */
     public void setEditable(boolean aValue)
     {
@@ -725,7 +725,7 @@ public class RMTextShape extends RMRectShape {
     /**
      * Returns a text layout.
      */
-    public TextModelX getTextBox()
+    public TextModelX getTextModel()
     {
         // If already set, just return
         if (_textModel != null) return _textModel;
@@ -782,7 +782,7 @@ public class RMTextShape extends RMRectShape {
     public RMTextEditor getTextEditor()
     {
         if (_textEditor != null) return _textEditor;
-        return _textEditor = new RMTextEditor(getTextBox());
+        return _textEditor = new RMTextEditor(getTextModel());
     }
 
     /**
@@ -814,7 +814,7 @@ public class RMTextShape extends RMRectShape {
     {
         if (_wraps == WRAP_SCALE) return getHeight();
         if (length() == 0) return 0; // Zero instead of getMarginTop()+getMarginBottom() so empty texts are hidden
-        double ph = getTextBox().getPrefHeight(getTextBox().getWidth());
+        double ph = getTextModel().getPrefHeight(getTextModel().getWidth());
         return Math.ceil(getMarginTop() + ph + getMarginBottom());
     }
 
@@ -934,8 +934,8 @@ public class RMTextShape extends RMRectShape {
         if (isTextEditorSet())
             getTextEditor().paintAll(aPntr);
 
-        // Otherwise just paint TextBox
-        else getTextBox().paint(aPntr);
+        // Otherwise just paint TextModel
+        else getTextModel().paint(aPntr);
 
         // Restore
         aPntr.restore();

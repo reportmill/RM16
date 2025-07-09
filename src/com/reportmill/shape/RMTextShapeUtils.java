@@ -42,7 +42,7 @@ public class RMTextShapeUtils {
         outlineShape.moveTo(aText.getWidth(), aText.getHeight());
 
         // Iterate over text runs
-        TextModelX textModel = aText.getTextBox();
+        TextModelX textModel = aText.getTextModel();
         for (TextLine line : textModel.getLines()) {
             for (TextRun run : line.getRuns()) { //if(run.length()==0 || run.isTab()) continue;
                 String str = run.getString();
@@ -67,7 +67,7 @@ public class RMTextShapeUtils {
         textCharsShape.copyShape(aText);
 
         // Iterate over runs
-        TextModelX textModel = aText.getTextBox();
+        TextModelX textModel = aText.getTextModel();
         for (TextLine line : textModel.getLines())
             for (TextRun run : line.getRuns()) { //if(run.length()==0 || run.isTab()) continue;
 

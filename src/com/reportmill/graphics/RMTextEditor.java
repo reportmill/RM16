@@ -27,11 +27,6 @@ public class RMTextEditor extends TextAdapter {
     }
 
     /**
-     * Returns the text box used to layout text.
-     */
-    public TextModel getTextBox()  { return _textModel; }
-
-    /**
      * Returns the text style applied to any input characters.
      */
     public RMTextStyle getSelStyle()

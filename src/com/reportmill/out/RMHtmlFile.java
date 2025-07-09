@@ -471,7 +471,7 @@ public class RMHtmlFile {
             XMLElement text = new XMLElement("text");
 
             // Iterate over runs and create text spans
-            TextModelX tbox = aTextShape.getTextBox();
+            TextModelX tbox = aTextShape.getTextModel();
             for (TextLine line : tbox.getLines())
                 for (TextRun run : line.getRuns()) {
                     String str = run.getString();

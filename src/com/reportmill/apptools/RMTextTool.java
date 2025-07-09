@@ -83,7 +83,7 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
         // Set TextView RichText and selection
         _textView.setSourceText(text.getRichText());
         if (textEditor != null) {
-            TextModel textModel = textEditor.getTextBox();
+            TextModel textModel = textEditor.getTextModel();
             int textStartCharIndex = textModel.getStartCharIndex();
             int selStartCharIndex = textEditor.getSelStart() + textStartCharIndex;
             int selEndCharIndex = textEditor.getSelEnd() + textStartCharIndex;
@@ -268,7 +268,7 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
         // Get TextEditor and update selection from TextView
         RMTextEditor textEditor = editor.getTextEditor();
         if (textEditor != null) {
-            TextModel textModel = textEditor.getTextBox();
+            TextModel textModel = textEditor.getTextModel();
             int textStartCharIndex = textModel.getStartCharIndex();
             int selStartCharIndex = Math.max(_textView.getSelStart() - textStartCharIndex, 0);
             int selEndCharIndex = Math.max(_textView.getSelEnd() - textStartCharIndex, 0);

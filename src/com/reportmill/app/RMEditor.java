@@ -1094,7 +1094,7 @@ public class RMEditor extends RMViewer implements DeepChangeListener {
     public void undo()
     {
         // If undoer exists, do undo, select shapes and repaint
-        if (getUndoer() != null && getUndoer().getUndoSetLast() != null) {
+        if (getUndoer() != null && getUndoer().getLastUndoSet() != null) {
             UndoSet undoSet = getUndoer().undo();
             setUndoSelection(undoSet.getUndoSelection());
             repaint();
@@ -1110,7 +1110,7 @@ public class RMEditor extends RMViewer implements DeepChangeListener {
     public void redo()
     {
         // If undoer exists, do undo, select shapes and repaint
-        if (getUndoer() != null && getUndoer().getRedoSetLast() != null) {
+        if (getUndoer() != null && getUndoer().getLastRedoSet() != null) {
             UndoSet redoSet = getUndoer().redo();
             setUndoSelection(redoSet.getRedoSelection());
             repaint();

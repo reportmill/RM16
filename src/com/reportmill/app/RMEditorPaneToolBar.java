@@ -85,8 +85,8 @@ public class RMEditorPaneToolBar extends RMEditorPane.SupportPane {
 
         // Update UndoButton, RedoButton
         Undoer undoer = editor.getUndoer();
-        setViewEnabled("UndoButton", undoer != null && undoer.getUndoSetLast() != null);
-        setViewEnabled("RedoButton", undoer != null && undoer.getRedoSetLast() != null);
+        setViewEnabled("UndoButton", undoer != null && undoer.getLastUndoSet() != null);
+        setViewEnabled("RedoButton", undoer != null && undoer.getLastRedoSet() != null);
 
         // Update MoneyButton, PercentButton, CommaButton
         RMFormat fmt = RMEditorUtils.getFormat(editor);

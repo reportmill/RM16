@@ -12,6 +12,7 @@ import snap.props.PropChange;
 import snap.props.PropChangeListener;
 import snap.text.TextModel;
 import snap.text.TextLine;
+import snap.text.TextModelX;
 import snap.text.TextRun;
 import snap.view.*;
 
@@ -80,8 +81,11 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
         setViewValue("AlignMiddleButton", text.getAlignmentY() == RMTypes.AlignY.Middle);
         setViewValue("AlignBottomButton", text.getAlignmentY() == RMTypes.AlignY.Bottom);
 
-        // Set TextView RichText and selection
-        _textView.setSourceText(text.getRichText());
+        // Set TextView TextModel
+        TextModelX textModelX = (TextModelX) _textView.getTextAdapter().getTextModel();
+        textModelX.setSourceText(text.getRichText());
+
+        // Set TextView selection
         if (textEditor != null) {
             TextModel textModel = textEditor.getTextModel();
             int textStartCharIndex = textModel.getStartCharIndex();

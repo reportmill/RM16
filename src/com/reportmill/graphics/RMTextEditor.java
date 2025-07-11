@@ -62,11 +62,6 @@ public class RMTextEditor extends TextAdapter {
     }
 
     /**
-     * Returns the plain string of the xstring being edited.
-     */
-    public String getString()  { return getText(); }
-
-    /**
      * Returns the color of the current selection or cursor.
      */
     public RMColor getColor()

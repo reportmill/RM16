@@ -191,7 +191,7 @@ public class RMEditor extends RMViewer implements DeepChangeListener {
         requestFocus();
 
         // If shapes is null or empty super-select the selected page and return
-        if (theShapes == null || theShapes.size() == 0) {
+        if (theShapes == null || theShapes.isEmpty()) {
             setSuperSelectedShape(getSelPage());
             return;
         }
@@ -269,7 +269,7 @@ public class RMEditor extends RMViewer implements DeepChangeListener {
         // Remove current super-selected shapes that aren't an ancestor of given shape
         while (shape != getSuperSelectedShape() && !shape.isAncestor(getSuperSelectedShape())) {
             RMShape ssShape = getSuperSelectedShape();
-            getTool(ssShape).willLoseSuperSelected(ssShape);
+            getTool(ssShape).handleShapeLosingSuperSelected(ssShape);
             ListUtils.removeLast(_superSelShapes);
         }
 
@@ -295,7 +295,7 @@ public class RMEditor extends RMViewer implements DeepChangeListener {
         _superSelShapes.add(aShape);
 
         // Notify tool
-        getTool(aShape).didBecomeSuperSelected(aShape);
+        getTool(aShape).handleShapeBecameSuperSelected(aShape);
 
         // If ancestor is page but not document's selected page, make it the selected page
         if (aShape instanceof RMPage && aShape != getDoc().getSelPage())
@@ -685,7 +685,7 @@ public class RMEditor extends RMViewer implements DeepChangeListener {
     public void addShapesToShape(List<? extends RMShape> theShapes, RMParentShape aShape, boolean withCorrection)
     {
         // If no shapes, just return
-        if (theShapes.size() == 0) return;
+        if (theShapes.isEmpty()) return;
 
         // Declare variables for dx, dy, dr
         double dx = 0, dy = 0, dr = 0;

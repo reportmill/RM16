@@ -36,8 +36,8 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
     // Whether current mouse drag should be moving table column
     private boolean _moveTableColumn;
 
-    // A Listener for RichText PropChange
-    private PropChangeListener _richTextLsnr = this::handleTextShapeTextModelPropChange;
+    // A Listener for super selected TextShape TextModel PropChange
+    private PropChangeListener _textShapeTextModelPropChangeLsnr = this::handleTextShapeTextModelPropChange;
 
     /**
      * Initialize UI panel.
@@ -58,7 +58,8 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
         // Get editor and currently selected text
         RMEditor editor = getEditor();
         RMTextShape text = getSelectedShape();
-        if (text == null) return;
+        if (text == null)
+            return;
 
         // Get paragraph from text
         int selStart = 0;
@@ -83,16 +84,10 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
 
         // Set TextView TextModel
         TextModelX textModelX = (TextModelX) _textView.getTextAdapter().getTextModel();
-        textModelX.setSourceText(text.getRichText());
+        textModelX.setSourceText(text.getTextModel());
 
         // Set TextView selection
-        if (textEditor != null) {
-            TextModel textModel = textEditor.getTextModel();
-            int textStartCharIndex = textModel.getStartCharIndex();
-            int selStartCharIndex = textEditor.getSelStart() + textStartCharIndex;
-            int selEndCharIndex = textEditor.getSelEnd() + textStartCharIndex;
-            _textView.setSel(selStartCharIndex, selEndCharIndex);
-        }
+        resetTextViewSelFromTextEditor();
 
         // Get text's background color and set in TextView if found
         Color color = null;
@@ -154,11 +149,12 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
         // Get editor, currently selected text shape and text shapes (just return if null)
         RMEditor editor = getEditor();
         RMTextShape text = getSelectedShape();
-        if (text == null) return;
-        List<RMTextShape> texts = (List) getSelectedShapes();
+        if (text == null)
+            return;
 
         // Register repaint for texts
-        for (RMShape txt : texts) txt.repaint(); //texts.forEach(i -> i.repaint());
+        List<RMTextShape> texts = (List<RMTextShape>) getSelectedShapes();
+        texts.forEach(RMTextShape::repaint);
 
         // Handle AlignLeftButton, AlignCenterButton, AlignRightButton, AlignFullButton, AlignTopButton, AlignMiddleButton
         if (anEvent.equals("AlignLeftButton")) RMEditorUtils.setAlignmentX(editor, RMTypes.AlignX.Left);
@@ -209,8 +205,7 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
 
         // Handle TurnToPathMenuItem
         if (anEvent.equals("TurnToPathMenuItem"))
-            for (int i = 0; i < texts.size(); i++) {
-                RMTextShape text1 = texts.get(i);
+            for (RMTextShape text1 : texts) {
                 RMShape textPathShape = RMTextShapeUtils.getTextPathShape(text1);
                 RMParentShape parent = text1.getParent();
                 parent.addChild(textPathShape, text1.indexOf());
@@ -220,8 +215,7 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
 
         // Handle TurnToCharsShapeMenuItem
         if (anEvent.equals("TurnToCharsShapeMenuItem"))
-            for (int i = 0; i < texts.size(); i++) {
-                RMTextShape text1 = texts.get(i);
+            for (RMTextShape text1 : texts) {
                 RMShape textCharsShape = RMTextShapeUtils.getTextCharsShape(text1);
                 RMParentShape parent = text1.getParent();
                 parent.addChild(textCharsShape, text1.indexOf());
@@ -254,6 +248,40 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
     }
 
     /**
+     * Resets TextView text selection from text editor.
+     */
+    private void resetTextViewSelFromTextEditor()
+    {
+        RMEditor editor = getEditor();
+        RMTextEditor textEditor = editor.getTextEditor();
+        if (textEditor == null)
+            return;
+
+        TextModel textModel = textEditor.getTextModel();
+        int textStartCharIndex = textModel.getStartCharIndex();
+        int selStartCharIndex = textEditor.getSelStart() + textStartCharIndex;
+        int selEndCharIndex = textEditor.getSelEnd() + textStartCharIndex;
+        _textView.setSel(selStartCharIndex, selEndCharIndex);
+    }
+
+    /**
+     * Reset super selected text shape text editor from text view.
+     */
+    private void resetTextEditorSelFromTextView()
+    {
+        RMEditor editor = getEditor();
+        RMTextEditor textEditor = editor.getTextEditor();
+        if (textEditor == null)
+            return;
+
+        TextModel textModel = textEditor.getTextModel();
+        int textStartCharIndex = textModel.getStartCharIndex();
+        int selStartCharIndex = Math.max(_textView.getSelStart() - textStartCharIndex, 0);
+        int selEndCharIndex = Math.max(_textView.getSelEnd() - textStartCharIndex, 0);
+        textEditor.setSel(selStartCharIndex, selEndCharIndex);
+    }
+
+    /**
      * Called when TextView.Selection changes.
      */
     private void handleTextViewSelectionChange()
@@ -264,20 +292,14 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
         // Get text, repaint and make sure it's super-selected
         RMEditor editor = getEditor();
         RMTextShape textShape = getSelectedShape();
-        if (textShape == null) return;
+        if (textShape == null)
+            return;
         textShape.repaint();
         if (textShape != editor.getSuperSelectedShape())
             editor.setSuperSelectedShape(textShape);
 
         // Get TextEditor and update selection from TextView
-        RMTextEditor textEditor = editor.getTextEditor();
-        if (textEditor != null) {
-            TextModel textModel = textEditor.getTextModel();
-            int textStartCharIndex = textModel.getStartCharIndex();
-            int selStartCharIndex = Math.max(_textView.getSelStart() - textStartCharIndex, 0);
-            int selEndCharIndex = Math.max(_textView.getSelEnd() - textStartCharIndex, 0);
-            textEditor.setSel(selStartCharIndex, selEndCharIndex);
-        }
+        resetTextEditorSelFromTextView();
 
         // ResetUI on MouseUp
         ViewUtils.runOnMouseUp(() -> getEditorPane().resetLater());
@@ -434,7 +456,8 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
         }
 
         // If shape isn't super selected, just return
-        if (!isSuperSelected(aTextShape)) return;
+        if (!isSuperSelected(aTextShape))
+            return;
 
         // If mouse event, convert event to text shape coords and consume
         if (anEvent.isMouseEvent()) {
@@ -446,6 +469,7 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
         // Forward on to editor
         aTextShape.getTextEditor().processEvent(anEvent);
         aTextShape.repaint();
+        resetTextViewSelFromTextEditor();
     }
 
     /**
@@ -479,6 +503,7 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
         // Have text editor process key event
         aTextShape.getTextEditor().processEvent(anEvent);
         aTextShape.repaint();
+        resetLater();
     }
 
     /**
@@ -500,7 +525,7 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
         // Handle MouseDragged: layout children by X (if outside row, skip drag shape)
         if (anEvent.isMouseDrag()) {
             List<RMShape> children = RMShapeUtils.getShapesSortedByFrameX(tableRow.getChildren());
-            float x = 0;
+            double x = 0;
             for (RMShape child : children) {
                 if (child == shape) {
                     if (inRow) child.setX(point.x - child.getWidth() / 2);
@@ -508,7 +533,8 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
                         child.setX(9999);
                         continue;
                     }
-                } else child.setX(x);
+                }
+                else child.setX(x);
                 x += child.getWidth();
             }
         }
@@ -518,13 +544,15 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
 
             // If shape in row, set new index
             if (inRow) {
-                int iold = shape.indexOf();
-                int inew = 0;
-                while (inew < tableRow.getChildCount() && tableRow.getChild(inew).getX() <= shape.getX()) inew++;
-                if (iold != inew) {
-                    tableRow.removeChild(iold);
-                    if (inew > iold) inew--;
-                    tableRow.addChild(shape, inew);
+                int oldIndex = shape.indexOf();
+                int newIndex = 0;
+                while (newIndex < tableRow.getChildCount() && tableRow.getChild(newIndex).getX() <= shape.getX())
+                    newIndex++;
+                if (oldIndex != newIndex) {
+                    tableRow.removeChild(oldIndex);
+                    if (newIndex > oldIndex)
+                        newIndex--;
+                    tableRow.addChild(shape, newIndex);
                 }
             }
 
@@ -541,35 +569,36 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
     }
 
     /**
-     * Editor method - installs this text in RMEditor's text editor.
+     * Override to start listening to text shape text changes.
      */
-    public void didBecomeSuperSelected(T aTextShape)
+    @Override
+    public void handleShapeBecameSuperSelected(T textShape)
     {
-        // Start listening to changes to TextShape RichText
-        aTextShape.getRichText().addPropChangeListener(_richTextLsnr);
+        textShape.getTextModel().addPropChangeListener(_textShapeTextModelPropChangeLsnr);
     }
 
     /**
-     * Editor method - uninstalls this text from RMEditor's text editor and removes new text if empty.
+     * Override to stop listening to text shape text changes.
      */
-    public void willLoseSuperSelected(T aTextShape)
+    @Override
+    public void handleShapeLosingSuperSelected(T textShape)
     {
         // If text editor was really just an insertion point and ending text length is zero, remove text
-        if (_updatingSize && aTextShape.length() == 0 &&
+        if (_updatingSize && textShape.length() == 0 &&
                 getEditor().getSelectTool().getDragMode() == RMSelectTool.DragMode.None)
-            aTextShape.removeFromParent();
+            textShape.removeFromParent();
 
         // Stop listening to changes to TextShape RichText
-        aTextShape.getRichText().removePropChangeListener(_richTextLsnr);
+        textShape.getTextModel().removePropChangeListener(_textShapeTextModelPropChangeLsnr);
         _updatingSize = false;
         _updatingMinHeight = 0;
 
         // Set text editor's text shape to null
-        aTextShape.clearTextEditor();
+        textShape.clearTextEditor();
     }
 
     /**
-     * Handle changes to Selected TextShape.RichText
+     * Handle changes to Selected TextShape.TextModel
      */
     protected void handleTextShapeTextModelPropChange(PropChange aPC)
     {
@@ -578,13 +607,15 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
 
             // Get TextShape
             RMTextShape textShape = getSelectedShape();
-            if (textShape == null) return;
+            if (textShape == null)
+                return;
 
             // Get preferred text shape width
             double maxWidth = _updatingMinHeight == 0 ? textShape.getParent().getWidth() - textShape.getX() :
                     textShape.getWidth();
             double prefWidth = textShape.getPrefWidth();
-            if (prefWidth > maxWidth) prefWidth = maxWidth;
+            if (prefWidth > maxWidth)
+                prefWidth = maxWidth;
 
             // If width gets updated, get & set desired width (make sure it doesn't go beyond page border)
             if (_updatingMinHeight == 0)
@@ -603,10 +634,11 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
      */
     public boolean mousePressedSelection(ViewEvent anEvent)
     {
+        List<RMShape> selectedShapes = getEditor().getSelectedOrSuperSelectedShapes();
+
         // Iterator over selected shapes and see if any has an overflow indicator box that was hit
-        List shapes = getEditor().getSelectedOrSuperSelectedShapes();
-        for (int i = 0, iMax = shapes.size(); i < iMax; i++) {
-            RMTextShape text = (RMTextShape) shapes.get(i);
+        for (RMShape shape : selectedShapes) {
+            RMTextShape text = (RMTextShape) shape;
 
             // If no linked text and not painting text indicator, just continue
             if (text.getLinkedText() == null && !isPaintingTextLinkIndicator(text)) continue;
@@ -621,7 +653,7 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
                 if (text.getLinkedText() == null)
                     fireActionEventForObject("LinkedTextMenuItem", anEvent);
 
-                // Otherwise select it
+                    // Otherwise select it
                 else getEditor().setSelectedShape(text.getLinkedText());
 
                 // Return true so SelectTool goes to DragModeNone
@@ -687,12 +719,15 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
     public String getToolTip(T aTextShape, ViewEvent anEvent)
     {
         // If all text is visible and greater than 8 pt, return null
-        if (aTextShape.isAllTextVisible() && aTextShape.getFont().getSize() >= 8) return null;
+        if (aTextShape.isAllTextVisible() && aTextShape.getFont().getSize() >= 8)
+            return null;
 
         // Get text string (just return if empty), trim to 64 chars or less and return
         String string = aTextShape.getText();
-        if (string == null || string.length() == 0) return null;
-        if (string.length() > 64) string = string.substring(0, 64) + "...";
+        if (string == null || string.isEmpty())
+            return null;
+        if (string.length() > 64)
+            string = string.substring(0, 64) + "...";
         return string;
     }
 

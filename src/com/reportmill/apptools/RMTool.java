@@ -169,30 +169,22 @@ public class RMTool<T extends RMShape> extends ViewOwner {
     /**
      * Called when a tool is selected.
      */
-    public void activateTool()
-    {
-    }
+    public void activateTool()  { }
 
     /**
      * Called when a tool is deselected (when another tool is selected).
      */
-    public void deactivateTool()
-    {
-    }
+    public void deactivateTool()  { }
 
     /**
      * Called when a tool is selected even when it's already the current tool.
      */
-    public void reactivateTool()
-    {
-    }
+    public void reactivateTool()  { }
 
     /**
      * Called when a tool is deselected to give an opportunity to finalize changes in progress.
      */
-    public void flushChanges(RMEditor anEditor, RMShape aShape)
-    {
-    }
+    public void flushChanges(RMEditor anEditor, RMShape aShape)  { }
 
     /**
      * Returns whether a given shape is selected in the editor.
@@ -237,14 +229,14 @@ public class RMTool<T extends RMShape> extends ViewOwner {
     /**
      * Editor method - called when an instance of this tool's shape is super selected.
      */
-    public void didBecomeSuperSelected(T aShape)
+    public void handleShapeBecameSuperSelected(T aShape)
     {
     }
 
     /**
      * Editor method - called when an instance of this tool's shape in de-super-selected.
      */
-    public void willLoseSuperSelected(T aShape)
+    public void handleShapeLosingSuperSelected(T aShape)
     {
     }
 
@@ -315,7 +307,7 @@ public class RMTool<T extends RMShape> extends ViewOwner {
         // If not found, look for font with child tools (recurse)
         for (int i = 0, iMax = aShape.getChildCount(); i < iMax && font == null; i++) {
             RMShape child = aShape.getChild(i);
-            RMTool tool = getTool(child);
+            RMTool<?> tool = getTool(child);
             font = tool.getFontDeep(anEditor, child);
         }
 
@@ -424,7 +416,7 @@ public class RMTool<T extends RMShape> extends ViewOwner {
         // Set for children
         for (int i = 0, iMax = aShape.getChildCount(); i < iMax; i++) {
             RMShape child = aShape.getChild(i);
-            RMTool tool = getTool(child);
+            RMTool<?> tool = getTool(child);
             tool.setFontKeyDeep(anEditor, child, aKey, aVal);
         }
     }
@@ -432,9 +424,7 @@ public class RMTool<T extends RMShape> extends ViewOwner {
     /**
      * Event handling - called on mouse move when this tool is active.
      */
-    public void mouseMoved(ViewEvent anEvent)
-    {
-    }
+    public void mouseMoved(ViewEvent anEvent)  { }
 
     /**
      * Event handling for shape creation.
@@ -696,27 +686,17 @@ public class RMTool<T extends RMShape> extends ViewOwner {
         double midY = minY + (maxY - minY) / 2;
 
         // Get point for given handle
-        switch (aHandle) {
-            case HandleNW:
-                return new Point(minX, minY);
-            case HandleNE:
-                return new Point(maxX, minY);
-            case HandleSW:
-                return new Point(minX, maxY);
-            case HandleSE:
-                return new Point(maxX, maxY);
-            case HandleW:
-                return new Point(minX, midY);
-            case HandleE:
-                return new Point(maxX, midY);
-            case HandleN:
-                return new Point(midX, minY);
-            case HandleS:
-                return new Point(midX, maxY);
-        }
-
-        // Return null if invalid handle
-        return null;
+        return switch (aHandle) {
+            case HandleNW -> new Point(minX, minY);
+            case HandleNE -> new Point(maxX, minY);
+            case HandleSW -> new Point(minX, maxY);
+            case HandleSE -> new Point(maxX, maxY);
+            case HandleW -> new Point(minX, midY);
+            case HandleE -> new Point(maxX, midY);
+            case HandleN -> new Point(midX, minY);
+            case HandleS -> new Point(midX, maxY);
+            default -> null; // Return null if invalid handle
+        };
     }
 
     /**
@@ -745,7 +725,9 @@ public class RMTool<T extends RMShape> extends ViewOwner {
             if (hr.contains(aPoint.getX(), aPoint.getY()))
                 return i;
         }
-        return -1; // Return -1 since no handle at given point
+
+        // Return -1 since no handle at given point
+        return -1;
     }
 
     /**
@@ -754,27 +736,17 @@ public class RMTool<T extends RMShape> extends ViewOwner {
     public Cursor getHandleCursor(T aShape, int aHandle)
     {
         // Get cursor for handle type
-        switch (aHandle) {
-            case HandleN:
-                return Cursor.N_RESIZE;
-            case HandleS:
-                return Cursor.S_RESIZE;
-            case HandleE:
-                return Cursor.E_RESIZE;
-            case HandleW:
-                return Cursor.W_RESIZE;
-            case HandleNW:
-                return Cursor.NW_RESIZE;
-            case HandleNE:
-                return Cursor.NE_RESIZE;
-            case HandleSW:
-                return Cursor.SW_RESIZE;
-            case HandleSE:
-                return Cursor.SE_RESIZE;
-        }
-
-        // Return null
-        return null;
+        return switch (aHandle) {
+            case HandleN -> Cursor.N_RESIZE;
+            case HandleS -> Cursor.S_RESIZE;
+            case HandleE -> Cursor.E_RESIZE;
+            case HandleW -> Cursor.W_RESIZE;
+            case HandleNW -> Cursor.NW_RESIZE;
+            case HandleNE -> Cursor.NE_RESIZE;
+            case HandleSW -> Cursor.SW_RESIZE;
+            case HandleSE -> Cursor.SE_RESIZE;
+            default -> null;
+        };
     }
 
     /**
@@ -845,27 +817,18 @@ public class RMTool<T extends RMShape> extends ViewOwner {
     public int getHandleOpposing(int handle)
     {
         // Return opposing handle from given panel
-        switch (handle) {
-            case HandleNW:
-                return HandleSE;
-            case HandleNE:
-                return HandleSW;
-            case HandleSW:
-                return HandleNE;
-            case HandleSE:
-                return HandleNW;
-            case HandleW:
-                return HandleE;
-            case HandleE:
-                return HandleW;
-            case HandleS:
-                return HandleN;
-            case HandleN:
-                return HandleS;
-        }
+        return switch (handle) {
+            case HandleNW -> HandleSE;
+            case HandleNE -> HandleSW;
+            case HandleSW -> HandleNE;
+            case HandleSE -> HandleNW;
+            case HandleW -> HandleE;
+            case HandleE -> HandleW;
+            case HandleS -> HandleN;
+            case HandleN -> HandleS;
+            default -> -1; // Return -1 if given handle is unknown
+        };
 
-        // Return -1 if given handle is unknown
-        return -1;
     }
 
     /**
@@ -938,28 +901,22 @@ public class RMTool<T extends RMShape> extends ViewOwner {
     }
 
     /**
-     * Notifies tool that a something was dragged into of one of it's shapes with drag and drop.
+     * Notifies tool that a something was dragged into of one of its shapes with drag and drop.
      */
-    public void dragEnter(RMShape aShape, ViewEvent anEvent)
-    {
-    }
+    public void dragEnter(RMShape aShape, ViewEvent anEvent)  { }
 
     /**
-     * Notifies tool that a something was dragged out of one of it's shapes with drag and drop.
+     * Notifies tool that a something was dragged out of one of its shapes with drag and drop.
      */
-    public void dragExit(RMShape aShape, ViewEvent anEvent)
-    {
-    }
+    public void dragExit(RMShape aShape, ViewEvent anEvent)  { }
 
     /**
-     * Notifies tool that something was dragged over one of it's shapes with drag and drop.
+     * Notifies tool that something was dragged over one of its shapes with drag and drop.
      */
-    public void dragOver(RMShape aShape, ViewEvent anEvent)
-    {
-    }
+    public void dragOver(RMShape aShape, ViewEvent anEvent)  { }
 
     /**
-     * Notifies tool that something was dropped on one of it's shapes with drag and drop.
+     * Notifies tool that something was dropped on one of its shapes with drag and drop.
      */
     public void drop(T aShape, ViewEvent anEvent)
     {
@@ -1057,7 +1014,7 @@ public class RMTool<T extends RMShape> extends ViewOwner {
         if (aShape != editor.getSelPage()) {
 
             // Create drop image file options array
-            String options[] = {"Image Shape", "Texture", "Cancel"};
+            String[] options = {"Image Shape", "Texture", "Cancel"};
 
             // Run drop image file options panel
             String msg = "Image can be either image shape or texture", title = "Image import";
@@ -1300,5 +1257,4 @@ public class RMTool<T extends RMShape> extends ViewOwner {
         // Otherwise, get tool for super class
         //return createTool(aClass.getSuperclass());
     }
-
 }

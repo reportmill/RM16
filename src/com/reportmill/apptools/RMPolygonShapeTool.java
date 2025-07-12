@@ -313,9 +313,9 @@ public class RMPolygonShapeTool<T extends RMPolygonShape> extends RMTool<T> {
     /**
      * Editor method - called when an instance of this tool's shape in de-super-selected.
      */
-    public void willLoseSuperSelected(T aShape)
+    public void handleShapeLosingSuperSelected(T aShape)
     {
-        super.willLoseSuperSelected(aShape);
+        super.handleShapeLosingSuperSelected(aShape);
         _selectedPointIndex = -1;
     }
 

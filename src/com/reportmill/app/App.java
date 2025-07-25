@@ -12,6 +12,7 @@ import snap.viewx.DialogBox;
 import snap.viewx.ExceptionReporter;
 import snap.web.WebFile;
 import snap.web.WebURL;
+import java.awt.*;
 import java.io.File;
 import java.util.List;
 
@@ -49,10 +50,9 @@ public class App {
         Prefs.setDefaultPrefs(prefs);
 
         // Install Exception reporter
-        ExceptionReporter er = new ExceptionReporter("ReportMill");
-        er.setToAddress("support@reportmill.com");
-        er.setInfo("ReportMill Version " + ReportMill.getVersion() + ", Build Date: " + ReportMill.getBuildInfo());
-        Thread.setDefaultUncaughtExceptionHandler(er);
+        ExceptionReporter.setAppName("ReportMill");
+        ExceptionReporter.setAppInfo("ReportMill Version " + ReportMill.getVersion() + ", Build Date: " + ReportMill.getBuildInfo());
+        Thread.setDefaultUncaughtExceptionHandler(new ExceptionReporter());
 
         // Run welcome panel
         boolean didOpenFile = openFilesFromArgs(args);
@@ -60,13 +60,13 @@ public class App {
             WelcomePanel.getShared().showPanel();
 
         // Install OpenFiles Handler
-//        Desktop desktop = Desktop.getDesktop();
-//        if (desktop.isSupported(Desktop.Action.APP_OPEN_FILE))
-//            desktop.setOpenFileHandler(ofh -> ViewUtils.runLater(() -> openFiles(ofh.getFiles())));
-//        if (desktop.isSupported(Desktop.Action.APP_PREFERENCES))
-//            desktop.setPreferencesHandler(pe -> new PreferencesPanel().showPanel(null));
-//        if (desktop.isSupported(Desktop.Action.APP_QUIT_HANDLER))
-//            desktop.setQuitHandler((qe,qr) -> { quitApp(); qr.cancelQuit(); });
+        Desktop desktop = Desktop.getDesktop();
+        if (desktop.isSupported(Desktop.Action.APP_OPEN_FILE))
+            desktop.setOpenFileHandler(ofh -> ViewUtils.runLater(() -> openFiles(ofh.getFiles())));
+        if (desktop.isSupported(Desktop.Action.APP_PREFERENCES))
+            desktop.setPreferencesHandler(pe -> new PreferencesPanel().showPanel(null));
+        if (desktop.isSupported(Desktop.Action.APP_QUIT_HANDLER))
+            desktop.setQuitHandler((qe,qr) -> { quitApp(); qr.cancelQuit(); });
     }
 
     /**

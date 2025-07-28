@@ -28,7 +28,7 @@ public class RMCrossTabCellTool<T extends RMCrossTabCell> extends RMTextTool<T> 
     protected View createUI()
     {
         // Get UI for this tool
-        ChildView cellUI = (ChildView) createUIForClass(getClass());
+        ChildView cellUI = (ChildView) UILoader.loadViewForOwner(this);
 
         // Create SortPanel, set bounds and install
         _sortPanel = new RMSortPanel(this);
@@ -36,7 +36,7 @@ public class RMCrossTabCellTool<T extends RMCrossTabCell> extends RMTextTool<T> 
         cellUI.addChild(_sortPanel.getUI(), 1);
 
         // Get super UI (TextTool UI - a ColView) and add UI for this tool
-        ColView colView = (ColView) createUIForClass(RMTextTool.class);
+        ColView colView = (ColView) UILoader.loadViewForClass(RMTextTool.class);
         colView.setGrowHeight(false); // So inspector will scroll
         colView.addChild(cellUI, 0);
         return colView;

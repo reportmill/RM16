@@ -7,6 +7,7 @@ import com.reportmill.graphics.*;
 import com.reportmill.shape.*;
 import java.util.*;
 import snap.util.*;
+import snap.web.WebURL;
 
 /**
  * This class offers a command line interface to some of ReportMill's functionality. You can invoke it like this:
@@ -156,7 +157,8 @@ public class Shell {
             System.err.print("Reading infile: " + infile);
             System.err.flush();
             time = System.currentTimeMillis();
-            Map map = new RMXMLReader().readObject(infile, template.getDataSourceSchema());
+            WebURL infileUrl = WebURL.getUrl(infile); assert infileUrl != null;
+            Map map = new RMXMLReader().readObjectFromUrl(infileUrl, template.getDataSourceSchema());
             seconds = (System.currentTimeMillis() - time) / 1000f;
             System.err.println(" (" + seconds + " seconds)");
 

@@ -306,7 +306,7 @@ public class RMExtras {
         RMDocument template = new RMDocument(getMoviesURL());
 
         // Get objects
-        Map map = new RMXMLReader().readObject(getHollywoodURL(), template.getDataSourceSchema());
+        Map map = new RMXMLReader().readObjectFromUrl(getHollywoodURL(), template.getDataSourceSchema());
 
         // Generate report
         RMDocument report = template.generateReport(map);
@@ -369,7 +369,7 @@ public class RMExtras {
      */
     public static void passwordReport()
     {
-        Map dset = new RMXMLReader().readObject(getHollywoodURL());
+        Map dset = new RMXMLReader().readObjectFromUrl(getHollywoodURL(), null);
         RMDocument template = new RMDocument(getMoviesURL());
         RMDocument report = template.generateReport(dset);
 

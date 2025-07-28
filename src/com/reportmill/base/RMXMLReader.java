@@ -4,6 +4,7 @@
 package com.reportmill.base;
 import java.util.*;
 import snap.util.*;
+import snap.web.WebURL;
 
 /**
  * This class creates an object graph of collections (Map/List) and core Java types from a given XML source.
@@ -31,21 +32,28 @@ public class RMXMLReader {
     }
 
     /**
-     * Returns a map loaded from the given XML source.
+     * Returns a map loaded from the given XML source with the given XML schema.
      */
-    public Map readObject(Object aSource)
+    public Map readObjectFromUrl(WebURL sourceUrl, Schema aSchema)
     {
-        return readObject(aSource, null);
+        XMLElement rootXML = XMLElement.readXmlFromUrl(sourceUrl);
+        return readObjectFromXml(rootXML, aSchema);
     }
 
     /**
      * Returns a map loaded from the given XML source with the given XML schema.
      */
-    public Map readObject(Object aSource, Schema aSchema)
+    public Map readObjectFromBytes(byte[] sourceBytes, Schema aSchema)
     {
-        // Get root element for source
-        XMLElement rootXML = XMLElement.readFromXMLSource(aSource);
+        XMLElement rootXML = XMLElement.readXmlFromBytes(sourceBytes);
+        return readObjectFromXml(rootXML, aSchema);
+    }
 
+    /**
+     * Returns a map loaded from the given XML source with the given XML schema.
+     */
+    private Map readObjectFromXml(XMLElement rootXML, Schema aSchema)
+    {
         // If root is null, return null
         if (rootXML == null)
             return null;

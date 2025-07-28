@@ -199,7 +199,7 @@ public class RMEditorClipboard {
 
         // Get unarchived object from clipboard bytes
         byte bytes[] = cboard.getDataBytes(RM_XML_TYPE);
-        Object obj = new RMArchiver().readFromXMLBytes(bytes);
+        Object obj = new RMArchiver().readXmlFromBytes(bytes);
 
         // A bit of a hack - remove any non-shapes (plugins for one)
         if (obj instanceof List) {

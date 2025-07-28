@@ -45,7 +45,10 @@ public class RMArchiver extends XMLArchiver {
         // Create archiver, read, set source and return
         setRootObject(aBaseDoc);
 
-        RMDocument doc = (RMDocument) readFromXMLSource(url != null ? url : bytes);
+        RMDocument doc;
+        if (url != null)
+            doc = (RMDocument) readXmlFromUrl(url);
+        else doc = (RMDocument) readXmlFromBytes(bytes);
 
         // Set Source URL and return
         doc.setSourceURL(getSourceURL());

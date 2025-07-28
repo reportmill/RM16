@@ -5,6 +5,8 @@ import com.reportmill.shape.RMDocument;
 import com.reportmill.shape.RMPage;
 import com.reportmill.shape.RMShape;
 import snap.geom.Point;
+import snap.web.WebURL;
+
 import java.util.List;
 
 /**
@@ -51,8 +53,8 @@ public class ScaleDocContent {
         Object templateSource = RMExtras.getMoviesURL();
         RMDocument template = getDocWithContentScaled(templateSource, .5);
 
-        Object dataSetSource = RMExtras.getHollywoodURL();
-        Object dataSet = new RMXMLReader().readObject(dataSetSource);
+        WebURL dataSetSource = RMExtras.getHollywoodURL();
+        Object dataSet = new RMXMLReader().readObjectFromUrl(dataSetSource, null);
         RMDocument report = template.generateReport(dataSet);
         report.writePDF("/tmp/Movies.pdf");
     }

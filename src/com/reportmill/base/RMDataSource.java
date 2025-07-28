@@ -92,7 +92,7 @@ public class RMDataSource implements XMLArchiver.Archivable {
 
         // Create XML reader and read dataset
         RMXMLReader reader = new RMXMLReader();
-        try { _dataset = reader.readObject(bytes, _customSchema ? _schema : null); }
+        try { _dataset = reader.readObjectFromBytes(bytes, _customSchema ? _schema : null); }
         catch (Throwable e) { throw new RuntimeException(e); }
 
         // If schema is null, set to reader schema

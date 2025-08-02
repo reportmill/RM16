@@ -667,7 +667,7 @@ public class RMTable extends RMParentShape {
         // Iterate over child elements and unarchive table rows
         for (int i = 0, iMax = anElement.size(); i < iMax; i++) {
             XMLElement childXML = anElement.get(i);
-            Class childClass = anArchiver.getClass(childXML.getName());
+            Class childClass = anArchiver.getClassForName(childXML.getName());
             if (childClass != null && RMTableRow.class.isAssignableFrom(childClass)) {
                 RMShape shape = (RMTableRow) anArchiver.fromXML(childXML, this);
                 addChild(shape);

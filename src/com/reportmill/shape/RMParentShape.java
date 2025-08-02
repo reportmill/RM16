@@ -731,7 +731,7 @@ public class RMParentShape extends RMShape implements PropChange.DoChange {
             XMLElement childXML = anElement.get(i);
 
             // Get child class - if RMShape, unarchive and add
-            Class childClass = anArchiver.getClass(childXML.getName());
+            Class childClass = anArchiver.getClassForName(childXML.getName());
             if (childClass != null && RMShape.class.isAssignableFrom(childClass)) {
                 RMShape shape = (RMShape) anArchiver.fromXML(childXML, this);
                 addChild(shape);

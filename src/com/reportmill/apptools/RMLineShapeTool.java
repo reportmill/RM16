@@ -134,7 +134,7 @@ public class RMLineShapeTool<T extends RMLineShape> extends RMTool<T> {
 
         // Add "None" menu item
         menuBuilder.name("ArrowsMenuButtonMenuItem 999").text("None").save();
-        MenuItem[] menuItems = menuBuilder.buildAll();
+        List<MenuItem> menuItems = menuBuilder.buildAll();
         menuButton.setMenuItems(menuItems);
     }
 

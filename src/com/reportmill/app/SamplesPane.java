@@ -1,8 +1,8 @@
 package com.reportmill.app;
 import com.reportmill.shape.*;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
-
 import snap.geom.*;
 import snap.gfx.*;
 import snap.util.*;
@@ -132,8 +132,8 @@ public class SamplesPane extends ViewOwner {
      */
     private void loadIndexFile()
     {
-        WebURL url = WebURL.getUrl(SAMPLES_ROOT + "index.txt");
-        url.getResponseAndCall(resp -> indexFileLoaded(resp));
+        WebURL url = WebURL.getUrl(SAMPLES_ROOT + "index.txt"); assert url != null;
+        CompletableFuture.supplyAsync(url::getResponse).thenAccept(this::indexFileLoaded);
     }
 
     /**
@@ -155,7 +155,7 @@ public class SamplesPane extends ViewOwner {
         List<String> docNamesList = new ArrayList<>();
         for (String line : lines) {
             line = line.trim();
-            if (line.length() > 0)
+            if (!line.isEmpty())
                 docNamesList.add(line);
         }
 
@@ -228,7 +228,7 @@ public class SamplesPane extends ViewOwner {
             ibox.setAlign(Pos.TOP_CENTER);
             ibox.setChildren(iview, label);
             ibox.setPadding(0, 0, 8, 0);
-            ibox.setName("ItemBox" + String.valueOf(i));
+            ibox.setName("ItemBox" + i);
             ibox.addEventHandler(e -> itemBoxWasPressed(ibox, e), MousePress);
             rowView.addChild(ibox);
         }
@@ -376,7 +376,7 @@ public class SamplesPane extends ViewOwner {
      */
     private void setImage(Image anImg, int anIndex)
     {
-        String name = "ImageView" + String.valueOf(anIndex);
+        String name = "ImageView" + anIndex;
         ImageView iview = getView(name, ImageView.class);
         iview.setImage(anImg);
     }

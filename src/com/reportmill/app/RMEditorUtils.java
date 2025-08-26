@@ -30,7 +30,7 @@ public class RMEditorUtils {
             theShapes = anEditor.getSelectedShapes();
 
         // If there are less than 2 selected shapes play a beep (the user really should know better)
-        if (theShapes.size() == 0) {
+        if (theShapes.isEmpty()) {
             anEditor.beep();
             return;
         }
@@ -118,7 +118,7 @@ public class RMEditorUtils {
         }
 
         // If were some ungroupedShapes, select them (set selected objects for undo/redo)
-        if (ungroupedShapes.size() > 0)
+        if (!ungroupedShapes.isEmpty())
             anEditor.setSelectedShapes(ungroupedShapes);
 
             // If no ungroupedShapes, beep at silly user
@@ -281,7 +281,7 @@ public class RMEditorUtils {
         anEditor.undoerSetUndoTitle("Make Same Size");
         Size size = anEditor.getSelectedShape().getSize();
         for (RMShape shape : anEditor.getSelectedShapes())
-            shape.setSize(size.getWidth(), size.getHeight());
+            shape.setSize(size.width, size.height);
     }
 
     /**
@@ -416,10 +416,8 @@ public class RMEditorUtils {
     {
         // Get selected shapes and parent (just return if no shapes)
         List<RMShape> shapes = anEditor.getSelectedShapes();
-        if (shapes.size() == 0) {
-            anEditor.beep();
-            return;
-        }
+        if (shapes.isEmpty()) {
+            anEditor.beep(); return; }
         RMShape parent = anEditor.getSelectedShape(0).getParent();
 
         // Create switch shape to hold selected shapes with fram of combined bounds of children (ouset by just a little)

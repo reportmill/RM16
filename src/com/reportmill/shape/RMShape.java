@@ -249,7 +249,7 @@ public class RMShape implements Cloneable, RMTypes, Archivable, Key.GetSet {
      */
     public void setSize(Size aSize)
     {
-        setSize(aSize.getWidth(), aSize.getHeight());
+        setSize(aSize.width, aSize.height);
     }
 
     /**
@@ -410,20 +410,18 @@ public class RMShape implements Cloneable, RMTypes, Archivable, Key.GetSet {
 
         // Convert X & Y axis to parent coords
         Transform toParent = getLocalToParent();
-        Size x_axis = new Size(_width, 0);
-        toParent.transformVector(x_axis);
-        Size y_axis = new Size(0, _height);
-        toParent.transformVector(y_axis);
+        Size x_axis = toParent.transformVector(_width, 0);
+        Size y_axis = toParent.transformVector(0, _height);
 
         // Scale widths of X & Y axes in parent coords by ratio of NewWidth/OldWidth
         double sizeByRatio1 = Math.abs(aWidth) / (Math.abs(x_axis.width) + Math.abs(y_axis.width));
-        x_axis.width *= sizeByRatio1;
-        y_axis.width *= sizeByRatio1;
+        double new_x_axis_width = x_axis.width * sizeByRatio1;
+        double new_y_axis_width = y_axis.width * sizeByRatio1;
 
         // Scale heights of X & Y axes in parent coords by ratio of NewHeight/OldHeight
         double sizeByRatio2 = Math.abs(aHeight) / (Math.abs(x_axis.height) + Math.abs(y_axis.height));
-        x_axis.height *= sizeByRatio2;
-        y_axis.height *= sizeByRatio2;
+        double new_x_axis_height = x_axis.height * sizeByRatio2;
+        double new_y_axis_height = y_axis.height * sizeByRatio2;
 
         // Cache current bounds origin (this shouldn't change)
         Point origin = getFrameXY();
@@ -431,8 +429,8 @@ public class RMShape implements Cloneable, RMTypes, Archivable, Key.GetSet {
         // Reset current Skew and convert X & Y axis from parent coords
         setSkewXY(0, 0);
         Transform fromParent = getParentToLocal();
-        fromParent.transformVector(x_axis);
-        fromParent.transformVector(y_axis);
+        x_axis = fromParent.transformVector(new_x_axis_width, new_x_axis_height);
+        y_axis = fromParent.transformVector(new_y_axis_width, new_y_axis_height);
 
         // Set the size to compensate for the skew
         setSize(x_axis.width, y_axis.height);

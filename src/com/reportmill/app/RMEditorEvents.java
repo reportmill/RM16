@@ -435,9 +435,9 @@ public class RMEditorEvents extends RMViewerEvents {
 
         // Go ahead and offset aPoint if necessary
         if (Math.abs(dx) <= gridSpacing / 2)
-            aPoint = aPoint.offsetted(dx, 0);
+            aPoint = aPoint.addXY(dx, 0);
         if (Math.abs(dy) <= gridSpacing / 2)
-            aPoint = aPoint.offsetted(0, dy);
+            aPoint = aPoint.addXY(0, dy);
 
         // Covert back to shape if we need to
         if (!snapEdges)
@@ -531,9 +531,9 @@ public class RMEditorEvents extends RMViewerEvents {
 
         // Go ahead and offset aPoint if necessary
         if (Math.abs(dx) <= gridSpacing / 2)
-            aPoint = aPoint.offsetted(dx, 0);
+            aPoint = aPoint.addXY(dx, 0);
         if (Math.abs(dy) <= gridSpacing / 2)
-            aPoint = aPoint.offsetted(0, dy);
+            aPoint = aPoint.addXY(0, dy);
 
         // Covert back to shape if we need to
         if (!snapEdges)

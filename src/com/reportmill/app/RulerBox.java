@@ -132,7 +132,7 @@ public class RulerBox extends ParentView {
         double _zoomFactor;
 
         // The mouse point
-        Point _mouse = new Point();
+        Point _mouse = Point.ZERO;
 
         // Ruler constants
         private static final int RULER_WIDTH = 20;

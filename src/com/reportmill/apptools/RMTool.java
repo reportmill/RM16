@@ -998,7 +998,7 @@ public class RMTool<T extends RMShape> extends ViewOwner {
         else if (ext.equals("rpt")) dropReportFile(aShape, aFile, aPoint);
 
         // Return point offset by 10
-        return aPoint.offsetted(10, 10);
+        return aPoint.addXY(10, 10);
     }
 
     /**

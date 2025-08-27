@@ -518,8 +518,7 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
         tableRow.repaint();
 
         // Get event x in TableRow coords and whether point is in TableRow
-        Point point = editor.convertToShape(anEvent.getX(), anEvent.getY(), tableRow);
-        point.y = 2;
+        Point point = editor.convertToShape(anEvent.getX(), anEvent.getY(), tableRow).withY(2);
         boolean inRow = tableRow.contains(point);
 
         // Handle MouseDragged: layout children by X (if outside row, skip drag shape)

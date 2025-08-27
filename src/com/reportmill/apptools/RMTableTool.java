@@ -165,8 +165,7 @@ public class RMTableTool<T extends RMTable> extends RMParentShapeTool<T> impleme
             RMParentShape parent = table.getParent();
 
             // If in TableGroup, get out of it
-            if (parent instanceof RMTableGroup) {
-                RMTableGroup tableGroup = (RMTableGroup) parent;
+            if (parent instanceof RMTableGroup tableGroup) {
                 tableGroup.repaint();
                 tableGroup.removeTable(table);
                 tableGroup.getParent().addChild(table);
@@ -467,8 +466,8 @@ public class RMTableTool<T extends RMTable> extends RMParentShapeTool<T> impleme
         dh = MathUtils.clamp(dh, -Math.abs(tableRow.height()), Math.abs(aTable.height()) -
                 aTable.getResizeBarBounds(aTable.getChildCount() - 1).getMaxY());
 
-        // Update last mouse point, rese table row height and repaint table
-        _lastMousePoint.y += dh;
+        // Update last mouse point, reset table row height and repaint table
+        _lastMousePoint = _lastMousePoint.addXY(0, dh);
         tableRow.setHeight(tableRow.height() + dh);
         aTable.relayout();
         aTable.repaint();

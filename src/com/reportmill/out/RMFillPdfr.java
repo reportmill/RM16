@@ -101,19 +101,20 @@ public class RMFillPdfr {
 
         // Get gradient paint and start/end
         GradientPaint gpnt = aFill.snap().copyForRect(aShape.getBoundsInside());
-        Point startPt = new Point(gpnt.getStartX(), gpnt.getStartY()), endPt = new Point(gpnt.getEndX(), gpnt.getEndY());
+        Point startPt = new Point(gpnt.getStartX(), gpnt.getStartY());
+        Point endPt = new Point(gpnt.getEndX(), gpnt.getEndY());
 
         // In pdf, coordinates of the gradient axis are defined in pattern space.  Pattern space is the same as the
         // page's coordinate system, and doesn't get affected by changes to the ctm. Since the RMGradient returns
         // points in the shape's coordinate system, we have to transform them into pattern space (page space).
         RMShape page = aShape.getPageShape();
         Transform patternSpaceTransform = aShape.getLocalToParent(page);
-        patternSpaceTransform.transformPoint(startPt);
-        patternSpaceTransform.transformPoint(endPt);
+        startPt = startPt.transformedBy(patternSpaceTransform);
+        endPt = endPt.transformedBy(patternSpaceTransform);
 
         // add in flip
-        startPt.y = page.getFrameMaxY() - startPt.y;
-        endPt.y = page.getFrameMaxY() - endPt.y;
+        startPt = startPt.withY(page.getFrameMaxY() - startPt.y);
+        endPt = endPt.withY(page.getFrameMaxY() - endPt.y);
 
         // Add the newly calculated endpoints to the shading dictionary
         List<Double> coordsList = new ArrayList<>(4);

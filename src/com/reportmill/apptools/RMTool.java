@@ -978,7 +978,8 @@ public class RMTool<T extends RMShape> extends ViewOwner {
 
         // Get path and extension (set to empty string if null)
         String ext = aFile.getFileType();
-        if (ext == null) return aPoint;
+        if (ext == null)
+            return aPoint;
         ext = ext.toLowerCase();
 
         // If xml file, pass it to setDataSource()
@@ -997,8 +998,7 @@ public class RMTool<T extends RMShape> extends ViewOwner {
         else if (ext.equals("rpt")) dropReportFile(aShape, aFile, aPoint);
 
         // Return point offset by 10
-        aPoint.offset(10, 10);
-        return aPoint;
+        return aPoint.offsetted(10, 10);
     }
 
     /**

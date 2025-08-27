@@ -273,8 +273,7 @@ public class RMEditorEvents extends RMViewerEvents {
         RMEditor editor = getEditor();
 
         // Get current event point in doc coords, rounded to integers
-        Point point = editor.convertToShape(_currentEvent.getX(), _currentEvent.getY(), null);
-        point.snap();
+        Point point = editor.convertToShape(_currentEvent.getX(), _currentEvent.getY(), null).round();
 
         // If shift key is down, constrain values to increments of 45 degrees from _downPoint
         if (_currentEvent.isShiftDown() && !editor.isCurrentToolSelectToolAndSelecting()) {
@@ -435,8 +434,10 @@ public class RMEditorEvents extends RMViewerEvents {
         }
 
         // Go ahead and offset aPoint if necessary
-        if (Math.abs(dx) <= gridSpacing / 2) aPoint.offset(dx, 0);
-        if (Math.abs(dy) <= gridSpacing / 2) aPoint.offset(0, dy);
+        if (Math.abs(dx) <= gridSpacing / 2)
+            aPoint = aPoint.offsetted(dx, 0);
+        if (Math.abs(dy) <= gridSpacing / 2)
+            aPoint = aPoint.offsetted(0, dy);
 
         // Covert back to shape if we need to
         if (!snapEdges)
@@ -529,8 +530,10 @@ public class RMEditorEvents extends RMViewerEvents {
         }
 
         // Go ahead and offset aPoint if necessary
-        if (Math.abs(dx) <= gridSpacing / 2) aPoint.offset(dx, 0);
-        if (Math.abs(dy) <= gridSpacing / 2) aPoint.offset(0, dy);
+        if (Math.abs(dx) <= gridSpacing / 2)
+            aPoint = aPoint.offsetted(dx, 0);
+        if (Math.abs(dy) <= gridSpacing / 2)
+            aPoint = aPoint.offsetted(0, dy);
 
         // Covert back to shape if we need to
         if (!snapEdges)

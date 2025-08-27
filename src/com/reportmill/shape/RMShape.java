@@ -366,7 +366,7 @@ public class RMShape implements Cloneable, RMTypes, Archivable, Key.GetSet {
      */
     public Point getFrameXY()
     {
-        return isRSS() ? getFrame().getXY().clone() : getXY();
+        return isRSS() ? getFrame().getXY() : getXY();
     }
 
     /**
@@ -1228,7 +1228,8 @@ public class RMShape implements Cloneable, RMTypes, Archivable, Key.GetSet {
      */
     public Point localToParent(double aX, double aY)
     {
-        if (isTransformSimple()) return new Point(aX + getX(), aY + getY());
+        if (isTransformSimple())
+            return new Point(aX + getX(), aY + getY());
         return getLocalToParent().transformXY(aX, aY);
     }
 
@@ -1238,10 +1239,8 @@ public class RMShape implements Cloneable, RMTypes, Archivable, Key.GetSet {
     public Point localToParent(double aX, double aY, RMShape aPar)
     {
         Point point = new Point(aX, aY);
-        for (RMShape n = this; n != aPar && n != null; n = n.getParent()) {
-            if (n.isTransformSimple()) point.offset(n.getX(), n.getY());
-            else point = n.localToParent(point.x, point.y);
-        }
+        for (RMShape parentShape = this; parentShape != aPar && parentShape != null; parentShape = parentShape.getParent())
+            point = parentShape.localToParent(point.x, point.y);
         return point;
     }
 

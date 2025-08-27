@@ -222,10 +222,7 @@ public class RMShape implements Cloneable, RMTypes, Archivable, Key.GetSet {
     /**
      * Sets the X and Y location of the shape to the given point (convenience).
      */
-    public void setXY(Point aPoint)
-    {
-        setXY(aPoint.getX(), aPoint.getY());
-    }
+    public void setXY(Point aPoint)  { setXY(aPoint.x, aPoint.y); }
 
     /**
      * Sets the X and Y location of the shape to the given point (convenience).
@@ -369,16 +366,13 @@ public class RMShape implements Cloneable, RMTypes, Archivable, Key.GetSet {
      */
     public Point getFrameXY()
     {
-        return isRSS() ? new Point(getFrame().getXY()) : getXY();
+        return isRSS() ? getFrame().getXY().clone() : getXY();
     }
 
     /**
      * Sets a shape's origin such that its bounds rect (in parent coords) has origin at the given point.
      */
-    public void setFrameXY(Point aPoint)
-    {
-        setFrameXY(aPoint.getX(), aPoint.getY());
-    }
+    public void setFrameXY(Point aPoint)  { setFrameXY(aPoint.x, aPoint.y); }
 
     /**
      * Sets a shape's origin such that its frame (enclosing rect in parent coords) will have the given X and Y.
@@ -481,7 +475,7 @@ public class RMShape implements Cloneable, RMTypes, Archivable, Key.GetSet {
         // If rotated-scaled-skewd, get XY in parent coords and set XY as an offset from parent
         if (isRSS()) {
             Point p = getXYP();
-            setXY(_x + anX - p.getX(), _y + aY - p.getY());
+            setXY(_x + anX - p.x, _y + aY - p.y);
         }
 
         // If not rotated-scaled-skewed, just set x/y (adjusted if width/height are negative)
@@ -1652,12 +1646,12 @@ public class RMShape implements Cloneable, RMTypes, Archivable, Key.GetSet {
         bounds.inset(-lineWidth / 2, -lineWidth / 2);
 
         // If point isn't even in bounds rect, just return false
-        if (!bounds.contains(aPoint.getX(), aPoint.getY()))
+        if (!bounds.contains(aPoint.x, aPoint.y))
             return false;
 
         // Get shape in bounds rect and return whether shape intersects point
         Shape path = getPath();
-        return path.contains(aPoint.getX(), aPoint.getY(), lineWidth);
+        return path.contains(aPoint.x, aPoint.y, lineWidth);
     }
 
     /**

@@ -367,21 +367,21 @@ public class RMEditorProxGuide {
 
         // If
         if (minDX <= maxDX && minDX < 5)
-            aPoint.setX(aPoint.x - (bounds.getX() - minDXShape.getFrameX()));
+            aPoint = aPoint.withX(aPoint.x - (bounds.getX() - minDXShape.getFrameX()));
 
         // If
         if (maxDX < minDX && maxDX < 5)
-            aPoint.setX(aPoint.x - (bounds.getMaxX() - maxDXShape.getFrameMaxX()));
+            aPoint = aPoint.withX(aPoint.x - (bounds.getMaxX() - maxDXShape.getFrameMaxX()));
 
         // If
         if (minDY <= maxDY && minDY < 5)
-            aPoint.setY(aPoint.y - (bounds.getY() - minDYShape.getFrameY()));
+            aPoint = aPoint.withY(aPoint.y - (bounds.getY() - minDYShape.getFrameY()));
 
         // If
         if (maxDY < minDY && maxDY < 5)
-            aPoint.setY(aPoint.y - (bounds.getMaxY() - maxDYShape.getFrameMaxY()));
+            aPoint = aPoint.withY(aPoint.y - (bounds.getMaxY() - maxDYShape.getFrameMaxY()));
 
-        // Return point
+        // Return
         return aPoint;
     }
 

@@ -280,20 +280,27 @@ public class RMEditorEvents extends RMViewerEvents {
         if (_currentEvent.isShiftDown() && !editor.isCurrentToolSelectToolAndSelecting()) {
 
             // Get absolute values of delta X and delta Y relative to mouseDown point
-            double absX = Math.abs(point.getX() - _downPoint.getX()), absY = Math.abs(point.getY() - _downPoint.getY());
+            double absX = Math.abs(point.x - _downPoint.x);
+            double absY = Math.abs(point.y - _downPoint.y);
 
             // If X is greater than Y set Y to either X or zero
             if (absX > absY) {
+
                 // If X is twice as big as Y or more, set Y to 0, If X is less than twice as big as Y, set Y to X
-                if (absX > 2 * absY) point.setY(_downPoint.getY());
-                else point.setY(_downPoint.getY() + MathUtils.sign(point.getY() - _downPoint.getY()) * absX);
+                double newY = _downPoint.y;
+                if (absX <= 2 * absY)
+                    newY = _downPoint.y + MathUtils.sign(point.y - _downPoint.y) * absX;
+                point = point.withY(newY);
             }
 
             // If Y is greater than X, set X to either Y or zero
             else {
+
                 // If X is twice as big as Y or more, set Y to 0, If X is less than twice as big as Y, set Y to X
-                if (absY > 2 * absX) point.setX(_downPoint.getX());
-                else point.setX(_downPoint.getX() + MathUtils.sign(point.getX() - _downPoint.getX()) * absY);
+                double newX = _downPoint.x;
+                if (absY <= 2 * absX)
+                    newX = _downPoint.x + MathUtils.sign(point.x - _downPoint.x) * absY;
+                point = point.withX(newX);
             }
         }
 
@@ -341,7 +348,8 @@ public class RMEditorEvents extends RMViewerEvents {
 
         // Get local copy of point
         Point point = aPoint;
-        double x = point.getX(), y = point.getY();
+        double x = point.x;
+        double y = point.y;
 
         // If doc snaps to grid, adjust for snap
         if (doc.getSnapGrid())
@@ -352,7 +360,7 @@ public class RMEditorEvents extends RMViewerEvents {
             point = pointSnappedToGuides(point, snapEdges);
 
         // If points haven't changed, adjust for proximity guides
-        if (x == point.getX() && y == point.getY())
+        if (x == point.x && y == point.y)
             point = RMEditorProxGuide.pointSnappedToProximityGuides(editor, point);
 
         // Return point
@@ -385,13 +393,13 @@ public class RMEditorEvents extends RMViewerEvents {
         if (!snapEdges) {
 
             // Get point in editor coords
-            aPoint = editor.convertFromShape(aPoint.getX(), aPoint.getY(), null);
+            aPoint = editor.convertFromShape(aPoint.x, aPoint.y, null);
 
             // Get dx/dy to nearest grid
-            double px = MathUtils.round(aPoint.getX() - docFrameX, gridSpacing) + docFrameX;
-            double py = MathUtils.round(aPoint.getY() - docFrameY, gridSpacing) + docFrameY;
-            dx = px - aPoint.getX();
-            dy = py - aPoint.getY();
+            double px = MathUtils.round(aPoint.x - docFrameX, gridSpacing) + docFrameX;
+            double py = MathUtils.round(aPoint.y - docFrameY, gridSpacing) + docFrameY;
+            dx = px - aPoint.x;
+            dy = py - aPoint.y;
         }
 
         // If SnapEdges, find dx/dy for all edges of selected shapes to nearest grid or guide
@@ -459,19 +467,20 @@ public class RMEditorEvents extends RMViewerEvents {
         if (!snapEdges) {
 
             // Get point in editor coords
-            aPoint = editor.convertFromShape(aPoint.getX(), aPoint.getY(), null);
+            aPoint = editor.convertFromShape(aPoint.x, aPoint.y, null);
 
             // Find min dx/dy to nearest guide
             for (int j = 0, jMax = getGuideCount(doc); j < jMax; j++) {
                 byte orientation = getGuideOrientation(j);
                 double location = getGuideLocation(doc, j) * editor.getZoomFactor() +
-                        (orientation == GUIDE_VERTICAL ? docFrame.getX() : docFrame.getY());
+                        (orientation == GUIDE_VERTICAL ? docFrame.x : docFrame.y);
 
                 if (orientation == GUIDE_VERTICAL) {
-                    if (Math.abs(location - aPoint.getX()) < Math.abs(dx))
-                        dx = location - aPoint.getX();
-                } else if (Math.abs(location - aPoint.getY()) < Math.abs(dy))
-                    dy = location - aPoint.getY();
+                    if (Math.abs(location - aPoint.x) < Math.abs(dx))
+                        dx = location - aPoint.x;
+                }
+                else if (Math.abs(location - aPoint.y) < Math.abs(dy))
+                    dy = location - aPoint.y;
             }
         }
 

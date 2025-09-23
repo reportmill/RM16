@@ -43,8 +43,8 @@ dependencies {
     implementation files('lib/spell.jar')
 
     // So we can get jars
-    testImplementation project(':CJDom')
-    testImplementation project(':SnapCJ')
+    //testImplementation project(':CJDom')
+    //testImplementation project(':SnapCJ')
 }
 
 mainClassName = 'com.reportmill.app.App'
@@ -81,6 +81,9 @@ task copyCJ(type: Copy) {
     )
     into "build/libs"
     dependsOn buildFullJar
+
+    // Declare that this task depends on the 'jar' task of CJDom, SnapCJ
+    dependsOn(":CJDom:jar", ":SnapCJ:jar")
 }
 
 /**

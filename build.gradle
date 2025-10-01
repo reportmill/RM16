@@ -41,10 +41,6 @@ dependencies {
 
     // For spelling
     implementation files('lib/spell.jar')
-
-    // So we can get jars
-    //testImplementation project(':CJDom')
-    //testImplementation project(':SnapCJ')
 }
 
 mainClassName = 'com.reportmill.app.App'
@@ -74,16 +70,16 @@ task buildFullJar(type: Jar) {
 
 task copyCJ(type: Copy) {
     from (
-        "../CJDom/cjdom.js",
-        "../CJDom/build/libs/CJDom-" + new SimpleDateFormat("yyyy.MM").format(new Date()) + ".jar",
+        "../WebAPI/cjdom.js",
+        "../WebAPI/build/libs/WebAPI-" + new SimpleDateFormat("yyyy.MM").format(new Date()) + ".jar",
         "../SnapCJ/build/libs/SnapCJ-" + new SimpleDateFormat("yyyy.MM").format(new Date()) + ".jar",
         "../SnapKit/build/libs/SnapKit-" + new SimpleDateFormat("yyyy.MM").format(new Date()) + ".jar",
     )
     into "build/libs"
     dependsOn buildFullJar
 
-    // Declare that this task depends on the 'jar' task of CJDom, SnapCJ
-    dependsOn(":CJDom:jar", ":SnapCJ:jar")
+    // Declare that this task depends on the 'jar' task of WebAPI, SnapCJ
+    dependsOn(":WebAPI:jar", ":SnapCJ:jar")
 }
 
 /**

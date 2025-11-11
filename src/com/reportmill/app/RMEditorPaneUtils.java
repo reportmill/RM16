@@ -26,25 +26,26 @@ public class RMEditorPaneUtils {
     /**
      * Opens the named sample file from the examples package.
      */
-    public static RMEditorPane openSample(String aTitle)
+    public static void openSample(String aTitle)
     {
         // If file is xml resource, get temp file, get XML bytes, write to file, open file and return null
         if (aTitle.endsWith(".xml")) {
             File file = FileUtils.getTempFile(FilePathUtils.getFilename(aTitle));
             byte[] bytes = SnapUtils.getBytes(aTitle);
-            SnapUtils.writeBytes(bytes, file);
+            try { FileUtils.writeBytes(file, bytes); }
+            catch (Exception e) { throw new RuntimeException(e); }
             FileUtils.openFile(file);
-            return null;
+            return;
         }
 
         // If not url, append Jar:/com/reportmill prefix
-        if (!aTitle.startsWith("http:")) aTitle = "Jar:/com/reportmill/examples/" + aTitle + ".rpt";
+        if (!aTitle.startsWith("http:"))
+            aTitle = "Jar:/com/reportmill/examples/" + aTitle + ".rpt";
 
         // Create new editor pane, open document and window, and return editor pane
         RMEditorPane editorPane = new RMEditorPane();
         editorPane.openSource(aTitle);
         editorPane.setWindowVisible(true);
-        return editorPane;
     }
 
     /**

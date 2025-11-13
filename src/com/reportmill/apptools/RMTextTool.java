@@ -83,7 +83,7 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
         setViewValue("AlignBottomButton", text.getAlignmentY() == RMTypes.AlignY.Bottom);
 
         // Set TextView TextModel
-        TextModelX textModelX = (TextModelX) _textView.getTextAdapter().getTextModel();
+        TextModelX textModelX = (TextModelX) _textView.getTextAdapter().getTextLayout();
         textModelX.setSourceText(text.getTextModel());
 
         // Set TextView selection

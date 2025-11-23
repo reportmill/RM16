@@ -123,14 +123,6 @@ public class ShapeTree extends RMEditorPane.SupportPane {
             }
             return str;
         }
-
-        /**
-         * Return the image to be used for given item.
-         */
-        public View getGraphic(RMShape anItem)
-        {
-            return null;
-        }
     }
 
 }

@@ -30,7 +30,7 @@ public class RMXString implements Cloneable, CharSequence, RMTypes, XMLArchiver.
      */
     public RMXString()
     {
-        _richText = new TextModel(true);
+        _richText = TextModel.createDefaultTextModel(true);
     }
 
     /**

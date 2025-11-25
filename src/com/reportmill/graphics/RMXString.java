@@ -132,7 +132,7 @@ public class RMXString implements Cloneable, CharSequence, RMTypes, XMLArchiver.
      */
     public void addChars(CharSequence theChars, TextStyle aStyle, int anIndex)
     {
-        if (theChars.length() == 0) return;
+        if (theChars.isEmpty()) return;
         _richText.addCharsWithStyle(theChars, aStyle, anIndex);
     }
 
@@ -152,7 +152,7 @@ public class RMXString implements Cloneable, CharSequence, RMTypes, XMLArchiver.
     /**
      * Appends the given string to the end of this XString, with the given attributes.
      */
-    public void addChars(CharSequence theChars, Map theAttrs)
+    public void addChars(CharSequence theChars, Map<String,Object> theAttrs)
     {
         int index = length();
         TextStyle style = _richText.getTextStyleForCharIndex(index);
@@ -272,32 +272,6 @@ public class RMXString implements Cloneable, CharSequence, RMTypes, XMLArchiver.
     {
         TextRun run = _richText.getRunForCharRange(startIndex, endIndex);
         return new RMXStringRun(this, run);
-    }
-
-    /**
-     * Returns the text style for the run at the given character index.
-     */
-    public RMTextStyle getStyleForCharIndex(int anIndex)
-    {
-        RMXStringRun textStyle = getRunForCharIndex(anIndex);
-        return textStyle.getStyle();
-    }
-
-    /**
-     * Returns the text style for the run at the given character index.
-     */
-    public RMTextStyle getStyleForCharRange(int startIndex, int endIndex)
-    {
-        RMXStringRun run = getRunForCharRange(startIndex, endIndex);
-        return run.getStyle();
-    }
-
-    /**
-     * Sets the text style for given range.
-     */
-    public void setStyle(RMTextStyle aStyle, int aStart, int anEnd)
-    {
-        _richText.setTextStyle(aStyle._style, aStart, anEnd);
     }
 
     /**
@@ -447,7 +421,7 @@ public class RMXString implements Cloneable, CharSequence, RMTypes, XMLArchiver.
         RMXString clone;
         try { clone = (RMXString) super.clone(); }
         catch (Exception e) { throw new RuntimeException(e); }
-        clone._richText = _richText.clone();
+        clone._richText = _richText.copyForRange(0, _richText.length());
         return clone;
     }
 
@@ -506,10 +480,8 @@ public class RMXString implements Cloneable, CharSequence, RMTypes, XMLArchiver.
                 Object val = RMKeyChain.getValue(anRptOwner, keyChain);
 
                 // If val is list, replace with first value (or null)
-                if (val instanceof List) {
-                    List<?> list = (List<?>) val;
-                    val = list.size() > 0 ? list.get(0) : null;
-                }
+                if (val instanceof List<?> list)
+                    val = !list.isEmpty() ? list.get(0) : null;
 
                 // If we found a String, then we'll just use it for key sub (although we to see if it's a KeyChain literal)
                 if (val instanceof String) {
@@ -602,8 +574,7 @@ public class RMXString implements Cloneable, CharSequence, RMTypes, XMLArchiver.
                     outString = clone();
 
                 // If substitution string was raw string, perform replace (and possible rtf/html evaluation)
-                if (valString instanceof String) {
-                    String string = (String) valString;
+                if (valString instanceof String string) {
 
                     // If string is HTML formatted text, parse into RMXString
                     if (StringUtils.startsWithIC(string, "<html"))
@@ -621,8 +592,7 @@ public class RMXString implements Cloneable, CharSequence, RMTypes, XMLArchiver.
                 }
 
                 // If substitution string is xstring, just do xstring replace
-                if (valString instanceof RMXString) {
-                    RMXString xstring = (RMXString) valString;
+                if (valString instanceof RMXString xstring) {
                     outString.replaceString(xstring, totalKeyRange.start, totalKeyRange.end);
                     totalKeyRange.setLength(xstring.length());
                 }

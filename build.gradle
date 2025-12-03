@@ -70,16 +70,11 @@ task buildFullJar(type: Jar) {
 
 task copyCJ(type: Copy) {
     from (
-        "../WebAPI/cjdom.js",
-        "../WebAPI/build/libs/WebAPI-" + new SimpleDateFormat("yyyy.MM").format(new Date()) + ".jar",
-        "../SnapCJ/build/libs/SnapCJ-" + new SimpleDateFormat("yyyy.MM").format(new Date()) + ".jar",
+        "../SnapKit/cjdom.js",
         "../SnapKit/build/libs/SnapKit-" + new SimpleDateFormat("yyyy.MM").format(new Date()) + ".jar",
     )
     into "build/libs"
     dependsOn buildFullJar
-
-    // Declare that this task depends on the 'jar' task of WebAPI, SnapCJ
-    dependsOn(":WebAPI:jar", ":SnapCJ:jar")
 }
 
 /**

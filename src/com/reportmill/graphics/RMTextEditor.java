@@ -19,9 +19,9 @@ public class RMTextEditor extends TextAdapter {
     /**
      * Constructor.
      */
-    public RMTextEditor(TextModel textModel)
+    public RMTextEditor(TextLayout textLayout)
     {
-        super(textModel);
+        super(textLayout);
         setEditable(true);
         setShowCaret(true);
     }

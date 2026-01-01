@@ -12,7 +12,7 @@ import snap.geom.PathIter;
 import snap.geom.Rect;
 import snap.geom.Shape;
 import snap.gfx.*;
-import snap.text.TextModelX;
+import snap.text.TextLayout;
 import snap.text.TextLine;
 import snap.text.TextRun;
 import snap.util.*;
@@ -471,14 +471,14 @@ public class RMHtmlFile {
             XMLElement text = new XMLElement("text");
 
             // Iterate over runs and create text spans
-            TextModelX tbox = aTextShape.getTextModel();
-            for (TextLine line : tbox.getLines())
+            TextLayout textLayout = aTextShape.getTextLayout();
+            for (TextLine line : textLayout.getLines())
                 for (TextRun run : line.getRuns()) {
                     String str = run.getString();
                     Font rfont = run.getFont();
                     Color rcolor = run.getColor();
                     double x = run.getX(), y = line.getBaseline();
-                    while (str.length() > 0 && str.charAt(0) == ' ') {
+                    while (!str.isEmpty() && str.charAt(0) == ' ') {
                         x += rfont.charAdvance(' ');
                         str = str.substring(1);
                     }

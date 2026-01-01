@@ -12,6 +12,7 @@ import snap.geom.Shape;
 import snap.gfx.*;
 import snap.props.PropChange;
 import snap.props.PropChangeListener;
+import snap.text.TextLayout;
 import snap.text.TextModel;
 import snap.text.TextModelX;
 import snap.text.TextStyle;
@@ -183,7 +184,7 @@ public class RMTextShape extends RMRectShape {
      */
     public int getVisibleEnd()
     {
-        return getTextModel().getEndCharIndex();
+        return getTextLayout().getEndCharIndex();
     }
 
     /**
@@ -191,7 +192,7 @@ public class RMTextShape extends RMRectShape {
      */
     public boolean isAllTextVisible()
     {
-        return !getTextModel().isTextOutOfBounds();
+        return !getTextLayout().isTextOutOfBounds();
     }
 
     /**
@@ -723,9 +724,9 @@ public class RMTextShape extends RMRectShape {
     }
 
     /**
-     * Returns a text layout.
+     * Returns the text layout.
      */
-    public TextModelX getTextModel()
+    public TextLayout getTextLayout()
     {
         // If already set, just return
         if (_textModel != null) return _textModel;
@@ -740,6 +741,11 @@ public class RMTextShape extends RMRectShape {
         // Return
         return _textModel;
     }
+
+    /**
+     * Returns a text model.
+     */
+    public TextModel getTextModel()  { return getTextLayout().getTextModel(); }
 
     /**
      * Updates the text box.
@@ -782,7 +788,7 @@ public class RMTextShape extends RMRectShape {
     public RMTextEditor getTextEditor()
     {
         if (_textEditor != null) return _textEditor;
-        return _textEditor = new RMTextEditor(getTextModel());
+        return _textEditor = new RMTextEditor(getTextLayout());
     }
 
     /**
@@ -814,7 +820,7 @@ public class RMTextShape extends RMRectShape {
     {
         if (_wraps == WRAP_SCALE) return getHeight();
         if (length() == 0) return 0; // Zero instead of getMarginTop()+getMarginBottom() so empty texts are hidden
-        double ph = getTextModel().getPrefHeight(getTextModel().getWidth());
+        double ph = getTextLayout().getPrefHeight();
         return Math.ceil(getMarginTop() + ph + getMarginBottom());
     }
 
@@ -935,7 +941,7 @@ public class RMTextShape extends RMRectShape {
             getTextEditor().paintAll(aPntr);
 
         // Otherwise just paint TextModel
-        else getTextModel().paint(aPntr);
+        else getTextLayout().paint(aPntr);
 
         // Restore
         aPntr.restore();

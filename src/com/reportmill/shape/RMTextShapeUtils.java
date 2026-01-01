@@ -5,7 +5,7 @@ package com.reportmill.shape;
 import com.reportmill.graphics.*;
 import snap.geom.*;
 import snap.gfx.*;
-import snap.text.TextModelX;
+import snap.text.TextLayout;
 import snap.text.TextLine;
 import snap.text.TextRun;
 
@@ -42,8 +42,8 @@ public class RMTextShapeUtils {
         outlineShape.moveTo(aText.getWidth(), aText.getHeight());
 
         // Iterate over text runs
-        TextModelX textModel = aText.getTextModel();
-        for (TextLine line : textModel.getLines()) {
+        TextLayout textLayout = aText.getTextLayout();
+        for (TextLine line : textLayout.getLines()) {
             for (TextRun run : line.getRuns()) { //if(run.length()==0 || run.isTab()) continue;
                 String str = run.getString();
                 Font font = run.getFont();
@@ -67,8 +67,8 @@ public class RMTextShapeUtils {
         textCharsShape.copyShape(aText);
 
         // Iterate over runs
-        TextModelX textModel = aText.getTextModel();
-        for (TextLine line : textModel.getLines())
+        TextLayout textLayout = aText.getTextLayout();
+        for (TextLine line : textLayout.getLines())
             for (TextRun run : line.getRuns()) { //if(run.length()==0 || run.isTab()) continue;
 
                 // Get run font and run bounds

@@ -54,7 +54,7 @@ public class RMShapePdfrs {
 
             // If not editable, just write out text and return
             if (!aTextShape.isEditable()) {
-                PDFWriterText.writeText(aWriter, aTextShape.getTextModel());
+                PDFWriterText.writeText(aWriter, aTextShape.getTextLayout());
                 return;
             }
 
@@ -63,10 +63,10 @@ public class RMShapePdfrs {
 
             // Get TextShape info
             String name = aTextShape.getName();
-            String pdfName = name != null && name.length() > 0 ? name : "Text Box " + aWriter.getAcroFormFieldCount();
-            String tooTip = name != null && name.length() > 0 ? name : null;
+            String pdfName = name != null && !name.isEmpty() ? name : "Text Box " + aWriter.getAcroFormFieldCount();
+            String tooTip = name != null && !name.isEmpty() ? name : null;
             String text = aTextShape.getText();
-            String pdfText = text != null && text.length() > 0 ? text : null;
+            String pdfText = text != null && !text.isEmpty() ? text : null;
 
             // Get ViewShape frame in PDF page coords (minus text insets)
             RMShape page = aTextShape.getPageShape();

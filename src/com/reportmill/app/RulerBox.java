@@ -96,27 +96,12 @@ public class RulerBox extends ParentView {
     }
 
     /**
-     * Returns the preferred width.
+     * Override to return border layout.
      */
-    protected double getPrefWidthImpl(double aH)
+    @Override
+    protected ViewLayout<?> getViewLayoutImpl()
     {
-        return BorderView.getPrefWidth(this, _content, _hruler, null, null, _vruler, aH);
-    }
-
-    /**
-     * Returns the preferred height.
-     */
-    protected double getPrefHeightImpl(double aW)
-    {
-        return BorderView.getPrefHeight(this, _content, _hruler, null, null, _vruler, aW);
-    }
-
-    /**
-     * Layout children.
-     */
-    protected void layoutImpl()
-    {
-        BorderView.layout(this, _content, _hruler, null, null, _vruler);
+        return new BorderViewLayout(this, _content, _hruler, null, null, _vruler);
     }
 
     /**

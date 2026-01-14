@@ -149,20 +149,22 @@ public class ShapeGeneral extends RMEditorPane.SupportPane {
      */
     private void configureBindingsTable(ListCell<String> aCell)
     {
-        if (aCell.getCol() == 0) return;
-        String pname = aCell.getItem();
-        RMShape shape = getSelectedShape();
-        if (shape == null) return;
-        Binding binding = getSelectedShape().getBinding(pname);
+        String propName = aCell.getItem();
+
+        // Configure binding name column
+        if (aCell.getCol() == 0) {
+            aCell.setText(propName);
+            return;
+        }
+
+        // Configure binding value column
+        RMShape shape = getSelectedShape(); if (shape == null) return;
+        Binding binding = getSelectedShape().getBinding(propName);
         aCell.setText(binding != null ? binding.getKey() : null);
     }
 
     /**
      * Returns the name to be used in the inspector's window title.
      */
-    public String getWindowTitle()
-    {
-        return "General Inspector";
-    }
-
+    public String getWindowTitle()  { return "General Inspector"; }
 }

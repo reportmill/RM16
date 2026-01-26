@@ -99,7 +99,7 @@ public class RulerBox extends ParentView {
      * Override to return border layout.
      */
     @Override
-    protected ViewLayout<?> getViewLayoutImpl()
+    protected ViewLayout getViewLayoutImpl()
     {
         return new BorderViewLayout(this, _content, _hruler, null, null, _vruler);
     }

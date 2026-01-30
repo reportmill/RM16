@@ -151,7 +151,7 @@ public class RulerBox extends ParentView {
         /**
          * Override to control size.
          */
-        protected double getPrefWidthImpl(double aH)
+        protected double computePrefWidth(double aH)
         {
             return isHorizontal() ? _doc.getWidth() : RULER_WIDTH;
         }
@@ -159,7 +159,7 @@ public class RulerBox extends ParentView {
         /**
          * Override to control size.
          */
-        protected double getPrefHeightImpl(double aW)
+        protected double computePrefHeight(double aW)
         {
             return isHorizontal() ? RULER_WIDTH : _doc.getHeight();
         }

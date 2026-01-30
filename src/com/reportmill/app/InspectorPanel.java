@@ -360,12 +360,12 @@ public class InspectorPanel extends RMEditorPane.SupportPane {
      * View to render SelectionPath separator.
      */
     private static class Sep extends View {
-        protected double getPrefWidthImpl(double aH)
+        protected double computePrefWidth(double aH)
         {
             return 5;
         }
 
-        protected double getPrefHeightImpl(double aW)
+        protected double computePrefHeight(double aW)
         {
             return 40;
         }

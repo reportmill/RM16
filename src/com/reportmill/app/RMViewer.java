@@ -463,7 +463,7 @@ public class RMViewer extends ParentView {
     /**
      * Returns the preferred size of the viewer (includes ZoomFactor).
      */
-    protected double getPrefWidthImpl(double aH)
+    protected double computePrefWidth(double aH)
     {
         double pw = _vshape.getPrefWidth();
         if (isZoomToFactor()) pw *= getZoomFactor();
@@ -473,7 +473,7 @@ public class RMViewer extends ParentView {
     /**
      * Returns the preferred size of the viewer (includes ZoomFactor).
      */
-    protected double getPrefHeightImpl(double aW)
+    protected double computePrefHeight(double aW)
     {
         double ph = _vshape.getPrefHeight();
         if (isZoomToFactor()) ph *= getZoomFactor();

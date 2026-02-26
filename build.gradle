@@ -5,8 +5,8 @@ plugins {
     id 'maven-publish'
 }
 
-group 'com.reportmill'
-version new SimpleDateFormat("yyyy.MM").format(new Date())
+group = 'com.reportmill'
+version = new SimpleDateFormat("yyyy.MM").format(new Date())
 
 sourceSets.main.java.srcDirs = ['src']
 sourceSets.main.resources.srcDirs = ['src']
@@ -19,7 +19,7 @@ java {
 repositories {
 
     // Jitpack makes builds from GitHub repos
-    maven { url 'https://jitpack.io' }
+    maven { url = 'https://jitpack.io' }
 }
 
 dependencies {
@@ -89,21 +89,10 @@ publishing {
 
         // Standard maven package
         gpr (MavenPublication) {
-            artifactId 'ReportMill16'
+            artifactId = 'ReportMill16'
             artifact buildFullJar // from(components.java)
             pom.withXml {
                 asNode().dependencies.dependency.each { dep -> dep.parent().remove(dep) }
-            }
-        }
-    }
-
-    repositories {
-        maven {
-            name = "GitHubPackages"
-            url = "https://maven.pkg.github.com/reportmill/RM16"
-            credentials {
-                username = System.getenv("GITHUB_USER")
-                password = System.getenv("GITHUB_TOKEN")
             }
         }
     }

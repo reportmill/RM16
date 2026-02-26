@@ -43,7 +43,9 @@ dependencies {
     implementation files('lib/spell.jar')
 }
 
-mainClassName = 'com.reportmill.app.App'
+application {
+    mainClass = 'com.reportmill.app.App'
+}
 
 /**
  * Custom task to build jar that includes all dependencies.

@@ -7,7 +7,7 @@ import snap.view.*;
 /**
  * Manages WelcomePanelAnim view.
  */
-public class WelcomePanelAnim extends ViewOwner {
+public class WelcomePanelAnim extends ViewController {
 
     // The main view
     private ChildView _mainView;

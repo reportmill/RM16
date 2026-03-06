@@ -240,7 +240,7 @@ public class RMDocumentTool<T extends RMDocument> extends RMTool<T> {
     public static class PageSizeView extends View {
         public void paintFront(Painter aPntr)
         {
-            RMDocumentTool docTool = getOwner(RMDocumentTool.class);
+            RMDocumentTool docTool = getController(RMDocumentTool.class);
             RMEditor editor = docTool.getEditor();
             Size pageSize = editor.getDoc().getPageSize();
             double maxHeight = Math.max(17 * 72, pageSize.height);

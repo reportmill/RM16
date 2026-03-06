@@ -28,7 +28,7 @@ public class RMCrossTabCellTool<T extends RMCrossTabCell> extends RMTextTool<T> 
     protected View createUI()
     {
         // Get UI for this tool
-        ChildView cellUI = (ChildView) UILoader.loadViewForOwner(this);
+        ChildView cellUI = (ChildView) UILoader.loadViewForController(this);
 
         // Create SortPanel, set bounds and install
         _sortPanel = new RMSortPanel(this);

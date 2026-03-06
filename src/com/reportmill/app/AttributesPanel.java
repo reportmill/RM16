@@ -16,7 +16,7 @@ public class AttributesPanel extends RMEditorPane.SupportPane {
     private TabView  _tabView;
 
     // Inspectors
-    private ViewOwner[]  _insprs;
+    private ViewController[]  _insprs;
 
     // The DrawerView
     private DrawerView  _drawer;
@@ -47,7 +47,7 @@ public class AttributesPanel extends RMEditorPane.SupportPane {
     /**
      * Returns the inspectors.
      */
-    public ViewOwner[] getInspectors()
+    public ViewController[] getInspectors()
     {
         if (_insprs != null) return _insprs;
         return _insprs = createInspectors();
@@ -56,13 +56,13 @@ public class AttributesPanel extends RMEditorPane.SupportPane {
     /**
      * Creates the inspectors array.
      */
-    protected ViewOwner[] createInspectors()
+    protected ViewController[] createInspectors()
     {
         KeysPanel keys = new KeysPanel(getEditorPane());
         APColorPanel color = new APColorPanel();
         FontPanel font = new FontPanel(getEditorPane());
         FormatPanel format = new FormatPanel(getEditorPane());
-        return new ViewOwner[] { keys, color, font, format };
+        return new ViewController[] { keys, color, font, format };
     }
 
     /**
@@ -177,7 +177,7 @@ public class AttributesPanel extends RMEditorPane.SupportPane {
 
         // Get inspectors and tab builder
         String[] names = getInspectorNames();
-        ViewOwner[] inspectors = getInspectors();
+        ViewController[] inspectors = getInspectors();
         Tab.Builder tabBuilder = new Tab.Builder(_tabView.getTabBar());
 
         // Iterate over inspectors and create/add tabs
@@ -195,7 +195,7 @@ public class AttributesPanel extends RMEditorPane.SupportPane {
     {
         // Get selected inspector and reset
         Tab selTab = _tabView.getSelItem();
-        ViewOwner inspector = selTab != null ? selTab.getContentOwner() : null;
+        ViewController inspector = selTab != null ? selTab.getContentOwner() : null;
         if (inspector != null)
             inspector.resetLater();
     }

@@ -59,7 +59,7 @@ public class RMEditorPane extends RMViewerPane {
     /**
      * Creates the top tool bar.
      */
-    protected ViewOwner createTopToolBar()  { return new RMEditorPaneToolBar(this); }
+    protected ViewController createTopToolBar()  { return new RMEditorPaneToolBar(this); }
 
     /**
      * Returns the SwingOwner for the menu bar.
@@ -298,7 +298,7 @@ public class RMEditorPane extends RMViewerPane {
     protected void respondUI(ViewEvent anEvent)
     {
         // Forward on to menu bar
-        getMenuBar().dispatchEventToOwner(anEvent);
+        getMenuBar().dispatchEventToController(anEvent);
 
         // Do normal version
         super.respondUI(anEvent);
@@ -724,7 +724,7 @@ public class RMEditorPane extends RMViewerPane {
             popupMenu.addItem(m);
 
         // Initialize popup menu items to send Events to menu bar
-        popupMenu.setOwner(getMenuBar());
+        popupMenu.setController(getMenuBar());
         popupMenu.showMenuAtXY(getEditor(), anEvent.getX(), anEvent.getY());
         anEvent.consume();
     }
@@ -753,7 +753,7 @@ public class RMEditorPane extends RMViewerPane {
     /**
      * A class for any editor pane support panes.
      */
-    public static class SupportPane extends ViewOwner {
+    public static class SupportPane extends ViewController {
 
         // The editor pane
         RMEditorPane _editorPane;

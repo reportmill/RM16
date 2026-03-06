@@ -10,7 +10,7 @@ import snap.viewx.DialogBox;
 /**
  * This class provides a Preferences panel UI window.
  */
-public class PreferencesPanel extends ViewOwner {
+public class PreferencesPanel extends ViewController {
 
     // The FormatPanel
     private FormatPanel _formatPanel;

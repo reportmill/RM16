@@ -18,7 +18,7 @@ import snap.viewx.DialogBox;
 /**
  * This is the base class for tools in RM - the objects that provide GUI editing for RM shapes.
  */
-public class RMTool<T extends RMShape> extends ViewOwner {
+public class RMTool<T extends RMShape> extends ViewController {
 
     // The Editor that owns this tool
     RMEditor _editor;

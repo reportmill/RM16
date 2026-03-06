@@ -196,7 +196,7 @@ public class RMTableRowTool<T extends RMTableRow> extends RMParentShapeTool<T> {
         }
 
         // Init popup menu and return
-        menu.setOwner(this);
+        menu.setController(this);
         return menu;
     }
 

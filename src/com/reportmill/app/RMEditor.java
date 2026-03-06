@@ -95,7 +95,7 @@ public class RMEditor extends RMViewer implements DeepChangeListener {
     public RMEditorPane getEditorPane()
     {
         if (_editorPane != null) return _editorPane;
-        return _editorPane = getOwner(RMEditorPane.class);
+        return _editorPane = getController(RMEditorPane.class);
     }
 
     /**

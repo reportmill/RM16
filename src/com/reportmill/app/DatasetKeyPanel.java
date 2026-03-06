@@ -8,7 +8,7 @@ import snap.viewx.DialogBox;
 /**
  * Runs a simple panel letting the user choose a dataset key element, like table, graph, crosstab or labels.
  */
-public class DatasetKeyPanel extends ViewOwner {
+public class DatasetKeyPanel extends ViewController {
 
     // The selected dataset key element type
     private byte _selectedType = TABLE;

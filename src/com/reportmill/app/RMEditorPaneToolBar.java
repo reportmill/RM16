@@ -61,7 +61,7 @@ public class RMEditorPaneToolBar extends RMEditorPane.SupportPane {
         _colorWell = new ColorWell();
         _colorWell.setName("ColorWell");
         ColorPanel.getShared().setDefaultColorWell(_colorWell);
-        _colorWell.setOwner(this);
+        _colorWell.setController(this);
 
         // Install InspectorPanel.TitleLabel
         RowView rowView = (RowView) getUI(ColView.class).getChild(1);

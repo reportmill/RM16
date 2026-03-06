@@ -11,7 +11,7 @@ import snap.web.*;
 /**
  * An implementation of a panel to manage/open user Snap sites (projects).
  */
-public class WelcomePanel extends ViewOwner {
+public class WelcomePanel extends ViewController {
 
     // Whether welcome panel is enabled
     private boolean  _enabled = true;

@@ -15,7 +15,7 @@ import snap.web.WebURL;
 /**
  * A class to show samples.
  */
-public class SamplesPane extends ViewOwner {
+public class SamplesPane extends ViewController {
 
     // A consumer for resulting URL
     private Consumer<WebURL>  _handler;
@@ -40,7 +40,7 @@ public class SamplesPane extends ViewOwner {
     /**
      * Shows the samples pane.
      */
-    public void showSamples(ViewOwner anOwner, Consumer<WebURL> aHandler)
+    public void showSamples(ViewController anOwner, Consumer<WebURL> aHandler)
     {
         View view = anOwner.getUI();
         _handler = aHandler;
@@ -235,7 +235,7 @@ public class SamplesPane extends ViewOwner {
 
         // Make sure all row views and image boxes are owned by ui
         for (View child : colView.getChildren())
-            child.setOwner(this);
+            child.setController(this);
 
         // Load images in background
         CompletableFuture.runAsync(this::loadImages);

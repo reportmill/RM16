@@ -7,7 +7,7 @@ import snap.view.*;
 /**
  * UI controls for RMViewerPlus top.
  */
-public class RMViewerTopToolBar extends ViewOwner {
+public class RMViewerTopToolBar extends ViewController {
 
     // The viewer associated with this tool bar
     RMViewerPane _viewerPane;

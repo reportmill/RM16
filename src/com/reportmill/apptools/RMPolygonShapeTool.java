@@ -387,7 +387,7 @@ public class RMPolygonShapeTool<T extends RMPolygonShape> extends RMTool<T> {
         menuItem.setText(menuTitle);
         menuItem.setName(menuName);
         contextMenu.addItem(menuItem);
-        contextMenu.setOwner(this);
+        contextMenu.setController(this);
         contextMenu.showMenuAtXY(anEvent.getView(), anEvent.getX(), anEvent.getY());
     }
 

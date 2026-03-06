@@ -10,7 +10,7 @@ import snap.viewx.DialogBox;
 /**
  * This class provides a UI panel to send feedback back to ReportMill.
  */
-public class FeedbackPanel extends ViewOwner {
+public class FeedbackPanel extends ViewController {
 
     /**
      * Show panel.

@@ -13,7 +13,7 @@ import snap.viewx.DialogBox;
 /**
  * Provides UI for configuring a grouping for a tool.
  */
-public class RMSortPanel extends ViewOwner {
+public class RMSortPanel extends ViewController {
 
     // The owner of this sort panel
     private Owner _owner;

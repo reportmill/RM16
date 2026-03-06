@@ -13,7 +13,7 @@ import snap.view.*;
  * changing the size and a text field for specifically setting a size. In addition, there is a pick list that
  * shows all the individual fonts available for a given family.
  */
-public class FontPanel extends ViewOwner {
+public class FontPanel extends ViewController {
 
     // The EditorPane
     private RMEditorPane _editorPane;

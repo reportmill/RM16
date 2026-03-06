@@ -19,7 +19,7 @@ import snap.web.WebURL;
  *   myFrame.setContentPane(viewer);
  * </pre></blockquote>
  */
-public class RMViewerPane extends ViewOwner {
+public class RMViewerPane extends ViewController {
 
     // The real viewer
     RMViewer _viewer;
@@ -31,10 +31,10 @@ public class RMViewerPane extends ViewOwner {
     RulerBox _rulerBox;
 
     // The controls at the top of the document
-    ViewOwner _topToolBar;
+    ViewController _topToolBar;
 
     // The controls at the bottom of the document
-    ViewOwner _btmToolBar;
+    ViewController _btmToolBar;
 
     /**
      * Returns the viewer for this viewer pane.
@@ -97,7 +97,7 @@ public class RMViewerPane extends ViewOwner {
     /**
      * Returns the top controls.
      */
-    public ViewOwner getTopToolBar()
+    public ViewController getTopToolBar()
     {
         return _topToolBar != null ? _topToolBar : (_topToolBar = createTopToolBar());
     }
@@ -105,7 +105,7 @@ public class RMViewerPane extends ViewOwner {
     /**
      * Creates the top tool bar.
      */
-    protected ViewOwner createTopToolBar()
+    protected ViewController createTopToolBar()
     {
         return new RMViewerTopToolBar(this);
     }
@@ -113,7 +113,7 @@ public class RMViewerPane extends ViewOwner {
     /**
      * Returns the bottom controls.
      */
-    public ViewOwner getBottomToolBar()
+    public ViewController getBottomToolBar()
     {
         return _btmToolBar != null ? _btmToolBar : (_btmToolBar = createBottomToolBar());
     }
@@ -121,7 +121,7 @@ public class RMViewerPane extends ViewOwner {
     /**
      * Creates bottom tool bar.
      */
-    protected ViewOwner createBottomToolBar()
+    protected ViewController createBottomToolBar()
     {
         return new RMViewerBottomToolBar(this);
     }

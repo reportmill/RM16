@@ -28,7 +28,7 @@ public class InspectorPanel extends RMEditorPane.SupportPane {
     private ScrollView _inspBox;
 
     // The child inspector current installed in inspector panel
-    private ViewOwner _childInspector;
+    private ViewController _childInspector;
 
     // The inspector for paint/border (fill/stroke), and effects
     private StylerPane _stylerPane;
@@ -122,7 +122,7 @@ public class InspectorPanel extends RMEditorPane.SupportPane {
             setInspector(_stylerPane);
 
         // Get the inspector (owner)
-        ViewOwner owner = getInspector();
+        ViewController owner = getInspector();
 
         // Get inspector title from owner and set
         String title = "Inspector";
@@ -237,7 +237,7 @@ public class InspectorPanel extends RMEditorPane.SupportPane {
     /**
      * Returns the inspector (owner) of the inspector pane.
      */
-    protected ViewOwner getInspector()
+    protected ViewController getInspector()
     {
         return _childInspector;
     }
@@ -245,7 +245,7 @@ public class InspectorPanel extends RMEditorPane.SupportPane {
     /**
      * Sets the inspector in the inspector pane.
      */
-    protected void setInspector(ViewOwner anOwner)
+    protected void setInspector(ViewController anOwner)
     {
         // Set new inspector
         _childInspector = anOwner;
@@ -301,7 +301,7 @@ public class InspectorPanel extends RMEditorPane.SupportPane {
 
             // Add button to selection path panel and button group
             _selPathView.addChild(button, 0);
-            button.setOwner(this);
+            button.setController(this);
             getToggleGroup("SelPathGroup").add(button);
             if (shp != _deepestShape) _selPathView.addChild(new Sep(), 1);
         }

@@ -463,7 +463,7 @@ public class RMEditorPane extends RMViewerPane {
 
         // If source is already opened, return editor pane
         if (!Objects.equals(sourceURL, getSourceURL())) {
-            RMEditorPane[] editorPanes = WindowView.getOpenWindowOwners(RMEditorPane.class);
+            RMEditorPane[] editorPanes = WindowView.getOpenWindowControllers(RMEditorPane.class);
             for (RMEditorPane editorPane : editorPanes)
                 if (Objects.equals(sourceURL, editorPane.getSourceURL()))
                     return editorPane;
@@ -672,7 +672,7 @@ public class RMEditorPane extends RMViewerPane {
         getWindow().hide();
 
         // If another open editor is available focus on it, otherwise run WelcomePanel
-        RMEditorPane editorPane = WindowView.getOpenWindowOwner(RMEditorPane.class);
+        RMEditorPane editorPane = WindowView.getOpenWindowController(RMEditorPane.class);
         if (editorPane != null)
             editorPane.getEditor().requestFocus();
         else if (WelcomePanel.getShared().isEnabled())

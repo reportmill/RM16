@@ -182,7 +182,7 @@ public class AttributesPanel extends RMEditorPane.SupportPane {
 
         // Iterate over inspectors and create/add tabs
         for (int i = 0; i < names.length; i++)
-            tabBuilder.title(names[i]).contentOwner(inspectors[i]).add();
+            tabBuilder.title(names[i]).contentController(inspectors[i]).add();
 
         // Return
         return _tabView;
@@ -195,7 +195,7 @@ public class AttributesPanel extends RMEditorPane.SupportPane {
     {
         // Get selected inspector and reset
         Tab selTab = _tabView.getSelItem();
-        ViewController inspector = selTab != null ? selTab.getContentOwner() : null;
+        ViewController inspector = selTab != null ? selTab.getContentController() : null;
         if (inspector != null)
             inspector.resetLater();
     }

@@ -77,7 +77,7 @@ public class App {
         // Get open editor panes
         if (_quiting) return;
         _quiting = true;
-        RMEditorPane[] editorPanes = WindowView.getOpenWindowOwners(RMEditorPane.class);
+        RMEditorPane[] editorPanes = WindowView.getOpenWindowControllers(RMEditorPane.class);
 
         // Iterate over open Editors to see if any have unsaved changes
         int answer = 0;

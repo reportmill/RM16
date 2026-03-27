@@ -545,7 +545,7 @@ public class RMTextShape extends RMRectShape {
     public void setMarginString(String aString)
     {
         // If given string is empty, set default margins
-        if (aString == null || aString.trim().length() == 0) {
+        if (aString == null || aString.trim().isEmpty()) {
             setMargin(getMarginDefault());
             return;
         }
@@ -660,7 +660,7 @@ public class RMTextShape extends RMRectShape {
     /**
      * This notification method is called when any peer is changed.
      */
-    public void peerDidChange(RMShape aShape)
+    public void handlePeerChange(RMShape aShape)
     {
         // If this text respects neighbors and shape intersects it, register for redraw
         if (getPerformsWrap() && aShape.getFrame().intersectsRect(getFrame())) {
@@ -753,7 +753,7 @@ public class RMTextShape extends RMRectShape {
         Insets pad = getMargin();
         double textW = Math.max(getWidth() - pad.getWidth(), 0);
         double textH = Math.max(getHeight() - pad.getHeight(), 0);
-        _textModel.setBounds(pad.left, pad.right, textW, textH);
+        _textModel.setBounds(pad.left, pad.top, textW, textH);
 
         // Set StartCharIndex
         _textModel.setStartCharIndex(getVisibleStart());
@@ -936,7 +936,7 @@ public class RMTextShape extends RMRectShape {
         // If editing text, paint TextEditor, otherwise paint text layout
         if (isTextEditorSet())
             TextPainter.DEFAULT.paintTextAdapter(aPntr, getTextEditor());
-        else TextPainter.DEFAULT.paintText(aPntr, getTextLayout());
+        else TextPainter.DEFAULT.paintTextLayout(aPntr, getTextLayout());
 
         // Restore
         aPntr.restore();

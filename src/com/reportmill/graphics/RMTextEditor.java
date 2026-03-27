@@ -3,7 +3,6 @@
  */
 package com.reportmill.graphics;
 import com.reportmill.base.RMFormat;
-import snap.geom.Shape;
 import snap.gfx.*;
 import snap.text.*;
 import snap.util.*;
@@ -24,6 +23,7 @@ public class RMTextEditor extends TextAdapter {
         super(textLayout);
         setEditable(true);
         setShowCaret(true);
+        snap.text.SpellCheck.setSharedClass(RMSpellCheck.class);
     }
 
     /**
@@ -246,42 +246,6 @@ public class RMTextEditor extends TextAdapter {
      * Returns the height needed to display all characters.
      */
     public double getPrefHeight()  { return getPrefHeight(-1); }
-
-    /**
-     * Override to support spell check paint.
-     */
-    @Override
-    public void paintAll(Painter aPntr)
-    {
-        // Paint selection
-        paintSel(aPntr);
-
-        // Paint spell check
-        if (isSpellChecking() && length() > 0)
-            paintSpellCheck(aPntr);
-
-        // Paint Text
-        paintText(aPntr);
-    }
-
-    /**
-     * Paints spell check.
-     */
-    private void paintSpellCheck(Painter aPntr)
-    {
-        // Set RM SpellCheck
-        snap.text.SpellCheck.setSharedClass(RMSpellCheck.class);
-
-        // Get spelling path
-        Shape spellingPath = snap.text.SpellCheck.getSpellingPath(_textModel, getSelStart());
-
-        // Paint spelling path
-        aPntr.setColor(Color.RED);
-        aPntr.setStroke(Stroke.StrokeDash1);
-        aPntr.draw(spellingPath);
-        aPntr.setColor(Color.BLACK);
-        aPntr.setStroke(Stroke.Stroke1);
-    }
 
     /**
      * Override to always show caret.

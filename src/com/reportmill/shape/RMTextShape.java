@@ -12,10 +12,7 @@ import snap.geom.Shape;
 import snap.gfx.*;
 import snap.props.PropChange;
 import snap.props.PropChangeListener;
-import snap.text.TextLayout;
-import snap.text.TextModel;
-import snap.text.TextModelX;
-import snap.text.TextStyle;
+import snap.text.*;
 import snap.util.*;
 
 /**
@@ -936,12 +933,10 @@ public class RMTextShape extends RMRectShape {
         aPntr.save();
         aPntr.clip(getBoundsInside());
 
-        // Paint TextEditor (if editing text)
+        // If editing text, paint TextEditor, otherwise paint text layout
         if (isTextEditorSet())
-            getTextEditor().paintAll(aPntr);
-
-        // Otherwise just paint TextModel
-        else getTextLayout().paint(aPntr);
+            TextPainter.DEFAULT.paintTextAdapter(aPntr, getTextEditor());
+        else TextPainter.DEFAULT.paintText(aPntr, getTextLayout());
 
         // Restore
         aPntr.restore();

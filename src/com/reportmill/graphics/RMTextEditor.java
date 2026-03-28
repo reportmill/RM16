@@ -12,8 +12,11 @@ import snap.util.*;
  */
 public class RMTextEditor extends TextAdapter {
 
+    // Whether as-you-type spell checking is enabled
+    private static Boolean _spellChecking = Prefs.getDefaultPrefs().getBoolean("SpellChecking", false);
+
     // Whether hyphenating is activated
-    static boolean _hyphenating = Prefs.getDefaultPrefs().getBoolean("Hyphenating", false);
+    private static boolean _hyphenating = Prefs.getDefaultPrefs().getBoolean("Hyphenating", false);
 
     /**
      * Constructor.
@@ -38,10 +41,7 @@ public class RMTextEditor extends TextAdapter {
     /**
      * Sets the attributes that are applied to current selection or newly typed chars.
      */
-    public void setInputAttribute(String aKey, Object aValue)
-    {
-        setSelTextStyleValue(aKey, aValue);
-    }
+    public void setInputAttribute(String aKey, Object aValue)  { setSelTextStyleValue(aKey, aValue); }
 
     /**
      * Returns the paragraph of the current selection or cursor position.
@@ -56,50 +56,32 @@ public class RMTextEditor extends TextAdapter {
     /**
      * Sets the paragraph of the current selection or cursor position.
      */
-    public void setInputParagraph(RMParagraph ps)
-    {
-        _textModel.setLineStyle(ps._lstyle, getSelStart(), getSelEnd());
-    }
+    public void setInputParagraph(RMParagraph ps)  { _textModel.setLineStyle(ps._lstyle, getSelStart(), getSelEnd()); }
 
     /**
      * Returns the color of the current selection or cursor.
      */
-    public RMColor getColor()
-    {
-        return getSelStyle().getColor();
-    }
+    public RMColor getColor()  { return getSelStyle().getColor(); }
 
     /**
      * Sets the color of the current selection or cursor.
      */
-    public void setColor(RMColor color)
-    {
-        setInputAttribute(RMTextStyle.COLOR_KEY, color);
-    }
+    public void setColor(RMColor color)  { setInputAttribute(RMTextStyle.COLOR_KEY, color); }
 
     /**
      * Returns the font of the current selection or cursor.
      */
-    public RMFont getFont()
-    {
-        return getSelStyle().getFont();
-    }
+    public RMFont getFont()  { return getSelStyle().getFont(); }
 
     /**
      * Sets the font of the current selection or cursor.
      */
-    public void setFont(RMFont font)
-    {
-        setInputAttribute(RMTextStyle.FONT_KEY, font);
-    }
+    public void setFont(RMFont font)  { setInputAttribute(RMTextStyle.FONT_KEY, font); }
 
     /**
      * Returns the format of the current selection or cursor.
      */
-    public RMFormat getFormat()
-    {
-        return getSelStyle().getFormat();
-    }
+    public RMFormat getFormat()  { return getSelStyle().getFormat(); }
 
     /**
      * Sets the format of the current selection or cursor, after trying to expand the selection to encompass currently
@@ -123,42 +105,27 @@ public class RMTextEditor extends TextAdapter {
     /**
      * Returns whether current selection is outlined.
      */
-    public Border getTextBorder()
-    {
-        return getSelStyle().getBorder();
-    }
+    public Border getTextBorder()  { return getSelStyle().getBorder(); }
 
     /**
      * Sets whether current selection is outlined.
      */
-    public void setTextBorder(Border aBorder)
-    {
-        setInputAttribute(RMTextStyle.BORDER_KEY, aBorder);
-    }
+    public void setTextBorder(Border aBorder)  { setInputAttribute(RMTextStyle.BORDER_KEY, aBorder); }
 
     /**
      * Returns the character spacing of the current selection or cursor.
      */
-    public float getCharSpacing()
-    {
-        return (float) getSelStyle().getCharSpacing();
-    }
+    public float getCharSpacing()  { return (float) getSelStyle().getCharSpacing(); }
 
     /**
      * Returns the character spacing of the current selection or cursor.
      */
-    public void setCharSpacing(float aValue)
-    {
-        setInputAttribute(RMTextStyle.CHAR_SPACING_KEY, aValue);
-    }
+    public void setCharSpacing(float aValue)  { setInputAttribute(RMTextStyle.CHAR_SPACING_KEY, aValue); }
 
     /**
      * Returns the alignment for current selection.
      */
-    public RMTypes.AlignX getAlignX()
-    {
-        return getInputParagraph().getAlignmentX();
-    }
+    public RMTypes.AlignX getAlignX()  { return getInputParagraph().getAlignmentX(); }
 
     /**
      * Sets the alignment for current selection.
@@ -172,10 +139,7 @@ public class RMTextEditor extends TextAdapter {
     /**
      * Returns the line spacing for current selection.
      */
-    public float getLineSpacing()
-    {
-        return getInputParagraph().getLineSpacing();
-    }
+    public float getLineSpacing()  { return getInputParagraph().getLineSpacing(); }
 
     /**
      * Sets the line spacing for current selection.
@@ -189,10 +153,7 @@ public class RMTextEditor extends TextAdapter {
     /**
      * Returns the line gap for current selection.
      */
-    public float getLineGap()
-    {
-        return getInputParagraph().getLineGap();
-    }
+    public float getLineGap()  { return getInputParagraph().getLineGap(); }
 
     /**
      * Sets the line gap for current selection.
@@ -206,10 +167,7 @@ public class RMTextEditor extends TextAdapter {
     /**
      * Returns the min line height for current selection.
      */
-    public float getLineHeightMin()
-    {
-        return getInputParagraph().getLineHeightMin();
-    }
+    public float getLineHeightMin()  { return getInputParagraph().getLineHeightMin(); }
 
     /**
      * Sets the min line height for current selection.
@@ -252,6 +210,31 @@ public class RMTextEditor extends TextAdapter {
      */
     @Override
     public boolean isShowCaret()  { return true; }
+
+    /**
+     * Override to use RMTextEditor global.
+     */
+    @Override
+    public boolean isSpellChecking()  { return isSpellCheckingGlobal(); }
+
+    /**
+     * Returns whether editor is doing check-as-you-type spelling for all text editors.
+     */
+    public static boolean isSpellCheckingGlobal()
+    {
+        if (_spellChecking != null) return _spellChecking;
+        return _spellChecking = Prefs.getDefaultPrefs().getBoolean("SpellChecking", false);
+    }
+
+    /**
+     * Returns whether editor is doing check-as-you-type spelling for all text editors.
+     */
+    public static void setSpellCheckingGlobal(boolean aValue)
+    {
+        if (aValue == isSpellCheckingGlobal()) return;
+        _spellChecking = aValue;
+        Prefs.getDefaultPrefs().setValue("SpellChecking", aValue);
+    }
 
     /**
      * Returns whether layout tries to hyphenate wrapped words.

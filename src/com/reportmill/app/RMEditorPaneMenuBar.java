@@ -35,7 +35,7 @@ public class RMEditorPaneMenuBar extends RMEditorPane.SupportPane {
     protected void initUI()
     {
         // Configure CheckSpellingAsYouTypeMenuItem and HyphenateTextMenuItem
-        setViewValue("CheckSpellingAsYouTypeMenuItem", RMTextEditor.isSpellChecking);
+        setViewValue("CheckSpellingAsYouTypeMenuItem", RMTextEditor.isSpellCheckingGlobal());
         setViewValue("HyphenateTextMenuItem", RMTextEditor.isHyphenating());
     }
 
@@ -127,8 +127,7 @@ public class RMEditorPaneMenuBar extends RMEditorPane.SupportPane {
 
         // Edit -> CheckSpellingAsYouTypeMenuItem
         if (anEvent.equals("CheckSpellingAsYouTypeMenuItem")) {
-            RMTextEditor.isSpellChecking = anEvent.getBooleanValue();
-            Prefs.getDefaultPrefs().setValue("SpellChecking", RMTextEditor.isSpellChecking);
+            RMTextEditor.setSpellCheckingGlobal(anEvent.getBooleanValue());
             editor.repaint();
         }
 

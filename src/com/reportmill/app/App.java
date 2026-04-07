@@ -5,7 +5,6 @@ package com.reportmill.app;
 import com.reportmill.base.ReportMill;
 import snap.gfx.GFXEnv;
 import snap.util.*;
-import snap.view.ViewTheme;
 import snap.view.ViewUtils;
 import snap.view.WindowView;
 import snap.viewx.DialogBox;
@@ -41,9 +40,6 @@ public class App {
     {
         // Set app is true
         ReportMill.isApp = true;
-
-        // Set UI Theme
-        ViewTheme.setThemeForName("Light");
 
         // Set default preferences
         Prefs prefs = Prefs.getPrefsForName("/com/reportmill");

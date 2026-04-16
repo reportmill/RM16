@@ -94,10 +94,11 @@ public class FontPicker extends ViewController {
 
         // Set sample text color
         ViewStyle selectedStyle = ViewTheme.get().getStyleForClassAndState(ListView.class, PseudoClass.Active);
-        _sel.setFill(selectedStyle.getFill());
-        _sel._label.setTextColor(selectedStyle.getTextColor());
-        _sel._sampleLC.setTextColor(selectedStyle.getTextColor());
-        _sel._sampleUC.setTextColor(selectedStyle.getTextColor());
+        _sel.setFill(ViewTheme.get().getSelectedFill());
+        Color textColor = ViewTheme.get().getSelectedTextColor();
+        _sel._label.setTextColor(textColor);
+        _sel._sampleLC.setTextColor(textColor);
+        _sel._sampleUC.setTextColor(textColor);
     }
 
     /**

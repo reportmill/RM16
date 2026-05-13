@@ -237,7 +237,7 @@ public class RMShapeUtils {
             RMShape shape = theShapes.get(i);
             Rect bounds = shape.getBoundsInside();
             if (anInset != 0 && i > 0) bounds.inset(anInset);
-            Shape path = shape.getPath().copyFor(bounds);
+            Shape path = shape.getPath().copyForBounds(bounds);
             path = shape.localToParent(path);
             paths.add(path);
         }

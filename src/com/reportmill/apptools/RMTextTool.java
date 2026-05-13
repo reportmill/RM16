@@ -766,7 +766,7 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
         aPntr.save();
         aPntr.setColor(getEditor().isSuperSelected(aText) ? new Color(.9f, .4f, .4f) : Color.LIGHTGRAY);
         aPntr.setStroke(Stroke.Stroke1.copyForDashes(3, 2));
-        Shape path = aText.getPath().copyFor(aText.getBoundsInside());
+        Shape path = aText.getPath().copyForBounds(aText.getBoundsInside());
         path = getEditor().convertFromShape(path, aText);
         aPntr.setAntialiasing(false);
         aPntr.draw(path);

@@ -1265,7 +1265,7 @@ public class RMShape implements Cloneable, RMTypes, Archivable, Key.GetSet {
      */
     public Shape localToParent(Shape aShape)
     {
-        return aShape.copyFor(getLocalToParent());
+        return aShape.copyForTransform(getLocalToParent());
     }
 
     /**
@@ -1273,7 +1273,7 @@ public class RMShape implements Cloneable, RMTypes, Archivable, Key.GetSet {
      */
     public Shape localToParent(Shape aShape, RMShape aPar)
     {
-        return aShape.copyFor(getLocalToParent(aPar));
+        return aShape.copyForTransform(getLocalToParent(aPar));
     }
 
     /**
@@ -1314,7 +1314,7 @@ public class RMShape implements Cloneable, RMTypes, Archivable, Key.GetSet {
      */
     public Shape parentToLocal(Shape aShape)
     {
-        return aShape.copyFor(getParentToLocal());
+        return aShape.copyForTransform(getParentToLocal());
     }
 
     /**
@@ -1322,7 +1322,7 @@ public class RMShape implements Cloneable, RMTypes, Archivable, Key.GetSet {
      */
     public Shape parentToLocal(Shape aShape, RMShape aPar)
     {
-        return aShape.copyFor(getParentToLocal(aPar));
+        return aShape.copyForTransform(getParentToLocal(aPar));
     }
 
     /**

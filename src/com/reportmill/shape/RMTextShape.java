@@ -618,12 +618,12 @@ public class RMTextShape extends RMRectShape {
     {
         // If text doesn't perform wrap or parent is null, return normal path in bounds
         if (!getPerformsWrap() || getParent() == null)
-            return getPathShape() != null ? getPathShape().getPath().copyFor(getBoundsInside()) : super.getPath();
+            return getPathShape() != null ? getPathShape().getPath().copyForBounds(getBoundsInside()) : super.getPath();
 
         // Get peers who cause wrap (if none, just return super path in bounds)
         List<RMShape> peersWhoCauseWrap = getPeersWhoCauseWrap();
         if (peersWhoCauseWrap == null)
-            return getPathShape() != null ? getPathShape().getPath().copyFor(getBoundsInside()) : super.getPath();
+            return getPathShape() != null ? getPathShape().getPath().copyForBounds(getBoundsInside()) : super.getPath();
 
         // Add this text to list
         peersWhoCauseWrap.add(0, this);
@@ -633,7 +633,7 @@ public class RMTextShape extends RMRectShape {
         Shape path = RMShapeUtils.getSubtractedPath(peersWhoCauseWrap, -3);  // INSET NAILED TO -3
         _performsWrap = true;
         path = parentToLocal(path);
-        path = path.copyFor(getBoundsInside());
+        path = path.copyForBounds(getBoundsInside());
         return path;
     }
 

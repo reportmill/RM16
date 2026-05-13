@@ -269,7 +269,7 @@ public class RMScene3D extends RMParentShape {
 
         // Transform to parent (scene)
         Transform shapeToParent = aShape.getTransform();
-        Shape shapePathFlatInScene = shapePathFlat.copyFor(shapeToParent);
+        Shape shapePathFlatInScene = shapePathFlat.copyForTransform(shapeToParent);
 
         // Flip
         double height = getHeight();

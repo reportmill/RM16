@@ -36,7 +36,7 @@ public class RMPolygonShape extends RMParentShape {
     public Path2D getPath()
     {
         Rect boundsInside = getBoundsInside();
-        return _path.copyFor(boundsInside);
+        return _path.copyForBounds(boundsInside);
     }
 
     /**

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <TabView MinWidth="120">
-  <ColView MinWidth="200" MinHeight="200" Padding="12" Spacing="6" FillWidth="true" title="Main">
+  <ColView MinWidth="200" MinHeight="200" Padding="12" Spacing="6" FillWidth="true" Title="Main">
     <Label Text="Control Type:" />
     <ListView Name="TypeListView" MinWidth="120" PrefHeight="60" GrowHeight="true" />
     <Label Text="Default text:" />
     <TextField Name="TextView" PrefHeight="100" Multiline="true" />
   </ColView>
-  <ColView MinWidth="200" MinHeight="200" Padding="12" Spacing="6" FillWidth="true" title="TextField">
+  <ColView MinWidth="200" MinHeight="200" Padding="12" Spacing="6" FillWidth="true" Title="TextField">
     <CheckBox Name="MultilineCheckBox" Text="Multi-line Text" />
   </ColView>
-  <ColView title="Button" />
+  <ColView Title="Button" />
 </TabView>

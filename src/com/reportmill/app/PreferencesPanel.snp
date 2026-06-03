@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <TabView PrefWidth="350" PrefHeight="360" Border="#C0 1" Font="Arial 12" GrowHeight="true">
-  <ColView Align="TOP_CENTER" Padding="50,5,5,5" Spacing="40" title="License">
+  <ColView Align="TOP_CENTER" Padding="50,5,5,5" Spacing="40" Title="License">
     <RowView Spacing="10">
       <Label Text="License Key:" />
       <TextField Name="LicenseText" PrefWidth="210" />
     </RowView>
     <CheckBox Name="EnableExceptionsCheckBox" Text="Enable Exception Reporting" />
   </ColView>
-  <RowView Padding="15,5,10,5" Spacing="10" FillHeight="true" title="Formats">
+  <RowView Padding="15,5,10,5" Spacing="10" FillHeight="true" Title="Formats">
     <ColView PrefWidth="150" Spacing="4" GrowWidth="true" FillWidth="true">
       <RowView>
         <Label Text="Number Formats:" />

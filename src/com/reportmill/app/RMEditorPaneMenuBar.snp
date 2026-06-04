@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<MenuBar MinHeight="30" Padding="0,10,0,10" Font="Arial 13">
+<MenuBar MinHeight="30" Padding="0,10,0,10">
   <Menu Name="FileMenu" Text="File">
     <MenuItem Name="NewMenuItem" Text="New" Shortcut="meta N" />
     <MenuItem Name="OpenMenuItem" Text="Open..." Shortcut="meta O" />
@@ -11,7 +11,7 @@
     <MenuItem Name="RevertMenuItem" Text="Revert to Saved" Shortcut="meta U" />
     <MenuItem />
     <MenuItem Name="PreviewMenuItem" Text="Preview Report" />
-    <Menu Name="PreviewMenu" Font="Arial 13" Text="Preview Reports">
+    <Menu Name="PreviewMenu" Text="Preview Reports">
       <MenuItem Name="PreviewPDFMenuItem" Text="PDF" Shortcut="meta shift P" />
       <MenuItem Name="PreviewHTMLMenuItem" Text="HTML" />
       <MenuItem Name="PreviewCSVMenuItem" Text="CSV" />
@@ -20,7 +20,7 @@
       <MenuItem Name="PreviewJPEGMenuItem" Text="JPEG" />
       <MenuItem Name="PreviewPNGMenuItem" Text="PNG" />
     </Menu>
-    <Menu Name="SamplesMenu" Font="Arial 13" Text="Samples">
+    <Menu Name="SamplesMenu" Text="Samples">
       <MenuItem Name="MoviesMenuItem" Text="Movies" />
       <MenuItem Name="MoviesGraphMenuItem" Text="Movies Graph" />
       <MenuItem Name="MoviesLabelsMenuItem" Text="Movies Labels" />
@@ -75,11 +75,11 @@
     <MenuItem Name="UngroupMenuItem" Text="Ungroup" Shortcut="meta shift G" />
     <MenuItem Name="BringToFrontMenuItem" Text="Bring to Front" Shortcut="meta shift F" />
     <MenuItem Name="SendToBackMenuItem" Text="Send to Back" Shortcut="meta shift B" />
-    <Menu Name="GroupSpecialMenu" Font="Arial 13" Text="Group Special">
+    <Menu Name="GroupSpecialMenu" Text="Group Special">
       <MenuItem Name="GroupInSwitchShapeMenuItem" Text="Group in Switch Shape" />
       <MenuItem Name="GroupInScene3DMenuItem" Text="Group in 3D Shape" />
     </Menu>
-    <Menu Name="MakeRowColumnMenu" Font="Arial 13" Text="Make Row/Column">
+    <Menu Name="MakeRowColumnMenu" Text="Make Row/Column">
       <MenuItem Name="MakeRowTopMenuItem" Text="Make Row Top" />
       <MenuItem Name="MakeRowCenterMenuItem" Text="Make Row Center" />
       <MenuItem Name="MakeRowBottomMenuItem" Text="Make Row Bottom" />
@@ -89,7 +89,7 @@
       <MenuItem Name="EquallySpaceRowMenuItem" Text="Equally Space Row" />
       <MenuItem Name="EquallySpaceColumnMenuItem" Text="Equally Space Column" />
     </Menu>
-    <Menu Name="MakeSameSizeMenu" Font="Arial 13" Text="Make Same Size">
+    <Menu Name="MakeSameSizeMenu" Text="Make Same Size">
       <MenuItem Name="MakeSameWidthMenuItem" Text="Make Same Width" />
       <MenuItem Name="MakeSameHeightMenuItem" Text="Make Same Height" />
       <MenuItem Name="MakeSameSizeMenuItem" Text="Make Same Size" />

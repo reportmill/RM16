@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<SpringView X="1" Y="1" Width="275" Height="325" PrefWidth="275" PrefHeight="325">
+<SpringView Width="275" Height="325" PrefWidth="275" PrefHeight="325">
   <Label X="10" Y="10" Width="30" Height="20" Text="Key:" />
   <TextField Name="KeyText" X="40" Y="10" Width="172" Height="20" />
   <Button Name="KeysButton" X="215" Y="10" Width="55" Height="20" Font="Arial 10" Text="Keys" />

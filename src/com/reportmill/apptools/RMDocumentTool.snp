@@ -68,7 +68,7 @@
       </ColView>
       <RowView Margin="0,0,0,20">
         <Label Margin="4" Text="Spacing:" />
-        <TextField Name="GridSpacingText" Align="CENTER" Margin="4" PrefWidth="50" />
+        <TextField Name="GridSpacingText" PrefWidth="50" Align="CENTER" Margin="4" />
       </RowView>
     </RowView>
   </TitleView>
@@ -80,7 +80,7 @@
       </ColView>
       <ColView Margin="0,0,0,10" Spacing="2">
         <RadioButton Name="FacingRadio" Text="Facing" />
-        <RadioButton Name="ContinuousRadio" X="128" Y="20" Width="100" Height="20" Text="Continuous" />
+        <RadioButton Name="ContinuousRadio" Text="Continuous" />
       </ColView>
     </RowView>
   </TitleView>

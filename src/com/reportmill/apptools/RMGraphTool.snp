@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ColView Font="Arial 12" FillWidth="true">
   <RowView PrefHeight="40" Align="CENTER" Padding="2,4,3,4" FillHeight="true">
-    <ToggleButton Name="GraphTypeBarButton" PrefWidth="36" Padding="4" ToolTip="Bar Graph" ImageName="Graph_Bar.png" Position="CENTER_LEFT" GroupName="gtypebg" />
-    <ToggleButton Name="GraphTypeBarHButton" PrefWidth="36" Padding="4" ToolTip="Horizontal Bar Graph" ImageName="Graph_BarHorz.png" Position="CENTER" GroupName="gtypebg" />
-    <ToggleButton Name="GraphTypeAreaButton" PrefWidth="36" Padding="4" ToolTip="Area Graph" ImageName="Graph_Area.png" Position="CENTER" GroupName="gtypebg" />
-    <ToggleButton Name="GraphTypeLineButton" PrefWidth="36" Padding="4" ToolTip="Line Graph" ImageName="Graph_Line.png" Position="CENTER" GroupName="gtypebg" />
-    <ToggleButton Name="GraphTypeScatterButton" PrefWidth="36" Padding="4" ToolTip="Scatter Graph" ImageName="Graph_Scatter.png" Position="CENTER" GroupName="gtypebg" />
-    <ToggleButton Name="GraphTypePieButton" PrefWidth="36" Padding="4" ToolTip="Pie Graph" ImageName="Graph_Pie.png" Position="CENTER_RIGHT" GroupName="gtypebg" />
+    <ToggleButton Name="GraphTypeBarButton" PrefWidth="36" ToolTip="Bar Graph" ImageName="Graph_Bar.png" Position="CENTER_LEFT" GroupName="gtypebg" />
+    <ToggleButton Name="GraphTypeBarHButton" PrefWidth="36" ToolTip="Horizontal Bar Graph" ImageName="Graph_BarHorz.png" Position="CENTER" GroupName="gtypebg" />
+    <ToggleButton Name="GraphTypeAreaButton" PrefWidth="36" ToolTip="Area Graph" ImageName="Graph_Area.png" Position="CENTER" GroupName="gtypebg" />
+    <ToggleButton Name="GraphTypeLineButton" PrefWidth="36" ToolTip="Line Graph" ImageName="Graph_Line.png" Position="CENTER" GroupName="gtypebg" />
+    <ToggleButton Name="GraphTypeScatterButton" PrefWidth="36" ToolTip="Scatter Graph" ImageName="Graph_Scatter.png" Position="CENTER" GroupName="gtypebg" />
+    <ToggleButton Name="GraphTypePieButton" PrefWidth="36" ToolTip="Pie Graph" ImageName="Graph_Pie.png" Position="CENTER_RIGHT" GroupName="gtypebg" />
   </RowView>
   <RowView Padding="3,4,3,4" Spacing="3">
     <Label PrefWidth="68" PrefHeight="18" Text="Dataset Key:" />

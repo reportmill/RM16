@@ -19,7 +19,7 @@
       <CheckBox Name="PaintBackCheckBox" Align="CENTER" Text="Paint Background" />
     </ColView>
     <ColView Margin="4" Spacing="4">
-      <Button Name="AddButton" PrefWidth="80" Height="25" Text="Add" />
+      <Button Name="AddButton" PrefWidth="80" Text="Add" />
       <Button Name="RemoveButton" PrefWidth="80" Text="Remove" />
       <Button Name="RenameButton" PrefWidth="80" Text="Rename" />
       <Button Name="MergeButton" PrefWidth="80" Text="Merge" />

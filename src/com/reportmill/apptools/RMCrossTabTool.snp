@@ -4,9 +4,9 @@
   <TextField Name="DatasetKeyText" X="73" Y="5" Width="196" Height="20" />
   <Label X="5" Y="31" Width="62" Height="18" Text="Filter Expr:" />
   <TextField Name="FilterKeyText" X="63" Y="30" Width="206" Height="20" />
-  <Spinner Name="RowCountSpinner" X="10" Y="95" Width="60" Height="22" Min="1" Value="1" />
+  <Spinner Name="RowCountSpinner" X="10" Y="95" Width="60" Height="22" Min="1" />
   <Label X="10" Y="73" Width="50" Height="18" Text="Rows:" />
-  <Spinner Name="ColCountSpinner" X="10" Y="142" Width="60" Height="22" Min="1" Value="1" />
+  <Spinner Name="ColCountSpinner" X="10" Y="142" Width="60" Height="22" Min="1" />
   <Label X="10" Y="120" Width="69" Height="18" Text="Columns:" />
   <Spinner Name="HeaderRowCountSpinner" X="95" Y="95" Width="70" Height="22" Min="0" />
   <Label X="95" Y="73" Width="84" Height="18" Text="Header Rows:" />

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<TabView PrefWidth="350" PrefHeight="360" Border="#C0 1" Font="Arial 12" GrowHeight="true">
+<TabView PrefWidth="350" PrefHeight="360" Border="#C0" Font="Arial 12" GrowHeight="true">
   <ColView Align="TOP_CENTER" Padding="50,5,5,5" Spacing="40" Title="License">
     <RowView Spacing="10">
       <Label Text="License Key:" />

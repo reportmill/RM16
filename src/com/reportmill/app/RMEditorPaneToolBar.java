@@ -21,23 +21,26 @@ import snap.viewx.*;
 public class RMEditorPaneToolBar extends RMEditorPane.SupportPane {
 
     // The font face ComboBox
-    ComboBox _fontFaceComboBox;
+    private ComboBox<String> _fontFaceComboBox;
 
     // The font size ComboBox
-    ComboBox _fontSizeComboBox;
+    private ComboBox<Number> _fontSizeComboBox;
 
     // The editor selected color ColorWell (hidden)
-    ColorWell _colorWell;
+    private ColorWell _colorWell;
 
     // The toolbar tools
-    RMTool _toolBarTools[];
+    private List<RMTool<?>> _toolBarTools;
+
+    // Constant for standard font sizes
+    private static Number[] sizes = { 6, 8, 9, 10, 11, 12, 14, 16, 18, 22, 24, 36, 48, 64, 72, 96, 128, 144 };
 
     /**
-     * Creates a new editor pane tool bar.
+     * Constructor.
      */
-    public RMEditorPaneToolBar(RMEditorPane anEP)
+    public RMEditorPaneToolBar(RMEditorPane editorPane)
     {
-        super(anEP);
+        super(editorPane);
         _toolBarTools = createToolBarTools();
     }
 
@@ -49,11 +52,10 @@ public class RMEditorPaneToolBar extends RMEditorPane.SupportPane {
         // Get/configure FontFaceComboBox
         _fontFaceComboBox = getView("FontFaceComboBox", ComboBox.class);
         _fontFaceComboBox.getPopupList().setMaxRowCount(20);
-        _fontFaceComboBox.setItems((Object[]) Font.getFamilyNames());
+        _fontFaceComboBox.setItems(Font.getFamilyNames());
 
         // Get/configure FontSizeComboBox
         _fontSizeComboBox = getView("FontSizeComboBox", ComboBox.class);
-        Object sizes[] = {6, 8, 9, 10, 11, 12, 14, 16, 18, 22, 24, 36, 48, 64, 72, 96, 128, 144};
         _fontSizeComboBox.setItems(sizes);
         _fontSizeComboBox.setItemTextFunction(i -> Convert.stringValue(i) + " pt");
 
@@ -107,8 +109,8 @@ public class RMEditorPaneToolBar extends RMEditorPane.SupportPane {
 
         // Reset FontFaceComboBox, FontSizeComboBox
         _fontFaceComboBox.setSelItem(font.getFamily());
-        String fstext = _fontSizeComboBox.getText(font.getSize());
-        _fontSizeComboBox.setText(fstext);
+        String fontSizeStr = _fontSizeComboBox.getTextForItem(font.getSize());
+        _fontSizeComboBox.setText(fontSizeStr);
 
         // Reset BoldButton, ItalicButton, UnderlineButton
         setViewValue("BoldButton", font.isBold());
@@ -173,51 +175,53 @@ public class RMEditorPaneToolBar extends RMEditorPane.SupportPane {
         }
 
         // Handle MoneyButton: If currently selected format is number format, add or remove dollars
-        RMFormat fmt = RMEditorUtils.getFormat(editor);
-        RMNumberFormat nfmt = fmt instanceof RMNumberFormat ? (RMNumberFormat) fmt : null;
         if (anEvent.equals("MoneyButton")) {
-            if (nfmt == null) RMEditorUtils.setFormat(editor, RMNumberFormat.CURRENCY);
-            else {
-                nfmt = nfmt.clone(); // Clone it
-                nfmt.setLocalCurrencySymbolUsed(!nfmt.isLocalCurrencySymbolUsed()); // Toggle whether $ is used
-                RMEditorUtils.setFormat(editor, nfmt);
+            if (RMEditorUtils.getFormat(editor) instanceof RMNumberFormat numFormat) {
+                numFormat = numFormat.clone(); // Clone it
+                numFormat.setLocalCurrencySymbolUsed(!numFormat.isLocalCurrencySymbolUsed()); // Toggle whether $ is used
+                RMEditorUtils.setFormat(editor, numFormat);
             }
+            else RMEditorUtils.setFormat(editor, RMNumberFormat.CURRENCY);
         }
 
         // Handle PercentButton: If currently selected format is number format, add or remove percent symbol
         if (anEvent.equals("PercentButton")) {
-            if (nfmt == null) RMEditorUtils.setFormat(editor, new RMNumberFormat("#,##0.00 %"));
-            else {
-                nfmt = nfmt.clone(); // Clone it
-                nfmt.setPercentSymbolUsed(!nfmt.isPercentSymbolUsed()); // Toggle whether percent symbol is used
-                RMEditorUtils.setFormat(editor, nfmt);
+            if (RMEditorUtils.getFormat(editor) instanceof RMNumberFormat numFormat) {
+                numFormat = numFormat.clone(); // Clone it
+                numFormat.setPercentSymbolUsed(!numFormat.isPercentSymbolUsed()); // Toggle whether percent symbol is used
+                RMEditorUtils.setFormat(editor, numFormat);
             }
+            else RMEditorUtils.setFormat(editor, new RMNumberFormat("#,##0.00 %"));
         }
 
         // Handle CommaButton: If currently selected format is number format, add or remove grouping
         if (anEvent.equals("CommaButton")) {
-            if (nfmt == null) RMEditorUtils.setFormat(editor, new RMNumberFormat("#,##0.00"));
-            else {
-                nfmt = nfmt.clone();
-                nfmt.setGroupingUsed(!nfmt.isGroupingUsed()); // Toggle whether grouping is used
-                RMEditorUtils.setFormat(editor, nfmt);
+            if (RMEditorUtils.getFormat(editor) instanceof RMNumberFormat numFormat) {
+                numFormat = numFormat.clone();
+                numFormat.setGroupingUsed(!numFormat.isGroupingUsed()); // Toggle whether grouping is used
+                RMEditorUtils.setFormat(editor, numFormat);
             }
+            else RMEditorUtils.setFormat(editor, new RMNumberFormat("#,##0.00"));
         }
 
         // Handle DecimalAddButton: If currently selected format is number format, add decimal
-        if (anEvent.equals("DecimalAddButton") && nfmt != null) {
-            nfmt = nfmt.clone();
-            nfmt.setMinimumFractionDigits(nfmt.getMinimumFractionDigits() + 1);
-            nfmt.setMaximumFractionDigits(nfmt.getMinimumFractionDigits());
-            RMEditorUtils.setFormat(editor, nfmt);
+        if (anEvent.equals("DecimalAddButton")) {
+            if (RMEditorUtils.getFormat(editor) instanceof RMNumberFormat numFormat) {
+                numFormat = numFormat.clone();
+                numFormat.setMinimumFractionDigits(numFormat.getMinimumFractionDigits() + 1);
+                numFormat.setMaximumFractionDigits(numFormat.getMinimumFractionDigits());
+                RMEditorUtils.setFormat(editor, numFormat);
+            }
         }
 
         // Handle DecimalRemoveButton: If currently selected format is number format, remove decimal digits
-        if (anEvent.equals("DecimalRemoveButton") && nfmt != null) {
-            nfmt = nfmt.clone();
-            nfmt.setMinimumFractionDigits(nfmt.getMinimumFractionDigits() - 1);
-            nfmt.setMaximumFractionDigits(nfmt.getMinimumFractionDigits());
-            RMEditorUtils.setFormat(editor, nfmt);
+        if (anEvent.equals("DecimalRemoveButton")) {
+            if (RMEditorUtils.getFormat(editor) instanceof RMNumberFormat numFormat) {
+                numFormat = numFormat.clone();
+                numFormat.setMinimumFractionDigits(numFormat.getMinimumFractionDigits() - 1);
+                numFormat.setMaximumFractionDigits(numFormat.getMinimumFractionDigits());
+                RMEditorUtils.setFormat(editor, numFormat);
+            }
         }
 
         // Handle SamplesButton
@@ -226,11 +230,8 @@ public class RMEditorPaneToolBar extends RMEditorPane.SupportPane {
 
         // Handle Preview/Edit button and PreviewMenuItem
         if (anEvent.equals("PreviewEditButton") || anEvent.equals("PreviewMenuItem")) {
-
-            // Hack to open edited file as text file
-            if (anEvent.isAltDown()) openDocTextFile();
-
-                // Normal preview
+            if (anEvent.isAltDown()) // Open as text file
+                openDocTextFile();
             else getEditorPane().setEditing(!getEditorPane().isEditing());
         }
 
@@ -240,17 +241,15 @@ public class RMEditorPaneToolBar extends RMEditorPane.SupportPane {
 
         // Handle ToolButton(s)
         if (anEvent.getName().endsWith("ToolButton")) {
-            for (RMTool tool : _toolBarTools)
-                if (anEvent.getName().startsWith(tool.getClass().getSimpleName())) {
-                    getEditor().setCurrentTool(tool);
-                    break;
-                }
+            RMTool<?> matchingTool = ListUtils.findMatch(_toolBarTools, tool -> anEvent.getName().startsWith(tool.getClass().getSimpleName()));
+            if (matchingTool != null)
+                getEditor().setCurrentTool(matchingTool);
         }
 
         // Handle FontFaceComboBox
         if (anEvent.equals("FontFaceComboBox")) {
             String familyName = anEvent.getText();
-            String fontNames[] = Font.getFontNames(familyName);
+            String[] fontNames = Font.getFontNames(familyName);
             if (fontNames == null || fontNames.length == 0) return;
             String fontName = fontNames[0];
             Font font = Font.getFont(fontName, 12);
@@ -329,11 +328,11 @@ public class RMEditorPaneToolBar extends RMEditorPane.SupportPane {
     public void startSamplesButtonAnim()
     {
         // Get button
-        View btn = getView("SamplesButton");
-        btn.setScale(1.2);
+        View samplesButton = getView("SamplesButton");
+        samplesButton.setScale(1.2);
 
         // Configure anim
-        ViewAnim anim = btn.getAnim(0);
+        ViewAnim anim = samplesButton.getAnim(0);
         anim.getAnim(400).setScale(1.4).getAnim(800).setScale(1.2).getAnim(1200).setScale(1.4).getAnim(1600).setScale(1.2)
                 .getAnim(2400).setRotate(360);
         anim.setLoopCount(3).play();
@@ -344,25 +343,22 @@ public class RMEditorPaneToolBar extends RMEditorPane.SupportPane {
      */
     public void stopSamplesButtonAnim()
     {
-        View btn = getView("SamplesButton");
-        btn.getAnim(0).finish();
+        View samplesButton = getView("SamplesButton");
+        samplesButton.getAnim(0).finish();
     }
 
     /**
      * Creates the list of tool instances for tool bar.
      */
-    protected RMTool[] createToolBarTools()
+    private List<RMTool<?>> createToolBarTools()
     {
-        List<RMTool> tools = new ArrayList();
         RMEditor editor = getEditor();
-        tools.add(editor.getSelectTool());
-        tools.add(editor.getTool(RMLineShape.class));
-        tools.add(editor.getTool(RMRectShape.class));
-        tools.add(editor.getTool(RMOvalShape.class));
-        tools.add(editor.getTool(RMTextShape.class));
-        tools.add(editor.getTool(RMPolygonShape.class));
-        tools.add(new RMPolygonShapeTool.PencilTool(editor));
-        return tools.toArray(new RMTool[0]);
+        return List.of(editor.getSelectTool(),
+            editor.getTool(RMLineShape.class),
+            editor.getTool(RMRectShape.class),
+            editor.getTool(RMOvalShape.class),
+            editor.getTool(RMTextShape.class),
+            editor.getTool(RMPolygonShape.class),
+            new RMPolygonShapeTool.PencilTool(editor));
     }
-
 }

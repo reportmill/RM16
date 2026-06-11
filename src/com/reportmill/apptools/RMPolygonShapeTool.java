@@ -445,7 +445,7 @@ public class RMPolygonShapeTool<T extends RMPolygonShape> extends RMTool<T> {
     /**
      * This inner class defines a polygon tool subclass for drawing freehand pencil sketches instead.
      */
-    public static class PencilTool<T extends RMPolygonShape> extends RMPolygonShapeTool<T> {
+    public static class PencilTool extends RMPolygonShapeTool<RMPolygonShape> {
 
         /**
          * Constructor.

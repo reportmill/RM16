@@ -1001,6 +1001,9 @@ public class RMEditor extends RMViewer implements DeepChangeListener {
 
             // If zoom to fit, update zoom to fit factor (just returns if unchanged)
             else setZoomToFitFactor();
+
+            if (anEvent.isMouseRelease())
+                resetEditorPaneOnMouseUp();
         }
     }
 
@@ -1133,14 +1136,14 @@ public class RMEditor extends RMViewer implements DeepChangeListener {
     /**
      * Property change.
      */
-    public void deepChange(Object aShape, PropChange aPC)
+    public void deepChange(Object aShape, PropChange propChange)
     {
         // If deep change for EditorTextEditor, just return since it registers Undo itself (with better coalesce)
         //if(getTextEditor()!=null && getTextEditor().getTextShape()==aShape &&
         //    (anEvent.getSource() instanceof RMXString || anEvent.getSource() instanceof RMXStringRun)) return;
 
         // Add undo change
-        addUndoChange(aPC);
+        addUndoChange(propChange);
 
         // Reset EditorPane UI
         resetEditorPaneLater();
@@ -1149,14 +1152,14 @@ public class RMEditor extends RMViewer implements DeepChangeListener {
     /**
      * Property change.
      */
-    protected void addUndoChange(PropChange aPC)
+    protected void addUndoChange(PropChange propChange)
     {
         // Get undoer (just return if null)
         Undoer undoer = getUndoer();
         if (undoer == null) return;
 
         // Handle some changes special
-        String pname = aPC.getPropName();
+        String pname = propChange.getPropName();
         if (pname == RMGraph.ProxyShape_Prop) {
             resetEditorPaneOnMouseUp();
             return;
@@ -1174,7 +1177,7 @@ public class RMEditor extends RMViewer implements DeepChangeListener {
             undoer.setUndoSelection(new ArrayList<>(getSelectedOrSuperSelectedShapes()));
 
         // Add property change
-        undoer.addPropChange(aPC);
+        undoer.addPropChange(propChange);
 
         // Save UndoerChanges after delay
         saveUndoerChangesLater();

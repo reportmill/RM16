@@ -243,7 +243,7 @@ public class RMEditorPane extends RMViewerPane {
         getEditor().addEventHandler(this::handleEditorMouseEvent, MousePress, MouseRelease);
 
         // Listen for Editor PropChanges
-        getEditor().addPropChangeListener(pc -> editorDidPropChange(pc));
+        getEditor().addPropChangeListener(pc -> handleEditorPropChange(pc));
     }
 
     /**
@@ -287,9 +287,12 @@ public class RMEditorPane extends RMViewerPane {
         }
 
         // Reset MenuBar, InspectorPanel and AttributesPanel
-        if (!ViewUtils.isMouseDown()) getMenuBar().resetLater();
-        if (getInspectorPanel().isResetWithEditor()) getInspectorPanel().resetLater();
-        if (getAttributesPanel().isVisible() && !ViewUtils.isMouseDown()) getAttributesPanel().resetLater();
+        if (!ViewUtils.isMouseDown())
+            getMenuBar().resetLater();
+        if (getInspectorPanel().isResetWithEditor())
+            getInspectorPanel().resetLater();
+        if (getAttributesPanel().isVisible() && !ViewUtils.isMouseDown())
+            getAttributesPanel().resetLater();
     }
 
     /**
@@ -699,8 +702,7 @@ public class RMEditorPane extends RMViewerPane {
             return;
 
         // If RMTextShape, get copy of Format menu
-        if (selShape instanceof RMTextShape) {
-            RMTextShape text = (RMTextShape) selShape;
+        if (selShape instanceof RMTextShape text) {
 
             // Get editor pane format menu and add menu items to popup
             Menu formatMenu = getMenuBar().getView("FormatMenu", Menu.class);
@@ -732,12 +734,10 @@ public class RMEditorPane extends RMViewerPane {
     /**
      * Called when Editor has prop change.
      */
-    private void editorDidPropChange(PropChange aPC)
+    private void handleEditorPropChange(PropChange propChange)
     {
-        String propName = aPC.getPropName();
-        switch (propName) {
-            case RMEditor.SelShapes_Prop: resetLater(); break;
-            case RMEditor.SuperSelShape_Prop: resetLater(); break;
+        switch (propChange.getPropName()) {
+            case RMEditor.SelShapes_Prop, RMEditor.SuperSelShape_Prop -> resetLater();
         }
     }
 

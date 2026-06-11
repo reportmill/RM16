@@ -21,7 +21,7 @@ import snap.view.*;
 /**
  * This class subclasses RMViewer to support RMDocument editing.
  */
-public class RMEditor extends RMViewer implements DeepChangeListener {
+public class RMEditor extends RMViewer {
 
     // The EditorPane (if set)
     private RMEditorPane _editorPane;
@@ -1136,7 +1136,7 @@ public class RMEditor extends RMViewer implements DeepChangeListener {
     /**
      * Property change.
      */
-    public void deepChange(Object aShape, PropChange propChange)
+    protected void handleShapeDeepChange(Object aShape, PropChange propChange)
     {
         // If deep change for EditorTextEditor, just return since it registers Undo itself (with better coalesce)
         //if(getTextEditor()!=null && getTextEditor().getTextShape()==aShape &&

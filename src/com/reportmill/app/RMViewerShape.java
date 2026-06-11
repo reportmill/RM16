@@ -33,10 +33,8 @@ public class RMViewerShape extends RMParentShape {
         _viewer = aViewer;
 
         // If Viewer is really editor, do more
-        if (_viewer instanceof RMEditor) {
-            RMEditor editor = (RMEditor) _viewer;
-            addDeepChangeListener(editor);
-        }
+        if (_viewer instanceof RMEditor editor)
+            addDeepChangeListener(editor::handleShapeDeepChange);
     }
 
     /**
@@ -75,8 +73,7 @@ public class RMViewerShape extends RMParentShape {
         _doc.addPropChangeListener(_viewerDocLsnr);
 
         // If working for editor, do more
-        if (_viewer instanceof RMEditor) {
-            RMEditor editor = (RMEditor) _viewer;
+        if (_viewer instanceof RMEditor editor) {
 
             // Make sure current document page is super-selected
             if (editor._selShapes != null) {

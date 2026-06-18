@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <SpringView Width="400" Height="30" PrefWidth="400" PrefHeight="30">
-  <Button X="4" Y="2" Width="4" Height="24" ImageName="ToolBar.png" ShowArea="false" />
-  <Button Name="SaveButton" X="10" Y="3" Width="22" Height="22" ToolTip="Save" ImageName="File_Save.png" ShowArea="false" />
-  <Button Name="PreviewPDFButton" X="32" Y="3" Width="22" Height="22" ToolTip="Preview PDF" ImageName="Preview_PDF.png" ShowArea="false" />
-  <Button Name="PrintButton" X="54" Y="3" Width="22" Height="22" ToolTip="Print" ImageName="File_Print.png" ShowArea="false" />
-  <Button Name="CopyButton" X="76" Y="3" Width="22" Height="22" ToolTip="Copy" ImageName="Edit_Copy.png" ShowArea="false" />
+  <Button X="4" Y="2" Width="4" Height="24" ImageName="ToolBar.png" Plain="true" />
+  <Button Name="SaveButton" X="10" Y="3" Width="22" Height="22" ToolTip="Save" ImageName="File_Save.png" Plain="true" />
+  <Button Name="PreviewPDFButton" X="32" Y="3" Width="22" Height="22" ToolTip="Preview PDF" ImageName="Preview_PDF.png" Plain="true" />
+  <Button Name="PrintButton" X="54" Y="3" Width="22" Height="22" ToolTip="Print" ImageName="File_Print.png" Plain="true" />
+  <Button Name="CopyButton" X="76" Y="3" Width="22" Height="22" ToolTip="Copy" ImageName="Edit_Copy.png" Plain="true" />
   <ToggleButton Name="MoveButton" X="282" Y="3" Width="25" Height="25" ToolTip="Move" ImageName="Move.png" Selected="true" GroupName="bg1" />
   <ToggleButton Name="TextButton" X="307" Y="3" Width="25" Height="25" ToolTip="Text " ImageName="Text.png" GroupName="bg1" />
   <ToggleButton Name="SelectButton" X="332" Y="3" Width="25" Height="25" ToolTip="Select" ImageName="Select.png" GroupName="bg1" />

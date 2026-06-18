@@ -291,7 +291,7 @@ public class InspectorPanel extends RMEditorPane.SupportPane {
             button.setName("SelPath " + (shp.getAncestorCount() - 1));
             button.setPrefSize(40, 40);
             button.setMinSize(40, 40);
-            button.setShowArea(false);
+            button.setPlain(true);
 
             // Set button images
             Image img = editor.getTool(shp).getImage();

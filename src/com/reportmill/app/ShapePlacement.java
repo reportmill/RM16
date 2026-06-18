@@ -272,7 +272,7 @@ public class ShapePlacement extends RMEditorPane.SupportPane {
         String _autosizing = "-~~,-~~";
 
         // Autosizing spring/strut images
-        Image _images[];
+        Image[] _images;
 
         // Constants for images
         public static final int BACKGROUND = 0;
@@ -286,12 +286,14 @@ public class ShapePlacement extends RMEditorPane.SupportPane {
         public static final int INNER_VERTICAL_STRUT = 8;
 
         /**
-         * Creates a new autosizing panel.
+         * Constructor.
          */
         public AutosizingPanel()
         {
+            super();
+
             // Get image names
-            String imageNames[] = {"SpringsBack.png", "SpringOuterX.png", "SpringOuterY.png", "StrutOuterX.png",
+            String[] imageNames = {"SpringsBack.png", "SpringOuterX.png", "SpringOuterY.png", "StrutOuterX.png",
                     "StrutOuterY.png", "SpringX.png", "SpringY.png", "StrutX.png", "StrutY.png"};
 
             // Create images array and load images
@@ -300,7 +302,6 @@ public class ShapePlacement extends RMEditorPane.SupportPane {
                 _images[i] = Image.getImageForClassResource(getClass(), imageNames[i]);
 
             // Add mouse listener to send action
-            setActionable(true);
             enableEvents(MouseRelease);
         }
 
@@ -310,7 +311,7 @@ public class ShapePlacement extends RMEditorPane.SupportPane {
         protected void processEvent(ViewEvent anEvent)
         {
             if (!isEnabled() || !anEvent.isMouseEvent()) return;
-            StringBuffer sb = new StringBuffer(_autosizing);
+            StringBuilder sb = new StringBuilder(_autosizing);
             Point p = new Point(anEvent.getX(), anEvent.getY());
             double w = getWidth(), h = getHeight();
 

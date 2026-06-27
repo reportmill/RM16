@@ -91,12 +91,10 @@ public class RMDocument extends RMParentShape {
     public static Locale _locale = Locale.ENGLISH;  // Used by date/number formats    
 
     // Page Layout Enumerations
-    public enum PageLayout {Single, Double, Quadruple, Facing, Continuous, ContinuousDouble}
-
-    ;
+    public enum PageLayout { Single, Double, Quadruple, Facing, Continuous, ContinuousDouble }
 
     // Unit Enumerations
-    public enum Unit {Inch, Point, CM, MM, Pica}
+    public enum Unit { Inch, Point, CM, MM, Pica }
 
     // Constants for property changes
     public static final String SelPageIndex_Prop = "SelPageIndex";

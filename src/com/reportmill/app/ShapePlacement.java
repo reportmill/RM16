@@ -302,15 +302,15 @@ public class ShapePlacement extends RMEditorPane.SupportPane {
                 _images[i] = Image.getImageForClassResource(getClass(), imageNames[i]);
 
             // Add mouse listener to send action
-            enableEvents(MouseRelease);
+            addEventHandler(this::handleMouseReleaseEvent, MouseRelease);
         }
 
         /**
          * ProcessEvent.
          */
-        protected void processEvent(ViewEvent anEvent)
+        private void handleMouseReleaseEvent(ViewEvent anEvent)
         {
-            if (!isEnabled() || !anEvent.isMouseEvent()) return;
+            if (!isEnabled()) return;
             StringBuilder sb = new StringBuilder(_autosizing);
             Point p = new Point(anEvent.getX(), anEvent.getY());
             double w = getWidth(), h = getHeight();
@@ -382,5 +382,4 @@ public class ShapePlacement extends RMEditorPane.SupportPane {
             }
         }
     }
-
 }

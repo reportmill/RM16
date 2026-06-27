@@ -52,15 +52,15 @@ public class RMViewer extends ParentView {
     public static final String Content_Prop = "Content";
 
     /**
-     * Creates a new RMViewer with an empty document in it.
+     * Constructor.
      */
     public RMViewer()
     {
-        enableEvents(MouseEvents);
-        enableEvents(KeyEvents);
         setFocusable(true);
         setFocusWhenPressed(true);
         setFill(Color.LIGHTGRAY);
+        addEventHandler(this::handleMouseOrKeyEvent, MouseEvents);
+        addEventHandler(this::handleMouseOrKeyEvent, KeyEvents);
     }
 
     /**
@@ -452,11 +452,10 @@ public class RMViewer extends ParentView {
     }
 
     /**
-     * Handle mouse events.
+     * Handle mouse and key events.
      */
-    protected void processEvent(ViewEvent anEvent)
+    protected void handleMouseOrKeyEvent(ViewEvent anEvent)
     {
-        super.processEvent(anEvent); // Do normal version
         getEvents().processEvent(anEvent); // Forward to event helper
     }
 
@@ -541,24 +540,16 @@ public class RMViewer extends ParentView {
     /**
      * Called when document has PropChange.
      */
-    protected void docDidPropChange(PropChange anEvent)
+    protected void handleDocumentPropChange(PropChange propChange)
     {
         // Handle SelectedPageIndex, PageSize, PageLayout
-        String propName = anEvent.getPropName();
+        String propName = propChange.getPropName();
         if (propName.equals(RMDocument.SelPageIndex_Prop) || propName.equals("PageSize") || propName.equals("PageLayout")) {
             relayout();
             setZoomToFitFactor();
             repaint();
-            firePropChange("ContentChange" + propName, anEvent.getOldValue(), anEvent.getNewValue());
+            firePropChange("ContentChange" + propName, propChange.getOldValue(), propChange.getNewValue());
         }
-    }
-
-    /**
-     * Returns the document shape for given name.
-     */
-    public RMShape getShape(String aName)
-    {
-        return _vshape.getChildWithName(aName);
     }
 
     /**

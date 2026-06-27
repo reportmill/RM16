@@ -19,7 +19,7 @@ public class RMViewerShape extends RMParentShape {
     RMDocument _doc;
 
     // A PropChangeListener to catch doc changes (Showing, PageSize, )
-    PropChangeListener _viewerDocLsnr = pc -> _viewer.docDidPropChange(pc);
+    PropChangeListener _viewerDocLsnr = pc -> _viewer.handleDocumentPropChange(pc);
 
     // An optional undoer object to track document changes
     Undoer _undoer;
@@ -40,18 +40,12 @@ public class RMViewerShape extends RMParentShape {
     /**
      * Returns the viewer.
      */
-    public RMViewer getViewer()
-    {
-        return _viewer;
-    }
+    public RMViewer getViewer()  { return _viewer; }
 
     /**
      * Returns the document.
      */
-    public RMDocument getDoc()
-    {
-        return _doc;
-    }
+    public RMDocument getDoc()  { return _doc; }
 
     /**
      * Sets the document to be viewed in viewer.
@@ -63,7 +57,8 @@ public class RMViewerShape extends RMParentShape {
         aDoc.layoutDeep();
 
         // If old document, stop listening to shape changes and notify shapes hidden
-        if (_doc != null) _doc.removePropChangeListener(_viewerDocLsnr);
+        if (_doc != null)
+            _doc.removePropChangeListener(_viewerDocLsnr);
 
         // Set new document
         if (_doc != null) removeChild(_doc);

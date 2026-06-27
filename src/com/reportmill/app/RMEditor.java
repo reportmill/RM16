@@ -11,7 +11,6 @@ import snap.geom.Point;
 import snap.geom.Rect;
 import snap.geom.Shape;
 import snap.gfx.*;
-import snap.props.DeepChangeListener;
 import snap.props.PropChange;
 import snap.props.UndoSet;
 import snap.props.Undoer;
@@ -71,15 +70,17 @@ public class RMEditor extends RMViewer {
     public static final String SuperSelShape_Prop = "SuperSelShape";
 
     /**
-     * Creates a new editor.
+     * Constructor.
      */
     public RMEditor()
     {
+        super();
+
         // SuperSelect ViewerShape
         setSuperSelectedShape(getViewerShape());
 
         // Enable Drag events
-        enableEvents(DragEvents);
+        addEventHandler(_dragHelper::processEvent, DragEvents);
 
         // Enable ToolTips so getToolTip gets called and disable FocusKeys so tab doesn't leave editor
         setToolTipEnabled(true);
@@ -978,17 +979,13 @@ public class RMEditor extends RMViewer {
     /**
      * Override to revalidate when ideal size changes.
      */
-    protected void processEvent(ViewEvent anEvent)
+    protected void handleMouseOrKeyEvent(ViewEvent anEvent)
     {
         // Do normal version
-        super.processEvent(anEvent);
+        super.handleMouseOrKeyEvent(anEvent);
 
-        // Handle DragEvent
-        if (anEvent.isDragEvent())
-            _dragHelper.processEvent(anEvent);
-
-            // See if zoom needs to be reset for any input events
-        else if (anEvent.isMouseDrag() || anEvent.isMouseRelease() || anEvent.isKeyRelease()) {
+        // See if zoom needs to be reset for any input events
+        if (anEvent.isMouseDrag() || anEvent.isMouseRelease() || anEvent.isKeyRelease()) {
 
             // If zoom to factor, revalidate when preferred size changes
             if (isZoomToFactor()) {

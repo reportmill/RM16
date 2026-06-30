@@ -97,17 +97,17 @@ public class SamplesPane extends ViewController {
         selectLabel.setFont(Font.Arial16.copyForSize(20).getBold());
 
         // Create silly DatasetButton to add movies dataset
-        Button dsetButton = new Button("Add Movies Dataset");
-        dsetButton.setName("DatasetButton");
-        dsetButton.setFont(Font.Arial12);
-        dsetButton.setPadding(4, 4, 4, 4);
-        dsetButton.setLeanX(HPos.RIGHT);
-        dsetButton.addEventHandler(e -> datasetButtonClicked(), Action);
+        Button dataSetButton = new Button("Add Movies Dataset");
+        dataSetButton.setName("DatasetButton");
+        dataSetButton.setFont(Font.Arial12);
+        dataSetButton.setPadding(4, 4, 4, 4);
+        dataSetButton.setLeanX(HPos.RIGHT);
+        dataSetButton.addEventHandler(e -> handleDatasetButtonActionEvent(), Action);
 
         // Create HeaderRow to hold SelectLabel and DatasetButton
         RowView headerRow = new RowView();
         headerRow.addChild(selectLabel);
-        headerRow.addChild(dsetButton);
+        headerRow.addChild(dataSetButton);
 
         // Create top level col view to hold HeaderRow and ColView
         ColView boxView = new ColView();
@@ -223,14 +223,14 @@ public class SamplesPane extends ViewController {
             }
 
             // Create/add ItemBox for Sample and add ImageView + Label
-            ColView ibox = new ColView();
-            ibox.setPrefSize(175, 175);
-            ibox.setAlign(Pos.TOP_CENTER);
-            ibox.setChildren(iview, label);
-            ibox.setPadding(0, 0, 8, 0);
-            ibox.setName("ItemBox" + i);
-            ibox.addEventHandler(e -> itemBoxWasPressed(ibox, e), MousePress);
-            rowView.addChild(ibox);
+            ColView itemBox = new ColView();
+            itemBox.setPrefSize(175, 175);
+            itemBox.setAlign(Pos.TOP_CENTER);
+            itemBox.setChildren(iview, label);
+            itemBox.setPadding(0, 0, 8, 0);
+            itemBox.setName("ItemBox" + i);
+            itemBox.addEventHandler(e -> handleItemBoxMousePressEvent(itemBox, e), MousePress);
+            rowView.addChild(itemBox);
         }
 
         // Make sure all row views and image boxes are owned by ui
@@ -244,7 +244,7 @@ public class SamplesPane extends ViewController {
     /**
      * Called when template ItemBox is clicked.
      */
-    private void itemBoxWasPressed(ColView anItemBox, ViewEvent anEvent)
+    private void handleItemBoxMousePressEvent(ColView anItemBox, ViewEvent anEvent)
     {
         // Get name and index of pressed ItemBox
         String name = anItemBox.getName();
@@ -273,7 +273,7 @@ public class SamplesPane extends ViewController {
     /**
      * Called when user hits DatasetButton.
      */
-    private void datasetButtonClicked()
+    private void handleDatasetButtonActionEvent()
     {
         _handler.accept(null);
         _dialogSheet.cancel();

@@ -12,13 +12,13 @@ import snap.view.*;
 class RMEditorDnD {
 
     // The editor that this class is working for
-    RMEditor _editor;
+    private RMEditor _editor;
 
     // The last shape that a drag and drop action was over
-    RMShape _lastOverShape;
+    private RMShape _lastOverShape;
 
     /**
-     * Creates a new editor drop target listener.
+     * Constructor.
      */
     public RMEditorDnD(RMEditor anEditor)
     {
@@ -28,31 +28,21 @@ class RMEditorDnD {
     /**
      * Handle events.
      */
-    protected void processEvent(ViewEvent anEvent)
+    protected void handleEditorDragEvent(ViewEvent anEvent)
     {
         switch (anEvent.getType()) {
-            case DragEnter:
-                dragEnter(anEvent);
-                break;
-            case DragOver:
-                dragOver(anEvent);
-                break;
-            case DragExit:
-                dragExit(anEvent);
-                break;
-            case DragDrop:
-                dragDrop(anEvent);
-                break;
-            default:
-                throw new RuntimeException("RMEditorDnD: Unknown event type: " + anEvent.getType());
-                //case DragActionChanged: anEvent.acceptDrag(DnDConstants.ACTION_COPY);
+            case DragEnter -> dragEnter(anEvent);
+            case DragOver -> dragOver(anEvent);
+            case DragExit -> dragExit(anEvent);
+            case DragDrop -> dragDrop(anEvent);
+            default -> throw new RuntimeException("RMEditorDnD: Unknown event type: " + anEvent.getType());
         }
     }
 
     /**
      * Drop target listener method.
      */
-    public void dragEnter(ViewEvent anEvent)
+    private void dragEnter(ViewEvent anEvent)
     {
         _lastOverShape = null;  // Reset last over shape and last drag point
         dragOver(anEvent);                             // Do a drag over to get things started
@@ -61,7 +51,7 @@ class RMEditorDnD {
     /**
      * Drop target listener method.
      */
-    public void dragOver(ViewEvent anEvent)
+    private void dragOver(ViewEvent anEvent)
     {
         // Windows calls this method continuously, as long as the mouse is held down
         //if(anEvent.getPoint().equals(_lastDragPoint)) return; _lastDragPoint = anEvent.getPoint();
@@ -104,7 +94,7 @@ class RMEditorDnD {
     /**
      * Drop target listener method.
      */
-    public void dragExit(ViewEvent anEvent)
+    private void dragExit(ViewEvent anEvent)
     {
         _editor._dragShape = null;
         _editor.repaint();        // Clear DragShape
@@ -114,7 +104,7 @@ class RMEditorDnD {
     /**
      * Drop target listener method.
      */
-    public void dragDrop(ViewEvent anEvent)
+    private void dragDrop(ViewEvent anEvent)
     {
         // Formally accept drop
         anEvent.acceptDrag();//DnDConstants.ACTION_COPY);
@@ -132,5 +122,4 @@ class RMEditorDnD {
         _editor._dragShape = null;
         _editor.repaint();
     }
-
 }

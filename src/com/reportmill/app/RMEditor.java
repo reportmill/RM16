@@ -80,7 +80,7 @@ public class RMEditor extends RMViewer {
         setSuperSelectedShape(getViewerShape());
 
         // Enable Drag events
-        addEventHandler(_dragHelper::processEvent, DragEvents);
+        addEventHandler(_dragHelper::handleEditorDragEvent, DragEvents);
 
         // Enable ToolTips so getToolTip gets called and disable FocusKeys so tab doesn't leave editor
         setToolTipEnabled(true);

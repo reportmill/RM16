@@ -321,7 +321,7 @@ public class RMViewerEvents {
             _shapeUnderCursorStack.pop();
 
             // Send mouse exited
-            shape.processEvent(createShapeEvent(shape, anEvent, ViewEvent.Type.MouseEnter));
+            shape.processEvent(createShapeEvent(shape, anEvent, EventType.MouseEnter));
 
             // Reset cursor
             getViewer().setCursor(_shapeUnderCursorStack.isEmpty() ? Cursor.DEFAULT : _shapeUnderCursorStack.peek());
@@ -333,7 +333,7 @@ public class RMViewerEvents {
 
         // Add aShape if non-null
         if (aShape != null && (_shapeUnderStack.isEmpty() || _shapeUnderStack.peek() != aShape)) {
-            aShape.processEvent(createShapeEvent(aShape, anEvent, ViewEvent.Type.MouseEnter));
+            aShape.processEvent(createShapeEvent(aShape, anEvent, EventType.MouseEnter));
             _shapeUnderStack.push(aShape);
             _shapeUnderCursorStack.push(getViewer().getCursor());
         }
@@ -342,7 +342,7 @@ public class RMViewerEvents {
     /**
      * Creates a shape mouse event.
      */
-    ViewEvent createShapeEvent(RMShape s, ViewEvent e, ViewEvent.Type t)
+    ViewEvent createShapeEvent(RMShape s, ViewEvent e, EventType t)
     {
         return getViewer().createShapeEvent(s, e, t);
     }

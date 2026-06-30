@@ -162,7 +162,7 @@ public class KeysPanel extends RMEditorPane.SupportPane {
         // Register KeysBrowser for click, drag
         _keysBrowser.addEventHandler(this::handleKeysBrowserMouseRelease, MouseRelease);
         _keysBrowser.addEventHandler(this::handleKeysBrowserDragGesture, DragGesture);
-        _keysBrowser.addEventHandler(this::handleKeysBrowserDragSourceEnd, ViewEvent.Type.DragSourceEnd);
+        _keysBrowser.addEventHandler(this::handleKeysBrowserDragSourceEnd, EventType.DragSourceEnd);
     }
 
     /**

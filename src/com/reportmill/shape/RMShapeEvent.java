@@ -19,7 +19,7 @@ public class RMShapeEvent extends ViewEvent {
     /**
      * Creates a new RMShapeEvent.
      */
-    public RMShapeEvent(RMShape aShape, ViewEvent anEvent, Point aPoint, ViewEvent.Type aType)
+    public RMShapeEvent(RMShape aShape, ViewEvent anEvent, Point aPoint, EventType aType)
     {
         setView(anEvent.getView());
         setEvent(_event = anEvent);
@@ -119,7 +119,7 @@ public class RMShapeEvent extends ViewEvent {
     /**
      * Override to forward to encapsulated event.
      */
-    protected Type getTypeImpl()
+    protected EventType getTypeImpl()
     {
         return _event.getType();
     }

@@ -555,7 +555,7 @@ public class RMViewer extends ParentView {
     /**
      * Creates a shape mouse event.
      */
-    public ViewEvent createShapeEvent(RMShape aShape, ViewEvent anEvent, ViewEvent.Type aType)
+    public ViewEvent createShapeEvent(RMShape aShape, ViewEvent anEvent, EventType aType)
     {
         Point point = convertToShape(anEvent.getX(), anEvent.getY(), aShape);
         return new RMShapeEvent(aShape, anEvent, point, aType); // was ne

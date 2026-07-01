@@ -65,7 +65,7 @@ public class RMNumberFormat implements RMFormat, Cloneable {
     {
         // If DefaultLocale, create and set DecimalFormatSymbols
         if (_defaultLocale != null)
-            setDecimalFormatSymbols(new DecimalFormatSymbols(_defaultLocale));
+            _fmt.setDecimalFormatSymbols(new DecimalFormatSymbols(_defaultLocale));
         else if (SnapEnv.isTeaVM)
             _fmt = (DecimalFormat) NumberFormat.getInstance(Locale.ENGLISH);
 
@@ -124,12 +124,12 @@ public class RMNumberFormat implements RMFormat, Cloneable {
 
         // If the currency symbol also uses the same character as the group or decimal separator, such as
         // "Kr." or "SFr.", putting it in the pattern will cause the DecimalFormat to throw an exception.
-        String separators[] = {getDecimalSeparator(), getThousandsSeparator(), ".", ","};
+        String[] separators = {getDecimalSeparator(), getThousandsSeparator(), ".", ","};
 
         // just replace them with spaces
-        for (int i = 0; i < separators.length; ++i)
-            if (separators[i] != null && separators[i].length() > 0)
-                symbol = symbol.replace(separators[i], " ");
+        for (String separator : separators)
+            if (separator != null && !separator.isEmpty())
+                symbol = symbol.replace(separator, " ");
 
         // trim up the ends
         return symbol.trim();
@@ -142,7 +142,7 @@ public class RMNumberFormat implements RMFormat, Cloneable {
     {
         // Get pattern and return whether $ or local currency symbol or international currency symbol is used
         String pattern = _fmt.toPattern();
-        return pattern.indexOf("$") >= 0 || pattern.indexOf(getLocalCurrencySymbol()) >= 0;
+        return pattern.contains("$") || pattern.contains(getLocalCurrencySymbol());
     }
 
     /**
@@ -169,7 +169,7 @@ public class RMNumberFormat implements RMFormat, Cloneable {
         else if (isLocalCurrencySymbolUsed() && !aFlag) {
 
             // Get pattern pieces (positive & negative)
-            String patterns[] = pattern.split(";");
+            String[] patterns = pattern.split(";");
 
             // Strip out $ or local currency symbol or international symbol
             for (int i = 0; i < patterns.length; i++) {
@@ -193,7 +193,7 @@ public class RMNumberFormat implements RMFormat, Cloneable {
     {
         // Get pattern and return whether $ or local currency symbol or international currency symbol is used
         String pattern = _fmt.toPattern();
-        return pattern.indexOf("$") >= 0 || pattern.indexOf(_fmt.getCurrency().getSymbol()) >= 0 || pattern.indexOf("\u00A4") >= 0;
+        return pattern.contains("$") || pattern.contains(_fmt.getCurrency().getSymbol()) || pattern.contains("\u00A4");
     }
 
     /**
@@ -203,7 +203,7 @@ public class RMNumberFormat implements RMFormat, Cloneable {
     {
         // Get pattern and return whether $ or local currency symbol or international currency symbol is used
         String pattern = _fmt.toPattern();
-        return pattern.indexOf("%") >= 0;
+        return pattern.contains("%");
     }
 
     /**
@@ -233,13 +233,14 @@ public class RMNumberFormat implements RMFormat, Cloneable {
      */
     public void setThousandsSeparator(String aValue)
     {
-        if (aValue != null && aValue.length() > 0) {
+        if (aValue != null && !aValue.isEmpty()) {
             char c = aValue.charAt(0);
             _fmtSyms.setGroupingSeparator(c);
-            setDecimalFormatSymbols(_fmtSyms);
+            _fmt.setDecimalFormatSymbols(_fmtSyms);
             _fmt.setGroupingUsed(true);
             _fmt.setGroupingSize(3);
-        } else _fmt.setGroupingUsed(false);
+        }
+        else _fmt.setGroupingUsed(false);
     }
 
     /**
@@ -255,10 +256,10 @@ public class RMNumberFormat implements RMFormat, Cloneable {
      */
     public void setDecimalSeparator(String aValue)
     {
-        if (aValue != null && aValue.length() > 0) {
+        if (aValue != null && !aValue.isEmpty()) {
             char c = aValue.charAt(0);
             _fmtSyms.setDecimalSeparator(c);
-            setDecimalFormatSymbols(_fmtSyms);
+            _fmt.setDecimalFormatSymbols(_fmtSyms);
         }
     }
 
@@ -376,7 +377,7 @@ public class RMNumberFormat implements RMFormat, Cloneable {
             _fmtSyms = _fmt.getDecimalFormatSymbols();
             if (dsep > 0 && dsep != '.') _fmtSyms.setDecimalSeparator(dsep);
             if (gsep > 0 && gsep != ',') _fmtSyms.setGroupingSeparator(gsep);
-            setDecimalFormatSymbols(_fmtSyms);
+            _fmt.setDecimalFormatSymbols(_fmtSyms);
         }
 
         // If that failed, re-throw exception
@@ -402,6 +403,7 @@ public class RMNumberFormat implements RMFormat, Cloneable {
     /**
      * Returns the format style.
      */
+    @Override
     public TextStyle formatStyle(Object anObj)
     {
         Number num = getNumber(anObj);
@@ -456,20 +458,8 @@ public class RMNumberFormat implements RMFormat, Cloneable {
      */
     public Number parse(String aStr)
     {
-        try {
-            return _fmt.parse(aStr);
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    /**
-     * For TeaVM.
-     */
-    void setDecimalFormatSymbols(DecimalFormatSymbols aDFS)
-    {
-        if (SnapEnv.isTeaVM) return;
-        _fmt.setDecimalFormatSymbols(aDFS);
+        try { return _fmt.parse(aStr); }
+        catch (Exception e) { return null; }
     }
 
     /**
@@ -477,18 +467,11 @@ public class RMNumberFormat implements RMFormat, Cloneable {
      */
     public boolean equals(Object anObj)
     {
-        // Check identity and super
         if (anObj == this) return true;
         if (!super.equals(anObj)) return false;
-
-        // Get other number format
         RMNumberFormat other = (RMNumberFormat) anObj;
-
-        // Check NullString and NegativeInRed
         if (!Objects.equals(other._nullString, _nullString)) return false;
         if (other._negativeInRed != _negativeInRed) return false;
-
-        // Return true since all other checks passed
         return true;
     }
 
@@ -497,12 +480,9 @@ public class RMNumberFormat implements RMFormat, Cloneable {
      */
     public RMNumberFormat clone()
     {
-        RMNumberFormat clone = null;
-        try {
-            clone = (RMNumberFormat) super.clone();
-        } catch (CloneNotSupportedException e) {
-            throw new RuntimeException(e);
-        }
+        RMNumberFormat clone;
+        try { clone = (RMNumberFormat) super.clone(); }
+        catch (CloneNotSupportedException e) { throw new RuntimeException(e); }
         clone._fmt = (DecimalFormat) _fmt.clone();
         clone._fmtSyms = _fmt.getDecimalFormatSymbols();
         return clone;
@@ -511,29 +491,26 @@ public class RMNumberFormat implements RMFormat, Cloneable {
     /**
      * XML archival.
      */
+    @Override
     public XMLElement toXML(XMLArchiver anArchiver)
     {
-        // Get new element named format with type "number"
         XMLElement e = new XMLElement("format");
         e.add("type", "number");
-
-        // Archive Pattern, NullString, NegativeInRed
         e.add("pattern", getPattern());
-        if (_nullString != null && _nullString.length() > 0) e.add("null-string", _nullString);
+        if (_nullString != null && !_nullString.isEmpty()) e.add("null-string", _nullString);
         if (_negativeInRed) e.add("negative-red", true);
-        return e; // Return xml element
+        return e;
     }
 
     /**
      * XML unarchival.
      */
+    @Override
     public Object fromXML(XMLArchiver anArchiver, XMLElement anElement)
     {
-        // Unarchive Pattern, NullString, NegativeInRed
         setPattern(anElement.getAttributeValue("pattern"));
         _nullString = anElement.getAttributeValue("null-string");
         _negativeInRed = anElement.getAttributeBoolValue("negative-red");
-        return this;  // Return this number format
+        return this;
     }
-
 }

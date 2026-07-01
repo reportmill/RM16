@@ -2382,7 +2382,7 @@ public class RMShape implements Cloneable, RMTypes, Archivable, Key.GetSet {
         if (getEffect() != null) e.add(anArchiver.toXML(getEffect(), this));
 
         // Archive font
-        if (isFontSet()) e.add(getFont().toXML(anArchiver));
+        if (isFontSet()) e.add(RMArchiverHpr.fontToXML(getFont()));
 
         // Archive Opacity, Visible
         if (getOpacity() < 1) e.add("opacity", getOpacity());
@@ -2452,7 +2452,8 @@ public class RMShape implements Cloneable, RMTypes, Archivable, Key.GetSet {
 
         // Unarchive font
         XMLElement fontXML = anElement.getElement("font");
-        if (fontXML != null) setFont((RMFont) anArchiver.fromXML(fontXML, this));
+        if (fontXML != null)
+            setFont(RMFont.get(RMArchiverHpr.fontFromXML(fontXML)));
 
         // Unarchive Opacity, Visible
         setOpacity(anElement.getAttributeFloatValue("opacity", 1));

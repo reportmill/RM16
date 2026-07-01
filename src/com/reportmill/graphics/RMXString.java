@@ -329,7 +329,7 @@ public class RMXString implements Cloneable, CharSequence, RMTypes, XMLArchiver.
      */
     public void setParagraph(RMParagraph aPG, int aStart, int anEnd)
     {
-        _richText.setLineStyle(aPG._lstyle, aStart, anEnd);
+        _richText.setLineStyle(aPG._lineStyle, aStart, anEnd);
     }
 
     /**
@@ -390,7 +390,7 @@ public class RMXString implements Cloneable, CharSequence, RMTypes, XMLArchiver.
      */
     public XMLElement toXML(XMLArchiver anArchiver)
     {
-        return _richText.toXML(anArchiver);
+        return RMArchiverHpr.textModelToXML(_richText, anArchiver);
     }
 
     /**
@@ -398,7 +398,7 @@ public class RMXString implements Cloneable, CharSequence, RMTypes, XMLArchiver.
      */
     public RMXString fromXML(XMLArchiver anArch, XMLElement anElmt)
     {
-        _richText.fromXML(anArch, anElmt);
+        RMArchiverHpr.textModelFromXML(_richText, anArch, anElmt);
         return this;
     }
 
@@ -516,16 +516,19 @@ public class RMXString implements Cloneable, CharSequence, RMTypes, XMLArchiver.
                 // If val is Number, get format and change val to string (verify format type)
                 else if (val instanceof Number) {
                     RMFormat format = keyRun.getFormat();
-                    if (!(format instanceof RMNumberFormat)) format = RMNumberFormat.PLAIN;
+                    if (!(format instanceof RMNumberFormat))
+                        format = RMNumberFormat.PLAIN;
                     valString = format.format(val);
                     TextStyle style = format.formatStyle(val);
-                    if (style != null) valString = new RMXString((String) valString, style.getColor());
+                    if (style != null)
+                        valString = new RMXString((String) valString, style.getColor());
                 }
 
                 // If val is Date, get format and change val to string (verify format type)
                 else if (val instanceof Date) {
                     RMFormat format = keyRun.getFormat();
-                    if (!(format instanceof RMDateFormat)) format = RMDateFormat.defaultFormat;
+                    if (!(format instanceof RMDateFormat))
+                        format = RMDateFormat.defaultFormat;
                     valString = format.format(val);
                 }
 

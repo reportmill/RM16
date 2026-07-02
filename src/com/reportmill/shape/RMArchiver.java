@@ -13,21 +13,10 @@ import snap.web.WebURL;
  */
 public class RMArchiver extends XMLArchiver {
 
-    // Class map
-    private static Map<String, Class<?>> _rmCM;
-
     /**
-     * Returns a parent shape for source.
+     * Reads a document for given .rpt file source.
      */
-    public RMDocument getDoc(Object aSource)
-    {
-        return getDoc(aSource, null);
-    }
-
-    /**
-     * Creates a document.
-     */
-    public RMDocument getDoc(Object aSource, RMDocument aBaseDoc)
+    public RMDocument readDocumentForRptSource(Object aSource, RMDocument aBaseDoc)
     {
         // If source is a document, just return it
         if (aSource instanceof RMDocument) return (RMDocument) aSource;
@@ -53,14 +42,6 @@ public class RMArchiver extends XMLArchiver {
         // Set Source URL and return
         doc.setSourceURL(getSourceURL());
         return doc;
-    }
-
-    /**
-     * Returns the class map.
-     */
-    public Map<String, Class<?>> getClassMap()
-    {
-        return _rmCM != null ? _rmCM : (_rmCM = createClassMap());
     }
 
     /**
@@ -102,7 +83,7 @@ public class RMArchiver extends XMLArchiver {
         // Graphics
         classMap.put("color", RMColor.class);
         classMap.put("font", RMFont.class);
-        classMap.put("format", RMFormatStub.class);
+        classMap.put("format", RMArchiverHpr.RMFormatStub.class);
         classMap.put("pgraph", RMParagraph.class);
         classMap.put("xstring", RMXString.class);
 
@@ -117,12 +98,6 @@ public class RMArchiver extends XMLArchiver {
         classMap.put("radial-fill", RMGradientFill.class);
         classMap.put("image-fill", RMImageFill.class);
 
-        // Effects
-        classMap.put("blur-effect", snap.gfx.BlurEffect.class);
-        classMap.put("shadow-effect", snap.gfx.ShadowEffect.class);
-        classMap.put("reflection-effect", snap.gfx.ReflectEffect.class);
-        classMap.put("emboss-effect", snap.gfx.EmbossEffect.class);
-
         // Sorts, Grouping
         classMap.put("sort", com.reportmill.base.RMSort.class);
         classMap.put("top-n-sort", com.reportmill.base.RMTopNSort.class);
@@ -132,28 +107,5 @@ public class RMArchiver extends XMLArchiver {
 
         // Return classmap
         return classMap;
-    }
-
-    /**
-     * A class to unarchive formats as proper subclass based on type attribute.
-     */
-    public static class RMFormatStub implements Archivable {
-
-        /**
-         * Implement fromXML to return proper format based on type attribute.
-         */
-        public XMLElement toXML(XMLArchiver anArchive)
-        {
-            return null;
-        }
-
-        public Object fromXML(XMLArchiver anArchiver, XMLElement anElmnt)
-        {
-            String type = anElmnt.getAttributeValue("type", "");
-            if (type.equals("number")) return anArchiver.fromXML(anElmnt, RMNumberFormat.class, null);
-            if (type.equals("date")) return anArchiver.fromXML(anElmnt, RMDateFormat.class, null);
-            if (!type.isEmpty()) System.err.println("RMFormatStub: Unknown format type " + type);
-            return null;
-        }
     }
 }

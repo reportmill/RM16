@@ -1,4 +1,6 @@
 package com.reportmill.shape;
+import com.reportmill.base.RMDateFormat;
+import com.reportmill.base.RMNumberFormat;
 import snap.geom.HPos;
 import snap.gfx.*;
 import snap.text.*;
@@ -503,5 +505,28 @@ public class RMArchiverHpr {
 
         // Return paragraph
         return lineStyle;
+    }
+
+    /**
+     * A class to unarchive formats as proper subclass based on type attribute.
+     */
+    public static class RMFormatStub implements XMLArchiver.Archivable {
+
+        /**
+         * Implement fromXML to return proper format based on type attribute.
+         */
+        public XMLElement toXML(XMLArchiver anArchive)
+        {
+            return null;
+        }
+
+        public Object fromXML(XMLArchiver anArchiver, XMLElement anElmnt)
+        {
+            String type = anElmnt.getAttributeValue("type", "");
+            if (type.equals("number")) return anArchiver.fromXML(anElmnt, RMNumberFormat.class, null);
+            if (type.equals("date")) return anArchiver.fromXML(anElmnt, RMDateFormat.class, null);
+            if (!type.isEmpty()) System.err.println("RMFormatStub: Unknown format type " + type);
+            return null;
+        }
     }
 }

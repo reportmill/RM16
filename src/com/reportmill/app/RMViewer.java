@@ -44,9 +44,7 @@ public class RMViewer extends ParentView {
     RMViewerEvents _events = createEvents();
 
     // Zoom modes
-    public enum ZoomMode {ZoomToFit, ZoomAsNeeded, ZoomToFactor}
-
-    ;
+    public enum ZoomMode { ZoomToFit, ZoomAsNeeded, ZoomToFactor }
 
     // Constants for PropertyChanges
     public static final String Content_Prop = "Content";
@@ -103,7 +101,7 @@ public class RMViewer extends ParentView {
      */
     public void setDoc(Object aSource)
     {
-        setDoc(new RMArchiver().getDoc(aSource));
+        setDoc(RMDocument.getDoc(aSource));
     }
 
     /**
@@ -185,15 +183,6 @@ public class RMViewer extends ParentView {
     public Rect getDocBounds()
     {
         return convertFromShape(getDoc().getBoundsInside(), null).getBounds();
-    }
-
-    /**
-     * Returns the bounds of the viewer document's selected page.
-     */
-    public Rect getPageBounds()
-    {
-        RMShape page = getSelPage();
-        return convertFromShape(page.getBoundsInside(), page).getBounds();
     }
 
     /**

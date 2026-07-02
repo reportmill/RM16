@@ -126,7 +126,7 @@ public class RMDocument extends RMParentShape {
      */
     public RMDocument(Object aSource)
     {
-        new RMArchiver().getDoc(aSource, this);
+        new RMArchiver().readDocumentForRptSource(aSource, this);
     }
 
     /**
@@ -134,7 +134,7 @@ public class RMDocument extends RMParentShape {
      */
     public static RMDocument getDoc(Object aSource)
     {
-        return new RMArchiver().getDoc(aSource);
+        return new RMArchiver().readDocumentForRptSource(aSource, null);
     }
 
     /**

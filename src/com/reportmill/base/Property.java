@@ -4,12 +4,13 @@
 package com.reportmill.base;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import com.reportmill.shape.RMArchiver;
 import snap.util.*;
 
 /**
  * This class describes an attribute of an entity.
  */
-public class Property implements Comparable<Object>, XMLArchiver.Archivable {
+public class Property implements Comparable<Object>, RMArchiver.Archivable {
 
     // The entity that owns this property
     Entity _entity;
@@ -356,7 +357,7 @@ public class Property implements Comparable<Object>, XMLArchiver.Archivable {
     /**
      * XML archival.
      */
-    public XMLElement toXML(XMLArchiver anArchiver)
+    public XMLElement toXML(RMArchiver anArchiver)
     {
         // Create new element for property
         XMLElement e = new XMLElement("property");
@@ -383,7 +384,7 @@ public class Property implements Comparable<Object>, XMLArchiver.Archivable {
     /**
      * XML unarchival.
      */
-    public Property fromXML(XMLArchiver anArchiver, XMLElement anElement)
+    public Property fromXML(RMArchiver anArchiver, XMLElement anElement)
     {
         // Unarchive Name, Type
         _name = anElement.getAttributeValue("name", anElement.getName());

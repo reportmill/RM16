@@ -3,13 +3,14 @@
  */
 package com.reportmill.base;
 import java.util.*;
+import com.reportmill.shape.RMArchiver;
 import snap.util.*;
 
 /**
  * This class represents an entity for a data source. It has a list of properties, some of which are simple
  * attributes and some of which are relationships.
  */
-public class Entity implements XMLArchiver.Archivable {
+public class Entity implements RMArchiver.Archivable {
 
     // The schema that owns this entity
     Schema _schema;
@@ -383,7 +384,7 @@ public class Entity implements XMLArchiver.Archivable {
     /**
      * XML archival.
      */
-    public XMLElement toXML(XMLArchiver anArchiver)
+    public XMLElement toXML(RMArchiver anArchiver)
     {
         // Get element named entity
         XMLElement e = new XMLElement("entity");
@@ -400,7 +401,7 @@ public class Entity implements XMLArchiver.Archivable {
     /**
      * XML unarchival.
      */
-    public Entity fromXML(XMLArchiver anArchiver, XMLElement anElement)
+    public Entity fromXML(RMArchiver anArchiver, XMLElement anElement)
     {
         // Unarchive Name and Properties
         _name = anElement.getAttributeValue("name", anElement.getName());

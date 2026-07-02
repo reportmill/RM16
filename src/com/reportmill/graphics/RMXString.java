@@ -20,7 +20,7 @@ import snap.util.*;
  *    xstring.addAttribute(RMFont.getFont("Arial BoldItalic", 12), 6, xstring.length());
  * </pre></blockquote><p>
  */
-public class RMXString implements Cloneable, CharSequence, RMTypes, XMLArchiver.Archivable {
+public class RMXString implements Cloneable, CharSequence, RMTypes, RMArchiver.Archivable {
 
     // The TextModel
     private TextModel _richText;
@@ -388,7 +388,7 @@ public class RMXString implements Cloneable, CharSequence, RMTypes, XMLArchiver.
     /**
      * XML archival.
      */
-    public XMLElement toXML(XMLArchiver anArchiver)
+    public XMLElement toXML(RMArchiver anArchiver)
     {
         return RMArchiverHpr.textModelToXML(_richText, anArchiver);
     }
@@ -396,7 +396,7 @@ public class RMXString implements Cloneable, CharSequence, RMTypes, XMLArchiver.
     /**
      * XML unarchival.
      */
-    public RMXString fromXML(XMLArchiver anArch, XMLElement anElmt)
+    public RMXString fromXML(RMArchiver anArch, XMLElement anElmt)
     {
         RMArchiverHpr.textModelFromXML(_richText, anArch, anElmt);
         return this;

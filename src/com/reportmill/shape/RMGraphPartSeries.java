@@ -290,7 +290,7 @@ public class RMGraphPartSeries extends RMShape {
     /**
      * XML archival.
      */
-    public XMLElement toXML(XMLArchiver anArchiver)
+    public XMLElement toXML(RMArchiver anArchiver)
     {
         // Archive basic shape attributes and reset element name
         XMLElement e = super.toXML(anArchiver);
@@ -319,7 +319,7 @@ public class RMGraphPartSeries extends RMShape {
     /**
      * XML unarchival.
      */
-    public Object fromXML(XMLArchiver anArchiver, XMLElement anElement)
+    public Object fromXML(RMArchiver anArchiver, XMLElement anElement)
     {
         // Unarchive basic shape attributes
         super.fromXML(anArchiver, anElement);

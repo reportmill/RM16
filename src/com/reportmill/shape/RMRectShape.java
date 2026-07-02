@@ -44,7 +44,7 @@ public class RMRectShape extends RMShape {
     /**
      * XML archival.
      */
-    public XMLElement toXML(XMLArchiver anArchiver)
+    public XMLElement toXML(RMArchiver anArchiver)
     {
         XMLElement e = super.toXML(anArchiver);
         e.setName("rect"); // Archive basic shape attributes and reset name
@@ -55,7 +55,7 @@ public class RMRectShape extends RMShape {
     /**
      * XML unarchival.
      */
-    public Object fromXML(XMLArchiver anArchiver, XMLElement anElement)
+    public Object fromXML(RMArchiver anArchiver, XMLElement anElement)
     {
         super.fromXML(anArchiver, anElement);                                          // Unarchive basic shape attributes
         if (anElement.hasAttribute("radius")) setRadius(anElement.getAttributeFloatValue("radius")); // Unarchive Radius

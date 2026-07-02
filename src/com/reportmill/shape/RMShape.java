@@ -9,7 +9,7 @@ import snap.geom.*;
 import snap.gfx.*;
 import snap.props.*;
 import snap.util.*;
-import snap.util.XMLArchiver.*;
+import com.reportmill.shape.RMArchiver.*;
 import snap.view.*;
 
 /**
@@ -2338,7 +2338,7 @@ public class RMShape implements Cloneable, RMTypes, Archivable, Key.GetSet {
     /**
      * XML Archival.
      */
-    public XMLElement toXML(XMLArchiver anArchiver)
+    public XMLElement toXML(RMArchiver anArchiver)
     {
         // Get new element called shape
         XMLElement e = new XMLElement("shape");
@@ -2397,7 +2397,7 @@ public class RMShape implements Cloneable, RMTypes, Archivable, Key.GetSet {
     /**
      * XML unarchival.
      */
-    public Object fromXML(XMLArchiver anArchiver, XMLElement anElement)
+    public Object fromXML(RMArchiver anArchiver, XMLElement anElement)
     {
         // Unarchive name
         setName(anElement.getAttributeValue("name"));

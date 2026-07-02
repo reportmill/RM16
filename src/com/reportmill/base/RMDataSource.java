@@ -3,6 +3,7 @@
  */
 package com.reportmill.base;
 import java.util.*;
+import com.reportmill.shape.RMArchiver;
 import snap.util.*;
 import snap.web.*;
 
@@ -11,7 +12,7 @@ import snap.web.*;
  * information of the object graph (in the form of Schema, Entity and Property objects) and it provides sample data
  * (mostly in the form of Java Collections and core types: List, Map, String, Number, Date).
  */
-public class RMDataSource implements XMLArchiver.Archivable {
+public class RMDataSource implements RMArchiver.Archivable {
 
     // The source URL of the data
     private WebURL  _url;
@@ -169,7 +170,7 @@ public class RMDataSource implements XMLArchiver.Archivable {
     /**
      * XML archival.
      */
-    public XMLElement toXML(XMLArchiver anArchiver)
+    public XMLElement toXML(RMArchiver anArchiver)
     {
         // Get xml for basic datasource attributes
         XMLElement e = new XMLElement("datasource");
@@ -193,7 +194,7 @@ public class RMDataSource implements XMLArchiver.Archivable {
     /**
      * XML unarchival.
      */
-    public RMDataSource fromXML(XMLArchiver anArchiver, XMLElement anElement)
+    public RMDataSource fromXML(RMArchiver anArchiver, XMLElement anElement)
     {
         // Unarchive URL for xml file
         String urls = anElement.getAttributeValue("source");

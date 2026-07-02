@@ -221,7 +221,7 @@ public class RMGraphLegend extends RMParentShape {
     /**
      * XML archival.
      */
-    public XMLElement toXMLShape(XMLArchiver anArchiver)
+    public XMLElement toXMLShape(RMArchiver anArchiver)
     {
         // Archive basic shape attributes
         XMLElement e = super.toXMLShape(anArchiver);
@@ -235,7 +235,7 @@ public class RMGraphLegend extends RMParentShape {
     /**
      * XML unarchival.
      */
-    public void fromXMLShape(XMLArchiver anArchiver, XMLElement anElement)
+    public void fromXMLShape(RMArchiver anArchiver, XMLElement anElement)
     {
         // Unarchive basic shape attributes
         super.fromXMLShape(anArchiver, anElement);
@@ -247,7 +247,7 @@ public class RMGraphLegend extends RMParentShape {
     /**
      * Override to suppress child archival.
      */
-    protected void toXMLChildren(XMLArchiver anArchiver, XMLElement anElement)
+    protected void toXMLChildren(RMArchiver anArchiver, XMLElement anElement)
     {
     }
 

@@ -2,6 +2,7 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package com.reportmill.graphics;
+import com.reportmill.shape.RMArchiver;
 import snap.gfx.*;
 import snap.util.*;
 
@@ -11,7 +12,7 @@ import java.util.Objects;
  * This class represents a simple shape fill, drawing a given color in a provided path. Subclasses support things
  * like gradients, textures, etc.
  */
-public class RMFill implements Cloneable, XMLArchiver.Archivable {
+public class RMFill implements Cloneable, RMArchiver.Archivable {
 
     // Fill color
     RMColor _color = RMColor.black;
@@ -107,7 +108,7 @@ public class RMFill implements Cloneable, XMLArchiver.Archivable {
     /**
      * XML archival.
      */
-    public XMLElement toXML(XMLArchiver anArchiver)
+    public XMLElement toXML(RMArchiver anArchiver)
     {
         XMLElement e = new XMLElement("fill");
         if (!getColor().equals(RMColor.black)) e.add("color", "#" + getColor().toHexString());
@@ -117,7 +118,7 @@ public class RMFill implements Cloneable, XMLArchiver.Archivable {
     /**
      * XML unarchival.
      */
-    public Object fromXML(XMLArchiver anArchiver, XMLElement anElement)
+    public Object fromXML(RMArchiver anArchiver, XMLElement anElement)
     {
         String color = anElement.getAttributeValue("color");
         if (color != null) _color = new RMColor(color);

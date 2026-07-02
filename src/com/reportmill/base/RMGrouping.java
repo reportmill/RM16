@@ -3,6 +3,7 @@
  */
 package com.reportmill.base;
 import java.util.*;
+import com.reportmill.shape.RMArchiver;
 import snap.props.PropChange;
 import snap.props.PropChangeListener;
 import snap.props.PropChangeSupport;
@@ -11,7 +12,7 @@ import snap.util.*;
 /**
  * This object represents an individual grouping with attributes like key, sorts, topN sort, etc.
  */
-public class RMGrouping implements Cloneable, XMLArchiver.Archivable {
+public class RMGrouping implements Cloneable, RMArchiver.Archivable {
 
     // The grouping key
     String _key;
@@ -489,7 +490,7 @@ public class RMGrouping implements Cloneable, XMLArchiver.Archivable {
     /**
      * XML Archival.
      */
-    public XMLElement toXML(XMLArchiver anArchiver)
+    public XMLElement toXML(RMArchiver anArchiver)
     {
         // Get new element named grouper
         XMLElement e = new XMLElement("grouping");
@@ -522,7 +523,7 @@ public class RMGrouping implements Cloneable, XMLArchiver.Archivable {
     /**
      * XML unarchival.
      */
-    public Object fromXML(XMLArchiver anArchiver, XMLElement anElement)
+    public Object fromXML(RMArchiver anArchiver, XMLElement anElement)
     {
         // Unarchive key
         if (anElement.hasAttribute("key"))

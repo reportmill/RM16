@@ -2,6 +2,7 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package com.reportmill.graphics;
+import com.reportmill.shape.RMArchiver;
 import snap.geom.Path2D;
 import snap.geom.Rect;
 import snap.geom.Shape;
@@ -181,7 +182,7 @@ public class RMBorderStroke extends RMStroke {
     /**
      * XML archival.
      */
-    public XMLElement toXML(XMLArchiver anArchiver)
+    public XMLElement toXML(RMArchiver anArchiver)
     {
         // Archive basic stroke attributes
         XMLElement e = super.toXML(anArchiver);
@@ -198,7 +199,7 @@ public class RMBorderStroke extends RMStroke {
     /**
      * XML unarchival.
      */
-    public Object fromXML(XMLArchiver anArchiver, XMLElement anElement)
+    public Object fromXML(RMArchiver anArchiver, XMLElement anElement)
     {
         // Unarchive basic stroke attributes
         super.fromXML(anArchiver, anElement);

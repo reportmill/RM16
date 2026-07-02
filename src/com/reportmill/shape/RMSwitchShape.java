@@ -302,7 +302,7 @@ public class RMSwitchShape extends RMParentShape {
     /**
      * XML Archival generic - break toXML into toXMLShape and toXMLShapeChildren.
      */
-    public XMLElement toXML(XMLArchiver anArchiver)
+    public XMLElement toXML(RMArchiver anArchiver)
     {
         // Cache current version and make sure that switch shape is set to default version
         String version = getAlternates() != null && !getVersion().equals(getDefaultVersionName()) ? getVersion() : null;
@@ -323,7 +323,7 @@ public class RMSwitchShape extends RMParentShape {
     /**
      * XML archival.
      */
-    protected XMLElement toXMLShape(XMLArchiver anArchiver)
+    protected XMLElement toXMLShape(RMArchiver anArchiver)
     {
         // Archive basic shape attributes and reset element name
         XMLElement e = super.toXMLShape(anArchiver);
@@ -337,7 +337,7 @@ public class RMSwitchShape extends RMParentShape {
     /**
      * XML child archival - override to archive alternates.
      */
-    protected void toXMLChildren(XMLArchiver anArchiver, XMLElement anElement)
+    protected void toXMLChildren(RMArchiver anArchiver, XMLElement anElement)
     {
         // Do normal child archival (just return if no alternates)
         super.toXMLChildren(anArchiver, anElement);
@@ -364,7 +364,7 @@ public class RMSwitchShape extends RMParentShape {
     /**
      * XML unarchival.
      */
-    protected void fromXMLShape(XMLArchiver anArchiver, XMLElement anElement)
+    protected void fromXMLShape(RMArchiver anArchiver, XMLElement anElement)
     {
         // Unarchive basic shape attributes
         super.fromXMLShape(anArchiver, anElement);

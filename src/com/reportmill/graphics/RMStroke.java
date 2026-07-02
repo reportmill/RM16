@@ -2,6 +2,7 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package com.reportmill.graphics;
+import com.reportmill.shape.RMArchiver;
 import snap.geom.Shape;
 import snap.gfx.*;
 import snap.util.*;
@@ -9,7 +10,7 @@ import snap.util.*;
 /**
  * This class describes a shape stroke.
  */
-public class RMStroke implements Cloneable, XMLArchiver.Archivable {
+public class RMStroke implements Cloneable, RMArchiver.Archivable {
 
     // The color
     private RMColor _color;
@@ -213,7 +214,7 @@ public class RMStroke implements Cloneable, XMLArchiver.Archivable {
     /**
      * XML archival.
      */
-    public XMLElement toXML(XMLArchiver anArchiver)
+    public XMLElement toXML(RMArchiver anArchiver)
     {
         // Create element
         XMLElement e = new XMLElement("stroke");
@@ -230,7 +231,7 @@ public class RMStroke implements Cloneable, XMLArchiver.Archivable {
     /**
      * XML unarchival.
      */
-    public Object fromXML(XMLArchiver anArchiver, XMLElement anElement)
+    public Object fromXML(RMArchiver anArchiver, XMLElement anElement)
     {
         // Unarchive Color
         String color = anElement.getAttributeValue("color");

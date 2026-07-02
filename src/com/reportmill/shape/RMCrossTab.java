@@ -692,7 +692,7 @@ public class RMCrossTab extends RMParentShape {
     /**
      * XML archival.
      */
-    protected XMLElement toXMLShape(XMLArchiver anArchiver)
+    protected XMLElement toXMLShape(RMArchiver anArchiver)
     {
         // Archive basic shape attributes and reset element name
         XMLElement e = super.toXMLShape(anArchiver);
@@ -728,14 +728,14 @@ public class RMCrossTab extends RMParentShape {
     /**
      * XML archival - override to suppress archival of children.
      */
-    protected void toXMLChildren(XMLArchiver anArchiver, XMLElement anElement)
+    protected void toXMLChildren(RMArchiver anArchiver, XMLElement anElement)
     {
     }
 
     /**
      * XML unarchival.
      */
-    protected void fromXMLShape(XMLArchiver anArchiver, XMLElement anElement)
+    protected void fromXMLShape(RMArchiver anArchiver, XMLElement anElement)
     {
         // Unarchive basic shape attributes
         super.fromXMLShape(anArchiver, anElement);

@@ -8,7 +8,7 @@ import snap.util.*;
 /**
  * Provides info for a column in a crosstab.
  */
-public class RMCrossTabCol extends RMCrossTabSpan implements XMLArchiver.Archivable {
+public class RMCrossTabCol extends RMCrossTabSpan implements RMArchiver.Archivable {
 
     // The width of the column
     double _width = 120;
@@ -154,7 +154,7 @@ public class RMCrossTabCol extends RMCrossTabSpan implements XMLArchiver.Archiva
     /**
      * XML archival.
      */
-    public XMLElement toXML(XMLArchiver anArchiver)
+    public XMLElement toXML(RMArchiver anArchiver)
     {
         XMLElement e = new XMLElement("column");
         e.add("width", getWidth());
@@ -164,7 +164,7 @@ public class RMCrossTabCol extends RMCrossTabSpan implements XMLArchiver.Archiva
     /**
      * XML unarchival.
      */
-    public Object fromXML(XMLArchiver anArchiver, XMLElement anElement)
+    public Object fromXML(RMArchiver anArchiver, XMLElement anElement)
     {
         _width = anElement.getAttributeFloatValue("width");
         return this;

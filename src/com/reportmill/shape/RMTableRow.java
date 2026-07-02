@@ -554,7 +554,7 @@ public class RMTableRow extends RMSwitchShape {
     /**
      * XML archival.
      */
-    protected XMLElement toXMLShape(XMLArchiver anArchiver)
+    protected XMLElement toXMLShape(RMArchiver anArchiver)
     {
         // Archive basic shape attributes and switch shape attributes and reset element name
         XMLElement e = super.toXMLShape(anArchiver);
@@ -595,7 +595,7 @@ public class RMTableRow extends RMSwitchShape {
     /**
      * XML unarchival.
      */
-    protected void fromXMLShape(XMLArchiver anArchiver, XMLElement anElement)
+    protected void fromXMLShape(RMArchiver anArchiver, XMLElement anElement)
     {
         // Unarchive basic shape attributes and switch shape attributes
         super.fromXMLShape(anArchiver, anElement);
@@ -639,7 +639,7 @@ public class RMTableRow extends RMSwitchShape {
     /**
      * Override to make sure structured children are sorted by X (wasn't necessarily so before RM14).
      */
-    protected void fromXMLChildren(XMLArchiver anArchiver, XMLElement anElement)
+    protected void fromXMLChildren(RMArchiver anArchiver, XMLElement anElement)
     {
         super.fromXMLChildren(anArchiver, anElement);
         if (isStructured()) RMShapeUtils.sortByX(_children);

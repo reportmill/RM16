@@ -8,7 +8,7 @@ import snap.util.*;
 /**
  * This shape manages a row of cells.
  */
-public class RMCrossTabRow extends RMCrossTabSpan implements XMLArchiver.Archivable {
+public class RMCrossTabRow extends RMCrossTabSpan implements RMArchiver.Archivable {
 
     // The table row height
     double _height = 25;
@@ -172,7 +172,7 @@ public class RMCrossTabRow extends RMCrossTabSpan implements XMLArchiver.Archiva
     /**
      * XML archival.
      */
-    public XMLElement toXML(XMLArchiver anArchiver)
+    public XMLElement toXML(RMArchiver anArchiver)
     {
         XMLElement e = new XMLElement("row");
         e.add("height", getHeight());
@@ -182,7 +182,7 @@ public class RMCrossTabRow extends RMCrossTabSpan implements XMLArchiver.Archiva
     /**
      * XML unarchival.
      */
-    public Object fromXML(XMLArchiver anArchiver, XMLElement anElement)
+    public Object fromXML(RMArchiver anArchiver, XMLElement anElement)
     {
         _height = anElement.getAttributeFloatValue("height"); // Unarchive width
         return this;

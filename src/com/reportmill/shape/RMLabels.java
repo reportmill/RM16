@@ -325,7 +325,7 @@ public class RMLabels extends RMParentShape {
     /**
      * XML archival.
      */
-    protected XMLElement toXMLShape(XMLArchiver anArchiver)
+    protected XMLElement toXMLShape(RMArchiver anArchiver)
     {
         // Archive basic shape attributes and reset element name
         XMLElement e = super.toXMLShape(anArchiver);
@@ -346,7 +346,7 @@ public class RMLabels extends RMParentShape {
     /**
      * XML unarchival.
      */
-    protected void fromXMLShape(XMLArchiver anArchiver, XMLElement anElement)
+    protected void fromXMLShape(RMArchiver anArchiver, XMLElement anElement)
     {
         // Unarchive basic shape attributes
         super.fromXMLShape(anArchiver, anElement);

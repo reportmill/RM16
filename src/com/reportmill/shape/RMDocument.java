@@ -138,84 +138,49 @@ public class RMDocument extends RMParentShape {
     }
 
     /**
-     * Returns whether Source URL is set.
-     */
-    public boolean isSourceURLSet()
-    {
-        return _sourceURL != null;
-    }
-
-    /**
      * Returns the Source URL.
      */
-    public WebURL getSourceURL()
-    {
-        return _sourceURL;
-    }
+    public WebURL getSourceURL()  { return _sourceURL; }
 
     /**
      * Sets the Source URL.
      */
-    public void setSourceURL(WebURL aURL)
-    {
-        _sourceURL = aURL;
-    }
+    public void setSourceURL(WebURL aURL)  { _sourceURL = aURL; }
 
     /**
      * Returns the filename associated with this document, if available.
      */
-    public String getFilename()
-    {
-        return getSourceURL() != null ? getSourceURL().getPath() : null;
-    }
+    public String getFilename()  { return _sourceURL != null ? _sourceURL.getPath() : null; }
 
     /**
      * Returns the document's default font.
      */
-    public RMFont getFont()
-    {
-        return RMFont.getDefaultFont();
-    }
+    public RMFont getFont()  { return RMFont.getDefaultFont();  }
 
     /**
      * Returns the version this document was loaded as.
      */
-    public float getVersion()
-    {
-        return _version;
-    }
+    public float getVersion()  { return _version; }
 
     /**
      * Returns the number of pages in this document.
      */
-    public int getPageCount()
-    {
-        return getChildCount();
-    }
+    public int getPageCount()  { return getChildCount(); }
 
     /**
      * Returns the page at the given index.
      */
-    public RMPage getPage(int anIndex)
-    {
-        return (RMPage) getChild(anIndex);
-    }
+    public RMPage getPage(int anIndex)  { return (RMPage) getChild(anIndex); }
 
     /**
      * Returns the last page (convenience).
      */
-    public RMPage getPageLast()
-    {
-        return getPage(getPageCount() - 1);
-    }
+    public RMPage getPageLast()  { return getPage(getPageCount() - 1); }
 
     /**
      * Returns the list of pages associated with this document.
      */
-    public List<RMPage> getPages()
-    {
-        return (List) _children;
-    }
+    public List<RMPage> getPages()  { return (List<RMPage>) (List<?>) _children; }
 
     /**
      * Adds a new page to this document.
@@ -1114,7 +1079,7 @@ public class RMDocument extends RMParentShape {
     public RMDocument clone()
     {
         RMDocument clone = (RMDocument) super.clone();
-        if (_metadata != null) clone._metadata = new HashMap(_metadata);
+        if (_metadata != null) clone._metadata = new HashMap<>(_metadata);
         clone._reportOwner = null;
         return clone;
     }
@@ -1122,7 +1087,7 @@ public class RMDocument extends RMParentShape {
     /**
      * XML archival.
      */
-    protected XMLElement toXMLShape(XMLArchiver anArchiver)
+    protected XMLElement toXMLShape(RMArchiver anArchiver)
     {
         // Archive basic shape attributes and reset element name
         XMLElement e = super.toXMLShape(anArchiver);
@@ -1171,7 +1136,7 @@ public class RMDocument extends RMParentShape {
     /**
      * XML archival of children.
      */
-    protected void toXMLChildren(XMLArchiver anArchiver, XMLElement anElement)
+    protected void toXMLChildren(RMArchiver anArchiver, XMLElement anElement)
     {
         // Archive pages
         for (int i = 0, iMax = getPageCount(); i < iMax; i++)
@@ -1181,7 +1146,7 @@ public class RMDocument extends RMParentShape {
     /**
      * XML unarchival.
      */
-    protected void fromXMLShape(XMLArchiver anArchiver, XMLElement anElement)
+    protected void fromXMLShape(RMArchiver anArchiver, XMLElement anElement)
     {
         // Remove default page and unarchive basic shape attributes
         while (getPageCount() > 0) removePage(0);

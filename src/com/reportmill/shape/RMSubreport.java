@@ -163,7 +163,7 @@ public class RMSubreport extends RMRectShape {
     /**
      * XML archival.
      */
-    public XMLElement toXML(XMLArchiver anArchiver)
+    public XMLElement toXML(RMArchiver anArchiver)
     {
         // Do normal version and reset name
         XMLElement e = super.toXML(anArchiver);
@@ -180,7 +180,7 @@ public class RMSubreport extends RMRectShape {
     /**
      * XML unarchival.
      */
-    public RMSubreport fromXML(XMLArchiver anArchiver, XMLElement anElement)
+    public RMSubreport fromXML(RMArchiver anArchiver, XMLElement anElement)
     {
         // Do normal version
         super.fromXML(anArchiver, anElement);

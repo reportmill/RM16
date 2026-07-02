@@ -6,7 +6,7 @@ import com.reportmill.graphics.*;
 import java.text.*;
 import java.util.Locale;
 import java.util.Objects;
-
+import com.reportmill.shape.RMArchiver;
 import snap.text.TextStyle;
 import snap.util.*;
 
@@ -492,7 +492,7 @@ public class RMNumberFormat implements RMFormat, Cloneable {
      * XML archival.
      */
     @Override
-    public XMLElement toXML(XMLArchiver anArchiver)
+    public XMLElement toXML(RMArchiver anArchiver)
     {
         XMLElement e = new XMLElement("format");
         e.add("type", "number");
@@ -506,7 +506,7 @@ public class RMNumberFormat implements RMFormat, Cloneable {
      * XML unarchival.
      */
     @Override
-    public Object fromXML(XMLArchiver anArchiver, XMLElement anElement)
+    public Object fromXML(RMArchiver anArchiver, XMLElement anElement)
     {
         setPattern(anElement.getAttributeValue("pattern"));
         _nullString = anElement.getAttributeValue("null-string");

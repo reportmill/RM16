@@ -381,7 +381,7 @@ public class RMTableGroup extends RMParentShape {
     /**
      * XML archival.
      */
-    protected XMLElement toXMLShape(XMLArchiver anArchiver)
+    protected XMLElement toXMLShape(RMArchiver anArchiver)
     {
         // Archive basic shape attributes, reset element name and return element
         XMLElement e = super.toXMLShape(anArchiver);
@@ -392,7 +392,7 @@ public class RMTableGroup extends RMParentShape {
     /**
      * XML archival - override to archive all child tables (not just visible one), recursively.
      */
-    protected void toXMLChildren(XMLArchiver anArchiver, XMLElement anElement)
+    protected void toXMLChildren(RMArchiver anArchiver, XMLElement anElement)
     {
         toXMLChildTables(anArchiver, anElement, null);
     }
@@ -400,7 +400,7 @@ public class RMTableGroup extends RMParentShape {
     /**
      * XML archival to recursively archive table group hierarchy.
      */
-    protected void toXMLChildTables(XMLArchiver anArchiver, XMLElement anElement, RMTable aParentTable)
+    protected void toXMLChildTables(RMArchiver anArchiver, XMLElement anElement, RMTable aParentTable)
     {
         // Get child tables
         List<RMTable> childTables = getChildTables(aParentTable);
@@ -419,7 +419,7 @@ public class RMTableGroup extends RMParentShape {
     /**
      * XML unarchival - overridden to unarchive all child tables, recursively.
      */
-    protected void fromXMLChildren(XMLArchiver anArchiver, XMLElement anElement)
+    protected void fromXMLChildren(RMArchiver anArchiver, XMLElement anElement)
     {
         // Unarchive child tables (recursively)
         fromXMLChildTables(anArchiver, anElement, null);
@@ -431,7 +431,7 @@ public class RMTableGroup extends RMParentShape {
     /**
      * XML archival to recursively unarchive table group hierarchy.
      */
-    protected void fromXMLChildTables(XMLArchiver anArchiver, XMLElement anElement, RMTable aParentTable)
+    protected void fromXMLChildTables(RMArchiver anArchiver, XMLElement anElement, RMTable aParentTable)
     {
         // Unarchive child tables (recursively) and add them back
         for (int i = anElement.indexOf("table"); i >= 0; i = anElement.indexOf("table", i + 1)) {

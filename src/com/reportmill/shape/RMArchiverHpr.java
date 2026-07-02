@@ -5,7 +5,6 @@ import snap.geom.HPos;
 import snap.gfx.*;
 import snap.text.*;
 import snap.util.MathUtils;
-import snap.util.XMLArchiver;
 import snap.util.XMLAttribute;
 import snap.util.XMLElement;
 import java.util.Objects;
@@ -18,7 +17,7 @@ public class RMArchiverHpr {
     /**
      * TextModel archival.
      */
-    public static XMLElement textModelToXML(TextModel textModel, XMLArchiver anArchiver)
+    public static XMLElement textModelToXML(TextModel textModel, RMArchiver anArchiver)
     {
         // Get new element named xstring
         XMLElement xml = new XMLElement("xstring");
@@ -114,7 +113,7 @@ public class RMArchiverHpr {
     /**
      * TextModel unarchival.
      */
-    public static void textModelFromXML(TextModel textModel, XMLArchiver anArchiver, XMLElement anElement)
+    public static void textModelFromXML(TextModel textModel, RMArchiver anArchiver, XMLElement anElement)
     {
         // Get map for run attributes
         TextStyle style = textModel.getDefaultTextStyle();
@@ -350,7 +349,7 @@ public class RMArchiverHpr {
     /**
      * ImagePaint archival.
      */
-    public static XMLElement imagePaintToXML(ImagePaint imagePaint, XMLArchiver anArchiver)
+    public static XMLElement imagePaintToXML(ImagePaint imagePaint, RMArchiver anArchiver)
     {
         // Archive basic fill attributes and set type
         XMLElement e = new XMLElement("ImagePaint");
@@ -383,7 +382,7 @@ public class RMArchiverHpr {
     /**
      * ImagePaint unarchival.
      */
-    public ImagePaint imagePaintFromXML(XMLArchiver anArchiver, XMLElement anElement)
+    public ImagePaint imagePaintFromXML(RMArchiver anArchiver, XMLElement anElement)
     {
         Image image = null;
         double imageX = 0, imageY = 0, imageW = 1, imageH = 1;
@@ -510,17 +509,17 @@ public class RMArchiverHpr {
     /**
      * A class to unarchive formats as proper subclass based on type attribute.
      */
-    public static class RMFormatStub implements XMLArchiver.Archivable {
+    public static class RMFormatStub implements RMArchiver.Archivable {
 
         /**
          * Implement fromXML to return proper format based on type attribute.
          */
-        public XMLElement toXML(XMLArchiver anArchive)
+        public XMLElement toXML(RMArchiver anArchive)
         {
             return null;
         }
 
-        public Object fromXML(XMLArchiver anArchiver, XMLElement anElmnt)
+        public Object fromXML(RMArchiver anArchiver, XMLElement anElmnt)
         {
             String type = anElmnt.getAttributeValue("type", "");
             if (type.equals("number")) return anArchiver.fromXML(anElmnt, RMNumberFormat.class, null);

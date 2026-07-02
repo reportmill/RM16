@@ -2,12 +2,13 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package com.reportmill.base;
+import com.reportmill.shape.RMArchiver;
 import snap.util.*;
 
 /**
  * This class maps a shape property value to a model key value.
  */
-public class Binding implements XMLArchiver.Archivable {
+public class Binding implements RMArchiver.Archivable {
 
     // The property name that is being bound
     private String _propName;
@@ -44,7 +45,7 @@ public class Binding implements XMLArchiver.Archivable {
     /**
      * XML archival.
      */
-    public XMLElement toXML(XMLArchiver anArchiver)
+    public XMLElement toXML(RMArchiver anArchiver)
     {
         XMLElement e = new XMLElement("binding");
         e.add("aspect", getPropName());
@@ -55,7 +56,7 @@ public class Binding implements XMLArchiver.Archivable {
     /**
      * XML unarchival.
      */
-    public Binding fromXML(XMLArchiver anArchiver, XMLElement anElement)
+    public Binding fromXML(RMArchiver anArchiver, XMLElement anElement)
     {
         _propName = anElement.getAttributeValue("aspect");
         _key = anElement.getAttributeValue("key");

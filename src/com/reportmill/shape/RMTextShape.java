@@ -998,7 +998,7 @@ public class RMTextShape extends RMRectShape {
     /**
      * XML archival.
      */
-    public XMLElement toXML(XMLArchiver anArchiver)
+    public XMLElement toXML(RMArchiver anArchiver)
     {
         // Archive basic shape attributes and reset element name to text
         XMLElement e = super.toXML(anArchiver);
@@ -1055,7 +1055,7 @@ public class RMTextShape extends RMRectShape {
     /**
      * XML unarchival.
      */
-    public Object fromXML(XMLArchiver anArchiver, XMLElement anElement)
+    public Object fromXML(RMArchiver anArchiver, XMLElement anElement)
     {
         // Unarchive basic shape attributes
         super.fromXML(anArchiver, anElement);
@@ -1105,7 +1105,7 @@ public class RMTextShape extends RMRectShape {
     /**
      * XML reference unarchival - to unarchive linked text.
      */
-    public void fromXMLFinish(XMLArchiver anArchiver, XMLElement anElement)
+    public void fromXMLFinish(RMArchiver anArchiver, XMLElement anElement)
     {
         // If linked-text, get referenced linked text and set
         if (!anElement.hasAttribute("linked-text")) return;

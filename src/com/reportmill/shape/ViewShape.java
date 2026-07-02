@@ -222,7 +222,7 @@ public class ViewShape extends RMShape {
     /**
      * XML archival.
      */
-    public XMLElement toXML(XMLArchiver anArchiver)
+    public XMLElement toXML(RMArchiver anArchiver)
     {
         XMLElement e = super.toXML(anArchiver);
         e.setName("ViewShape");
@@ -235,7 +235,7 @@ public class ViewShape extends RMShape {
     /**
      * XML unarchival.
      */
-    public Object fromXML(XMLArchiver anArchiver, XMLElement anElement)
+    public Object fromXML(RMArchiver anArchiver, XMLElement anElement)
     {
         super.fromXML(anArchiver, anElement);
         if (anElement.hasAttribute("ViewType")) setViewType(anElement.getAttributeValue("ViewType"));

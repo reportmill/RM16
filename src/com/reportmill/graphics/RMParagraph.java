@@ -3,6 +3,7 @@
  */
 package com.reportmill.graphics;
 import com.reportmill.shape.RMArchiverHpr;
+import com.reportmill.shape.RMArchiver;
 import snap.text.TextLineStyle;
 import snap.util.*;
 
@@ -14,7 +15,7 @@ import snap.util.*;
  *   RMParagraph pgraph = RMParagraph.defaultParagraph.deriveAligned(RMParagraph.ALIGN_RIGHT);
  *   RMXString xstring = new RMXString("Hello World", pgraph);
  */
-public class RMParagraph implements Cloneable, RMTypes, XMLArchiver.Archivable {
+public class RMParagraph implements Cloneable, RMTypes, RMArchiver.Archivable {
 
     // The line style
     TextLineStyle _lineStyle = TextLineStyle.DEFAULT;
@@ -210,7 +211,7 @@ public class RMParagraph implements Cloneable, RMTypes, XMLArchiver.Archivable {
     /**
      * XML archival.
      */
-    public XMLElement toXML(XMLArchiver anArchiver)
+    public XMLElement toXML(RMArchiver anArchiver)
     {
         return RMArchiverHpr.lineStyleToXML(_lineStyle);
     }
@@ -218,7 +219,7 @@ public class RMParagraph implements Cloneable, RMTypes, XMLArchiver.Archivable {
     /**
      * XML unarchival.
      */
-    public Object fromXML(XMLArchiver anArchiver, XMLElement anElement)
+    public Object fromXML(RMArchiver anArchiver, XMLElement anElement)
     {
         _lineStyle = RMArchiverHpr.lineStyleFromXML(anElement);
         return this;

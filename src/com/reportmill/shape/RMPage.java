@@ -610,7 +610,7 @@ public class RMPage extends RMParentShape {
     /**
      * XML archival.
      */
-    protected XMLElement toXMLShape(XMLArchiver anArchiver)
+    protected XMLElement toXMLShape(RMArchiver anArchiver)
     {
         // Archive basic shape attributes and reset name
         XMLElement e = super.toXMLShape(anArchiver);
@@ -627,7 +627,7 @@ public class RMPage extends RMParentShape {
     /**
      * XML archival of children.
      */
-    protected void toXMLChildren(XMLArchiver anArchiver, XMLElement anElement)
+    protected void toXMLChildren(RMArchiver anArchiver, XMLElement anElement)
     {
         // If no layers, archive page as normal shape
         if (getLayerCount() < 2)
@@ -657,7 +657,7 @@ public class RMPage extends RMParentShape {
     /**
      * XML unarchival.
      */
-    protected void fromXMLShape(XMLArchiver anArchiver, XMLElement anElement)
+    protected void fromXMLShape(RMArchiver anArchiver, XMLElement anElement)
     {
         // Unarchive basic shape attributes
         super.fromXMLShape(anArchiver, anElement);
@@ -672,7 +672,7 @@ public class RMPage extends RMParentShape {
     /**
      * XML unarchival for shape children.
      */
-    protected void fromXMLChildren(XMLArchiver anArchiver, XMLElement anElement)
+    protected void fromXMLChildren(RMArchiver anArchiver, XMLElement anElement)
     {
         // If no layers, unarchive children normally
         if (anElement.get("layer") == null)

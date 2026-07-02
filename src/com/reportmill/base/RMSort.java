@@ -3,6 +3,8 @@
  */
 package com.reportmill.base;
 import java.util.*;
+
+import com.reportmill.shape.RMArchiver;
 import snap.util.*;
 
 /**
@@ -20,7 +22,7 @@ import snap.util.*;
  *   RMSort.sort(myList, mySortList); // Sort myList by revenue and title
  * </blockquote></pre>
  */
-public class RMSort implements Comparator, Cloneable, XMLArchiver.Archivable {
+public class RMSort implements Comparator, Cloneable, RMArchiver.Archivable {
 
     // The key that is evaluated on objects to be sorted
     String _key;
@@ -275,7 +277,7 @@ public class RMSort implements Comparator, Cloneable, XMLArchiver.Archivable {
     /**
      * XML archival.
      */
-    public XMLElement toXML(XMLArchiver anArchiver)
+    public XMLElement toXML(RMArchiver anArchiver)
     {
         XMLElement e = new XMLElement("sort");
         e.add("key", _key);
@@ -286,7 +288,7 @@ public class RMSort implements Comparator, Cloneable, XMLArchiver.Archivable {
     /**
      * XML unarchival.
      */
-    public Object fromXML(XMLArchiver anArchiver, XMLElement anElement)
+    public Object fromXML(RMArchiver anArchiver, XMLElement anElement)
     {
         _key = anElement.getAttributeValue("key");
         if (anElement.getAttributeValue("order", "ascend").equals("descend")) _order = RMSort.ORDER_DESCEND;

@@ -2,6 +2,7 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package com.reportmill.base;
+import com.reportmill.shape.RMArchiver;
 import snap.util.*;
 
 /**
@@ -117,7 +118,7 @@ public class RMTopNSort extends RMSort {
     /**
      * XML archival.
      */
-    public XMLElement toXML(XMLArchiver anArchiver)
+    public XMLElement toXML(RMArchiver anArchiver)
     {
         // Archive basic sort attributes
         XMLElement e = new XMLElement("sort");
@@ -143,7 +144,7 @@ public class RMTopNSort extends RMSort {
     /**
      * XML unarchival.
      */
-    public Object fromXML(XMLArchiver anArchiver, XMLElement anElement)
+    public Object fromXML(RMArchiver anArchiver, XMLElement anElement)
     {
         // Unarchive basic sort attributes
         super.fromXML(anArchiver, anElement);

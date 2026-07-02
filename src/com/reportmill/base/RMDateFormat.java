@@ -5,6 +5,7 @@ package com.reportmill.base;
 import com.reportmill.shape.RMDocument;
 import java.util.*;
 import java.text.*;
+import com.reportmill.shape.RMArchiver;
 import snap.util.*;
 
 /**
@@ -130,7 +131,7 @@ public class RMDateFormat implements RMFormat, Cloneable {
      * XML archival.
      */
     @Override
-    public XMLElement toXML(XMLArchiver anArchiver)
+    public XMLElement toXML(RMArchiver anArchiver)
     {
         // Get new element named format
         XMLElement e = new XMLElement("format");
@@ -145,7 +146,7 @@ public class RMDateFormat implements RMFormat, Cloneable {
      * XML unarchival.
      */
     @Override
-    public Object fromXML(XMLArchiver anArchiver, XMLElement anElement)
+    public Object fromXML(RMArchiver anArchiver, XMLElement anElement)
     {
         _fmt.applyPattern(anElement.getAttributeValue("pattern"));
         _nullString = anElement.getAttributeValue("null-string");

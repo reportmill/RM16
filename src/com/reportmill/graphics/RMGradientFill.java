@@ -4,6 +4,7 @@
 package com.reportmill.graphics;
 import java.util.*;
 import com.reportmill.shape.RMArchiverHpr;
+import com.reportmill.shape.RMArchiver;
 import snap.gfx.*;
 import snap.gfx.GradientPaint.Stop;
 import snap.util.*;
@@ -114,7 +115,7 @@ public class RMGradientFill extends RMFill {
     /**
      * XML archival.
      */
-    public XMLElement toXML(XMLArchiver anArchiver)
+    public XMLElement toXML(RMArchiver anArchiver)
     {
         return RMArchiverHpr.gradientPaintToXML(_snap);
     }
@@ -122,7 +123,7 @@ public class RMGradientFill extends RMFill {
     /**
      * XML unarchival.
      */
-    public Object fromXML(XMLArchiver anArchiver, XMLElement anElement)
+    public Object fromXML(RMArchiver anArchiver, XMLElement anElement)
     {
         _snap = RMArchiverHpr.gradientPaintFromXML(anElement);
         return this;

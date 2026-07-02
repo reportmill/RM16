@@ -3,12 +3,13 @@
  */
 package com.reportmill.base;
 import java.util.*;
+import com.reportmill.shape.RMArchiver;
 import snap.util.*;
 
 /**
  * This class describes the structure of a data source by managing a list of entities.
  */
-public class Schema implements XMLArchiver.Archivable {
+public class Schema implements RMArchiver.Archivable {
 
     // The schema name
     String _name;
@@ -185,7 +186,7 @@ public class Schema implements XMLArchiver.Archivable {
     /**
      * XML archival.
      */
-    public XMLElement toXML(XMLArchiver anArchiver)
+    public XMLElement toXML(RMArchiver anArchiver)
     {
         // Get element named entity
         XMLElement e = new XMLElement("RMSchema");
@@ -202,7 +203,7 @@ public class Schema implements XMLArchiver.Archivable {
     /**
      * XML unarchival.
      */
-    public Schema fromXML(XMLArchiver anArchiver, XMLElement anElement)
+    public Schema fromXML(RMArchiver anArchiver, XMLElement anElement)
     {
         // Unarchive Name
         if (anElement.hasAttribute("name")) setName(anElement.getAttributeValue("name"));

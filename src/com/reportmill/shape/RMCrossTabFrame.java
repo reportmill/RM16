@@ -216,7 +216,7 @@ public class RMCrossTabFrame extends RMParentShape {
     /**
      * XML Archival.
      */
-    protected XMLElement toXMLShape(XMLArchiver anArchiver)
+    protected XMLElement toXMLShape(RMArchiver anArchiver)
     {
         XMLElement e = super.toXMLShape(anArchiver);
         e.setName("cell-table-frame");
@@ -227,7 +227,7 @@ public class RMCrossTabFrame extends RMParentShape {
     /**
      * XML Unarchival.
      */
-    protected void fromXMLShape(XMLArchiver anArchiver, XMLElement anElement)
+    protected void fromXMLShape(RMArchiver anArchiver, XMLElement anElement)
     {
         super.fromXMLShape(anArchiver, anElement);
         if (anElement.hasAttribute("reprint-header-rows"))

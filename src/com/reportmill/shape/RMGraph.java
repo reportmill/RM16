@@ -840,7 +840,7 @@ public class RMGraph extends RMParentShape {
     /**
      * XML archival.
      */
-    protected XMLElement toXMLShape(XMLArchiver anArchiver)
+    protected XMLElement toXMLShape(RMArchiver anArchiver)
     {
         _proxyDisable = true;
         // Archive basic shape attributes and reset element name and set type
@@ -909,7 +909,7 @@ public class RMGraph extends RMParentShape {
     /**
      * XML unarchival.
      */
-    protected void fromXMLShape(XMLArchiver anArchiver, XMLElement anElement)
+    protected void fromXMLShape(RMArchiver anArchiver, XMLElement anElement)
     {
         // Unarchive basic shape attributes
         super.fromXMLShape(anArchiver, anElement);
@@ -986,17 +986,17 @@ public class RMGraph extends RMParentShape {
     /**
      * XML archival - override shape implementation to suppress archival of children.
      */
-    protected void toXMLChildren(XMLArchiver anArchiver, XMLElement anElement)  { }
+    protected void toXMLChildren(RMArchiver anArchiver, XMLElement anElement)  { }
 
     /**
      * XML unarchival - override to suppress unarchival of children (don't really need this).
      */
-    protected void fromXMLChildren(XMLArchiver anArchiver, XMLElement anElement)  { }
+    protected void fromXMLChildren(RMArchiver anArchiver, XMLElement anElement)  { }
 
     /**
      * Legacy unarchival.
      */
-    public RMShape fromXML(XMLArchiver anArchiver, XMLElement anElement)
+    public RMShape fromXML(RMArchiver anArchiver, XMLElement anElement)
     {
         XMLElement gaxml = anElement.getElement("graph-area");
         if (gaxml == null) return super.fromXML(anArchiver, anElement);

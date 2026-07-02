@@ -150,7 +150,7 @@ public class RMLineShape extends RMParentShape {
     /**
      * XML archival.
      */
-    protected XMLElement toXMLShape(XMLArchiver anArchiver)
+    protected XMLElement toXMLShape(RMArchiver anArchiver)
     {
         XMLElement e = super.toXMLShape(anArchiver);
         e.setName("line");
@@ -199,7 +199,7 @@ public class RMLineShape extends RMParentShape {
         /**
          * XML archival.
          */
-        public XMLElement toXMLShape(XMLArchiver anArchiver)
+        public XMLElement toXMLShape(RMArchiver anArchiver)
         {
             XMLElement e = super.toXMLShape(anArchiver);
             e.setName("arrow-head");
@@ -211,7 +211,7 @@ public class RMLineShape extends RMParentShape {
         /**
          * XML unarchival.
          */
-        protected void fromXMLShape(XMLArchiver anArchiver, XMLElement anElement)
+        protected void fromXMLShape(RMArchiver anArchiver, XMLElement anElement)
         {
             super.fromXMLShape(anArchiver, anElement);
             float x = anElement.getAttributeFloatValue("xorigin", 0);

@@ -616,7 +616,7 @@ public class RMTable extends RMParentShape {
     /**
      * XML archival.
      */
-    protected XMLElement toXMLShape(XMLArchiver anArchiver)
+    protected XMLElement toXMLShape(RMArchiver anArchiver)
     {
         // Archive basic shape attributes and reset element name
         XMLElement e = super.toXMLShape(anArchiver);
@@ -643,7 +643,7 @@ public class RMTable extends RMParentShape {
     /**
      * XML unarchival.
      */
-    protected void fromXMLShape(XMLArchiver anArchiver, XMLElement anElement)
+    protected void fromXMLShape(RMArchiver anArchiver, XMLElement anElement)
     {
         // Unarchive basic shape attributes and split shape attributes
         super.fromXMLShape(anArchiver, anElement);
@@ -662,7 +662,7 @@ public class RMTable extends RMParentShape {
     /**
      * XML unarchival for shape children.
      */
-    protected void fromXMLChildren(XMLArchiver anArchiver, XMLElement anElement)
+    protected void fromXMLChildren(RMArchiver anArchiver, XMLElement anElement)
     {
         // Iterate over child elements and unarchive table rows
         for (int i = 0, iMax = anElement.size(); i < iMax; i++) {

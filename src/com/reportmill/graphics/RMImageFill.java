@@ -2,6 +2,7 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package com.reportmill.graphics;
+import com.reportmill.shape.RMArchiver;
 import snap.geom.Rect;
 import snap.gfx.*;
 import snap.util.*;
@@ -207,7 +208,7 @@ public class RMImageFill extends RMFill {
     /**
      * XML archival.
      */
-    public XMLElement toXML(XMLArchiver anArchiver)
+    public XMLElement toXML(RMArchiver anArchiver)
     {
         // Archive basic fill attributes and set type
         XMLElement e = super.toXML(anArchiver);
@@ -237,7 +238,7 @@ public class RMImageFill extends RMFill {
     /**
      * XML unarchival.
      */
-    public Object fromXML(XMLArchiver anArchiver, XMLElement anElement)
+    public Object fromXML(RMArchiver anArchiver, XMLElement anElement)
     {
         // Unarchive basic fill attributes
         super.fromXML(anArchiver, anElement);

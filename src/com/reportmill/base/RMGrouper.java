@@ -3,6 +3,7 @@
  */
 package com.reportmill.base;
 import java.util.*;
+import com.reportmill.shape.RMArchiver;
 import snap.props.PropChange;
 import snap.props.PropChangeListener;
 import snap.props.PropChangeSupport;
@@ -11,7 +12,7 @@ import snap.util.*;
 /**
  * This class simply manages a list of groupings and has some nice convenience methods.
  */
-public class RMGrouper implements Cloneable, XMLArchiver.Archivable {
+public class RMGrouper implements Cloneable, RMArchiver.Archivable {
 
     // The list of groupings
     List<RMGrouping> _groupings = new ArrayList();
@@ -350,7 +351,7 @@ public class RMGrouper implements Cloneable, XMLArchiver.Archivable {
     /**
      * XML archival.
      */
-    public XMLElement toXML(XMLArchiver anArchiver)
+    public XMLElement toXML(RMArchiver anArchiver)
     {
         // Get new element named grouper
         XMLElement e = new XMLElement("grouper");
@@ -366,7 +367,7 @@ public class RMGrouper implements Cloneable, XMLArchiver.Archivable {
     /**
      * XML unarchival.
      */
-    public Object fromXML(XMLArchiver anArchiver, XMLElement anElement)
+    public Object fromXML(RMArchiver anArchiver, XMLElement anElement)
     {
         // Unarchive grouping List
         _groupings = anArchiver.fromXMLList(anElement, "grouping", null, this);

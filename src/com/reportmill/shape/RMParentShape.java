@@ -668,7 +668,7 @@ public class RMParentShape extends RMShape implements PropChange.DoChange {
     /**
      * XML Archival generic - break toXML into toXMLShape and toXMLShapeChildren.
      */
-    public XMLElement toXML(XMLArchiver anArchiver)
+    public XMLElement toXML(RMArchiver anArchiver)
     {
         XMLElement e = toXMLShape(anArchiver); // Archive shape
         toXMLChildren(anArchiver, e); // Archive children
@@ -678,7 +678,7 @@ public class RMParentShape extends RMShape implements PropChange.DoChange {
     /**
      * XML Archival of basic shape.
      */
-    protected XMLElement toXMLShape(XMLArchiver anArchiver)
+    protected XMLElement toXMLShape(RMArchiver anArchiver)
     {
         return super.toXML(anArchiver);
     }
@@ -686,7 +686,7 @@ public class RMParentShape extends RMShape implements PropChange.DoChange {
     /**
      * XML archival of children.
      */
-    protected void toXMLChildren(XMLArchiver anArchiver, XMLElement anElement)
+    protected void toXMLChildren(RMArchiver anArchiver, XMLElement anElement)
     {
         // Archive children
         for (int i = 0, iMax = getChildCount(); i < iMax; i++) {
@@ -698,7 +698,7 @@ public class RMParentShape extends RMShape implements PropChange.DoChange {
     /**
      * XML unarchival generic - break fromXML into fromXMLShape and fromXMLShapeChildren.
      */
-    public RMShape fromXML(XMLArchiver anArchiver, XMLElement anElement)
+    public RMShape fromXML(RMArchiver anArchiver, XMLElement anElement)
     {
         // Legacy
         if (getClass() == RMParentShape.class) {
@@ -716,7 +716,7 @@ public class RMParentShape extends RMShape implements PropChange.DoChange {
     /**
      * XML unarchival.
      */
-    protected void fromXMLShape(XMLArchiver anArchiver, XMLElement anElement)
+    protected void fromXMLShape(RMArchiver anArchiver, XMLElement anElement)
     {
         super.fromXML(anArchiver, anElement);
     }
@@ -724,7 +724,7 @@ public class RMParentShape extends RMShape implements PropChange.DoChange {
     /**
      * XML unarchival for shape children.
      */
-    protected void fromXMLChildren(XMLArchiver anArchiver, XMLElement anElement)
+    protected void fromXMLChildren(RMArchiver anArchiver, XMLElement anElement)
     {
         // Iterate over child elements and unarchive shapes
         for (int i = 0, iMax = anElement.size(); i < iMax; i++) {

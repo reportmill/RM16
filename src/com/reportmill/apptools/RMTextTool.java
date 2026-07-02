@@ -39,8 +39,17 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
     private PropChangeListener _textShapeTextModelPropChangeLsnr = this::handleTextShapeTextModelPropChange;
 
     /**
+     * Constructor.
+     */
+    public RMTextTool()
+    {
+        super();
+    }
+
+    /**
      * Initialize UI panel.
      */
+    @Override
     protected void initUI()
     {
         // Get the TextView and register to update selection
@@ -52,7 +61,8 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
     /**
      * Refresh UI from currently selected text shape.
      */
-    public void resetUI()
+    @Override
+    protected void resetUI()
     {
         // Get editor and currently selected text
         RMEditor editor = getEditor();
@@ -137,7 +147,8 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
     /**
      * Handles changes from UI panel controls.
      */
-    public void respondUI(ViewEvent anEvent)
+    @Override
+    protected void respondUI(ViewEvent anEvent)
     {
         // Get editor, currently selected text shape and text shapes (just return if null)
         RMEditor editor = getEditor();
@@ -243,7 +254,7 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
     {
         RMEditor editor = getEditor();
         RMTextEditor textEditor = editor.getTextEditor();
-        if (textEditor == null)
+        if (textEditor == null || _textView == null)
             return;
 
         TextModel textModel = textEditor.getTextModel();
@@ -1066,5 +1077,4 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
             if (shape instanceof RMTextShape)
                 ((RMTextShape) shape).setLineHeightMax(aHeight);
     }
-
 }

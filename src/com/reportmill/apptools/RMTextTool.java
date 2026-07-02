@@ -132,11 +132,6 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
         //double lineHtMax = text.getLineHeightMax();
         //boolean lineHtMaxSet = lineHtMax>999; if(!lineHtMaxSet) lineHtMax = RMEditorUtils.getFont(editor).getSize();
         //setViewValue("LineHeightMaxSpinner", lineHtMax);
-
-        // Update PDF options: EditableCheckBox, MultilineCheckBox
-        setViewValue("EditableCheckBox", text.isEditable());
-        setViewValue("MultilineCheckBox", text.isEditable() && text.isMultiline());
-        setViewEnabled("MultilineCheckBox", text.isEditable());
     }
 
     /**
@@ -239,10 +234,6 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
             editor.setSelectedShape(linkedText);
             linkedText.repaint();
         }
-
-        // Update PDF options: EditableCheckBox, MultilineCheckBox
-        if (anEvent.equals("EditableCheckBox")) text.setEditable(anEvent.getBoolValue());
-        if (anEvent.equals("MultilineCheckBox")) text.setMultiline(anEvent.getBoolValue());
     }
 
     /**

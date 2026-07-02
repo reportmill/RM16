@@ -52,12 +52,6 @@ public class RMTextShape extends RMRectShape {
     // Whether text should draw box around itself even if there's no stroke
     boolean _drawsSelectionRect;
 
-    // PDF option: Whether text is editable in PDF
-    boolean _editable;
-
-    // PDF option: Whether text is multiline when editable in PDF
-    boolean _multiline;
-
     // The linked text shape for rendering overflow, if there is one
     RMLinkedText _linkedText;
 
@@ -77,10 +71,6 @@ public class RMTextShape extends RMRectShape {
     public static final byte WRAP_NONE = 0;
     public static final byte WRAP_BASIC = 1;
     public static final byte WRAP_SCALE = 2;
-
-    // Constants for properties
-    public static final String Editable_Prop = "Editable";
-    public static final String Multiline_Prop = "Multiline";
 
     /**
      * Creates an empty text instance.
@@ -364,35 +354,6 @@ public class RMTextShape extends RMRectShape {
     public void setDrawsSelectionRect(boolean aValue)  { _drawsSelectionRect = aValue; }
 
     /**
-     * Returns whether text is editable in PDF.
-     */
-    public boolean isEditable()  { return _editable; }
-
-    /**
-     * Sets whether text is editable in PDF.
-     */
-    public void setEditable(boolean aValue)
-    {
-        firePropChange(Editable_Prop, _editable, _editable = aValue);
-    }
-
-    /**
-     * Returns whether text is multiline when editable in PDF.
-     */
-    public boolean isMultiline()
-    {
-        return _multiline;
-    }
-
-    /**
-     * Sets whether text is multiline when editable in PDF.
-     */
-    public void setMultiline(boolean aValue)
-    {
-        firePropChange(Multiline_Prop, _multiline, _multiline = aValue);
-    }
-
-    /**
      * Returns the char spacing at char 0.
      */
     public float getCharSpacing()
@@ -660,14 +621,8 @@ public class RMTextShape extends RMRectShape {
     /**
      * This notification method is called when any peer is changed.
      */
-    public void handlePeerChange(RMShape aShape)
-    {
-        // If this text respects neighbors and shape intersects it, register for redraw
-        if (getPerformsWrap() && aShape.getFrame().intersectsRect(getFrame())) {
-            revalidate();
-            repaint();
-        }
-    }
+    //private void handlePeerChange(RMShape aShape)  {
+    //    if (getPerformsWrap() && aShape.getFrame().intersectsRect(getFrame())) { revalidate(); repaint(); } }
 
     /**
      * Returns the shape that provides the path for this text to wrap text to.
@@ -1044,10 +999,6 @@ public class RMTextShape extends RMRectShape {
             pathShapeElement.add(pathShapeElementZero);
         }
 
-        // Archive PDF options
-        if (isEditable()) e.add(Editable_Prop, true);
-        if (isMultiline()) e.add(Multiline_Prop, true);
-
         // Return element for this shape
         return e;
     }
@@ -1094,10 +1045,6 @@ public class RMTextShape extends RMRectShape {
             setPathShape(pathShape);
         }
 
-        // Unarchive PDF options
-        if (anElement.hasAttribute(Editable_Prop)) setEditable(anElement.getAttributeBoolValue(Editable_Prop));
-        if (anElement.hasAttribute(Multiline_Prop)) setMultiline(anElement.getAttributeBoolValue(Multiline_Prop));
-
         // Return this shape
         return this;
     }
@@ -1105,13 +1052,10 @@ public class RMTextShape extends RMRectShape {
     /**
      * XML reference unarchival - to unarchive linked text.
      */
-    public void fromXMLFinish(RMArchiver anArchiver, XMLElement anElement)
-    {
-        // If linked-text, get referenced linked text and set
-        if (!anElement.hasAttribute("linked-text")) return;
-        RMLinkedText linkedText = (RMLinkedText) anArchiver.getReference("linked-text", anElement);
-        setLinkedText(linkedText);
-    }
+    //public void fromXMLFinish(RMArchiver anArchiver, XMLElement anElement) {
+    //    if (!anElement.hasAttribute("linked-text")) return;
+    //    RMLinkedText linkedText = (RMLinkedText) anArchiver.getReference("linked-text", anElement);
+    //    setLinkedText(linkedText); }
 
     /**
      * Standard toSring implementation.

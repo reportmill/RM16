@@ -29,8 +29,6 @@
         <CheckBox Name="ShowBorderCheckBox" Text="Always Show Border" />
         <CheckBox Name="CoalesceNewlinesCheckBox" Text="Coalesce Newlines" />
         <CheckBox Name="PerformWrapCheckBox" Text="Wrap around peers" />
-        <CheckBox Name="EditableCheckBox" Text="PDF Editable" />
-        <CheckBox Name="MultilineCheckBox" Text="PDF Multiline" />
       </ColView>
       <ColView Spacing="4">
         <Label Text="Overflow Behavior:" />

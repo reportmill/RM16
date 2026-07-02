@@ -1200,14 +1200,6 @@ public class RMShape implements Cloneable, RMTypes, Archivable, Key.GetSet {
     }
 
     /**
-     * Returns the ancestor at the given index (parent is ancestor 0).
-     */
-    public RMShape getAncestor(int anIndex)
-    {
-        return anIndex == 0 ? getParent() : getParent().getAncestor(anIndex - 1);
-    }
-
-    /**
      * Returns true if given shape is one of this shape's ancestors.
      */
     public boolean isAncestor(RMShape aShape)
@@ -1449,15 +1441,6 @@ public class RMShape implements Cloneable, RMTypes, Archivable, Key.GetSet {
         double h = aHeight <= 0 ? 0 : aHeight;
         if (h == getMinHeight()) return;
         firePropChange(MinHeight_Prop, put(MinHeight_Prop, h), h);
-    }
-
-    /**
-     * Sets the shape minimum size.
-     */
-    public void setMinSize(double aWidth, double aHeight)
-    {
-        setMinWidth(aWidth);
-        setMinHeight(aHeight);
     }
 
     /**
@@ -2379,7 +2362,7 @@ public class RMShape implements Cloneable, RMTypes, Archivable, Key.GetSet {
         // Archive Stroke, Fill, Effect
         if (getStroke() != null) e.add(anArchiver.toXML(getStroke(), this));
         if (getFill() != null) e.add(anArchiver.toXML(getFill(), this));
-        if (getEffect() != null) e.add(anArchiver.toXML(getEffect(), this));
+        if (getEffect() != null) e.add("effect", getEffect().codeString());
 
         // Archive font
         if (isFontSet()) e.add(RMArchiverHpr.fontToXML(getFont()));
@@ -2445,10 +2428,8 @@ public class RMShape implements Cloneable, RMTypes, Archivable, Key.GetSet {
         }
 
         // Unarchive Effect
-        for (int i = anArchiver.indexOf(anElement, Effect.class); i >= 0; i = -1) {
-            Effect fill = (Effect) anArchiver.fromXML(anElement.get(i), this);
-            setEffect(fill);
-        }
+        if (anElement.hasAttribute("effect"))
+            setEffect(Effect.of(anElement.getAttributeValue("effect")));
 
         // Unarchive font
         XMLElement fontXML = anElement.getElement("font");

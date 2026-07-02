@@ -54,7 +54,6 @@
       <MenuItem Name="AddCrossTabButton" Text="Simple Table" ImageName="/com/reportmill/apptools/RMCrossTab.png" />
       <MenuItem Name="AddImagePlaceHolderMenuItem" Text="Image Placeholder" ImageName="/com/reportmill/apptools/RMImage.png" />
       <MenuItem Name="AddSubreportMenuItem" Text="Subreport" ImageName="/com/reportmill/apptools/RMSubreport.png" />
-      <MenuItem Name="AddWidgetMenuItem" Text="Widget" ImageName="ShapeRollScaleSkew.png" />
     </MenuButton>
   </RowView>
 </ColView>

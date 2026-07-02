@@ -1230,7 +1230,6 @@ public class RMTool<T extends RMShape> extends ViewController {
         if (aClass == RMTableRow.class) return new RMTableRowTool();
         if (aClass == RMTextShape.class) return new RMTextTool();
         if (aClass == RMViewerShape.class) return new RMTool();
-        if (aClass == ViewShape.class) return new ViewShapeTool();
         System.out.println("RMTool.createTool: " + aClass.getName());
         return new RMTool();
 

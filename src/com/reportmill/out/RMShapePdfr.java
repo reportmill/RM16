@@ -164,8 +164,6 @@ public class RMShapePdfr<T extends RMShape> {
             return (RMShapePdfr<RMShape>) (RMShapePdfr<?>) new RMShapePdfrs.RMPDFShapePdfr();
         if (aShape instanceof RMScene3D)
             return (RMShapePdfr<RMShape>) RMShapePdfrs._shapePainterPdfr;
-        if (aShape instanceof ViewShape)
-            return (RMShapePdfr<RMShape>) (RMShapePdfr<?>) new RMShapePdfrs.ViewShapePdfr();
         return _shapePdfr;
     }
 }

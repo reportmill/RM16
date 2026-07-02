@@ -294,7 +294,6 @@ public class RMEditorPaneToolBar extends RMEditorPane.SupportPane {
         if (anEvent.equals("AddCrossTabButton")) RMCrossTabTool.addCrossTab(getEditor());
         if (anEvent.equals("AddImagePlaceHolderMenuItem")) RMEditorUtils.addImagePlaceholder(getEditor());
         if (anEvent.equals("AddSubreportMenuItem")) RMEditorUtils.addSubreport(getEditor());
-        if (anEvent.equals("AddWidgetMenuItem")) RMEditorUtils.addWidget(getEditor());
 
         // Handle ConnectToDataSourceMenuItem
         if (anEvent.equals("ConnectToDataSourceMenuItem") || anEvent.equals("ConnectToDataSourceButton"))

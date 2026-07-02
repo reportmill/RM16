@@ -53,7 +53,7 @@ public class RMEditorClipboard {
 
             // Get xml for selected shapes as string and add as RM_XML_TYPE
             List<RMShape> shapes = anEditor.getSelectedOrSuperSelectedShapes();
-            XMLElement xml = new RMArchiver().writeToXML(shapes);
+            XMLElement xml = new RMArchiver().writeObjectToXml(shapes);
             String xmlStr = xml.getString();
             cb.addData(RM_XML_TYPE, xmlStr);
 
@@ -95,20 +95,19 @@ public class RMEditorClipboard {
     /**
      * Handles editor paste operation for given transferable, parent shape and location.
      */
-    public static void paste(RMEditor anEditor, Clipboard aCB, RMParentShape aParent, Point aPoint)
+    public static void paste(RMEditor anEditor, Clipboard clipboard, RMParentShape aParent, Point aPoint)
     {
         // Declare variable for pasted shape
         RMShape pastedShape = null;
 
         // If PasteBoard has ReportMill Data, paste it
-        if (aCB.hasData(RM_XML_TYPE)) {
+        if (clipboard.hasData(RM_XML_TYPE)) {
 
             // Unarchive shapes from clipboard bytes
-            Object object = getShapesFromClipboard(anEditor, aCB);
+            Object object = getShapesFromClipboard(clipboard);
 
             // If data is list of previously copied shapes, add them
-            if (object instanceof List) {
-                List shapes = (List) object;
+            if (object instanceof List shapes) {
                 anEditor.undoerSetUndoTitle("Paste Shape" + (shapes.size() > 1 ? "s" : ""));
                 anEditor.addShapesToShape(shapes, aParent, true);
                 anEditor.setSelectedShapes(shapes);
@@ -121,7 +120,7 @@ public class RMEditorClipboard {
                 double height = Math.min(text.getPrefHeight(), aParent.getHeight());
                 text.setSize(width, height);
                 anEditor.undoerSetUndoTitle("Paste Text");
-                anEditor.addShapesToShape(Arrays.asList(text), aParent, true);
+                anEditor.addShapesToShape(List.of(text), aParent, true);
                 anEditor.setSelectedShape(text);
             }
 
@@ -133,18 +132,18 @@ public class RMEditorClipboard {
         }
 
         // Paste Image
-        else if (aCB.hasImage()) {
-            ClipboardData idata = aCB.getImageData();
-            byte bytes[] = idata.getBytes();
+        else if (clipboard.hasImage()) {
+            ClipboardData idata = clipboard.getImageData();
+            byte[] bytes = idata.getBytes();
             pastedShape = new RMImageShape(bytes);
         }
 
         // paste pdf
-        else if ((pastedShape = getTransferPDF(aCB)) != null) {
+        else if ((pastedShape = getTransferPDF(clipboard)) != null) {
         }
 
         // last one - plain text
-        else if ((pastedShape = getTransferText(aCB)) != null) {
+        else if ((pastedShape = getTransferText(clipboard)) != null) {
         }
 
         // Might as well log unsupported paste types
@@ -180,43 +179,32 @@ public class RMEditorClipboard {
      */
     public static RMShape getShapeFromClipboard(RMEditor anEditor)
     {
-        Object shapes = getShapesFromClipboard(anEditor, null);
-        if (shapes instanceof List) shapes = ListUtils.get((List) shapes, 0);
+        Object shapes = getShapesFromClipboard(null);
+        if (shapes instanceof List<?> shapesList)
+            shapes = ListUtils.get(shapesList, 0);
         return shapes instanceof RMShape ? (RMShape) shapes : null;
     }
 
     /**
-     * Returns the shape or shapes read from the given transferable (uses system clipboard if null).
+     * Returns the shape or shapes read from the given clipboard (uses system clipboard if null).
      */
-    public static Object getShapesFromClipboard(RMEditor anEditor, Clipboard aCB)
+    private static Object getShapesFromClipboard(Clipboard aClipboard)
     {
-        // If no contents, use system clipboard
-        Clipboard cboard = aCB != null ? aCB : Clipboard.get();
+        Clipboard clipboard = aClipboard != null ? aClipboard : Clipboard.get();
 
-        // If no RMData, just return
-        if (!cboard.hasData(RM_XML_TYPE))
-            return null;
-
-        // Get unarchived object from clipboard bytes
-        byte bytes[] = cboard.getDataBytes(RM_XML_TYPE);
-        Object obj = new RMArchiver().readXmlFromBytes(bytes);
-
-        // A bit of a hack - remove any non-shapes (plugins for one)
-        if (obj instanceof List) {
-            List list = (List) obj;
-            for (int i = list.size() - 1; i >= 0; --i)
-                if (!(list.get(i) instanceof RMShape))
-                    list.remove(i);
+        // Handle RMData: Get unarchived object from clipboard bytes
+        if (clipboard.hasData(RM_XML_TYPE)) {
+            byte[] bytes = clipboard.getDataBytes(RM_XML_TYPE);
+            return new RMArchiver().readObjectFromXmlBytes(bytes);
         }
 
-        // Return object
-        return obj;
+        return null;
     }
 
     /**
      * Returns an RMText object with the contents if there's a plain text string on the clipboard.
      */
-    public static RMShape getTransferText(Clipboard aCB)
+    private static RMShape getTransferText(Clipboard aCB)
     {
         if (!aCB.hasString()) return null;
         String str = aCB.getString();
@@ -229,8 +217,7 @@ public class RMEditorClipboard {
     public static RMShape getTransferPDF(Clipboard aCB)
     {
         if (!aCB.hasData("application/pdf")) return null;
-        byte bytes[] = aCB.getDataBytes("application/pdf");
+        byte[] bytes = aCB.getDataBytes("application/pdf");
         return bytes != null ? new RMPDFShape(bytes) : null;
     }
-
 }

@@ -1105,7 +1105,7 @@ public class RMDocument extends RMParentShape {
     {
         layoutDeep();
         resolvePageReferences();
-        return new RMArchiver().writeToXML(this);
+        return new RMArchiver().writeObjectToXml(this);
     }
 
     /**

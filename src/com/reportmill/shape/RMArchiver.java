@@ -47,8 +47,8 @@ public class RMArchiver extends XMLArchiver {
 
         RMDocument doc;
         if (url != null)
-            doc = (RMDocument) readXmlFromUrl(url);
-        else doc = (RMDocument) readXmlFromBytes(bytes);
+            doc = (RMDocument) readObjectFromXmlUrl(url);
+        else doc = (RMDocument) readObjectFromXmlBytes(bytes);
 
         // Set Source URL and return
         doc.setSourceURL(getSourceURL());

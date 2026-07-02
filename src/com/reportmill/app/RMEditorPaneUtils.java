@@ -169,7 +169,7 @@ public class RMEditorPaneUtils {
     public static void previewXML(RMEditorPane anEP)
     {
         RMEditor editor = anEP.getEditor();
-        XMLElement xml = new RMArchiver().writeToXML(editor.getDoc());
+        XMLElement xml = new RMArchiver().writeObjectToXml(editor.getDoc());
         File file = FileUtils.getTempFile("RMXMLFile.xml");
         try {
             FileUtils.writeBytes(file, xml.getBytes());

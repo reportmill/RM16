@@ -53,7 +53,7 @@ public class RMEditorEvents extends RMViewerEvents {
         boolean isKey = anEvent.isKeyEvent() && !anEvent.isConsumed();
         if (isKey && (!editor.isPreview() || getOverridePreview())) {
             RMShape superSelectedShape = editor.getSuperSelectedShape();
-            RMTool tool = editor.getTool(superSelectedShape);
+            RMTool<RMShape> tool = editor.getTool(superSelectedShape);
             tool.processKeyEvent(superSelectedShape, anEvent);
         }
 
@@ -164,18 +164,6 @@ public class RMEditorEvents extends RMViewerEvents {
     }
 
     /**
-     * Handle key released.
-     */
-    public void keyReleased(ViewEvent anEvent)
-    {
-        // If in preview mode, call normal version
-        if (getEditor().isPreview() && !getOverridePreview()) {
-            super.keyReleased(anEvent);
-            return;
-        }
-    }
-
-    /**
      * Handle key pressed.
      */
     public void keyPressed(ViewEvent anEvent)
@@ -190,7 +178,7 @@ public class RMEditorEvents extends RMViewerEvents {
             // If event not consumed and user hit x, turn on preview override
             if (!anEvent.isConsumed() && anEvent.getKeyCode() == KeyCode.X)
                 setOverridePreview(true);
-            return; // Return
+            return;
         }
 
         // If event is command key, just return
@@ -227,7 +215,7 @@ public class RMEditorEvents extends RMViewerEvents {
 
             // If T key, swap in linked text
         else if (keyChar == 't')
-            ((RMTextTool) editor.getTool(RMTextShape.class)).convertToText(editor.getSelectedShape(), "test");
+            ((RMTextTool<?>) editor.getTool(RMTextShape.class)).convertToText(editor.getSelectedShape(), "test");
 
             // Otherwise, set consume to false
         else return;
@@ -237,32 +225,14 @@ public class RMEditorEvents extends RMViewerEvents {
     }
 
     /**
-     * Handle key pressed.
-     */
-    public void keyTyped(ViewEvent anEvent)
-    {
-        // If in preview mode, call normal version
-        if (getEditor().isPreview() && !getOverridePreview()) {
-            super.keyTyped(anEvent);
-            return;
-        }
-    }
-
-    /**
      * Returns the current event.
      */
-    public ViewEvent getCurrentEvent()
-    {
-        return _currentEvent;
-    }
+    public ViewEvent getCurrentEvent()  { return _currentEvent; }
 
     /**
      * Returns the current event point in document coords.
      */
-    public Point getEventPointInDoc()
-    {
-        return getEventPointInDoc(false);
-    }
+    public Point getEventPointInDoc()  { return getEventPointInDoc(false); }
 
     /**
      * Returns the current event point in document coords with an option to adjust to conform to grid.
@@ -556,41 +526,27 @@ public class RMEditorEvents extends RMViewerEvents {
      */
     public static double getGuideLocation(RMDocument aDoc, int anIndex)
     {
-        switch (anIndex) {
-            case 0:
-                return aDoc.getMarginLeft();
-            case 1:
-                return aDoc.getSelPage().getWidth() - aDoc.getMarginRight();
-            case 2:
-                return aDoc.getMarginTop();
-            case 3:
-                return aDoc.getSelPage().getHeight() - aDoc.getMarginBottom();
-        }
-        return 0;
+        return switch (anIndex) {
+            case 0 -> aDoc.getMarginLeft();
+            case 1 -> aDoc.getSelPage().getWidth() - aDoc.getMarginRight();
+            case 2 -> aDoc.getMarginTop();
+            case 3 -> aDoc.getSelPage().getHeight() - aDoc.getMarginBottom();
+            default -> 0;
+        };
     }
 
     /**
      * Returns the guide orientation for the given index.
      */
-    private byte getGuideOrientation(int anIndex)
-    {
-        return anIndex == 0 || anIndex == 1 ? GUIDE_VERTICAL : GUIDE_HORIZONTAL;
-    }
+    private byte getGuideOrientation(int anIndex)  { return anIndex == 0 || anIndex == 1 ? GUIDE_VERTICAL : GUIDE_HORIZONTAL; }
 
     /**
      * Returns whether to override preview mode.
      */
-    public boolean getOverridePreview()
-    {
-        return _overridePreview;
-    }
+    public boolean getOverridePreview()  { return _overridePreview; }
 
     /**
      * Sets whether to override preview mode.
      */
-    public void setOverridePreview(boolean aValue)
-    {
-        _overridePreview = aValue;
-    }
-
+    public void setOverridePreview(boolean aValue)  { _overridePreview = aValue; }
 }

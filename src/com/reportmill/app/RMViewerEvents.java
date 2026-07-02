@@ -21,37 +21,37 @@ import snap.view.*;
 public class RMViewerEvents {
 
     // The viewer
-    RMViewer _viewer;
+    private RMViewer _viewer;
 
     // The mode
-    int _mode = 1;
+    private int _mode = 1;
 
     // The last shape that was hit by a mouse press (PLAYER)
-    RMShape _shapePressed;
+    private RMShape _shapePressed;
 
     // The stack of shapes under the mouse for mouse moves (PLAYER)
-    Stack _shapeUnderStack = new Stack();
+    private Stack<RMShape> _shapeUnderStack = new Stack<>();
 
     // The stack of cursors (one for each shape in shape stack) for mouse moves (PLAYER)
-    Stack<Cursor> _shapeUnderCursorStack = new Stack();
+    private Stack<Cursor> _shapeUnderCursorStack = new Stack<>();
 
     // The list of text shapes selected (SELECT_TEXT)
-    List<RMTextShape> _selectedTexts = new ArrayList();
+    private List<RMTextShape> _selectedTexts = new ArrayList<>();
 
     // The down point for the last mouse loop (SELECT_TEXT/SELECT_IMAGE)
-    Point _downPoint;
+    private Point _downPoint;
 
     // The drag point for the last mouse loop (SELECT_TEXT/SELECT_IMAGE)
-    Point _dragPoint;
+    private Point _dragPoint;
 
     // The paint area (SELECT_TEXT)
-    Shape _paintArea = new Rect();
+    private Shape _paintArea = new Rect();
 
     // The selection rect (SELECT_IMAGE)
-    Rect _rect = new Rect();
+    private Rect _rect = new Rect();
 
     // The selected sides (a mask of sides) (SELECT_IMAGE)
-    int _selectedSides;
+    private int _selectedSides;
 
     // Constants for mode
     public static final int NONE = 0;
@@ -66,7 +66,7 @@ public class RMViewerEvents {
     public static final byte MaxYEdge = 1 << 3;
 
     /**
-     * Creates a new RMViewerEvents.
+     * Constructor.
      */
     public RMViewerEvents(RMViewer aViewer)
     {
@@ -76,18 +76,12 @@ public class RMViewerEvents {
     /**
      * Returns the viewer we work for.
      */
-    public RMViewer getViewer()
-    {
-        return _viewer;
-    }
+    public RMViewer getViewer()  { return _viewer; }
 
     /**
      * Returns the mode.
      */
-    public int getMode()
-    {
-        return _mode;
-    }
+    public int getMode()  { return _mode; }
 
     /**
      * Sets the mode.
@@ -104,17 +98,10 @@ public class RMViewerEvents {
     protected void processEvent(ViewEvent anEvent)
     {
         switch (_mode) {
-            case NONE:
-                break;
-            case DEFAULT:
-                processEventDefault(anEvent);
-                break;
-            case SELECT_TEXT:
-                processEventSelText(anEvent);
-                break;
-            case SELECT_IMAGE:
-                processEventSelImage(anEvent);
-                break;
+            case NONE -> { }
+            case DEFAULT -> processEventDefault(anEvent);
+            case SELECT_TEXT -> processEventSelText(anEvent);
+            case SELECT_IMAGE -> processEventSelImage(anEvent);
         }
     }
 
@@ -123,26 +110,12 @@ public class RMViewerEvents {
      */
     protected void processEventDefault(ViewEvent anEvent)
     {
-        // Forward mouse pressed and released to official methods
         switch (anEvent.getType()) {
-            case MouseMove:
-                mouseMoved(anEvent);
-                break;
-            case MousePress:
-                mousePressed(anEvent);
-                break;
-            case MouseDrag:
-                mouseDragged(anEvent);
-                break;
-            case MouseRelease:
-                mouseReleased(anEvent);
-                break;
-            case KeyPress:
-                keyPressed(anEvent);
-            case KeyRelease:
-                keyReleased(anEvent);
-            case KeyType:
-                keyTyped(anEvent);
+            case MouseMove -> mouseMoved(anEvent);
+            case MousePress -> mousePressed(anEvent);
+            case MouseDrag -> mouseDragged(anEvent);
+            case MouseRelease -> mouseReleased(anEvent);
+            case KeyPress -> keyPressed(anEvent);
         }
     }
 
@@ -151,17 +124,9 @@ public class RMViewerEvents {
      */
     protected void processEventSelText(ViewEvent anEvent)
     {
-        // Forward mouse pressed and released to official methods
         switch (anEvent.getType()) {
-            case MousePress:
-                mousePressedSelText(anEvent);
-                break;
-            case MouseRelease:
-                mouseReleasedSelText(anEvent);
-                break;
-            case MouseDrag:
-                mouseDraggedSelText(anEvent);
-                break;
+            case MousePress -> mousePressedSelText(anEvent);
+            case MouseDrag -> mouseDraggedSelText(anEvent);
         }
     }
 
@@ -170,17 +135,10 @@ public class RMViewerEvents {
      */
     protected void processEventSelImage(ViewEvent anEvent)
     {
-        // Forward mouse pressed and released to official methods
         switch (anEvent.getType()) {
-            case MousePress:
-                mousePressedSelImage(anEvent);
-                break;
-            case MouseMove:
-                mouseMovedSelImage(anEvent);
-                break;
-            case MouseDrag:
-                mouseDraggedSelImage(anEvent);
-                break;
+            case MousePress -> mousePressedSelImage(anEvent);
+            case MouseMove -> mouseMovedSelImage(anEvent);
+            case MouseDrag -> mouseDraggedSelImage(anEvent);
         }
     }
 
@@ -190,12 +148,8 @@ public class RMViewerEvents {
     public void paint(Painter aPntr)
     {
         switch (_mode) {
-            case SELECT_TEXT:
-                paintSelText(aPntr);
-                break;
-            case SELECT_IMAGE:
-                paintSelImage(aPntr);
-                break;
+            case SELECT_TEXT -> paintSelText(aPntr);
+            case SELECT_IMAGE -> paintSelImage(aPntr);
         }
     }
 
@@ -205,12 +159,8 @@ public class RMViewerEvents {
     public void copy()
     {
         switch (_mode) {
-            case SELECT_TEXT:
-                copySelText();
-                break;
-            case SELECT_IMAGE:
-                copySelImage();
-                break;
+            case SELECT_TEXT -> copySelText();
+            case SELECT_IMAGE -> copySelImage();
         }
     }
 
@@ -226,7 +176,7 @@ public class RMViewerEvents {
 
         // If shape has URL, open it
         if (_shapePressed != null)
-            _shapePressed.processEvent(createShapeEvent(_shapePressed, anEvent, null));
+            _shapePressed.processEvent(_viewer.createShapeEvent(_shapePressed, anEvent, null));
     }
 
     /**
@@ -240,13 +190,13 @@ public class RMViewerEvents {
             shape = shape.getParent();
 
         // If shape under move point is different than that of last last move point, update shape under stack
-        RMShape lastShapeUnder = _shapeUnderStack.isEmpty() ? null : (RMShape) _shapeUnderStack.peek();
+        RMShape lastShapeUnder = _shapeUnderStack.isEmpty() ? null : _shapeUnderStack.peek();
         if (shape != lastShapeUnder)
             updateShapeUnderStack(shape, anEvent);
 
         // Send mouse dragged to pressed shape
         if (_shapePressed != null)
-            _shapePressed.processEvent(createShapeEvent(_shapePressed, anEvent, null));
+            _shapePressed.processEvent(_viewer.createShapeEvent(_shapePressed, anEvent, null));
     }
 
     /**
@@ -255,29 +205,13 @@ public class RMViewerEvents {
     public void mouseReleased(ViewEvent anEvent)
     {
         if (_shapePressed != null)
-            _shapePressed.processEvent(createShapeEvent(_shapePressed, anEvent, null));
+            _shapePressed.processEvent(_viewer.createShapeEvent(_shapePressed, anEvent, null));
     }
 
     /**
      * Handle key pressed.
      */
-    public void keyPressed(ViewEvent anEvent)
-    {
-    }
-
-    /**
-     * Handle key released.
-     */
-    public void keyReleased(ViewEvent anEvent)
-    {
-    }
-
-    /**
-     * Handle key typed.
-     */
-    public void keyTyped(ViewEvent anEvent)
-    {
-    }
+    public void keyPressed(ViewEvent anEvent)  { }
 
     /**
      * Handle mouse moved event.
@@ -291,7 +225,7 @@ public class RMViewerEvents {
 
         // If shape under move point is identical to shape under last move point, call its mouseMoved
         if (!_shapeUnderStack.isEmpty() && _shapeUnderStack.peek() == shape)
-            shape.processEvent(createShapeEvent(shape, anEvent, null));
+            shape.processEvent(_viewer.createShapeEvent(shape, anEvent, null));
 
             // If shape under move point is different from last shape under, update it
         else updateShapeUnderStack(shape, anEvent);
@@ -315,13 +249,13 @@ public class RMViewerEvents {
         while (!_shapeUnderStack.isEmpty() && _shapeUnderStack.peek() != parent && _shapeUnderStack.peek() != aShape) {
 
             // Pop top shape and send mouse exited
-            RMShape shape = (RMShape) _shapeUnderStack.pop();
+            RMShape shape = _shapeUnderStack.pop();
 
             // Pop top cursor
             _shapeUnderCursorStack.pop();
 
             // Send mouse exited
-            shape.processEvent(createShapeEvent(shape, anEvent, EventType.MouseEnter));
+            shape.processEvent(_viewer.createShapeEvent(shape, anEvent, EventType.MouseEnter));
 
             // Reset cursor
             getViewer().setCursor(_shapeUnderCursorStack.isEmpty() ? Cursor.DEFAULT : _shapeUnderCursorStack.peek());
@@ -333,18 +267,10 @@ public class RMViewerEvents {
 
         // Add aShape if non-null
         if (aShape != null && (_shapeUnderStack.isEmpty() || _shapeUnderStack.peek() != aShape)) {
-            aShape.processEvent(createShapeEvent(aShape, anEvent, EventType.MouseEnter));
+            aShape.processEvent(_viewer.createShapeEvent(aShape, anEvent, EventType.MouseEnter));
             _shapeUnderStack.push(aShape);
             _shapeUnderCursorStack.push(getViewer().getCursor());
         }
-    }
-
-    /**
-     * Creates a shape mouse event.
-     */
-    ViewEvent createShapeEvent(RMShape s, ViewEvent e, EventType t)
-    {
-        return getViewer().createShapeEvent(s, e, t);
     }
 
     /*
@@ -354,7 +280,7 @@ public class RMViewerEvents {
     /**
      * Handle mouse pressed event.
      */
-    public void mousePressedSelText(ViewEvent anEvent)
+    private void mousePressedSelText(ViewEvent anEvent)
     {
         _downPoint = new Point(anEvent.getX(), anEvent.getY());              // Get down point
         getViewer().repaint(_paintArea.getBounds());  // Repaint paint area
@@ -364,7 +290,7 @@ public class RMViewerEvents {
     /**
      * Handle mouse dragged event.
      */
-    public void mouseDraggedSelText(ViewEvent anEvent)
+    private void mouseDraggedSelText(ViewEvent anEvent)
     {
         // Get drag point
         _dragPoint = new Point(anEvent.getX(), anEvent.getY());
@@ -381,18 +307,11 @@ public class RMViewerEvents {
         Rect rect = viewer.convertToShape(new Rect(x, y, w, h), viewer.getSelPage()).getBounds();
 
         // Get path for rect and find/set text shapes
-        findTextShapes(viewer.getSelPage(), rect, _selectedTexts = new ArrayList());
+        findTextShapes(viewer.getSelPage(), rect, _selectedTexts = new ArrayList<>());
 
         // Get selection paint area and repaint
         _paintArea = getTextSelectionArea();
         viewer.repaint(_paintArea.getBounds());
-    }
-
-    /**
-     * Handle mouse released event.
-     */
-    public void mouseReleasedSelText(ViewEvent anEvent)
-    {
     }
 
     /**
@@ -412,9 +331,9 @@ public class RMViewerEvents {
     private void copySelText()
     {
         // Get first selected text (just return if none)
-        RMTextShape stext = _selectedTexts.size() > 0 ? _selectedTexts.get(0) : null;
-        if (stext == null) return;
-        RMDocument sdoc = stext.getDocument();
+        RMTextShape selText = !_selectedTexts.isEmpty() ? _selectedTexts.get(0) : null;
+        if (selText == null) return;
+        RMDocument sdoc = selText.getDocument();
 
         // Create new document and add clone of SelectedTexts to new document
         RMDocument doc = new RMDocument(sdoc.getPageSize().width, sdoc.getPageSize().height);
@@ -432,22 +351,20 @@ public class RMViewerEvents {
     /**
      * Finds the text shape children of the given shape in the given rect. Recurses into child shapes.
      */
-    private void findTextShapes(RMParentShape aParent, Shape aPath, List aList)
+    private void findTextShapes(RMParentShape aParent, Shape aPath, List<RMTextShape> aList)
     {
         // Get list of hit shapes
         List<RMShape> shapes = aParent.getChildrenIntersecting(aPath);
 
         // Iterate over shapes
-        for (int i = 0, iMax = shapes.size(); i < iMax; i++) {
-            RMShape shape = shapes.get(i);
+        for (RMShape shape : shapes) {
 
             // If shape is text, just add it
-            if (shape instanceof RMTextShape)
-                aList.add(shape);
+            if (shape instanceof RMTextShape textShape)
+                aList.add(textShape);
 
                 // Otherwise if shape has children, recurse (with path converted to shape coords)
-            else if (shape instanceof RMParentShape) {
-                RMParentShape parent = (RMParentShape) shape;
+            else if (shape instanceof RMParentShape parent) {
                 Shape path = parent.parentToLocal(aPath);
                 findTextShapes(parent, path, aList);
             }
@@ -459,29 +376,29 @@ public class RMViewerEvents {
      */
     private Shape getTextSelectionArea()
     {
+        TextModelX textModel = new TextModelX(true);
+        Shape textAreaShape = new Rect();
+
         // Iterate over texts and create composite shape
-        TextModelX tbox = new TextModelX(true);
-        Shape area = new Rect();
-        for (int i = 0, iMax = _selectedTexts.size(); i < iMax; i++) {
-            RMTextShape text = _selectedTexts.get(i);
+        for (RMTextShape text : _selectedTexts) {
 
             // Convert points to text
             Point p1 = getViewer().convertToShape(_downPoint.x, _downPoint.y, text);
             Point p2 = getViewer().convertToShape(_dragPoint.x, _dragPoint.y, text);
 
             // Configure text editor for text
-            tbox.setSourceText(text.getRichText());
-            tbox.setBounds(0, 0, text.getWidth(), text.getHeight());
+            textModel.setSourceText(text.getRichText());
+            textModel.setBounds(0, 0, text.getWidth(), text.getHeight());
 
             // Get text selection for point, path for selection (int viewer coords) and add
-            TextSel sel = new TextSel(tbox, p1.getX(), p1.getY(), p2.getX(), p2.getY(), false, false);
+            TextSel sel = new TextSel(textModel, p1.getX(), p1.getY(), p2.getX(), p2.getY(), false, false);
             Shape path = sel.getPath();
             path = getViewer().convertFromShape(path, text);
-            area = Shape.addShapes(area, path);
+            textAreaShape = Shape.addShapes(textAreaShape, path);
         }
 
-        // Return area
-        return area;
+        // Return
+        return textAreaShape;
     }
 
     /*
@@ -620,11 +537,11 @@ public class RMViewerEvents {
     {
         // Get an image of the current page and sub-image
         RMShape page = getViewer().getDoc().getSelPage();
-        Image img = RMShapeUtils.createImage(page, Color.WHITE);
-        Image img2 = img.copyForCropRect(_rect.getX(), _rect.getY(), _rect.getWidth(), _rect.getHeight());
+        Image pageImage = RMShapeUtils.createImage(page, Color.WHITE);
+        Image selImage = pageImage.copyForCropRect(_rect.x, _rect.y, _rect.width, _rect.height);
 
         // Get transferable and add to clipboard
-        Clipboard.get().addData(img2);
+        Clipboard.get().addData(selImage);
     }
 
     /**
@@ -687,5 +604,4 @@ public class RMViewerEvents {
         else if ((anEdgeMask & MaxYEdge) > 0)
             aRect.setHeight(Math.max(1, aPoint.getY() - aRect.getY()));
     }
-
 }

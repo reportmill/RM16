@@ -4,8 +4,6 @@ import com.reportmill.base.RMNumberFormat;
 import snap.geom.HPos;
 import snap.gfx.*;
 import snap.text.*;
-import snap.util.MathUtils;
-import snap.util.XMLAttribute;
 import snap.util.XMLElement;
 import java.util.Objects;
 
@@ -256,177 +254,6 @@ public class RMArchiverHpr {
     }
 
     /**
-     * GradientPaint archival.
-     */
-    public static XMLElement gradientPaintToXML(GradientPaint gradientPaint)
-    {
-        // Archive basic fill attributes
-        XMLElement e = new XMLElement("gradient-fill");
-
-        // Archive Type
-        if (gradientPaint.isRadial())
-            e.add("type", "radial");
-
-        // Archive Points/Roll
-        if (gradientPaint.isRadial()) {
-            e.add("x0", gradientPaint.getStartX()); e.add("y0", gradientPaint.getStartY());
-            e.add("x1", gradientPaint.getEndX()); e.add("y1", gradientPaint.getEndY());
-        }
-        else if (gradientPaint.getRoll() != 0)
-            e.add("roll", gradientPaint.getRoll());
-
-        // Archive first color
-        if (!gradientPaint.getStopColor(0).equals(Color.BLACK))
-            e.add("color", "#" + gradientPaint.getStopColor(0).toHexString());
-
-        // Archive all colors beyond the first one as color2,color3 (for compatibility)
-        for (int i = 1, iMax = gradientPaint.getStopCount(); i<iMax; ++i) {
-            Color c = gradientPaint.getStopColor(i);
-            if (!c.equals(Color.BLACK))
-                e.add("color"+(i+1), "#" + c.toHexString());
-        }
-
-        // Archive stop positions (stop 0 defaults to 0.0, and last stop defaults to 1.0)
-        for (int i = 0, iMax = gradientPaint.getStopCount(); i<iMax; ++i) {
-            double offset = gradientPaint.getStopOffset(i);
-            if (i == 0 && MathUtils.equalsZero(offset)) continue;
-            if (i == iMax-1 && MathUtils.equals(offset, 1)) continue;
-            e.add("stop"+(i==0 ? "" : (i+1)), offset);
-        }
-
-        // Archive the number of stops, since the defaults in the above lists make it possibly indeterminate
-        if (gradientPaint.getStopCount() != 2)
-            e.add("nstops", gradientPaint.getStopCount());
-
-        // Return element
-        return e;
-    }
-
-    /**
-     * GradientPaint unarchival.
-     */
-    public static GradientPaint gradientPaintFromXML(XMLElement anElement)
-    {
-        // Unarchive type
-        String type = anElement.getAttributeValue("type", "linear");
-        GradientPaint.Type gradientType = GradientPaint.Type.LINEAR;
-        if (type.equals("radial"))
-            gradientType = GradientPaint.Type.RADIAL;
-
-        // Unarchive points
-        double sx = anElement.getAttributeDoubleValue("x0", .5);
-        double sy = anElement.getAttributeDoubleValue("y0", .5);
-        double ex = anElement.getAttributeDoubleValue("x1", 1);
-        double ey = anElement.getAttributeDoubleValue("y1", .5);
-
-        // Unarchive roll
-        double roll = anElement.getAttributeFloatValue("roll");
-
-        // Unarchive stops
-        int nstops = anElement.getAttributeIntValue("nstops", 2);
-        GradientPaint.Stop[] stops = new GradientPaint.Stop[nstops];
-        for (int i=0; i<nstops; i++) {
-            String cstring = anElement.getAttributeValue("color" + (i==0 ? "" : (i+1))); // unarchive color,color2...
-            Color c = cstring==null ? Color.BLACK : new Color(cstring);
-            double offset;
-            XMLAttribute stopAttr = anElement.getAttribute("stop" + (i==0 ? "" : (i+1))); // unarchive stop,stop2...
-            if (stopAttr==null) {
-                if (i == 0) offset = 0;
-                else if (i == nstops-1) offset = 1;
-                else continue;
-            }
-            else offset = stopAttr.getFloatValue();
-            stops[i] = new GradientPaint.Stop(offset, c);
-        }
-
-        // Return this gradient paint
-        GradientPaint gradientPaint = new GradientPaint(gradientType, sx, sy, ex, ey, stops);
-        if (roll != 0)
-            gradientPaint = gradientPaint.copyForRoll(roll);
-        return gradientPaint;
-    }
-
-    /**
-     * ImagePaint archival.
-     */
-    public static XMLElement imagePaintToXML(ImagePaint imagePaint, RMArchiver anArchiver)
-    {
-        // Archive basic fill attributes and set type
-        XMLElement e = new XMLElement("ImagePaint");
-
-        // Archive ImageData
-        Image image = imagePaint.getImage();
-        if (image.getBytes() != null) {
-            String resName = anArchiver.addResource(image.getBytes(), "" + System.identityHashCode(image));
-            e.add("resource", resName);
-        }
-
-        // Archive Tile
-        if (!imagePaint.isAbsolute())
-            e.add("Tile", false);
-
-        // Archive bounds
-        if (imagePaint.getX() != 0)
-            e.add("x", imagePaint.getX());
-        if (imagePaint.getY() != 0)
-            e.add("y", imagePaint.getY());
-        if (imagePaint.getWidth() != image.getWidth())
-            e.add("w", imagePaint.getWidth());
-        if (imagePaint.getHeight() != image.getHeight())
-            e.add("h", imagePaint.getHeight());
-
-        // Return element
-        return e;
-    }
-
-    /**
-     * ImagePaint unarchival.
-     */
-    public ImagePaint imagePaintFromXML(RMArchiver anArchiver, XMLElement anElement)
-    {
-        Image image = null;
-        double imageX = 0, imageY = 0, imageW = 1, imageH = 1;
-
-        // Unarchive ImageName: get resource bytes, page and set ImageData
-        String iname = anElement.getAttributeValue("resource");
-        if (iname != null) {
-            byte[] bytes = anArchiver.getResource(iname); // Get resource bytes
-            image = Image.getImageForSource(bytes); // Create new image data
-            imageW = image.getWidth();
-            imageH = image.getHeight();
-        }
-
-        // Unarchive Tile, legacy FillStyle (Stretch=0, Tile=1, Fit=2, FitIfNeeded=3)
-        boolean isAbsolute = true;
-        if (anElement.hasAttribute("Tile") && !anElement.getAttributeBoolValue("Tile") ||
-                (anElement.hasAttribute("fillstyle") && anElement.getAttributeIntValue("fillstyle")!=1)) {
-            isAbsolute = false;
-            imageW = imageH = 1;
-        }
-
-        // Unarchive bounds
-        if (anElement.hasAttribute("x"))
-            imageX = anElement.getAttributeFloatValue("x");
-        if (anElement.hasAttribute("y"))
-            imageY = anElement.getAttributeFloatValue("y");
-        if (anElement.hasAttribute("w"))
-            imageW = anElement.getAttributeFloatValue("w");
-        if (anElement.hasAttribute("h"))
-            imageH = anElement.getAttributeFloatValue("h");
-
-        // Unarchive ScaleX, ScaleY
-        double sx = anElement.getAttributeFloatValue("scale-x", 1);
-        double sy = anElement.getAttributeFloatValue("scale-y", 1);
-        if (sx != 1 || sy != 1) {
-            imageW = isAbsolute ? imageW * sx : sx;
-            imageH = isAbsolute ? imageH * sy : sy;
-        }
-
-        // Return this image fill
-        return new ImagePaint(image, imageX, imageY, imageW, imageH, isAbsolute);
-    }
-
-    /**
      * TextLineStyle archival.
      */
     public static XMLElement lineStyleToXML(TextLineStyle lineStyle)
@@ -492,11 +319,16 @@ public class RMArchiverHpr {
         //_rightIndent = anElement.getAttributeFloatValue("right-indent");
 
         // Archive Spacing, SpacingFactor, LineHeightMin, LineHeightMax, ParagraphSpacing
-        //_spacing = anElement.getAttributeFloatValue("line-gap");
-        //_spacingFactor = anElement.getAttributeFloatValue("line-space", 1);
-        //_minHeight = anElement.getAttributeFloatValue("min-line-ht");
-        //_maxHeight = anElement.getAttributeFloatValue("max-line-ht", Float.MAX_VALUE);
-        //_newlineSpacing = anElement.getAttributeFloatValue("pgraph-space");
+        if (anElement.hasAttribute("line-gap"))
+            lineStyle = lineStyle.copyForPropKeyValue(TextLineStyle.Spacing_Prop, anElement.getAttributeFloatValue("line-gap"));
+        if (anElement.hasAttribute("line-space"))
+            lineStyle = lineStyle.copyForPropKeyValue(TextLineStyle.SpacingFactor_Prop, anElement.getAttributeFloatValue("line-space"));
+        if (anElement.hasAttribute("min-line-ht"))
+            lineStyle = lineStyle.copyForPropKeyValue(TextLineStyle.MinHeight_Prop, anElement.getAttributeFloatValue("min-line-ht"));
+        if (anElement.hasAttribute("max-line-ht"))
+            lineStyle = lineStyle.copyForPropKeyValue(TextLineStyle.MaxHeight_Prop, anElement.getAttributeFloatValue("max-line-ht"));
+        if (anElement.hasAttribute("pgraph-space"))
+            lineStyle = lineStyle.copyForPropKeyValue(TextLineStyle.NewlineSpacing_Prop, anElement.getAttributeFloatValue("pgraph-space"));
 
         // Unarchive Tabs
         //if (anElement.hasAttribute("tabs"))
@@ -511,13 +343,7 @@ public class RMArchiverHpr {
      */
     public static class RMFormatStub implements RMArchiver.Archivable {
 
-        /**
-         * Implement fromXML to return proper format based on type attribute.
-         */
-        public XMLElement toXML(RMArchiver anArchive)
-        {
-            return null;
-        }
+        public XMLElement toXML(RMArchiver anArchive)  { return null; }
 
         public Object fromXML(RMArchiver anArchiver, XMLElement anElmnt)
         {

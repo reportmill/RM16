@@ -39,15 +39,13 @@ public class RMSelectTool extends RMTool {
     Rect _selRect = new Rect();
 
     // The list of shapes that will be selected (during DragModeSelect)
-    List<RMShape> _newSelShapes = new ArrayList();
+    List<RMShape> _newSelShapes = new ArrayList<>();
 
     // Whether to re-enter mouse pressed
     boolean _redoMousePressed;
 
     // Drag mode constants
-    public enum DragMode {None, Move, Rotate, Resize, Select, EventDispatch}
-
-    ;
+    public enum DragMode { None, Move, Rotate, Resize, Select, EventDispatch }
 
     /**
      * Handles mouse pressed for the select tool.
@@ -137,7 +135,7 @@ public class RMSelectTool extends RMTool {
 
         // Get editor super selected shape and call mouse pressed for superSelectedShape's tool
         RMShape superSelShape = editor.getSuperSelectedShape();
-        getTool(superSelShape).processEvent(superSelShape, anEvent);
+        getTool(superSelShape).handleShapeMouseEvent(superSelShape, anEvent);
 
         // If redo mouse pressed was requested, do redo
         if (getRedoMousePressed()) {
@@ -156,7 +154,7 @@ public class RMSelectTool extends RMTool {
         if (isSelected(hitShape)) {
 
             // Call mouse pressed on mousePressedShape's tool
-            getTool(hitShape).processEvent(hitShape, anEvent);
+            getTool(hitShape).handleShapeMouseEvent(hitShape, anEvent);
 
             // If redo mouse pressed was requested, do redo
             if (getRedoMousePressed()) {
@@ -168,7 +166,6 @@ public class RMSelectTool extends RMTool {
             if (anEvent.isConsumed()) {
                 _eventShape = hitShape;
                 _dragMode = DragMode.EventDispatch;
-                return;
             }
         }
     }
@@ -250,7 +247,7 @@ public class RMSelectTool extends RMTool {
             case Select:
 
                 // Get current hit shapes
-                List newShapes = getHitShapes();
+                List<RMShape> newShapes = getHitShapes();
 
                 // Repaint selected shapes and SelectionRect
                 for (RMShape s : _newSelShapes) repaintShape(s);
@@ -262,7 +259,7 @@ public class RMSelectTool extends RMTool {
 
                 // If shift key was down, exclusive OR (xor) newShapes with selectedShapes
                 if (anEvent.isShiftDown()) {
-                    List xor = ListUtils.clone(editor.getSelectedShapes());
+                    List<RMShape> xor = ListUtils.clone(editor.getSelectedShapes());
                     ListUtils.xor(xor, newShapes);
                     _newSelShapes.addAll(xor);
                 }
@@ -279,7 +276,7 @@ public class RMSelectTool extends RMTool {
 
             // Handle DragModeSuperSelect: Forward mouse drag on to super selected shape's mouse dragged and break
             case EventDispatch:
-                getTool(_eventShape).processEvent(_eventShape, anEvent);
+                getTool(_eventShape).handleShapeMouseEvent(_eventShape, anEvent);
                 break;
 
             // Handle DragModeNone
@@ -305,12 +302,12 @@ public class RMSelectTool extends RMTool {
             case Select:
 
                 // Get hit shapes
-                List newShapes = getHitShapes();
+                List<RMShape> newShapes = getHitShapes();
 
                 // If shift key was down, exclusive OR (xor) newShapes with selectedShapes. Else select new shapes
-                if (newShapes.size() > 0) {
+                if (!newShapes.isEmpty()) {
                     if (anEvent.isShiftDown()) {
-                        List xor = ListUtils.clone(editor.getSelectedShapes());
+                        List<RMShape> xor = ListUtils.clone(editor.getSelectedShapes());
                         ListUtils.xor(xor, newShapes);
                         editor.setSelectedShapes(xor);
                     } else editor.setSelectedShapes(newShapes);
@@ -326,7 +323,7 @@ public class RMSelectTool extends RMTool {
 
             // Handle EventDispatch
             case EventDispatch:
-                getTool(_eventShape).processEvent(_eventShape, anEvent);
+                getTool(_eventShape).handleShapeMouseEvent(_eventShape, anEvent);
                 _eventShape = null;
                 break;
         }
@@ -472,9 +469,5 @@ public class RMSelectTool extends RMTool {
     /**
      * Tool callback selects parent of selected shapes (or just shape, if it's super-selected).
      */
-    public void reactivateTool()
-    {
-        getEditor().popSelection();
-    }
-
+    public void reactivateTool()  { getEditor().popSelection(); }
 }

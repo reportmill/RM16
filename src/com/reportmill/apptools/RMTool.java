@@ -189,56 +189,37 @@ public class RMTool<T extends RMShape> extends ViewController {
     /**
      * Returns whether a given shape is selected in the editor.
      */
-    public boolean isSelected(RMShape aShape)
-    {
-        return getEditor().isSelected(aShape);
-    }
+    public boolean isSelected(RMShape aShape)  { return getEditor().isSelected(aShape); }
 
     /**
      * Returns whether a given shape is superselected in the editor.
      */
-    public boolean isSuperSelected(RMShape aShape)
-    {
-        return getEditor().isSuperSelected(aShape);
-    }
+    public boolean isSuperSelected(RMShape aShape)  { return getEditor().isSuperSelected(aShape); }
 
     /**
      * Returns whether a given shape is super-selectable.
      */
-    public boolean isSuperSelectable(RMShape aShape)
-    {
-        return aShape.superSelectable();
-    }
+    public boolean isSuperSelectable(RMShape aShape)  { return aShape.superSelectable(); }
 
     /**
      * Returns whether a given shape accepts children.
      */
-    public boolean getAcceptsChildren(RMShape aShape)
-    {
-        return aShape.acceptsChildren();
-    }
+    public boolean getAcceptsChildren(RMShape aShape)  { return aShape.acceptsChildren(); }
 
     /**
      * Returns whether a given shape can be ungrouped.
      */
-    public boolean isUngroupable(RMShape aShape)
-    {
-        return aShape.getChildCount() > 0;
-    }
+    public boolean isUngroupable(RMShape aShape)  { return aShape.getChildCount() > 0; }
 
     /**
      * Editor method - called when an instance of this tool's shape is super selected.
      */
-    public void handleShapeBecameSuperSelected(T aShape)
-    {
-    }
+    public void handleShapeBecameSuperSelected(T aShape)  { }
 
     /**
      * Editor method - called when an instance of this tool's shape in de-super-selected.
      */
-    public void handleShapeLosingSuperSelected(T aShape)
-    {
-    }
+    public void handleShapeLosingSuperSelected(T aShape)  { }
 
     /**
      * Returns the bounds of the shape in parent coords when super selected (same as getBoundsMarkedDeep by default).
@@ -477,46 +458,35 @@ public class RMTool<T extends RMShape> extends ViewController {
     /**
      * Event handling from SelectTool for super selected shapes.
      */
-    public void processEvent(T aShape, ViewEvent anEvent)
+    public void handleShapeMouseEvent(T aShape, ViewEvent anEvent)
     {
         switch (anEvent.getType()) {
-            case MousePress:
-                mousePressed(aShape, anEvent);
-                break;
-            case MouseDrag:
-                mouseDragged(aShape, anEvent);
-                break;
-            case MouseRelease:
-                mouseReleased(aShape, anEvent);
-                break;
-            case MouseMove:
-                mouseMoved(aShape, anEvent);
-                break;
-            default:
-                if (anEvent.isKeyEvent()) processKeyEvent(aShape, anEvent);
+            case MousePress -> mousePressed(aShape, anEvent);
+            case MouseDrag -> mouseDragged(aShape, anEvent);
+            case MouseRelease -> mouseReleased(aShape, anEvent);
+            case MouseMove -> mouseMoved(aShape, anEvent);
+            default -> {
+                if (!anEvent.isMouseEvent())
+                    System.err.println("RMTool.handleShapeMouseEvent: Invalid event type: " + anEvent.getType());
+                //if (anEvent.isKeyEvent()) processKeyEvent(aShape, anEvent);
+            }
         }
     }
 
     /**
      * Event handling from select tool for super selected shapes.
      */
-    public void mousePressed(T aShape, ViewEvent anEvent)
-    {
-    }
+    public void mousePressed(T aShape, ViewEvent anEvent)  { }
 
     /**
      * Event handling from select tool for super selected shapes.
      */
-    public void mouseDragged(T aShape, ViewEvent anEvent)
-    {
-    }
+    public void mouseDragged(T aShape, ViewEvent anEvent)  { }
 
     /**
      * Event handling from select tool for super selected shapes.
      */
-    public void mouseReleased(T aShape, ViewEvent anEvent)
-    {
-    }
+    public void mouseReleased(T aShape, ViewEvent anEvent)  { }
 
     /**
      * Event handling from select tool - called on mouse move when tool shape is super selected.
@@ -559,25 +529,17 @@ public class RMTool<T extends RMShape> extends ViewController {
     /**
      * Event hook during selection.
      */
-    public boolean mousePressedSelection(ViewEvent anEvent)
-    {
-        return false;
-    }
+    public boolean mousePressedSelection(ViewEvent anEvent)  { return false; }
 
     /**
      * Returns a tool tip string for given shape and event.
      */
-    public String getToolTip(T aShape, ViewEvent anEvent)
-    {
-        return null;
-    }
+    public String getToolTip(T aShape, ViewEvent anEvent)  { return null; }
 
     /**
      * Editor method.
      */
-    public void processKeyEvent(T aShape, ViewEvent anEvent)
-    {
-    }
+    public void processKeyEvent(T aShape, ViewEvent anEvent)  { }
 
     /**
      * Paints when tool is active for things like SelectTool's handles & selection rect or polygon's in-progress path.
@@ -761,30 +723,14 @@ public class RMTool<T extends RMShape> extends ViewController {
         // If middle handle is used, set delta and p2 of that component to 0
         boolean minX = false, maxX = false, minY = false, maxY = false;
         switch (aHandle) {
-            case HandleNW:
-                minX = minY = true;
-                break;
-            case HandleNE:
-                maxX = minY = true;
-                break;
-            case HandleSW:
-                minX = maxY = true;
-                break;
-            case HandleSE:
-                maxX = maxY = true;
-                break;
-            case HandleW:
-                minX = true;
-                break;
-            case HandleE:
-                maxX = true;
-                break;
-            case HandleS:
-                maxY = true;
-                break;
-            case HandleN:
-                minY = true;
-                break;
+            case HandleNW -> minX = minY = true;
+            case HandleNE -> maxX = minY = true;
+            case HandleSW -> minX = maxY = true;
+            case HandleSE -> maxX = maxY = true;
+            case HandleW -> minX = true;
+            case HandleE -> maxX = true;
+            case HandleS -> maxY = true;
+            case HandleN -> minY = true;
         }
 
         // Calculate new width and height for handle move
@@ -940,9 +886,7 @@ public class RMTool<T extends RMShape> extends ViewController {
     /**
      * Called to handle dropping a string.
      */
-    public void dropString(T aShape, ViewEvent anEvent)
-    {
-    }
+    public void dropString(T aShape, ViewEvent anEvent)  { }
 
     /**
      * Called to handle dropping a color.

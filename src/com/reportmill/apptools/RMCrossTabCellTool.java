@@ -152,7 +152,7 @@ public class RMCrossTabCellTool<T extends RMCrossTabCell> extends RMTextTool<T> 
         String key = StringUtils.delete(anEvent.getStringValue(), "@");
 
         // If no key, reset grouping
-        if (key == null || key.length() == 0)
+        if (key == null || key.isEmpty())
             cell.setGrouping(null);
 
         // If cell grouping is null, create grouping
@@ -186,7 +186,7 @@ public class RMCrossTabCellTool<T extends RMCrossTabCell> extends RMTextTool<T> 
     /**
      * Event handling - overrides text tool to pass handling to table tool if user really wants to select cells.
      */
-    public void processEvent(T aCell, ViewEvent anEvent)
+    public void handleShapeMouseEvent(T aCell, ViewEvent anEvent)
     {
         // Get cell table and tool
         RMCrossTab table = aCell.getTable();
@@ -194,7 +194,7 @@ public class RMCrossTabCellTool<T extends RMCrossTabCell> extends RMTextTool<T> 
 
         // If event is popup trigger, run crosstab popup
         if (anEvent.isPopupTrigger()) {
-            tableTool.processEvent(table, anEvent);
+            tableTool.handleShapeMouseEvent(table, anEvent);
             return;
         }
 
@@ -207,7 +207,7 @@ public class RMCrossTabCellTool<T extends RMCrossTabCell> extends RMTextTool<T> 
 
             // If mouse pressed event is null, forward events to table
             if (_mousePressedEvent == null) {
-                tableTool.processEvent(table, anEvent);
+                tableTool.handleShapeMouseEvent(table, anEvent);
                 return;
             }
 
@@ -222,13 +222,13 @@ public class RMCrossTabCellTool<T extends RMCrossTabCell> extends RMTextTool<T> 
                 editor.setSelectedShape(aCell);
 
                 // Send table table mouse pressed
-                tableTool.processEvent(table, _mousePressedEvent);
+                tableTool.handleShapeMouseEvent(table, _mousePressedEvent);
 
                 // Clear mouse pressed event so we'll know that events should be forwarded
                 _mousePressedEvent = null;
 
                 // Send current mouse dragged event to table and return
-                tableTool.processEvent(table, anEvent);
+                tableTool.handleShapeMouseEvent(table, anEvent);
                 return;
             }
         }
@@ -238,7 +238,7 @@ public class RMCrossTabCellTool<T extends RMCrossTabCell> extends RMTextTool<T> 
 
             // If mouse pressed event is null, forward on to table tool
             if (_mousePressedEvent == null) {
-                tableTool.processEvent(table, anEvent);
+                tableTool.handleShapeMouseEvent(table, anEvent);
                 _mousePressedEvent = null;
                 return;
             }
@@ -248,7 +248,7 @@ public class RMCrossTabCellTool<T extends RMCrossTabCell> extends RMTextTool<T> 
         }
 
         // Call normal text tool mouse released
-        super.processEvent(aCell, anEvent);
+        super.handleShapeMouseEvent(aCell, anEvent);
     }
 
     /**
@@ -280,24 +280,17 @@ public class RMCrossTabCellTool<T extends RMCrossTabCell> extends RMTextTool<T> 
     /**
      * Overrides tool method to indicate that cells have no handles.
      */
-    public int getHandleCount(T aShape)
-    {
-        return 0;
-    }
+    public int getHandleCount(T aShape)  { return 0; }
 
     /**
      * Override to suppress normal TextTool painting.
      */
-    public void paintHandles(T aText, Painter aPntr, boolean isSuperSelected)
-    {
-    }
+    public void paintHandles(T aText, Painter aPntr, boolean isSuperSelected)  { }
 
     /**
      * Override to suppress normal TextTool painting.
      */
-    public void paintBoundsRect(RMTextShape aText, Painter aPntr)
-    {
-    }
+    public void paintBoundsRect(RMTextShape aText, Painter aPntr)  { }
 
     /**
      * Override normal implementation to handle KeysPanel drop.

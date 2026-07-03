@@ -430,11 +430,11 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
     /**
      * Event handling for shape editing (just forwards to text editor).
      */
-    public void processEvent(T aTextShape, ViewEvent anEvent)
+    public void handleShapeMouseEvent(T textShape, ViewEvent anEvent)
     {
         // Handle KeyEvent
         if (anEvent.isKeyEvent()) {
-            processKeyEvent(aTextShape, anEvent);
+            processKeyEvent(textShape, anEvent);
             return;
         }
 
@@ -442,33 +442,32 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
         if (_moveTableColumn)
             moveTableColumn(anEvent);
 
-            // If text is a structured table row column and point is outside column, start MoveTableRow
+        // If text is a structured table row column and point is outside column, start MoveTableRow
         else if (anEvent.isMouseDrag()) {
-            RMTextShape tshp = aTextShape;
-            Point pnt = getEditor().convertToShape(anEvent.getX(), anEvent.getY(), aTextShape);
+            Point pnt = getEditor().convertToShape(anEvent.getX(), anEvent.getY(), textShape);
             double px = pnt.getX();
-            if (tshp.isStructured() && (px < -20 || px > tshp.getWidth() + 10) && tshp.getParent().getChildCount() > 1) {
-                tshp.undoerSetUndoTitle("Reorder columns");
-                getEditor().setSelectedShape(tshp);
+            if (textShape.isStructured() && (px < -20 || px > textShape.getWidth() + 10) && textShape.getParent().getChildCount() > 1) {
+                textShape.undoerSetUndoTitle("Reorder columns");
+                getEditor().setSelectedShape(textShape);
                 _moveTableColumn = true;
                 return;
             }
         }
 
         // If shape isn't super selected, just return
-        if (!isSuperSelected(aTextShape))
+        if (!isSuperSelected(textShape))
             return;
 
         // If mouse event, convert event to text shape coords and consume
         if (anEvent.isMouseEvent()) {
             anEvent.consume();
-            Point pnt = getEditor().convertToShape(anEvent.getX(), anEvent.getY(), aTextShape);
-            anEvent = anEvent.copyForPoint(pnt.getX(), pnt.getY());
+            Point eventPointInShape = getEditor().convertToShape(anEvent.getX(), anEvent.getY(), textShape);
+            anEvent = anEvent.copyForPoint(eventPointInShape.x, eventPointInShape.y);
         }
 
         // Forward on to editor
-        aTextShape.getTextEditor().processEvent(anEvent);
-        aTextShape.repaint();
+        textShape.getTextEditor().handleTextAreaMouseAndKeyEvents(anEvent);
+        textShape.repaint();
         resetTextViewSelFromTextEditor();
     }
 
@@ -501,7 +500,7 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
         }
 
         // Have text editor process key event
-        aTextShape.getTextEditor().processEvent(anEvent);
+        aTextShape.getTextEditor().handleTextAreaMouseAndKeyEvents(anEvent);
         aTextShape.repaint();
         resetLater();
     }

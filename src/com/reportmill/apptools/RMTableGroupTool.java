@@ -272,7 +272,7 @@ public class RMTableGroupTool<T extends RMTableGroup> extends RMParentShapeTool<
         RMEditor editor = getEditor();
         if (editor.getSelectedOrSuperSelectedShape() == aTableGroup) {
             RMTable mainTable = aTableGroup.getMainTable();                // Get main table
-            getTool(mainTable).processEvent(mainTable, anEvent);    // Forward on
+            getTool(mainTable).handleShapeMouseEvent(mainTable, anEvent);    // Forward on
         }
     }
 

@@ -384,7 +384,7 @@ public class RMTableTool<T extends RMTable> extends RMParentShapeTool<T> impleme
         if (!isSuperSelected(aTable)) {
             RMTableRow tableRow = (RMTableRow) aTable.getChildContaining(point); // Get hit table row
             if (tableRow != null && tableRow.isStructured()) // If table row is structured
-                getTool(tableRow).processEvent(tableRow, anEvent);
+                getTool(tableRow).handleShapeMouseEvent(tableRow, anEvent);
             return;
         }
 

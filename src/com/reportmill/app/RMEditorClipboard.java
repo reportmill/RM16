@@ -55,7 +55,7 @@ public class RMEditorClipboard {
             List<RMShape> shapes = anEditor.getSelectedOrSuperSelectedShapes();
             XMLElement xml = new RMArchiver().writeObjectToXml(shapes);
             String xmlStr = xml.getString();
-            cb.addData(RM_XML_TYPE, xmlStr);
+            cb.addDataForMimeType(xmlStr, RM_XML_TYPE);
 
             // If only one shape, add as image too
             RMShape shape = shapes.size() == 1 ? anEditor.getSelectedShape() : null;
@@ -101,7 +101,7 @@ public class RMEditorClipboard {
         RMShape pastedShape = null;
 
         // If PasteBoard has ReportMill Data, paste it
-        if (clipboard.hasData(RM_XML_TYPE)) {
+        if (clipboard.hasDataForMimeType(RM_XML_TYPE)) {
 
             // Unarchive shapes from clipboard bytes
             Object object = getShapesFromClipboard(clipboard);
@@ -193,7 +193,7 @@ public class RMEditorClipboard {
         Clipboard clipboard = aClipboard != null ? aClipboard : Clipboard.get();
 
         // Handle RMData: Get unarchived object from clipboard bytes
-        if (clipboard.hasData(RM_XML_TYPE)) {
+        if (clipboard.hasDataForMimeType(RM_XML_TYPE)) {
             byte[] bytes = clipboard.getDataBytes(RM_XML_TYPE);
             return new RMArchiver().readObjectFromXmlBytes(bytes);
         }
@@ -216,7 +216,7 @@ public class RMEditorClipboard {
      */
     public static RMShape getTransferPDF(Clipboard aCB)
     {
-        if (!aCB.hasData("application/pdf")) return null;
+        if (!aCB.hasDataForMimeType("application/pdf")) return null;
         byte[] bytes = aCB.getDataBytes("application/pdf");
         return bytes != null ? new RMPDFShape(bytes) : null;
     }

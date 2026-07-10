@@ -345,7 +345,7 @@ public class RMViewerEvents {
         // Add doc RTF and CSV to clipboard
         Clipboard cb = Clipboard.getCleared();
         cb.addData(doc.getBytesCSV());
-        cb.addData("text/rtf", doc.getBytesRTF());
+        cb.addDataForMimeType(doc.getBytesRTF(), "text/rtf");
     }
 
     /**

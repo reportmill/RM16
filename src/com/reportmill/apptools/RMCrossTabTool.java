@@ -35,7 +35,7 @@ public class RMCrossTabTool<T extends RMCrossTab> extends RMTool<T> {
     /**
      * Resets the UI from current selected crosstab.
      */
-    public void resetUI()
+    protected void resetUI()
     {
         // Get currently selected crosstab (just return if null)
         RMCrossTab table = getTable(); if (table == null) return;
@@ -52,7 +52,7 @@ public class RMCrossTabTool<T extends RMCrossTab> extends RMTool<T> {
     /**
      * Updates currently selected crosstab from UI.
      */
-    public void respondUI(ViewEvent anEvent)
+    protected void respondUI(ViewEvent anEvent)
     {
         // Get currently selected CrossTab and cell (just return if null)
         RMCrossTab ctab = getTable(); if (ctab == null) return;
@@ -165,8 +165,7 @@ public class RMCrossTabTool<T extends RMCrossTab> extends RMTool<T> {
         RMShape shape = getEditor().getShapeAtPoint(anEvent.getX(), anEvent.getY());
 
         // If shape is a divider, set RESIZE_CURSOR
-        if (shape instanceof RMCrossTabDivider) {
-            RMCrossTabDivider divider = (RMCrossTabDivider) shape;
+        if (shape instanceof RMCrossTabDivider divider) {
             if (divider.isRowDivider()) getEditor().setCursor(Cursor.N_RESIZE);
             else getEditor().setCursor(Cursor.W_RESIZE);
             anEvent.consume(); // Consume event
@@ -292,7 +291,6 @@ public class RMCrossTabTool<T extends RMCrossTab> extends RMTool<T> {
             if (!_popupTriggered) runContextMenu(anEvent);
             _popupTriggered = false;
             anEvent.consume();
-            return;
         }
     }
 
@@ -312,13 +310,10 @@ public class RMCrossTabTool<T extends RMCrossTab> extends RMTool<T> {
         int keyCode = anEvent.getKeyCode();
 
         // If backspace or delete key is pressed, remove selected divider
-        if (editor.getSelectedShape() instanceof RMCrossTabDivider) {
+        if (editor.getSelectedShape() instanceof RMCrossTabDivider divider) {
 
             // If key was backspace or delete, remove selected grouping
             if (keyCode == KeyCode.BACK_SPACE || keyCode == KeyCode.DELETE) {
-
-                // Get the selected divider
-                RMCrossTabDivider divider = (RMCrossTabDivider) editor.getSelectedShape();
 
                 // If divider is last column or row divider, just beep
                 if (divider.isColDivider() ? divider.getNextCol() == null : divider.getNextRow() == null)
@@ -348,32 +343,29 @@ public class RMCrossTabTool<T extends RMCrossTab> extends RMTool<T> {
         }
 
         // If selected shape is cell, either change selection or super select
-        if (editor.getSelectedShape() instanceof RMCrossTabCell) {
-
-            // Get selected cell
-            RMCrossTabCell cell = (RMCrossTabCell) editor.getSelectedShape();
+        if (editor.getSelectedShape() instanceof RMCrossTabCell cell) {
 
             // If key is right arrow or tab, move forward
             if (keyCode == KeyCode.RIGHT || (keyCode == KeyCode.TAB && !anEvent.isShiftDown()))
                 editor.setSelectedShape(cell.getCellAfter());
 
-                // If key is left arrow or shift tab, move backward
+            // If key is left arrow or shift tab, move backward
             else if (keyCode == KeyCode.LEFT || (keyCode == KeyCode.TAB && anEvent.isShiftDown()))
                 editor.setSelectedShape(cell.getCellBefore());
 
-                // If key is down arrow or enter, move down
+            // If key is down arrow or enter, move down
             else if (keyCode == KeyCode.DOWN || (keyCode == KeyCode.ENTER && !anEvent.isShiftDown()))
                 editor.setSelectedShape(cell.getCellBelow());
 
-                // If key is up arrow or shift-enter, move up
+            // If key is up arrow or shift-enter, move up
             else if (keyCode == KeyCode.UP || (keyCode == KeyCode.ENTER && anEvent.isShiftDown()))
                 editor.setSelectedShape(cell.getCellAbove());
 
-                // If key has meta-down or control-down, just return
+            // If key has meta-down or control-down, just return
             else if (anEvent.isMetaDown() || anEvent.isControlDown())
                 return;
 
-                // If key char is control character or undefined, just return
+            // If key char is control character or undefined, just return
             else if (anEvent.getKeyChar() == KeyCode.CHAR_UNDEFINED || Character.isISOControl(anEvent.getKeyChar()))
                 return;
 
@@ -394,43 +386,29 @@ public class RMCrossTabTool<T extends RMCrossTab> extends RMTool<T> {
     public void runContextMenu(ViewEvent anEvent)
     {
         // Create PopupMenu and configure
-        Menu pmenu = new Menu();
-        MenuItem mitem = createMenuItem("Clear Contents", "ClearContentsMenuItem");
-        pmenu.addItem(mitem);
-        pmenu.addSeparator();
-        mitem = createMenuItem("Add Row Above", "AddRowAboveMenuItem");
-        pmenu.addItem(mitem);
-        mitem = createMenuItem("Add Row Below", "AddRowBelowMenuItem");
-        pmenu.addItem(mitem);
-        pmenu.addSeparator();
-        mitem = createMenuItem("Add Column Before", "AddColBeforeMenuItem");
-        pmenu.addItem(mitem);
-        mitem = createMenuItem("Add Column After", "AddColAfterMenuItem");
-        pmenu.addItem(mitem);
-        pmenu.addSeparator();
-        mitem = createMenuItem("Remove Row", "RemoveRowMenuItem");
-        pmenu.addItem(mitem);
-        mitem = createMenuItem("Remove Column", "RemoveColMenuItem");
-        pmenu.addItem(mitem);
-        pmenu.addSeparator();
-        mitem = createMenuItem("Merge Cells", "MergeCellsMenuItem");
-        pmenu.addItem(mitem);
-        mitem = createMenuItem("Split Cell", "SplitCellMenuItem");
-        pmenu.addItem(mitem);
+        String CONTEXT_MENU_UI = """
+            <Menu>
+              <MenuItem Name="ClearContentsMenuItem" Text="Clear Contents" />
+              <MenuItem />
+              <MenuItem Name="AddRowAboveMenuItem" Text="Add Row Above" />
+              <MenuItem Name="AddRowBelowMenuItem" Text="Add Row Below" />
+              <MenuItem />
+              <MenuItem Name="AddColBeforeMenuItem" Text="Add Column Before" />
+              <MenuItem Name="AddColAfterMenuItem" Text="Add Column After" />
+              <MenuItem />
+              <MenuItem Name="RemoveRowMenuItem" Text="Remove Row" />
+              <MenuItem Name="RemoveColMenuItem" Text="Remove Column" />
+              <MenuItem />
+              <MenuItem Name="MergeCellsMenuItem" Text="Merge Cells" />
+              <MenuItem Name="SplitCellMenuItem" Text="Split Cell" />
+            </Menu>
+            """;
 
         // Run menu and consume event
+        Menu pmenu = (Menu) UILoader.loadViewForString(CONTEXT_MENU_UI);
         pmenu.setController(this);
         pmenu.showMenuAtXY(anEvent.getView(), anEvent.getX(), anEvent.getY());
         anEvent.consume();
-    }
-
-    // Creates a new menu item
-    private MenuItem createMenuItem(String t, String n)
-    {
-        MenuItem mi = new MenuItem();
-        mi.setText(t);
-        mi.setName(n);
-        return mi;
     }
 
     /**
@@ -530,34 +508,22 @@ public class RMCrossTabTool<T extends RMCrossTab> extends RMTool<T> {
     /**
      * Returns the shape class this tool edits (RMTable).
      */
-    public Class getShapeClass()
-    {
-        return RMCrossTab.class;
-    }
+    public Class getShapeClass()  { return RMCrossTab.class; }
 
     /**
      * Returns the display name for this tool ("Table Inspector").
      */
-    public String getWindowTitle()
-    {
-        return "CrossTab Inspector";
-    }
+    public String getWindowTitle()  { return "CrossTab Inspector"; }
 
     /**
      * Overridden to make crosstab super-selectable.
      */
-    public boolean isSuperSelectable(RMShape aShape)
-    {
-        return true;
-    }
+    public boolean isSuperSelectable(RMShape aShape)  { return true; }
 
     /**
      * Overridden to make crosstab ungroupable.
      */
-    public boolean isUngroupable(RMShape aShape)
-    {
-        return false;
-    }
+    public boolean isUngroupable(RMShape aShape)  { return false; }
 
     /**
      * Returns the number of handles for this shape.
@@ -659,5 +625,4 @@ public class RMCrossTabTool<T extends RMCrossTab> extends RMTool<T> {
         anEditor.setCurrentToolToSelectTool();
         anEditor.setSelectedShape(ctab);
     }
-
 }

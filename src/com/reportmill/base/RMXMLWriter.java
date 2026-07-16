@@ -25,16 +25,16 @@ public class RMXMLWriter {
     Schema _schema;
 
     // Tracks circular references
-    List _processedMaps = new ArrayList(100);
+    List<Object> _processedMaps = new ArrayList<>(100);
 
     // Tracks circular references
-    List<XMLElement> _processedElements = new ArrayList(100);
+    List<XMLElement> _processedElements = new ArrayList<>(100);
 
     // Tracks circular references
-    List<Entity> _processedEntities = new ArrayList(100);
+    List<Entity> _processedEntities = new ArrayList<>(100);
 
     // A map of unique id's for properties
-    Map<Property, Integer> _propertyNextUniqueID = new HashMap();
+    Map<Property, Integer> _propertyNextUniqueID = new HashMap<>();
 
     // String used for Schema id tag
     public static final String TAG_ID = "id";
@@ -92,7 +92,7 @@ public class RMXMLWriter {
     /**
      * Tells writer to ignore any member of the given class from the serialized object graph.
      */
-    public void ignoreClass(Class aClass)
+    public void ignoreClass(Class<?> aClass)
     {
         getSchemaMaker().addIgnoreClass(aClass);
     }
@@ -116,7 +116,7 @@ public class RMXMLWriter {
     /**
      * Tells writer to ignore any member with the given class - member combination.
      */
-    public void ignoreMember(Class aClass, String aName)
+    public void ignoreMember(Class<?> aClass, String aName)
     {
         getSchemaMaker().addIgnoreMember(aClass, aName);
     }
@@ -176,12 +176,9 @@ public class RMXMLWriter {
             aPath += ".xml";
 
         // Write to path
-        byte bytes[] = rootElement.getBytes();
-        try {
-            FileUtils.writeBytes(new java.io.File(aPath), bytes);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        byte[] bytes = rootElement.getBytes();
+        try { FileUtils.writeBytes(new java.io.File(aPath), bytes); }
+        catch (Exception e) { throw new RuntimeException(e); }
     }
 
     /**
@@ -313,8 +310,7 @@ public class RMXMLWriter {
             }
 
             // If value is List, iterate over items and create element for each, add to parent and recursively write deep
-            if (value instanceof List) {
-                List list = (List) value;
+            if (value instanceof List<?> list) {
                 for (int j = 0, jMax = Math.min(list.size(), getBreadthLimit()); j < jMax; j++) {
                     Object item = list.get(j);
                     XMLElement e = new XMLElement(property.getName());

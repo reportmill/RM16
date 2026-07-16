@@ -42,11 +42,10 @@ public class Shell {
         String rptfile = null, infile = null, outfile = null;
         int count = 1, threads = 0;
 
-        // Declare variable for whether to paginate, generate table of contents, compress PDF, or hang (for testing)
+        // Declare variable for whether to paginate, generate table of contents, compress PDF
         Boolean paginate = null;
         boolean toc = false;
         boolean compress = true;
-        boolean hang = false;
 
         // Iterate over arguments
         for (int i = 0; i < args.length; i++) {
@@ -91,9 +90,6 @@ public class Shell {
 
             // Check for uncompress
             if (arg.equals("-nocompress")) compress = false;
-
-            // Check for hang request
-            if (arg.equals("-hang")) hang = true;
 
             // Check for fonts: Get list of fonts and print
             if (arg.startsWith("-fonts")) {
@@ -158,7 +154,7 @@ public class Shell {
             System.err.flush();
             time = System.currentTimeMillis();
             WebURL infileUrl = WebURL.getUrl(infile); assert infileUrl != null;
-            Map map = new RMXMLReader().readObjectFromUrl(infileUrl, template.getDataSourceSchema());
+            Map<String,Object> dataSet = new RMXMLReader().readObjectFromXmlUrl(infileUrl, template.getDataSourceSchema());
             seconds = (System.currentTimeMillis() - time) / 1000f;
             System.err.println(" (" + seconds + " seconds)");
 
@@ -168,7 +164,7 @@ public class Shell {
             if (threads > 0) {
                 Thread[] threadArray = new Thread[4];
                 for (int i = 0; i < threads; i++)
-                    threadArray[i] = new RPGThread(template, map, outfile, paginate, i, count);
+                    threadArray[i] = new RPGThread(template, dataSet, outfile, paginate, i, count);
                 for (int i = 0; i < threads; i++) threadArray[i].start();
                 for (int i = 0; i < threads; i++) {
                     try { threadArray[i].join(); }
@@ -178,7 +174,7 @@ public class Shell {
 
             // Generate reports, single threaded
             else for (int i = 1; i <= count; i++) {
-                RMDocument report = template.generateReport(map, paginate.booleanValue());
+                RMDocument report = template.generateReport(dataSet, paginate.booleanValue());
 
                 // If table of contents is requested, generate toc report and append
                 if (toc) {
@@ -192,9 +188,9 @@ public class Shell {
                 // Write output
                 report.write(outfile);
                 if (count > 1) {
-                    if (i == count) System.err.println("" + i + " (Done)");
+                    if (i == count) System.err.println(i + " (Done)");
                     else {
-                        System.err.print("" + i + " ");
+                        System.err.print(i + " ");
                         System.err.flush();
                     }
                 }
@@ -203,10 +199,6 @@ public class Shell {
             // Print done message
             seconds = (System.currentTimeMillis() - time) / 1000f;
             System.err.println("Generated Reports (" + seconds + " seconds)");
-
-            // Hang if requested (useful for optimizeit)
-            if (hang)
-                while (true) Thread.yield();
         }
 
         // Exit

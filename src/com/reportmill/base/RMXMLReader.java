@@ -12,54 +12,53 @@ import snap.web.WebURL;
  */
 public class RMXMLReader {
 
-    // The name of the top level element that was read
-    String _name;
-
     // The schema of the read data (either loaded from RMSchema tag, reverse engineered, or provided to readObject)
-    Schema _schema;
+    private Schema _schema;
 
-    // The resource elements in the xml file (RMResource tags)
-    List<XMLElement> _resources = new ArrayList();
-
-    // A cache of lists for specific element names
-    Map<String, List<Map>> _entityLists = new LinkedHashMap();
+    // A cache of lists for specific entity names
+    private Map<String, List<Map<String,Object>>> _readObjectsForEntityNames = new LinkedHashMap<>();
 
     /**
-     * Creates an uninitialized reader.
+     * Constructor.
      */
     public RMXMLReader()
     {
     }
 
     /**
+     * Returns a hierarchy of RMEntity objects describing the XML.
+     */
+    public Schema getSchema()  { return _schema; }
+
+    /**
      * Returns a map loaded from the given XML source with the given XML schema.
      */
-    public Map readObjectFromUrl(WebURL sourceUrl, Schema aSchema)
+    public Map<String,Object> readObjectFromXmlUrl(WebURL sourceUrl, Schema aSchema)
     {
         XMLElement rootXML = XMLElement.readXmlFromUrl(sourceUrl);
-        return readObjectFromXml(rootXML, aSchema);
+        return readObjectFromXmlAndSchema(rootXML, aSchema);
     }
 
     /**
      * Returns a map loaded from the given XML source with the given XML schema.
      */
-    public Map readObjectFromBytes(byte[] sourceBytes, Schema aSchema)
+    public Map<String,Object> readObjectFromXmlBytesAndSchema(byte[] sourceBytes, Schema aSchema)
     {
         XMLElement rootXML = XMLElement.readXmlFromBytes(sourceBytes);
-        return readObjectFromXml(rootXML, aSchema);
+        return readObjectFromXmlAndSchema(rootXML, aSchema);
     }
 
     /**
      * Returns a map loaded from the given XML source with the given XML schema.
      */
-    private Map readObjectFromXml(XMLElement rootXML, Schema aSchema)
+    private Map<String,Object> readObjectFromXmlAndSchema(XMLElement rootXML, Schema aSchema)
     {
         // If root is null, return null
         if (rootXML == null)
             return null;
 
         // Get root name
-        _name = rootXML.getName();
+        String rootXmlName = rootXML.getName();
 
         // Get schema element if present (and remove it from root)
         XMLElement schema = rootXML.get("RMSchema");
@@ -70,25 +69,21 @@ public class RMXMLReader {
         if (aSchema != null)
             _schema = aSchema;
 
-            // Otherwise, if schema element is available, create and read schema
+        // Otherwise, if schema element is available, create and read schema
         else if (schema != null)
-            _schema = new Schema(_name).fromXML(null, schema);
+            _schema = new Schema(rootXmlName).fromXML(null, schema);
 
-            // Otherwise, reverse engineer it from element
+        // Otherwise, reverse engineer it from element
         else _schema = new RMSchemaMaker().getSchema(rootXML);
 
         // Make sure schema has root entity
         _schema.getRootEntity();
 
-        // Iterate over resources, remove from root element and add to resources list
-        for (int i = rootXML.indexOf("RMResource"); i >= 0; i = rootXML.indexOf("RMResource", i))
-            _resources.add(rootXML.removeElement(i));
-
         // Create root map
-        Map rootMap = new LinkedHashMap();
+        Map<String,Object> rootMap = new LinkedHashMap<>();
 
         // Read rootMap from root element (recursively reads everything)
-        read(rootXML, rootMap, _name);
+        readObjectFromXmlAndEntity(rootXML, rootMap, rootXmlName);
 
         // Return root map
         return rootMap;
@@ -97,12 +92,12 @@ public class RMXMLReader {
     /**
      * Loads given map with collections & core types from given XML element, according to schema.
      */
-    private void read(XMLElement anElement, Map aMap, String anEntityName)
+    private void readObjectFromXmlAndEntity(XMLElement anElement, Map<String,Object> readObject, String entityName)
     {
         // Get entity, return if not found (should never happen, but I've seen it - maybe somehow with core types?)
-        Entity entity = _schema.getEntity(anEntityName);
+        Entity entity = _schema.getEntity(entityName);
         if (entity == null) {
-            System.err.println("RMXMLReader: Couldn't find entity named " + anEntityName);
+            System.err.println("RMXMLReader: Couldn't find entity named " + entityName);
             return;
         }
 
@@ -126,18 +121,18 @@ public class RMXMLReader {
                 // Get property value for string and add to map
                 Object value = prop.convertValue(valueStr);
                 if (value != null)
-                    aMap.put(propName, value);
+                    readObject.put(propName, value);
             }
 
             // Handle Relations
-            else readRelation(anElement, aMap, prop);
+            else readRelation(anElement, readObject, prop);
         }
     }
 
     /**
      * Loads given map with collections & core types from given XML element, according to schema.
      */
-    private void readRelation(XMLElement anElement, Map aMap, Property aRelation)
+    private void readRelation(XMLElement anElement, Map<String,Object> aMap, Property aRelation)
     {
         // Get property name and property relation entity name
         String propertyName = aRelation.getName();
@@ -149,26 +144,26 @@ public class RMXMLReader {
         if (aRelation.isToMany()) {
 
             // Declare variable for list
-            List list = null;
+            List<Map<String,Object>> readObjectsForRelation = null;
 
             // Iterate over child elements with name key
             for (int j = anElement.indexOf(propertyName); j >= 0; j = anElement.indexOf(propertyName, j + 1)) {
 
                 // Create list if needed
-                if (list == null)
-                    aMap.put(propertyName, list = new ArrayList());
+                if (readObjectsForRelation == null)
+                    aMap.put(propertyName, readObjectsForRelation = new ArrayList<>());
 
                 // Get child xml element
                 XMLElement child = anElement.get(j);
 
                 // Get unique map for child xml element
-                Map map = getUniqueMap(child, relationEntityName);
+                Map<String,Object> readObject = getUniqueMap(child, relationEntityName);
 
                 // Add to list
-                list.add(map);
+                readObjectsForRelation.add(readObject);
 
                 // Recurse into read
-                read(child, map, relationEntityName);
+                readObjectFromXmlAndEntity(child, readObject, relationEntityName);
             }
         }
 
@@ -190,28 +185,27 @@ public class RMXMLReader {
 
             // If xml element found, get unique map for child xml, add to parent and recurse
             if (childXML != null) {
-                Map map = getUniqueMap(childXML, relationEntityName);
+                Map<String,Object> map = getUniqueMap(childXML, relationEntityName);
                 aMap.put(propertyName, map);
-                read(childXML, map, aRelation.getRelationEntityName());
+                readObjectFromXmlAndEntity(childXML, map, aRelation.getRelationEntityName());
             }
         }
     }
 
-
     /**
      * Returns a unique map for the given xml element and entity name using primary keys
      */
-    private Map getUniqueMap(XMLElement anElement, String anEntityName)
+    private Map<String,Object> getUniqueMap(XMLElement anElement, String entityName)
     {
-        // Get list for entity name
-        List<Map> entityMaps = getEntityList(anEntityName);
+        // Get read objects for entity name
+        List<Map<String,Object>> readObjects = _readObjectsForEntityNames.computeIfAbsent(entityName, k -> new LinkedList<>());
 
         // Get entity and list of primaries
-        Entity entity = getSchema().getEntity(anEntityName);
+        Entity entity = getSchema().getEntity(entityName);
         List<? extends Property> primaries = entity.getPrimaries();
 
         // Create map with primary key values from element
-        Map map1 = new LinkedHashMap();
+        Map<String,Object> primaryKeyValues = new LinkedHashMap<>();
 
         // Add primary key values from element
         for (Property property : primaries) {
@@ -219,25 +213,24 @@ public class RMXMLReader {
             // Get primary value string (just return new map if any primary key is null)
             String valueString = anElement.getAttributeValue(property.getName());
             if (valueString == null)
-                return map1;
+                return primaryKeyValues;
 
             // Get value and add to map
             Object value = property.convertValue(valueString);
             if (value != null)
-                map1.put(property.getName(), value);
+                primaryKeyValues.put(property.getName(), value);
         }
 
         // Iterate over entity maps
-        if (primaries.size() > 0) {
-            for (int i = 0, iMax = entityMaps.size(); i < iMax; i++) {
-                Map map2 = entityMaps.get(i);
+        if (!primaries.isEmpty()) {
+            for (Map<String,Object> map2 : readObjects) {
 
                 // Iterate over primary properties to see if maps' primary property(s) match
                 for (int j = 0, jMax = primaries.size(); j < jMax && map2 != null; j++) {
                     Property property = primaries.get(j);
 
                     // Get primary property values and if they differ, break
-                    Object map1PrimaryValue = map1.get(property.getName());
+                    Object map1PrimaryValue = primaryKeyValues.get(property.getName());
                     Object map2PrimaryValue = map2.get(property.getName());
                     if (!Objects.equals(map1PrimaryValue, map2PrimaryValue))
                         map2 = null;
@@ -249,53 +242,8 @@ public class RMXMLReader {
             }
         }
 
-        // Add map1 to entity maps and return it
-        entityMaps.add(map1);
-        return map1;
+        // Add read object to entity maps and return it
+        readObjects.add(primaryKeyValues);
+        return primaryKeyValues;
     }
-
-    /**
-     * Returns the name of the root element.
-     */
-    public String getName()
-    {
-        return _name;
-    }
-
-    /**
-     * Returns a hierarchy of RMEntity objects describing the XML.
-     */
-    public Schema getSchema()
-    {
-        return _schema;
-    }
-
-    /**
-     * Returns the resources read from last source.
-     */
-    public List<XMLElement> getResources()
-    {
-        return _resources;
-    }
-
-    /**
-     * Returns the entity maps.
-     */
-    public Map<String, List<Map>> getEntityLists()
-    {
-        return _entityLists;
-    }
-
-    /**
-     * Returns the individual list of maps for the given entity name.
-     */
-    public List<Map> getEntityList(String aName)
-    {
-        // Get the list for the given element name (if absent, create and add)
-        List list = _entityLists.get(aName);
-        if (list == null)
-            _entityLists.put(aName, list = new ArrayList());
-        return list;
-    }
-
 }

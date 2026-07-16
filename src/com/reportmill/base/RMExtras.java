@@ -37,8 +37,7 @@ public class RMExtras {
     public static void replaceText(RMShape aShape, String aString1, String aString2)
     {
         // Handle RMTextShape
-        if (aShape instanceof RMTextShape) {
-            RMTextShape text = (RMTextShape) aShape;
+        if (aShape instanceof RMTextShape text) {
             RMXString xstring = text.getXString();
             String string = xstring.getText();
             for (int i = string.indexOf(aString1); i >= 0; i = string.indexOf(aString1, i)) {
@@ -61,22 +60,19 @@ public class RMExtras {
     public static void replaceDatasetKey(RMShape aShape, String aKey1, String aKey2)
     {
         // If shape is table, check table dataset key, and replace if found
-        if (aShape instanceof RMTable) {
-            RMTable table = (RMTable) aShape;
+        if (aShape instanceof RMTable table) {
             if (table.getDatasetKey().equals(aKey1))
                 table.setDatasetKey(aKey2);
         }
 
         // If shape is document, recursively call replace on pages
-        else if (aShape instanceof RMDocument) {
-            RMDocument doc = (RMDocument) aShape;
+        else if (aShape instanceof RMDocument doc) {
             for (int i = 0; i < doc.getPageCount(); i++)
                 replaceDatasetKey(doc.getPage(i), aKey1, aKey2);
         }
 
         // If shape is a table group, recursively call all top-level tables
-        else if (aShape instanceof RMTableGroup) {
-            RMTableGroup tableGroup = (RMTableGroup) aShape;
+        else if (aShape instanceof RMTableGroup tableGroup) {
             for (int i = 0; i < tableGroup.getChildTableCount(); i++)
                 replaceDatasetKey(tableGroup.getChildTable(i), aKey1, aKey2);
         }
@@ -92,8 +88,7 @@ public class RMExtras {
     public static void replaceGroupingKey(RMShape aShape, String aKey1, String aKey2)
     {
         // If shape is table, check table grouping's sorts for sort, and replace if found
-        if (aShape instanceof RMTable) {
-            RMTable table = (RMTable) aShape;
+        if (aShape instanceof RMTable table) {
 
             // Iterate over table groupings
             for (int i = 0; i < table.getGroupingCount(); i++) {
@@ -110,15 +105,13 @@ public class RMExtras {
         }
 
         // If shape is document, recursively call replace on pages
-        else if (aShape instanceof RMDocument) {
-            RMDocument doc = (RMDocument) aShape;
+        else if (aShape instanceof RMDocument doc) {
             for (int i = 0; i < doc.getPageCount(); i++)
                 replaceGroupingKey(doc.getPage(i), aKey1, aKey2);
         }
 
         // If shape is a table group, recursively call all top-level tables
-        else if (aShape instanceof RMTableGroup) {
-            RMTableGroup tableGroup = (RMTableGroup) aShape;
+        else if (aShape instanceof RMTableGroup tableGroup) {
             for (int i = 0; i < tableGroup.getChildTableCount(); i++)
                 replaceGroupingKey(tableGroup.getChildTable(i), aKey1, aKey2);
         }
@@ -134,8 +127,7 @@ public class RMExtras {
     public static void replaceSort(RMShape aShape, String aSort1, String aSort2)
     {
         // If shape is table, check table grouping's sorts for sort, and replace if found
-        if (aShape instanceof RMTable) {
-            RMTable table = (RMTable) aShape;
+        if (aShape instanceof RMTable table) {
 
             // Iterate over table groupings, and grouping sorts - if sort key matches, replace
             for (int i = 0; i < table.getGroupingCount(); i++) {
@@ -149,15 +141,13 @@ public class RMExtras {
         }
 
         // If shape is document, recursively call replace on pages
-        else if (aShape instanceof RMDocument) {
-            RMDocument doc = (RMDocument) aShape;
+        else if (aShape instanceof RMDocument doc) {
             for (int i = 0; i < doc.getPageCount(); i++)
                 replaceSort(doc.getPage(i), aSort1, aSort2);
         }
 
         // If shape is a table group, recursively call all top-level tables
-        else if (aShape instanceof RMTableGroup) {
-            RMTableGroup tableGroup = (RMTableGroup) aShape;
+        else if (aShape instanceof RMTableGroup tableGroup) {
             for (int i = 0; i < tableGroup.getChildTableCount(); i++)
                 replaceSort(tableGroup.getChildTable(i), aSort1, aSort2);
         }
@@ -173,8 +163,7 @@ public class RMExtras {
     public static void replaceFormat(RMShape aShape, RMFormat aFormat)
     {
         // Handle document
-        if (aShape instanceof RMDocument) {
-            RMDocument document = (RMDocument) aShape;
+        if (aShape instanceof RMDocument document) {
             for (RMPage page : document.getPages())
                 replaceFormat(page, aFormat);
         }
@@ -185,8 +174,7 @@ public class RMExtras {
                 replaceFormat(child, aFormat);
 
             // Handle Text
-        else if (aShape instanceof RMTextShape) {
-            RMTextShape text = (RMTextShape) aShape;
+        else if (aShape instanceof RMTextShape text) {
             RMXString xstring = text.getXString();
             for (int i = 0, iMax = xstring.getRunCount(); i < iMax; i++) {
                 RMXStringRun run = xstring.getRun(i);
@@ -213,7 +201,7 @@ public class RMExtras {
             Rect bounds = aShape.localToParent(aShape.getBoundsInside(), aShape.getPageShape()).getBounds();
             buffer.append("<AREA SHAPE=RECT COORDS=\"");
             buffer.append((int) bounds.x + "," + (int) bounds.y + "," + (int) bounds.width + "," + (int) bounds.height + "\" ");
-            buffer.append("HREF=\"" + aShape.getURL() + "\" ");
+            buffer.append("HREF=\"").append(aShape.getURL()).append("\" ");
             buffer.append(">\n");
         }
 
@@ -240,8 +228,7 @@ public class RMExtras {
         System.out.println(aShape.getClass().getName() + ": " + aShape.getName());
 
         // If shape is document, recursively call replace on pages
-        if (aShape instanceof RMDocument) {
-            RMDocument doc = (RMDocument) aShape;
+        if (aShape instanceof RMDocument doc) {
             for (int i = 0; i < doc.getPageCount(); i++)
                 printNames(doc.getPage(i));
         }
@@ -261,7 +248,7 @@ public class RMExtras {
     public static void printNames(RMTableGroup aTableGroup, RMTable aTable)
     {
         // Get table or table group
-        RMShape tableOrTableGroup = aTable == null ? (RMShape) aTableGroup : aTable;
+        RMShape tableOrTableGroup = aTable == null ? aTableGroup : aTable;
 
         // Print table (or tableGroup) name
         System.out.println(tableOrTableGroup.getClass().getName() + ": " + tableOrTableGroup.getName());
@@ -284,7 +271,7 @@ public class RMExtras {
         RMPage page2 = aDoc2.getPage(0);
 
         // Get copy of page 2 child list
-        RMShape children[] = page2.getChildArray();
+        RMShape[] children = page2.getChildArray();
 
         // Iterate over page 2 children, add to page 1 and shift to bottom of page
         for (RMShape child : children) {
@@ -306,7 +293,7 @@ public class RMExtras {
         RMDocument template = new RMDocument(getMoviesURL());
 
         // Get objects
-        Map map = new RMXMLReader().readObjectFromUrl(getHollywoodURL(), template.getDataSourceSchema());
+        Map map = new RMXMLReader().readObjectFromXmlUrl(getHollywoodURL(), template.getDataSourceSchema());
 
         // Generate report
         RMDocument report = template.generateReport(map);
@@ -334,20 +321,18 @@ public class RMExtras {
     public static void setTimeZone(RMShape aShape, TimeZone aTimeZone)
     {
         // Handle RMDocument
-        if (aShape instanceof RMDocument) {
-            RMDocument doc = (RMDocument) aShape;
+        if (aShape instanceof RMDocument doc) {
             for (int i = 0, iMax = doc.getPageCount(); i < iMax; i++)
                 setTimeZone(doc.getPage(i), aTimeZone);
         }
 
         // Handle RMText - iterate over xstring runs and reset date format time zones
-        else if (aShape instanceof RMTextShape) {
-            RMTextShape text = (RMTextShape) aShape;
+        else if (aShape instanceof RMTextShape text) {
             RMXString xstring = text.getXString();
             for (int i = 0, iMax = xstring.getRunCount(); i < iMax; i++) {
                 RMXStringRun run = xstring.getRun(i);
-                if (run.getFormat() instanceof RMDateFormat)
-                    ((RMDateFormat) run.getFormat()).setTimeZone(aTimeZone);
+                if (run.getFormat() instanceof RMDateFormat dateFormat)
+                    dateFormat.setTimeZone(aTimeZone);
             }
         }
 
@@ -355,8 +340,8 @@ public class RMExtras {
         else {
 
             // If shape has format, reset timezone
-            if (aShape.getFormat() instanceof RMDateFormat)
-                ((RMDateFormat) aShape.getFormat()).setTimeZone(aTimeZone);
+            if (aShape.getFormat() instanceof RMDateFormat dateFormat)
+                dateFormat.setTimeZone(aTimeZone);
 
             // Recurse
             for (int i = 0, iMax = aShape.getChildCount(); i < iMax; i++)
@@ -369,128 +354,35 @@ public class RMExtras {
      */
     public static void passwordReport()
     {
-        Map dset = new RMXMLReader().readObjectFromUrl(getHollywoodURL(), null);
+        Map<?,?> dataSet = new RMXMLReader().readObjectFromXmlUrl(getHollywoodURL(), null);
         RMDocument template = new RMDocument(getMoviesURL());
-        RMDocument report = template.generateReport(dset);
+        RMDocument report = template.generateReport(dataSet);
 
-        RMPDFWriter rm = new RMPDFWriter(); //rm.setUnmodifiable("Test");
-        rm.setAccessPermissions("fluffy", "bunny", 2052);  // PDFEncryptor.PRINTING_ALLOWED, MAXIMUM_RESOLUTION_PRINTING
-        try {
-            FileUtils.writeBytes(new java.io.File("/Users/jeff/Desktop/Test2.pdf"), rm.getBytes(report));
-        } catch (java.io.IOException e) {
-            throw new RuntimeException(e);
-        }
+        RMPDFWriter pdfWriter = new RMPDFWriter(); //rm.setUnmodifiable("Test");
+        pdfWriter.setAccessPermissions("fluffy", "bunny", 2052);  // PDFEncryptor.PRINTING_ALLOWED, MAXIMUM_RESOLUTION_PRINTING
+        try { FileUtils.writeBytes(new java.io.File("/Users/jeff/Desktop/Test2.pdf"), pdfWriter.getBytes(report)); }
+        catch (java.io.IOException e) { throw new RuntimeException(e); }
     }
+
+    /**
+     * A studio class.
+     */
+    public record Studio(String name, float budget) { }
 
     /**
      * A movie class.
      */
-    public static class Studio {
-        String name;
-        float budget;
-
-        public Studio(String aName, float aBudget)
-        {
-            name = aName;
-            budget = aBudget;
-        }
-
-        public String getName()
-        {
-            return name;
-        }
-
-        public float getBudget()
-        {
-            return budget;
-        }
-    }
-
-    /**
-     * A movie class.
-     */
-    public static class Movie {
-        String title;
-        Date showDate;
-        String rating;
-        Category category;
-        Studio studio;
-        List<MovieRole> movieRoles;
-
-        public Movie(String aTitle, Category aCat, Date aDate, String aRat, Studio aStudio, List<MovieRole> theRoles)
-        {
-            title = aTitle;
-            category = aCat;
-            showDate = aDate;
-            rating = aRat;
-            studio = aStudio;
-            movieRoles = theRoles;
-        }
-
-        public String getTitle()
-        {
-            return title;
-        }
-
-        public Category getCategory()
-        {
-            return category;
-        }
-
-        public Date getShowDate()
-        {
-            return showDate;
-        }
-
-        public String getRating()
-        {
-            return rating;
-        }
-
-        public Studio getStudio()
-        {
-            return studio;
-        }
-
-        public List getStudio2()
-        {
-            return Arrays.asList(MapUtils.newMap("Studio", studio, "ListType", "XJ-27"));
-        }
-
-        public List<MovieRole> getMovieRoles()
-        {
-            return movieRoles;
-        }
-    }
+    public record Movie(String title, Category category, Date showDate, String rating, double revenue, Studio studio, List<MovieRole> movieRoles) { }
 
     /**
      * Movie category constant type.
      */
-    public enum Category {Adventure, Comedy, Drama, Thriller}
+    public enum Category { Adventure, Comedy, Drama, Thriller }
 
     /**
      * A movie role class.
      */
-    public static class MovieRole {
-        String name;
-        String actorName;
-
-        public MovieRole(String aName, String anActorName)
-        {
-            name = aName;
-            actorName = anActorName;
-        }
-
-        public String getName()
-        {
-            return name;
-        }
-
-        public String getActorName()
-        {
-            return actorName;
-        }
-    }
+    public record MovieRole(String name, String actorName) { }
 
     /**
      * Returns a list of movies.
@@ -500,12 +392,12 @@ public class RMExtras {
         Studio studio = new Studio("Paramount Pictures", 500000);
         MovieRole m1r1 = new MovieRole("Woody", "Tom Hanks");
         MovieRole m1r2 = new MovieRole("Buzz Lightyear", "Tim Allen");
-        Movie m1 = new Movie("Toy Story", Category.Comedy, new Date(), "G", studio, Arrays.asList(m1r1, m1r2));
+        Movie m1 = new Movie("Toy Story", Category.Comedy, new Date(), "G", 1_195_000, studio, List.of(m1r1, m1r2));
         MovieRole m2r1 = new MovieRole("Luke Skywalker", "Mark Hamill");
         MovieRole m2r2 = new MovieRole("Princess Leia", "Carrie Fisher");
         MovieRole m2r3 = new MovieRole("Han Solo", "Harrison Ford");
-        Movie m2 = new Movie("Star Wars", Category.Adventure, new Date(), "PG", studio, Arrays.asList(m2r1, m2r2, m2r3));
-        return Arrays.asList(m1, m2);
+        Movie m2 = new Movie("Star Wars", Category.Adventure, new Date(), "PG", 1_345_000, studio, List.of(m2r1, m2r2, m2r3));
+        return List.of(m1, m2);
     }
 
     /**
@@ -517,9 +409,9 @@ public class RMExtras {
     }
 
     /**
-     * Generates a report.
+     * Generates a sample report.
      */
-    public static void generateReport()
+    public static RMDocument generateSampleMoviesReport()
     {
         // Load template
         Object templateSource = getMoviesURL();
@@ -529,15 +421,27 @@ public class RMExtras {
         Object dataSet = getMovies();
 
         // Generate report and write
-        RMDocument report = template.generateReport(dataSet);
-        report.write("/tmp/junk.pdf");
+        return template.generateReport(dataSet);
+    }
+
+    /**
+     * Generates a sample report and writes to PDF file.
+     */
+    public static void generateAndWriteSampleMoviesReport()
+    {
+        RMDocument report = generateSampleMoviesReport();
+        report.write("/tmp/MoviesReport.pdf");
     }
 
     /**
      * Writes a movie dataset to file.
      */
-    public static void main(String args[])
+    public static void main(String[] args)
     {
         writeMoviesDataset();
+//        com.reportmill.app.RMViewerPane viewerPane = new com.reportmill.app.RMViewerPane();
+//        RMDocument report = generateSampleMoviesReport();
+//        viewerPane.getViewer().setDoc(report);
+//        viewerPane.setWindowVisible(true);
     }
 }

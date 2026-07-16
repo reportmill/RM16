@@ -37,6 +37,14 @@ public class RMViewerPane extends ViewController {
     ViewController _btmToolBar;
 
     /**
+     * Constructor.
+     */
+    public RMViewerPane()
+    {
+        super();
+    }
+
+    /**
      * Returns the viewer for this viewer pane.
      */
     public RMViewer getViewer()

@@ -24,84 +24,63 @@ public class RMSchemaMaker {
     boolean _includeFields = false;
 
     // The set of method return types (or field types) to ignore
-    Set<String> _ignoredClasses = new HashSet();
+    Set<String> _ignoredClasses = new HashSet<>();
 
     // The set of method/field names to ignore
-    Set<String> _ignoredMembers = new HashSet();
+    Set<String> _ignoredMembers = new HashSet<>();
 
     // Used for pruning more specific Class/member branches
-    Map<String, Set> _ignoredClassMembers = new Hashtable();
+    Map<String, Set<String>> _ignoredClassMembers = new HashMap<>();
 
     // The schema currently being configure
     Schema _schema;
 
     // The list of objects that have already been processed
-    List _processed = new ArrayList();
+    List<Object> _processed = new ArrayList<>();
 
     // The list of object entities that have already been processed
-    List<Entity> _processedEntities = new ArrayList();
-
-    // A map of property classes
-    Map<Property, Class> _propertyClasses = new HashMap();
+    List<Entity> _processedEntities = new ArrayList<>();
 
     /**
-     * Creates a new schema maker.
+     * Constructor.
      */
     public RMSchemaMaker()
     {
         // Initialize ignored Methods/Classes with those we know are useless
-        String ignores[] = {"clone", "getClass", "hashCode", "toString"};
-        for (String s : ignores) addIgnoreMember(s);
+        List<String> ignores = List.of("clone", "getClass", "hashCode", "toString");
+        ignores.forEach(this::addIgnoreMember);
         addIgnoreClass("java.lang.Class");
     }
 
     /**
      * Returns the limit of recursion for relationships.
      */
-    public int getDepthLimit()
-    {
-        return _depthLimit;
-    }
+    public int getDepthLimit()  { return _depthLimit; }
 
     /**
      * Returns the maximum number of items to write for lists/array relationships.
      */
-    public int getBreadthLimit()
-    {
-        return _breadthLimit;
-    }
+    public int getBreadthLimit()  { return _breadthLimit; }
 
     /**
      * Sets the maximum number of items to write for lists/array relationships.
      */
-    public void setBreadthLimit(int aLimit)
-    {
-        _breadthLimit = aLimit;
-    }
+    public void setBreadthLimit(int aLimit)  { _breadthLimit = aLimit; }
 
     /**
      * Returns whether to only use getX/isX accessor methods (as opposed to any method returning a value).
      */
-    public boolean getUseGetAndIsMethodsOnly()
-    {
-        return _useGetAndIsMethodsOnly;
-    }
+    public boolean getUseGetAndIsMethodsOnly()  { return _useGetAndIsMethodsOnly; }
 
     /**
      * Sets whether to only use getX/isX accessor methods (as opposed to any method returning a value).
      */
-    public void setUseGetAndIsMethodsOnly(boolean aFlag)
-    {
-        _useGetAndIsMethodsOnly = aFlag;
-    }
+    public void setUseGetAndIsMethodsOnly(boolean aFlag)  { _useGetAndIsMethodsOnly = aFlag; }
 
     /**
      * Returns whether to include fields.
      */
-    public boolean getIncludeFields()
-    {
-        return _includeFields;
-    }
+    public boolean getIncludeFields()  { return _includeFields; }
 
     /**
      * Sets whether to include fields.
@@ -114,7 +93,7 @@ public class RMSchemaMaker {
     /**
      * Tells schema maker to ignore any members encountered with the given class.
      */
-    public void addIgnoreClass(Class aClass)
+    public void addIgnoreClass(Class<?> aClass)
     {
         addIgnoreClass(aClass.getName());
     }
@@ -138,7 +117,7 @@ public class RMSchemaMaker {
     /**
      * Tells schema maker to ignore members for a particular class.
      */
-    public void addIgnoreMember(Class aClass, String aMemberName)
+    public void addIgnoreMember(Class<?> aClass, String aMemberName)
     {
         addIgnoreMember(aClass.getName(), aMemberName);
     }
@@ -149,8 +128,8 @@ public class RMSchemaMaker {
     public void addIgnoreMember(String aClassName, String aMemberName)
     {
         // Get ignored class members set (if not present, create and set) and add member name to set
-        Set members = _ignoredClassMembers.get(aClassName);
-        if (members == null) _ignoredClassMembers.put(aClassName, members = new HashSet());
+        Set<String> members = _ignoredClassMembers.get(aClassName);
+        if (members == null) _ignoredClassMembers.put(aClassName, members = new HashSet<>());
         members.add(aMemberName);
     }
 
@@ -176,7 +155,7 @@ public class RMSchemaMaker {
      * This method returns an Entity with properties by iterating over given object methods, fields, or (Map) keys.
      * It recurses into method return values to given depth.
      */
-    private Entity getEntity(Object anObj, Class aClass, String aKey, int aDepth)
+    private Entity getEntity(Object anObj, Class<?> aClass, String aKey, int aDepth)
     {
         // If object is null, just return
         if (anObj == null) return null;
@@ -203,7 +182,7 @@ public class RMSchemaMaker {
             return getEntityForMap((Map) obj, aKey, aDepth);
 
         // Get object class and class name
-        Class objClass = aClass != null ? aClass : obj.getClass();
+        Class<?> objClass = aClass != null ? aClass : obj.getClass();
         String className = _schema.getEntityCount() == 0 ? aKey : objClass.getSimpleName();
 
         // Get entity for class name and class
@@ -213,39 +192,35 @@ public class RMSchemaMaker {
         if (getIncludeFields()) {
 
             // Iterate over fields and load into map (if field should be ignored, just continue)
-            Field fields[] = objClass.getFields();
+            Field[] fields = objClass.getFields();
             for (Field field : fields) {
                 if (!isValidField(field, objClass)) continue;
 
                 // Get field value and add and/or configure property
                 Object val = null;
-                try {
-                    val = field.get(anObj);
-                } catch (Exception e) {
-                }
+                try { val = field.get(anObj); }
+                catch (Exception ignore) { }
                 getProperty(val, field.getType(), field.getName(), aDepth, entity);
             }
         }
 
         // Iterate over methods and load into map
-        Method methods[] = objClass.getMethods();
-        for (Method meth : methods) {
+        Method[] methods = objClass.getMethods();
+        for (Method method : methods) {
 
             // If invalid method, just continue
-            if (!isValidMethod(meth, objClass))
+            if (!isValidMethod(method, objClass))
                 continue;
 
             // Get method return value
-            Object rval = null;
-            try {
-                rval = meth.invoke(anObj);
-            } catch (Exception e) {
-            }
+            Object returnValue = null;
+            try { returnValue = method.invoke(anObj); }
+            catch (Exception ignore) { }
 
             // Get property name and add and/or configure property
-            String mname = meth.getName();
-            String pname = getUseGetAndIsMethodsOnly() ? RMKey.getStandard(mname) : mname;
-            getProperty(rval, meth.getReturnType(), pname, aDepth, entity);
+            String methodName = method.getName();
+            String propertyName = getUseGetAndIsMethodsOnly() ? RMKey.getStandard(methodName) : methodName;
+            getProperty(returnValue, method.getReturnType(), propertyName, aDepth, entity);
         }
 
         // Add object/entity to processed lists and return entity
@@ -284,7 +259,7 @@ public class RMSchemaMaker {
      * It currently supports entity sub-classes (e.g., Vehicle->Car, Vehicle->Truck) by folding them into the common
      * super-class (e.g., Vehicle).
      */
-    protected Entity getEntityForNameAndClass(String aName, Class aClass)
+    protected Entity getEntityForNameAndClass(String aName, Class<?> aClass)
     {
         // If there is already an entity for given name, return it
         Entity entity = _schema.getEntity(aName);
@@ -295,18 +270,18 @@ public class RMSchemaMaker {
         for (int i = 0, iMax = _schema.getEntityCount(); i < iMax; i++) {
 
             // Get loop entity and class
-            Entity ent2 = _schema.getEntity(i);
-            Class eclass = ent2.getEntityClass();
+            Entity entity2 = _schema.getEntity(i);
+            Class<?> entityClass = entity2.getEntityClass();
 
             // If existing entity is superclass of Obj.Class, use it instead
-            if (eclass.isAssignableFrom(aClass))
-                return ent2;
+            if (entityClass.isAssignableFrom(aClass))
+                return entity2;
 
                 // If Obj.Class is superclass of existing entity, rename existing entity to new common super-class and use it
-            else if (aClass.isAssignableFrom(eclass)) {
-                renameEntity(ent2, aName); //ent2.setName(aName);
-                ent2.setEntityClass(aClass);
-                return ent2;
+            else if (aClass.isAssignableFrom(entityClass)) {
+                renameEntity(entity2, aName); //ent2.setName(aName);
+                entity2.setEntityClass(aClass);
+                return entity2;
             }
         }
 
@@ -339,7 +314,7 @@ public class RMSchemaMaker {
     /**
      * Configures a property for a property value.
      */
-    protected void getProperty(Object aValue, Class aClass, String aKey, int aDepth, Entity anEntity)
+    protected void getProperty(Object aValue, Class<?> aClass, String aKey, int aDepth, Entity anEntity)
     {
         // Get local reference to value, potentially converted from non-standard type (eg, WebObjects/NSArray)
         Object value = ReportMill.convertFromAppServerType(aValue);
@@ -368,8 +343,7 @@ public class RMSchemaMaker {
             String relKey = anEntity.getName() + '.' + prop.getName();
 
             // Handle List (RelationList)
-            if (value instanceof List) {
-                List list = (List) value;
+            if (value instanceof List<?> list) {
 
                 // Set type to List
                 prop.setType(Property.Type.RelationList);
@@ -398,7 +372,7 @@ public class RMSchemaMaker {
     /**
      * Returns whether given method is valid method.
      */
-    protected boolean isValidMethod(Method aMeth, Class aClass)
+    protected boolean isValidMethod(Method aMeth, Class<?> aClass)
     {
         // If method has no return value or any parameters, return false
         if (aMeth.getReturnType() == void.class || aMeth.getParameterTypes().length > 0)
@@ -411,7 +385,7 @@ public class RMSchemaMaker {
 
         // If method doesn't conform to UseGetAndIsMethodsOnly
         String methodName = aMeth.getName();
-        if (getUseGetAndIsMethodsOnly() && !methodName.startsWith("get") && !methodName.startsWith("is"))
+        if (getUseGetAndIsMethodsOnly() && !aClass.isRecord() && !methodName.startsWith("get") && !methodName.startsWith("is"))
             return false;
 
         // If method should be ignored, return false
@@ -429,7 +403,7 @@ public class RMSchemaMaker {
     /**
      * Returns whether given method is valid method.
      */
-    protected boolean isValidField(Field aField, Class aClass)
+    protected boolean isValidField(Field aField, Class<?> aClass)
     {
         // If field is non-public or is static return false
         int mods = aField.getModifiers();
@@ -470,7 +444,7 @@ public class RMSchemaMaker {
     /**
      * Returns whether schema maker should ignore any member with the given name.
      */
-    protected boolean ignoreClass(Class aClass)
+    protected boolean ignoreClass(Class<?> aClass)
     {
         return matches(aClass.getName(), _ignoredClasses);
     }
@@ -584,7 +558,7 @@ public class RMSchemaMaker {
      */
     private static boolean isValidIdentifier(String aStr)
     {
-        if (aStr.length() == 0 || !Character.isJavaIdentifierStart(aStr.charAt(0))) return false;
+        if (aStr.isEmpty() || !Character.isJavaIdentifierStart(aStr.charAt(0))) return false;
         for (int i = 1, iMax = aStr.length(); i < iMax; i++)
             if (!Character.isJavaIdentifierPart(aStr.charAt(i))) return false;
         return true;

@@ -497,7 +497,7 @@ public class RMGraphTool<T extends RMGraph> extends RMTool<T> implements RMSortP
         // See if 3D is available
         if (isSuperSelected(aGraph) && aGraph.isDraw3D()) {
             RMScene3D s3d = aGraph.get3D();
-            s3d.processEvent(createShapeEvent(s3d, anEvent));
+            s3d.processEvent(getEditor().copyEventForShapeAndType(anEvent, s3d, null));
             getEditor().setSuperSelectedShape(aGraph);
             anEvent.consume();
             _inScene3DMouseLoop = true;
@@ -512,7 +512,7 @@ public class RMGraphTool<T extends RMGraph> extends RMTool<T> implements RMSortP
         // If child is scene3d, forward mouse event to child and consume event
         if (_inScene3DMouseLoop) {
             RMScene3D s3d = aGraph.get3D();
-            s3d.processEvent(createShapeEvent(s3d, anEvent));
+            s3d.processEvent(getEditor().copyEventForShapeAndType(anEvent, s3d, null));
             anEvent.consume();
         }
     }
@@ -524,7 +524,7 @@ public class RMGraphTool<T extends RMGraph> extends RMTool<T> implements RMSortP
     {
         if (_inScene3DMouseLoop) {
             RMScene3D s3d = aGraph.get3D();
-            s3d.processEvent(createShapeEvent(s3d, anEvent));
+            s3d.processEvent(getEditor().copyEventForShapeAndType(anEvent, s3d, null));
             anEvent.consume();
             _inScene3DMouseLoop = false;
         }
@@ -544,5 +544,4 @@ public class RMGraphTool<T extends RMGraph> extends RMTool<T> implements RMSortP
             return graph != null ? graph.get3D() : null;
         }
     }
-
 }

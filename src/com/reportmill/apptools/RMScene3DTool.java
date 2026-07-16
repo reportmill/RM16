@@ -122,7 +122,7 @@ public class RMScene3DTool<T extends RMScene3D> extends RMTool<T> {
         if (!isSuperSelected(aScene3D)) return;
 
         // Forward mouse pressed to scene and consume event
-        aScene3D.processEvent(createShapeEvent(aScene3D, anEvent));
+        aScene3D.processEvent(getEditor().copyEventForShapeAndType(anEvent, aScene3D, null));
         anEvent.consume();
     }
 
@@ -132,7 +132,7 @@ public class RMScene3DTool<T extends RMScene3D> extends RMTool<T> {
     public void mouseDragged(T aScene3D, ViewEvent anEvent)
     {
         // Forward mouse pressed to scene and consume event
-        aScene3D.processEvent(createShapeEvent(aScene3D, anEvent));
+        aScene3D.processEvent(getEditor().copyEventForShapeAndType(anEvent, aScene3D, null));
         anEvent.consume();
     }
 
@@ -142,7 +142,7 @@ public class RMScene3DTool<T extends RMScene3D> extends RMTool<T> {
     public void mouseReleased(T aScene3D, ViewEvent anEvent)
     {
         // Forward mouse pressed to scene and consume event
-        aScene3D.processEvent(createShapeEvent(aScene3D, anEvent));
+        aScene3D.processEvent(getEditor().copyEventForShapeAndType(anEvent, aScene3D, null));
         anEvent.consume();
     }
 }

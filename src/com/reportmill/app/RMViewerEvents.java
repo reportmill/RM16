@@ -176,7 +176,7 @@ public class RMViewerEvents {
 
         // If shape has URL, open it
         if (_shapePressed != null)
-            _shapePressed.processEvent(_viewer.createShapeEvent(_shapePressed, anEvent, null));
+            _shapePressed.processEvent(_viewer.copyEventForShapeAndType(anEvent, _shapePressed, null));
     }
 
     /**
@@ -196,7 +196,7 @@ public class RMViewerEvents {
 
         // Send mouse dragged to pressed shape
         if (_shapePressed != null)
-            _shapePressed.processEvent(_viewer.createShapeEvent(_shapePressed, anEvent, null));
+            _shapePressed.processEvent(_viewer.copyEventForShapeAndType(anEvent, _shapePressed, null));
     }
 
     /**
@@ -205,7 +205,7 @@ public class RMViewerEvents {
     public void mouseReleased(ViewEvent anEvent)
     {
         if (_shapePressed != null)
-            _shapePressed.processEvent(_viewer.createShapeEvent(_shapePressed, anEvent, null));
+            _shapePressed.processEvent(_viewer.copyEventForShapeAndType(anEvent, _shapePressed, null));
     }
 
     /**
@@ -225,7 +225,7 @@ public class RMViewerEvents {
 
         // If shape under move point is identical to shape under last move point, call its mouseMoved
         if (!_shapeUnderStack.isEmpty() && _shapeUnderStack.peek() == shape)
-            shape.processEvent(_viewer.createShapeEvent(shape, anEvent, null));
+            shape.processEvent(_viewer.copyEventForShapeAndType(anEvent, shape, null));
 
             // If shape under move point is different from last shape under, update it
         else updateShapeUnderStack(shape, anEvent);
@@ -255,7 +255,7 @@ public class RMViewerEvents {
             _shapeUnderCursorStack.pop();
 
             // Send mouse exited
-            shape.processEvent(_viewer.createShapeEvent(shape, anEvent, EventType.MouseEnter));
+            shape.processEvent(_viewer.copyEventForShapeAndType(anEvent, shape, EventType.MouseEnter));
 
             // Reset cursor
             getViewer().setCursor(_shapeUnderCursorStack.isEmpty() ? Cursor.DEFAULT : _shapeUnderCursorStack.peek());
@@ -267,7 +267,7 @@ public class RMViewerEvents {
 
         // Add aShape if non-null
         if (aShape != null && (_shapeUnderStack.isEmpty() || _shapeUnderStack.peek() != aShape)) {
-            aShape.processEvent(_viewer.createShapeEvent(aShape, anEvent, EventType.MouseEnter));
+            aShape.processEvent(_viewer.copyEventForShapeAndType(anEvent, aShape, EventType.MouseEnter));
             _shapeUnderStack.push(aShape);
             _shapeUnderCursorStack.push(getViewer().getCursor());
         }

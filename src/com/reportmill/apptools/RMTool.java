@@ -1097,22 +1097,6 @@ public class RMTool<T extends RMShape> extends ViewController {
     }
 
     /**
-     * Returns a clone of a gallery shape (hook to allow extra configuration for subclasses).
-     */
-    public RMShape getGalleryClone(T aShape)
-    {
-        return aShape.cloneDeep();
-    }
-
-    /**
-     * Creates a shape mouse event.
-     */
-    protected ViewEvent createShapeEvent(RMShape s, ViewEvent e)
-    {
-        return getEditor().createShapeEvent(s, e, null);
-    }
-
-    /**
      * Returns the image used to represent shapes that this tool represents.
      */
     public Image getImage()

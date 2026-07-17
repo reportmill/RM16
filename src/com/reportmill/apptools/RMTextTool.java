@@ -445,8 +445,7 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
         // If text is a structured table row column and point is outside column, start MoveTableRow
         else if (anEvent.isMouseDrag()) {
             Point pnt = getEditor().convertToShape(anEvent.getX(), anEvent.getY(), textShape);
-            double px = pnt.getX();
-            if (textShape.isStructured() && (px < -20 || px > textShape.getWidth() + 10) && textShape.getParent().getChildCount() > 1) {
+            if (textShape.isStructured() && (pnt.x < -20 || pnt.x > textShape.getWidth() + 10) && textShape.getParent().getChildCount() > 1) {
                 textShape.undoerSetUndoTitle("Reorder columns");
                 getEditor().setSelectedShape(textShape);
                 _moveTableColumn = true;
@@ -841,48 +840,41 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
     }
 
     /**
-     * Editor method - returns handle count.
+     * Override to handle structured text (in table row).
      */
-    public int getHandleCount(T aText)
-    {
-        return aText.isStructured() ? 2 : super.getHandleCount(aText);
-    }
+    @Override
+    public int getHandleCount(T aText)  { return aText.isStructured() ? 2 : super.getHandleCount(aText); }
 
     /**
-     * Editor method - returns handle rect in editor coords.
+     * Override to handle structured text (in table row).
      */
-    public Rect getHandleRect(T aTextShape, int handle, boolean isSuperSelected)
+    @Override
+    public Rect getHandleRect(T textShape, int handle, boolean isSuperSelected)
     {
-        // If structured, return special handles (tall & thin)
-        if (aTextShape.isStructured()) {
+        if (!textShape.isStructured())
+            return super.getHandleRect(textShape, handle, isSuperSelected);
 
-            // Get handle point in text bounds, convert to table row bounds
-            Point cp = getHandlePoint(aTextShape, handle, true);
-            cp = aTextShape.localToParent(cp);
+        // Get handle point in text bounds, convert to table row bounds
+        Point handlePoint = getHandlePoint(textShape, handle, true);
+        handlePoint = textShape.localToParent(handlePoint);
 
-            // If point outside of parent, return bogus rect
-            if (cp.getX() < 0 || cp.getX() > aTextShape.getParent().getWidth())
-                return new Rect(-9999, -9999, 0, 0);
+        // If point outside of parent, return bogus rect
+        if (handlePoint.x < 0 || handlePoint.x > textShape.getParent().getWidth())
+            return new Rect(-9999, -9999, 0, 0);
 
-            // Get handle point in text coords
-            cp = getHandlePoint(aTextShape, handle, false);
+        // Get handle point in text coords
+        handlePoint = getHandlePoint(textShape, handle, false);
 
-            // Get handle point in editor coords
-            cp = getEditor().convertFromShape(cp.getX(), cp.getY(), aTextShape);
+        // Get handle point in editor coords
+        handlePoint = getEditor().convertFromShape(handlePoint.x, handlePoint.y, textShape);
 
-            // Get handle rect
-            Rect hr = new Rect(cp.getX() - 3, cp.getY(), 6, aTextShape.height() * getEditor().getZoomFactor());
+        // Get handle rect (if super-selected, offset)
+        Rect handleRect = new Rect(handlePoint.x - 3, handlePoint.y, 6, textShape.height() * getEditor().getZoomFactor());
+        if (isSuperSelected)
+            handleRect.offset(handle == 0 ? -2 : 2, 0);
 
-            // If super selected, offset
-            if (isSuperSelected)
-                hr.offset(handle == 0 ? -2 : 2, 0);
-
-            // Return handle rect
-            return hr;
-        }
-
-        // Return normal shape handle rect
-        return super.getHandleRect(aTextShape, handle, isSuperSelected);
+        // Return handle rect
+        return handleRect;
     }
 
     /**
@@ -893,8 +885,6 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
         // If KeysPanel is dragging, return true
         if (KeysPanel.getDragKey() != null)
             return true;
-
-        // Otherwise, return normal
         return super.acceptsDrag(aShape, anEvent);
     }
 

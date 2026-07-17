@@ -444,7 +444,7 @@ class RMGraphRPGBar extends RMGraphRPG {
             point1 = label.localToParent(point1);
 
             // Offset label location from its current location to graph location
-            label.offsetXY(point2.getX() - point1.getX(), point2.getY() - point1.getY());
+            label.offsetXY(point2.x - point1.x, point2.y - point1.y);
 
             // Add axis label to graph view
             _barShape.addValueAxisLabel(label);
@@ -459,7 +459,8 @@ class RMGraphRPGBar extends RMGraphRPG {
         // Get the label axis shape and label axis key (just return if empty)
         RMGraphPartLabelAxis labelAxis = _graph.getLabelAxis();
         String key = labelAxis.getItemKey();
-        if (key == null || key.length() == 0) return;
+        if (key == null || key.isEmpty())
+            return;
 
         // Iterate over sections, get section item and add label axis label for section bounds and series item group
         for (int i = 0, iMax = getSectionCount(); i < iMax; i++) {
@@ -506,7 +507,7 @@ class RMGraphRPGBar extends RMGraphRPG {
         point1 = label.localToParent(point1);
 
         // Offset label location from its current location to graph location
-        label.offsetXY(point2.getX() - point1.getX(), point2.getY() - point1.getY());
+        label.offsetXY(point2.x - point1.x, point2.y - point1.y);
 
         // Add the bar label to graph view
         _barShape.addLabelAxisLabel(label);
@@ -525,7 +526,7 @@ class RMGraphRPGBar extends RMGraphRPG {
             if (seriesPart.getFirstActivePosition() == null) continue;
 
             // Get active positions
-            List<RMGraphPartSeries.LabelPos> activePositions = new ArrayList();
+            List<RMGraphPartSeries.LabelPos> activePositions = new ArrayList<>();
             for (RMGraphPartSeries.LabelPos position : RMGraphPartSeries.LabelPos.values())
                 if (seriesPart.getLabelShape(position).length() > 0)
                     activePositions.add(position);
@@ -654,42 +655,42 @@ class RMGraphRPGBar extends RMGraphRPG {
         /**
          * Add grid line.
          */
-        public void addGridLineMajor(RMLineShape aLine);
+        void addGridLineMajor(RMLineShape aLine);
 
         /**
          * Add grid line.
          */
-        public void addGridLineMinor(RMLineShape aLine);
+        void addGridLineMinor(RMLineShape aLine);
 
         /**
          * Add grid line.
          */
-        public void addGridLineSeparator(RMLineShape aLine);
+        void addGridLineSeparator(RMLineShape aLine);
 
         /**
          * Add Bar.
          */
-        public void addBar(RMShape aBar, int aLayer);
+        void addBar(RMShape aBar, int aLayer);
 
         /**
          * Add bar label.
          */
-        public void addBarLabel(RMShape aBarLabel, RMGraphPartSeries.LabelPos aVersion);
+        void addBarLabel(RMShape aBarLabel, RMGraphPartSeries.LabelPos aVersion);
 
         /**
          * Add axis.
          */
-        public void addAxis(RMShape aShape);
+        void addAxis(RMShape aShape);
 
         /**
          * Add value axis label.
          */
-        public void addValueAxisLabel(RMShape anAxisLabel);
+        void addValueAxisLabel(RMShape anAxisLabel);
 
         /**
          * Add label axis label.
          */
-        public void addLabelAxisLabel(RMShape anAxisLabel);
+        void addLabelAxisLabel(RMShape anAxisLabel);
     }
 
     /**
@@ -697,8 +698,10 @@ class RMGraphRPGBar extends RMGraphRPG {
      */
     public static class BarGraphShape2D extends RMParentShape implements BarGraphShape {
 
+        private RMGraphRPG _graphRPG;
+
         /**
-         * Creates a new BarGraphShape2D.
+         * Constructor.
          */
         public BarGraphShape2D(RMGraph aGraph)
         {
@@ -708,19 +711,14 @@ class RMGraphRPGBar extends RMGraphRPG {
         /**
          * Returns the RMGraphRPG.
          */
-        public RMGraphRPG getGraphRPG()
-        {
-            return _grpg;
-        }
-
-        RMGraphRPG _grpg;
+        public RMGraphRPG getGraphRPG()  { return _graphRPG; }
 
         /**
          * Sets the RMGraphRPG.
          */
         public void setGraphRPG(RMGraphRPG aGRPG)
         {
-            _grpg = aGRPG;
+            _graphRPG = aGRPG;
         }
 
         /**

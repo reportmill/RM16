@@ -216,7 +216,7 @@ public class RMCrossTabCellTool<T extends RMCrossTabCell> extends RMTextTool<T> 
             Point point = editor.convertToShape(anEvent.getX(), anEvent.getY(), aCell);
 
             // If point is outside cell, start sending to table tool
-            if (point.getX() < -20 || point.getY() < -20 || point.getX() > aCell.getWidth() + 20 || point.getY() > aCell.getHeight() + 20) {
+            if (point.x < -20 || point.y < -20 || point.x > aCell.getWidth() + 20 || point.y > aCell.getHeight() + 20) {
 
                 // Make cell selected instead of super selected
                 editor.setSelectedShape(aCell);

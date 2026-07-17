@@ -16,35 +16,30 @@ import snap.geom.Rect;
 class RMExcelSheet {
 
     // The sheet
-    HSSFSheet _sheet;
+    private HSSFSheet _sheet;
 
     // The top-level ancestor of free-form shapes
-    HSSFPatriarch _patriarch;
+    private HSSFPatriarch _patriarch;
 
     // The point in shape space which corresponds to 0,0 in the patriarch
-    Point _sheetOrigin;
+    private Point _sheetOrigin;
 
     /**
-     * Create new excel sheet.
+     * Constructor.
      */
     public RMExcelSheet(HSSFSheet aSheet)
     {
         _sheet = aSheet;
     }
 
-    public HSSFSheet getSheet()
-    {
-        return _sheet;
-    }
+    public HSSFSheet getSheet()  { return _sheet; }
 
-    public void setOrigin(Point pt)
-    {
-        _sheetOrigin = pt;
-    }
+    public void setOrigin(Point pt)  { _sheetOrigin = pt; }
 
     public HSSFPatriarch getPatriarch()
     {
-        return _patriarch != null ? _patriarch : (_patriarch = _sheet.createDrawingPatriarch());
+        if (_patriarch != null) return _patriarch;
+        return _patriarch = _sheet.createDrawingPatriarch();
     }
 
     /**
@@ -59,47 +54,23 @@ class RMExcelSheet {
      * How screwy. Since each row can be a different size, converting from absolute coordinates to excel coordinates
      * involves figuring out the size of everything.
      */
-    private static class ExcelPoint {
+    private record ExcelPoint(short row, short column, int dx, int dy) { }
 
-        // row,col  range={0, 65280}
-        public short _row, _column;
-
-        // x offset (units of 1/1024 of column width) range={0, 1023}
-        public int _dx;
-
-        // y offset (in units of 1/256 of row height) range={0,255}
-        public int _dy;
-
-        public ExcelPoint(short aRow, short aCol, int xoff, int yoff)
-        {
-            _row = aRow;
-            _column = aCol;
-            _dx = xoff;
-            _dy = yoff;
-        }
-
-        public String toString()
-        {
-            return "{ row=" + _row + "+" + _dy / 256f + ", col=" + _column + "+" + _dx / 1024f + " }";
-        }
-    }
-
-    public ExcelPoint convertPoint(Point pt)
+    private ExcelPoint convertPoint(Point aPoint)
     {
         int r, c, dx, dy;
         float height = 0, rowheight = _sheet.getDefaultRowHeightInPoints();
         HSSFRow row = null;
 
         // negative origins clamped.  Could cause distortion
-        float y = (float) Math.max(pt.getY() - _sheetOrigin.getY(), 0);
+        float y = (float) Math.max(aPoint.y - _sheetOrigin.y, 0);
         for (r = 0; r < 65280; ++r) {
             row = _sheet.getRow(r);
-            if (row == null) {
-                // add extra rows if needed.  Height is the same as the last real row
+            if (row == null) { // add extra rows if needed.  Height is the same as the last real row
                 row = _sheet.createRow(r);
                 row.setHeightInPoints(rowheight);
-            } else
-                rowheight = row.getHeightInPoints();
+            }
+            else rowheight = row.getHeightInPoints();
             if (height + rowheight > y)
                 break;
             height += rowheight;
@@ -113,7 +84,7 @@ class RMExcelSheet {
         float width = 0, colwidth = 256 * 13;
 
         // Use floating point version of width, since dx units have greater precision that column width units
-        double x = RMExcelWriter.getCharWidthFromPoints(Math.max(pt.getX() - _sheetOrigin.getX(), 0)) * 256;
+        double x = RMExcelWriter.getCharWidthFromPoints(Math.max(aPoint.x - _sheetOrigin.x, 0)) * 256;
         for (c = 0; c < 255; ++c) {
             // append new cells to the row if needed
             if (c > maxColumnInRow) {
@@ -152,7 +123,7 @@ class RMExcelSheet {
             ExcelPoint origin = convertPoint(bounds.getXY());
             ExcelPoint max = convertPoint(new Point(bounds.getMaxX(), bounds.getMaxY()));
 
-            HSSFClientAnchor anchor = new HSSFClientAnchor(origin._dx, origin._dy, max._dx, max._dy, origin._column, origin._row, max._column, max._row);
+            HSSFClientAnchor anchor = new HSSFClientAnchor(origin.dx, origin.dy, max.dx, max.dy, origin.column, origin.row, max.column, max.row);
 
             // Handle image
             if (aShape instanceof RMImageShape)
@@ -190,5 +161,4 @@ class RMExcelSheet {
         s.setShapeType(HSSFSimpleShape.OBJECT_TYPE_LINE);
         return s;
     }
-
 }

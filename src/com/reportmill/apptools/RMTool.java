@@ -434,10 +434,10 @@ public class RMTool<T extends RMShape> extends ViewController {
     {
         _shape.repaint();
         Point currentPoint = getEditorEvents().getEventPointInShape(true);
-        double x = Math.min(_downPoint.getX(), currentPoint.getX());
-        double y = Math.min(_downPoint.getY(), currentPoint.getY());
-        double w = Math.abs(currentPoint.getX() - _downPoint.getX());
-        double h = Math.abs(currentPoint.getY() - _downPoint.getY());
+        double x = Math.min(_downPoint.x, currentPoint.x);
+        double y = Math.min(_downPoint.y, currentPoint.y);
+        double w = Math.abs(currentPoint.x - _downPoint.x);
+        double h = Math.abs(currentPoint.y - _downPoint.y);
         _shape.setFrame(x, y, w, h);
     }
 
@@ -666,14 +666,11 @@ public class RMTool<T extends RMShape> extends ViewController {
      */
     public Rect getHandleRect(T aShape, int aHandle, boolean isSuperSelected)
     {
-        // Get handle point for given handle index in shape coords and editor coords
-        Point hp = getHandlePoint(aShape, aHandle, isSuperSelected);
-        Point hpEd = getEditor().convertFromShape(hp.getX(), hp.getY(), aShape);
-
-        // Get handle rect at handle point, outset rect by handle width and return
-        Rect hr = new Rect(Math.round(hpEd.getX()), Math.round(hpEd.getY()), 0, 0);
-        hr.inset(-HandleWidth / 2);
-        return hr;
+        Point handlePoint = getHandlePoint(aShape, aHandle, isSuperSelected);
+        Point handlePointInEditor = getEditor().convertFromShape(handlePoint.x, handlePoint.y, aShape);
+        Rect handleRect = new Rect(Math.round(handlePointInEditor.x), Math.round(handlePointInEditor.y), 0, 0);
+        handleRect.inset(-HandleWidth / 2);
+        return handleRect;
     }
 
     /**
@@ -684,7 +681,7 @@ public class RMTool<T extends RMShape> extends ViewController {
         // Iterate over shape handles, get handle rect for current loop handle and return index if rect contains point
         for (int i = 0, iMax = getHandleCount(aShape); i < iMax; i++) {
             Rect hr = getHandleRect(aShape, i, isSuperSelected);
-            if (hr.contains(aPoint.getX(), aPoint.getY()))
+            if (hr.contains(aPoint.x, aPoint.y))
                 return i;
         }
 
@@ -734,13 +731,13 @@ public class RMTool<T extends RMShape> extends ViewController {
         }
 
         // Calculate new width and height for handle move
-        double dx = p2.getX() - p1.getX(), dy = p2.getY() - p1.getY();
+        double dx = p2.x - p1.x, dy = p2.y - p1.y;
         double nw = minX ? aShape.width() - dx : maxX ? aShape.width() + dx : aShape.width();
         double nh = minY ? aShape.height() - dy : maxY ? aShape.height() + dy : aShape.height();
 
         // Set new width and height, but calc new X & Y such that opposing handle is at same location w.r.t. parent
-        Point op = getHandlePoint(aShape, getHandleOpposing(aHandle), false);
-        op = aShape.localToParent(op);
+        Point oldHandlePoint = getHandlePoint(aShape, getHandleOpposing(aHandle), false);
+        oldHandlePoint = aShape.localToParent(oldHandlePoint);
 
         // Make sure new width and height are not too small
         if (Math.abs(nw) < .1) nw = MathUtils.sign(nw) * .1f;
@@ -749,12 +746,12 @@ public class RMTool<T extends RMShape> extends ViewController {
         // Set size
         aShape.setSize(nw, nh);
 
-        // Get point
-        Point p = getHandlePoint(aShape, getHandleOpposing(aHandle), false);
-        p = aShape.localToParent(p);
+        // Get new handle point
+        Point newHandlePoint = getHandlePoint(aShape, getHandleOpposing(aHandle), false);
+        newHandlePoint = aShape.localToParent(newHandlePoint);
 
         // Set frame
-        aShape.setFrameXY(aShape.getFrameX() + op.getX() - p.getX(), aShape.getFrameY() + op.getY() - p.getY());
+        aShape.setFrameXY(aShape.getFrameX() + oldHandlePoint.x - newHandlePoint.x, aShape.getFrameY() + oldHandlePoint.y - newHandlePoint.y);
     }
 
     /**
@@ -928,7 +925,7 @@ public class RMTool<T extends RMShape> extends ViewController {
 
         // If xml file, pass it to setDataSource()
         if (ext.equals("xml"))
-            getEditorPane().setDataSource(aFile.getSourceURL(), aPoint.getX(), aPoint.getY());
+            getEditorPane().setDataSource(aFile.getSourceURL(), aPoint.x, aPoint.y);
 
             // If image file, add image shape
         else if (Image.canRead(ext))

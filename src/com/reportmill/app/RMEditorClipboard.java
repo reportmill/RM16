@@ -161,7 +161,7 @@ public class RMEditorClipboard {
             pastedShape.setBestSize();
             if (aPoint != null) {
                 aPoint = anEditor.convertToShape(aPoint.x, aPoint.y, aParent);
-                pastedShape.setXY(aPoint.getX() - pastedShape.getWidth() / 2, aPoint.getY() - pastedShape.getHeight() / 2);
+                pastedShape.setXY(aPoint.x - pastedShape.getWidth() / 2, aPoint.y - pastedShape.getHeight() / 2);
             }
 
             // Add pasted shape to parent

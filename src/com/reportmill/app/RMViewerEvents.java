@@ -300,10 +300,10 @@ public class RMViewerEvents {
         viewer.repaint(_paintArea.getBounds());
 
         // Get rectangle for down point and current event point - in SelPage coords
-        double x = Math.min(_downPoint.getX(), anEvent.getX());
-        double y = Math.min(_downPoint.getY(), anEvent.getY());
-        double w = Math.max(_downPoint.getX(), anEvent.getX()) - x;
-        double h = Math.max(_downPoint.getY(), anEvent.getY()) - y;
+        double x = Math.min(_downPoint.x, anEvent.getX());
+        double y = Math.min(_downPoint.y, anEvent.getY());
+        double w = Math.max(_downPoint.x, anEvent.getX()) - x;
+        double h = Math.max(_downPoint.y, anEvent.getY()) - y;
         Rect rect = viewer.convertToShape(new Rect(x, y, w, h), viewer.getSelPage()).getBounds();
 
         // Get path for rect and find/set text shapes
@@ -391,7 +391,7 @@ public class RMViewerEvents {
             textModel.setBounds(0, 0, text.getWidth(), text.getHeight());
 
             // Get text selection for point, path for selection (int viewer coords) and add
-            TextSel sel = new TextSel(textModel, p1.getX(), p1.getY(), p2.getX(), p2.getY(), false, false);
+            TextSel sel = new TextSel(textModel, p1.x, p1.y, p2.x, p2.y, false, false);
             Shape path = sel.getPath();
             path = getViewer().convertFromShape(path, text);
             textAreaShape = Shape.addShapes(textAreaShape, path);
@@ -449,16 +449,16 @@ public class RMViewerEvents {
 
             // Otherwise, if point is in rect, move rect
         else if (_dragPoint != null) {
-            rect.offset(anEvent.getX() - _dragPoint.getX(), anEvent.getY() - _dragPoint.getY());
+            rect.offset(anEvent.getX() - _dragPoint.x, anEvent.getY() - _dragPoint.y);
             _dragPoint = new Point(anEvent.getX(), anEvent.getY());
         }
 
         // Otherwise, reset rect from down point and event event point
         else {
-            double x = Math.min(_downPoint.getX(), anEvent.getX());
-            double y = Math.min(_downPoint.getY(), anEvent.getY());
-            double w = Math.max(_downPoint.getX(), anEvent.getX()) - x;
-            double h = Math.max(_downPoint.getY(), anEvent.getY()) - y;
+            double x = Math.min(_downPoint.x, anEvent.getX());
+            double y = Math.min(_downPoint.y, anEvent.getY());
+            double w = Math.max(_downPoint.x, anEvent.getX()) - x;
+            double h = Math.max(_downPoint.y, anEvent.getY()) - y;
             rect = new Rect(x, y, w, h);
         }
 
@@ -485,7 +485,7 @@ public class RMViewerEvents {
             getViewer().setCursor(getResizeCursor(hitEdges));
 
             // If point in rect, set move cursor
-        else if (_rect.contains(point.getX(), point.getY()))
+        else if (_rect.contains(point.x, point.y))
             getViewer().setCursor(Cursor.MOVE);
 
             // Otherwise, reset cursor
@@ -570,10 +570,10 @@ public class RMViewerEvents {
     {
         // Check MinXEdge, MaxXEdge, MinYEdge, MaxYEdge
         int hitEdges = 0;
-        if (Math.abs(aPoint.getX() - aRect.getX()) < aRadius) hitEdges |= MinXEdge;
-        else if (Math.abs(aPoint.getX() - aRect.getMaxX()) < aRadius) hitEdges |= MaxXEdge;
-        if (Math.abs(aPoint.getY() - aRect.getY()) < aRadius) hitEdges |= MinYEdge;
-        else if (Math.abs(aPoint.getY() - aRect.getMaxY()) < aRadius) hitEdges |= MaxYEdge;
+        if (Math.abs(aPoint.x - aRect.x) < aRadius) hitEdges |= MinXEdge;
+        else if (Math.abs(aPoint.x - aRect.getMaxX()) < aRadius) hitEdges |= MaxXEdge;
+        if (Math.abs(aPoint.y - aRect.y) < aRadius) hitEdges |= MinYEdge;
+        else if (Math.abs(aPoint.y - aRect.getMaxY()) < aRadius) hitEdges |= MaxYEdge;
         return hitEdges;
     }
 
@@ -584,24 +584,24 @@ public class RMViewerEvents {
     {
         // Handle MinXEdge drag
         if ((anEdgeMask & MinXEdge) > 0) {
-            double newX = Math.min(aPoint.getX(), aRect.getMaxX() - 1);
+            double newX = Math.min(aPoint.x, aRect.getMaxX() - 1);
             aRect.setWidth(aRect.getMaxX() - newX);
             aRect.setX(newX);
         }
 
         // Handle MaxXEdge drag
         else if ((anEdgeMask & MaxXEdge) > 0)
-            aRect.setWidth(Math.max(1, aPoint.getX() - aRect.getX()));
+            aRect.setWidth(Math.max(1, aPoint.x - aRect.x));
 
         // Handle MinYEdge drag
         if ((anEdgeMask & MinYEdge) > 0) {
-            double newY = Math.min(aPoint.getY(), aRect.getMaxY() - 1);
+            double newY = Math.min(aPoint.y, aRect.getMaxY() - 1);
             aRect.setHeight(aRect.getMaxY() - newY);
             aRect.setY(newY);
         }
 
         // Handle MaxYEdge drag
         else if ((anEdgeMask & MaxYEdge) > 0)
-            aRect.setHeight(Math.max(1, aPoint.getY() - aRect.getY()));
+            aRect.setHeight(Math.max(1, aPoint.y - aRect.y));
     }
 }

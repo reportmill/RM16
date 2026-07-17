@@ -424,7 +424,7 @@ public class RMTable extends RMParentShape {
     {
         // Iterate over children and return first whose resize bar bounds contains given point
         for (int i = 0, iMax = getChildCount(); i < iMax; i++)
-            if (getResizeBarBounds(i).contains(aPoint.getX(), aPoint.getY()))
+            if (getResizeBarBounds(i).contains(aPoint.x, aPoint.y))
                 return i;
         return -1;
     }

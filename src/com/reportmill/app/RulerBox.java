@@ -137,7 +137,7 @@ public class RulerBox extends ParentView {
             // Standard view attributes
             setFill(Color.LIGHTGRAY);
             setBorder(Color.BLACK, 1);
-            setClipToBounds(true);
+            setOverflow(Overflow.Clip);
         }
 
         /**
@@ -229,10 +229,10 @@ public class RulerBox extends ParentView {
             }
 
             // Paint mouse position
-            Point mp = _editor.convertToShape(_mouse.x, _mouse.y, _doc);
+            Point mouseXY = _editor.convertToShape(_mouse.x, _mouse.y, _doc);
             aPntr.setColor(Color.BLACK);
             aPntr.setStroke(MOUSE_STROKE);
-            aPntr.drawLine(mp.getX(), 0, mp.getX(), getHeight());
+            aPntr.drawLine(mouseXY.x, 0, mouseXY.x, getHeight());
             aPntr.restore();
         }
 
@@ -253,10 +253,10 @@ public class RulerBox extends ParentView {
             aPntr.translate(0, -bnds.y);
 
             // Get basic coords
-            double usize = getUnitWidth();
-            double y = MathUtils.floor(bnds.y, usize), maxy = bnds.getMaxY();
+            double unitWidth = getUnitWidth();
+            double y = MathUtils.floor(bnds.y, unitWidth), maxy = bnds.getMaxY();
             double w = getWidth(), hw = w / 2;
-            double dy = usize, dym = 9;
+            double dy = unitWidth, dym = 9;
 
             // Get/set font and get font ascent
             Font font = RULER_FONT;
@@ -268,25 +268,27 @@ public class RulerBox extends ParentView {
                 String str = String.valueOf((int) Math.round(y));
                 aPntr.drawString(str, 2, y + fontAscent + 2);
                 aPntr.drawLine(0, y, w, y);
-                for (double y2 = y + dym, my2 = y + dy / 2 - 1; y2 < my2; y2 += dym) aPntr.drawLine(w - 5, y2, w, y2);
+                for (double y2 = y + dym, my2 = y + dy / 2 - 1; y2 < my2; y2 += dym)
+                    aPntr.drawLine(w - 5, y2, w, y2);
                 double my = y + dy / 2;
                 aPntr.drawLine(w, my, w - hw, my);
-                for (double y2 = my + dym, my2 = y + dy - 1; y2 < my2; y2 += dym) aPntr.drawLine(w, y2, w - 5, y2);
+                for (double y2 = my + dym, my2 = y + dy - 1; y2 < my2; y2 += dym)
+                    aPntr.drawLine(w, y2, w - 5, y2);
                 y += dy;
             }
 
             // Paint shape position
-            Rect selBnds = getShapeBounds();
-            if (selBnds != null) {
+            Rect selShapeBounds = getShapeBounds();
+            if (selShapeBounds != null) {
                 aPntr.setColor(new Color(1, .5));
-                aPntr.fillRect(0, selBnds.y, getWidth(), selBnds.height);
+                aPntr.fillRect(0, selShapeBounds.y, getWidth(), selShapeBounds.height);
             }
 
             // Paint mouse position
-            Point mp = _editor.convertToShape(_mouse.x, _mouse.y, _doc);
+            Point mouseXY = _editor.convertToShape(_mouse.x, _mouse.y, _doc);
             aPntr.setColor(Color.BLACK);
             aPntr.setStroke(MOUSE_STROKE);
-            aPntr.drawLine(0, mp.getY(), getWidth(), mp.getY());
+            aPntr.drawLine(0, mouseXY.y, getWidth(), mouseXY.y);
             aPntr.restore();
         }
 
@@ -300,5 +302,4 @@ public class RulerBox extends ParentView {
             return shape.localToParent(shape.getBoundsInside(), null).getBounds();
         }
     }
-
 }

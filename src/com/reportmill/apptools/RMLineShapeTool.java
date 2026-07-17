@@ -58,8 +58,8 @@ public class RMLineShapeTool<T extends RMLineShape> extends RMTool<T> {
     public void mouseDragged(ViewEvent anEvent)
     {
         Point currentPoint = getEditorEvents().getEventPointInShape(true);
-        double dx = currentPoint.getX() - _downPoint.getX();
-        double dy = currentPoint.getY() - _downPoint.getY();
+        double dx = currentPoint.x - _downPoint.x;
+        double dy = currentPoint.y - _downPoint.y;
         double breakingPoint = 20f;
 
         if (_hysteresis) {
@@ -74,7 +74,7 @@ public class RMLineShapeTool<T extends RMLineShape> extends RMTool<T> {
         _shape.repaint();
 
         // Set adjusted bounds
-        _shape.setBounds(_downPoint.getX(), _downPoint.getY(), dx, dy);
+        _shape.setBounds(_downPoint.x, _downPoint.y, dx, dy);
     }
 
     /**

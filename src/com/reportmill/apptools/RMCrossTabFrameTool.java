@@ -85,28 +85,28 @@ public class RMCrossTabFrameTool<T extends RMCrossTabFrame> extends RMTool<T> {
     /**
      * Event handling from select tool for super selected shapes.
      */
-    public void mousePressed(T aCTabFrame, ViewEvent anEvent)
+    public void mousePressed(T crossTabFrame, ViewEvent anEvent)
     {
         // Get event point in TableFrame coords
         RMEditor editor = getEditor();
-        Point point = editor.convertToShape(anEvent.getX(), anEvent.getY(), aCTabFrame);
+        Point point = editor.convertToShape(anEvent.getX(), anEvent.getY(), crossTabFrame);
 
         // Handle mouse press in crosstab when not superselected
-        if (editor.isSelected(aCTabFrame)) {
+        if (editor.isSelected(crossTabFrame)) {
 
             // If click was inside table bounds, super select table and consume event
-            if (point.getX() < aCTabFrame.getTable().getWidth() && point.getY() < aCTabFrame.getTable().getHeight()) {
-                editor.setSuperSelectedShape(aCTabFrame.getTable());
+            if (point.x < crossTabFrame.getTable().getWidth() && point.y < crossTabFrame.getTable().getHeight()) {
+                editor.setSuperSelectedShape(crossTabFrame.getTable());
                 anEvent.consume();
             }
         }
 
         // Handle mouse press in super selected crosstab's buffer region
-        if (editor.isSuperSelected(aCTabFrame)) {
+        if (editor.isSuperSelected(crossTabFrame)) {
 
             // If click was outside table bounds, make table frame just selected
-            if (point.getX() >= aCTabFrame.getTable().getWidth() || point.getY() >= aCTabFrame.getTable().getHeight()) {
-                editor.setSelectedShape(aCTabFrame);
+            if (point.x >= crossTabFrame.getTable().getWidth() || point.y >= crossTabFrame.getTable().getHeight()) {
+                editor.setSelectedShape(crossTabFrame);
                 editor.getSelectTool().setRedoMousePressed(true); // Register for redo
             }
         }

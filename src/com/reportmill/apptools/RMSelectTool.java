@@ -223,7 +223,7 @@ public class RMSelectTool extends RMTool {
                 // Iterate over selected shapes and update roll
                 for (RMShape shape : editor.getSelectedShapes()) {
                     if (shape.isLocked()) continue;
-                    shape.setRoll(shape.getRoll() + point2.getY() - _lastMousePoint.getY());
+                    shape.setRoll(shape.getRoll() + point2.y - _lastMousePoint.y);
                 }
 
                 // Reset last point and break
@@ -359,9 +359,9 @@ public class RMSelectTool extends RMTool {
         // Iterate over selected shapes
         for (int i = 0, iMax = getEditor().getSelectedShapeCount(); i < iMax; i++) {
             RMShape shape = getEditor().getSelectedShape(i);
-            if (shape.isLocked()) continue;
-            double fx = fromPoint.getX(), fy = fromPoint.getY(), tx = toPoint.getX(), ty = toPoint.getY();
-            shape.setFrameXY(shape.getFrameX() + tx - fx, shape.getFrameY() + ty - fy);
+            if (shape.isLocked())
+                continue;
+            shape.setFrameXY(shape.getFrameX() + toPoint.x - fromPoint.x, shape.getFrameY() + toPoint.y - fromPoint.y);
         }
     }
 

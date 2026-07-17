@@ -92,7 +92,7 @@ public class RMSwitchShape extends RMParentShape {
             toShape.addChild(child);
 
         // Reset origin
-        toShape.setXYP(origin.getX(), origin.getY());
+        toShape.setXYP(origin.x, origin.y);
     }
 
     /**

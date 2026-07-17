@@ -96,7 +96,7 @@ public class WelcomePanelAnim extends ViewController {
 
             // Handle normal: Size PrefHeight up
         else {
-            _mainView.setClipToBounds(true);
+            _mainView.setOverflow(View.Overflow.Clip);
             _mainView.getAnimCleared(600).setPrefHeight(240);
         }
 

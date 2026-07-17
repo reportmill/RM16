@@ -525,34 +525,22 @@ public class RMTextShape extends RMRectShape {
     /**
      * Returns the left margin of the text (default to 2).
      */
-    public int getMarginLeft()
-    {
-        return (int) Math.round(getMargin().getLeft());
-    }
+    public int getMarginLeft()  { return (int) Math.round(getMargin().left); }
 
     /**
      * Returns the right margin of the text (defaults to 2).
      */
-    public int getMarginRight()
-    {
-        return (int) Math.round(getMargin().getRight());
-    }
+    public int getMarginRight()  { return (int) Math.round(getMargin().right); }
 
     /**
      * Returns the top margin of the text (defaults to 1).
      */
-    public int getMarginTop()
-    {
-        return (int) Math.round(getMargin().getTop());
-    }
+    public int getMarginTop()  { return (int) Math.round(getMargin().top); }
 
     /**
      * Returns the bottom margin of the text (defaults to 0).
      */
-    public int getMarginBottom()
-    {
-        return (int) Math.round(getMargin().getBottom());
-    }
+    public int getMarginBottom()  { return (int) Math.round(getMargin().bottom); }
 
     /**
      * Override to revalidate.

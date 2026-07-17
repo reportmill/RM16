@@ -515,7 +515,7 @@ public class RMXString implements Cloneable, CharSequence, RMTypes, RMArchiver.A
 
                 // If val is Number, get format and change val to string (verify format type)
                 else if (val instanceof Number) {
-                    RMFormat format = keyRun.getFormat();
+                    TextFormat format = keyRun.getFormat();
                     if (!(format instanceof RMNumberFormat))
                         format = RMNumberFormat.PLAIN;
                     valString = format.format(val);
@@ -526,7 +526,7 @@ public class RMXString implements Cloneable, CharSequence, RMTypes, RMArchiver.A
 
                 // If val is Date, get format and change val to string (verify format type)
                 else if (val instanceof Date) {
-                    RMFormat format = keyRun.getFormat();
+                    TextFormat format = keyRun.getFormat();
                     if (!(format instanceof RMDateFormat))
                         format = RMDateFormat.defaultFormat;
                     valString = format.format(val);
@@ -534,7 +534,7 @@ public class RMXString implements Cloneable, CharSequence, RMTypes, RMArchiver.A
 
                 // If value is null, either use current format's or Document's NullString
                 else if (val == null) {
-                    RMFormat fmt = keyRun.getFormat();
+                    TextFormat fmt = keyRun.getFormat();
                     if (fmt != null)
                         valString = fmt.format(val);
                 }
@@ -590,7 +590,7 @@ public class RMXString implements Cloneable, CharSequence, RMTypes, RMArchiver.A
                         // If string is normal string, just perform replace and update key range
                     else {
                         outString.replaceChars(string, totalKeyRange.start, totalKeyRange.end);
-                        totalKeyRange.setLength(((String) valString).length());
+                        totalKeyRange.setLength(string.length());
                     }
                 }
 

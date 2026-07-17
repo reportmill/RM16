@@ -3,7 +3,6 @@
  */
 package com.reportmill.app;
 import com.reportmill.apptools.*;
-import com.reportmill.base.RMFormat;
 import com.reportmill.graphics.*;
 import com.reportmill.shape.*;
 import java.util.*;
@@ -11,6 +10,7 @@ import snap.geom.Point;
 import snap.geom.Shape;
 import snap.geom.Size;
 import snap.gfx.*;
+import snap.text.TextFormat;
 import snap.util.ListUtils;
 
 /**
@@ -775,7 +775,7 @@ public class RMEditorUtils {
     /**
      * Returns the format of the editor's selected shape.
      */
-    public static RMFormat getFormat(RMEditor anEditor)
+    public static TextFormat getFormat(RMEditor anEditor)
     {
         return anEditor.getSelectedOrSuperSelectedShape().getFormat();
     }
@@ -783,7 +783,7 @@ public class RMEditorUtils {
     /**
      * Sets the format of editor's selected shape(s).
      */
-    public static void setFormat(RMEditor anEditor, RMFormat aFormat)
+    public static void setFormat(RMEditor anEditor, TextFormat aFormat)
     {
         for (RMShape shape : anEditor.getSelectedOrSuperSelectedShapes())
             shape.setFormat(aFormat);

@@ -3,6 +3,7 @@
  */
 package com.reportmill.app;
 import com.reportmill.base.*;
+import snap.text.TextFormat;
 import snap.util.*;
 import snap.view.*;
 import snap.viewx.DialogBox;
@@ -66,44 +67,42 @@ public class FormatPanel extends RMEditorPane.SupportPane {
         // Get main editor and currently selected format (just return if null)
         RMEditor editor = getEditor();
         if (editor == null) return;
-        RMFormat format = RMEditorUtils.getFormat(editor);
+        TextFormat format = RMEditorUtils.getFormat(editor);
 
         // Handle NumberFormat: Update NumberPanel
-        if (format instanceof RMNumberFormat) {
-            RMNumberFormat nformat = (RMNumberFormat) format;
+        if (format instanceof RMNumberFormat numberformat) {
 
             // Install number panel if absent
             setViewSelIndex("PickerPanel", 1);
             setViewValue("NumberFormatButton", true);
 
             // Update MoneyButton, PercentButton, CommaButton
-            setViewValue("MoneyButton", nformat.isLocalCurrencySymbolUsed());
-            setViewValue("PercentButton", nformat.isPercentSymbolUsed());
-            setViewValue("CommaButton", nformat.isGroupingUsed());
+            setViewValue("MoneyButton", numberformat.isLocalCurrencySymbolUsed());
+            setViewValue("PercentButton", numberformat.isPercentSymbolUsed());
+            setViewValue("CommaButton", numberformat.isGroupingUsed());
 
             // Have the table select current format if present
             setViewSelIndex("NumberFormatTable", _numberFormats.indexOf(format));
 
             // Update NumberFormatText, NegativeInRedCheckBox, NumberNullStringText
-            setViewValue("NumberFormatText", nformat.getPattern());
-            setViewValue("NegativeInRedCheckBox", nformat.isNegativeInRed());
-            setViewValue("NumberNullStringText", nformat.getNullString());
+            setViewValue("NumberFormatText", numberformat.getPattern());
+            setViewValue("NegativeInRedCheckBox", numberformat.isNegativeInRed());
+            setViewValue("NumberNullStringText", numberformat.getNullString());
         }
 
         // Handle DateFormat: Update _datePanel text fields
-        else if (format instanceof RMDateFormat) {
-            RMDateFormat dformat = (RMDateFormat) format;
+        else if (format instanceof RMDateFormat dateFormat) {
 
             // Install date panel if absent
             setViewSelIndex("PickerPanel", 2);
             setViewValue("DateFormatButton", true);
 
             // Have the table select current format if present
-            setViewSelIndex("DateFormatTable", getDateFormatIndex(dformat.getPattern()));
+            setViewSelIndex("DateFormatTable", getDateFormatIndex(dateFormat.getPattern()));
 
             // Update DateFormatText, DateNullStringText
-            setViewValue("DateFormatText", dformat.getPattern());
-            setViewValue("DateNullStringText", dformat.getNullString());
+            setViewValue("DateFormatText", dateFormat.getPattern());
+            setViewValue("DateNullStringText", dateFormat.getNullString());
         }
 
         // Handle NoFormatPanel
@@ -121,7 +120,7 @@ public class FormatPanel extends RMEditorPane.SupportPane {
         // Get main editor and currently selected format, number format and date format (one or the other will be null)
         RMEditor editor = getEditor();
         if (editor == null) return;
-        RMFormat format = RMEditorUtils.getFormat(editor);
+        TextFormat format = RMEditorUtils.getFormat(editor);
         RMNumberFormat numFormat = format instanceof RMNumberFormat ? (RMNumberFormat) format : null;
         RMDateFormat dateFormat = format instanceof RMDateFormat ? (RMDateFormat) format : null;
 
@@ -144,7 +143,7 @@ public class FormatPanel extends RMEditorPane.SupportPane {
         }
 
         // Handle NumberFormatText
-        if (anEvent.equals("NumberFormatText") && anEvent.getStringValue().length() > 0) {
+        if (anEvent.equals("NumberFormatText") && !anEvent.getStringValue().isEmpty()) {
             try {
                 format.setPattern(anEvent.getStringValue());
             } catch (Exception e) {
@@ -220,10 +219,9 @@ public class FormatPanel extends RMEditorPane.SupportPane {
         }
 
         // Handle DateFormatText
-        if (anEvent.equals("DateFormatText") && anEvent.getStringValue().length() > 0) {
-            try {
-                format.setPattern(anEvent.getStringValue());
-            } catch (Exception e) {
+        if (anEvent.equals("DateFormatText") && !anEvent.getStringValue().isEmpty()) {
+            try { format.setPattern(anEvent.getStringValue()); }
+            catch (Exception e) {
                 String msg = "Invalid date format (see SimpleDateFormat javadoc for info).";
                 DialogBox dbox = new DialogBox("Invalid Date Format String");
                 dbox.setErrorMessage(msg);
@@ -357,15 +355,15 @@ public class FormatPanel extends RMEditorPane.SupportPane {
      */
     public String getDefaultNumberFormatsString()
     {
-        return
-                "$ #,##0.00\n" +
-                        "$ #,##0\n" +
-                        "0.00\n" +
-                        "0\n" +
-                        "#,##0\n" +
-                        "000000\n" +
-                        "0%\n" +
-                        "0.00%";
+        return """
+            $ #,##0.00
+            $ #,##0
+            0.00
+            0
+            #,##0
+            000000
+            0%
+            0.00%""";
     }
 
     /**
@@ -373,17 +371,17 @@ public class FormatPanel extends RMEditorPane.SupportPane {
      */
     public String getDefaultDateFormatsString()
     {
-        return
-                "EEEE, MMMM d, yyyy\n" +
-                        "MMMM d, yyyy\n" +
-                        "d MMMM yyyy\n" +
-                        "MM/dd/yy\n" +
-                        "MM/dd/yyyy\n" +
-                        "MMM dd, yyyy\n" +
-                        "dd MMM yyyy\n" +
-                        "dd-MMM-yyyy\n" +
-                        "HH:mm:ss a zzzz\n" +
-                        "hh:mm a";
+        return """
+            EEEE, MMMM d, yyyy
+            MMMM d, yyyy
+            d MMMM yyyy
+            MM/dd/yy
+            MM/dd/yyyy
+            MMM dd, yyyy
+            dd MMM yyyy
+            dd-MMM-yyyy
+            HH:mm:ss a zzzz
+            hh:mm a""";
     }
 
     /**

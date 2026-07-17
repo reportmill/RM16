@@ -7,6 +7,7 @@ import com.reportmill.out.RMPDFWriter;
 import com.reportmill.shape.*;
 import java.util.*;
 import snap.geom.Rect;
+import snap.text.TextFormat;
 import snap.util.*;
 import snap.web.WebURL;
 
@@ -160,7 +161,7 @@ public class RMExtras {
     /**
      * Replaces a format.
      */
-    public static void replaceFormat(RMShape aShape, RMFormat aFormat)
+    public static void replaceFormat(RMShape aShape, TextFormat aFormat)
     {
         // Handle document
         if (aShape instanceof RMDocument document) {

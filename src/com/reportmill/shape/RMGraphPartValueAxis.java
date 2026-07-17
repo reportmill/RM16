@@ -5,6 +5,7 @@ package com.reportmill.shape;
 import com.reportmill.base.*;
 import com.reportmill.graphics.RMColor;
 import com.reportmill.graphics.RMFont;
+import snap.text.TextFormat;
 import snap.util.*;
 
 /**
@@ -148,7 +149,7 @@ public class RMGraphPartValueAxis extends RMTextShape {
      */
     public void setFont(RMFont aFont)
     {
-        if (getXString().length() == 0 && !_unarchiving)
+        if (getXString().isEmpty() && !_unarchiving)
             getXString().addChars(" ");
         super.setFont(aFont);
         relayoutParent();
@@ -157,18 +158,18 @@ public class RMGraphPartValueAxis extends RMTextShape {
     /**
      * Returns the format for the shape.
      */
-    public RMFormat getFormat()
+    public TextFormat getFormat()
     {
-        RMFormat format = super.getFormat();
+        TextFormat format = super.getFormat();
         return format != null ? format : RMNumberFormat.BASIC;
     }
 
     /**
      * Sets the format for the shape.
      */
-    public void setFormat(RMFormat aFormat)
+    public void setFormat(TextFormat aFormat)
     {
-        if (getXString().length() == 0)
+        if (getXString().isEmpty())
             getXString().addChars(" ");
         super.setFormat(aFormat);
         relayoutParent();
@@ -179,7 +180,7 @@ public class RMGraphPartValueAxis extends RMTextShape {
      */
     public void setTextColor(RMColor aColor)
     {
-        if (getXString().length() == 0)
+        if (getXString().isEmpty())
             getXString().addChars(" ");
         super.setTextColor(aColor);
         relayoutParent();

@@ -3,6 +3,7 @@
  */
 package com.reportmill.graphics;
 import com.reportmill.base.*;
+import snap.text.TextFormat;
 import snap.text.TextLine;
 import snap.text.TextRun;
 import snap.text.TextStyle;
@@ -56,10 +57,7 @@ public class RMXStringRun implements CharSequence {
     /**
      * CharSequence method returning character at given index.
      */
-    public char charAt(int anIndex)
-    {
-        return _xstr.charAt(_start + anIndex);
-    }
+    public char charAt(int anIndex)  { return _xstr.charAt(_start + anIndex); }
 
     /**
      * CharSequence method return character sequence for range.
@@ -72,58 +70,37 @@ public class RMXStringRun implements CharSequence {
     /**
      * Returns the text style.
      */
-    public RMTextStyle getStyle()
-    {
-        return new RMTextStyle(_style);
-    }
+    public RMTextStyle getStyle()  { return new RMTextStyle(_style); }
 
     /**
      * Returns the font for this run.
      */
-    public RMFont getFont()
-    {
-        return getStyle().getFont();
-    }
+    public RMFont getFont()  { return getStyle().getFont(); }
 
     /**
      * Returns the color for this run.
      */
-    public RMColor getColor()
-    {
-        return getStyle().getColor();
-    }
+    public RMColor getColor()  { return getStyle().getColor(); }
 
     /**
      * Returns the format for this run.
      */
-    public RMFormat getFormat()
-    {
-        return getStyle().getFormat();
-    }
+    public TextFormat getFormat()  { return getStyle().getFormat(); }
 
     /**
      * Returns the paragraph for this run.
      */
-    public RMParagraph getParagraph()
-    {
-        return new RMParagraph(_textLine.getLineStyle());
-    }
+    public RMParagraph getParagraph()  { return new RMParagraph(_textLine.getLineStyle()); }
 
     /**
      * Returns whether this run is underlined.
      */
-    public boolean isUnderlined()
-    {
-        return getStyle().isUnderlined();
-    }
+    public boolean isUnderlined()  { return getStyle().isUnderlined(); }
 
     /**
      * Returns the char spacing.
      */
-    public float getCharSpacing()
-    {
-        return (float) getStyle().getCharSpacing();
-    }
+    public float getCharSpacing()  { return (float) getStyle().getCharSpacing(); }
 
     /**
      * Return next run.

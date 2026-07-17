@@ -2,7 +2,6 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package com.reportmill.graphics;
-import com.reportmill.base.RMFormat;
 import snap.gfx.*;
 import snap.text.*;
 import snap.util.*;
@@ -81,13 +80,13 @@ public class RMTextEditor extends TextAdapter {
     /**
      * Returns the format of the current selection or cursor.
      */
-    public RMFormat getFormat()  { return getSelStyle().getFormat(); }
+    public TextFormat getFormat()  { return getSelStyle().getFormat(); }
 
     /**
      * Sets the format of the current selection or cursor, after trying to expand the selection to encompass currently
      * selected, @-sign delineated key.
      */
-    public void setFormat(RMFormat aFormat)
+    public void setFormat(TextFormat aFormat)
     {
         // Get format selection range and select it (if non-null)
         TextSel sel = TextModelUtils.smartFindFormatRange(getTextModel(), getSelStart(), getSelEnd());

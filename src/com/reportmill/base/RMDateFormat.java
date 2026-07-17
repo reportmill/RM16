@@ -6,12 +6,13 @@ import com.reportmill.shape.RMDocument;
 import java.util.*;
 import java.text.*;
 import com.reportmill.shape.RMArchiver;
+import snap.text.TextFormat;
 import snap.util.*;
 
 /**
  * This is just a SimpleDateFormat subclass to support RM archiving and legacy formats.
  */
-public class RMDateFormat implements RMFormat, Cloneable {
+public class RMDateFormat implements TextFormat, Cloneable, RMArchiver.Archivable {
 
     // The format
     SimpleDateFormat _fmt = new SimpleDateFormat();

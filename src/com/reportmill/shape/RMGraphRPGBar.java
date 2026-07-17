@@ -2,11 +2,11 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package com.reportmill.shape;
-import com.reportmill.base.RMFormat;
 import com.reportmill.base.RMGroup;
 import com.reportmill.graphics.*;
 import java.util.*;
 import snap.geom.*;
+import snap.text.TextFormat;
 import snap.util.MathUtils;
 
 /**
@@ -386,7 +386,7 @@ class RMGraphRPGBar extends RMGraphRPG {
         double height = _graph.getHeight();
 
         // Get format from value axis (defaults to basic)
-        RMFormat format = valueAxis.getFormat();
+        TextFormat format = valueAxis.getFormat();
 
         // Create shape for value axis and configure
         RMPolygonShape axis = new RMPolygonShape();

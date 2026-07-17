@@ -2,10 +2,10 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package com.reportmill.shape;
-import com.reportmill.base.RMFormat;
 import com.reportmill.graphics.*;
 import java.util.*;
 import snap.gfx.Effect;
+import snap.text.TextFormat;
 import snap.util.*;
 
 /**
@@ -241,7 +241,7 @@ public class RMGraphPartSeries extends RMShape {
     /**
      * Override to handle proxy.
      */
-    public RMFormat getFormat()
+    public TextFormat getFormat()
     {
         return getProxy().getFormat();
     }
@@ -249,7 +249,7 @@ public class RMGraphPartSeries extends RMShape {
     /**
      * Override to handle proxy.
      */
-    public void setFormat(RMFormat aFormat)
+    public void setFormat(TextFormat aFormat)
     {
         getProxy().setFormat(aFormat);
     }

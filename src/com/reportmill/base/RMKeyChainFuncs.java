@@ -5,6 +5,8 @@ package com.reportmill.base;
 import com.reportmill.graphics.*;
 import java.lang.reflect.*;
 import java.util.*;
+
+import snap.text.TextFormat;
 import snap.util.*;
 
 /**
@@ -428,13 +430,13 @@ public class RMKeyChainFuncs {
 
         // If number, get number format and return formatted string
         if (anObj instanceof Number) {
-            RMFormat fmt = new RMNumberFormat(fmtStr);
+            TextFormat fmt = new RMNumberFormat(fmtStr);
             return fmt.format(anObj);
         }
 
         // If dte, get date format and return formatted string
         if (anObj instanceof Date) {
-            RMFormat fmt = new RMDateFormat(fmtStr);
+            TextFormat fmt = new RMDateFormat(fmtStr);
             return fmt.format(anObj);
         }
 

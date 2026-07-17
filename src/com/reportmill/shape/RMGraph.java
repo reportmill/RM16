@@ -2,12 +2,12 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package com.reportmill.shape;
-import com.reportmill.base.RMFormat;
 import com.reportmill.base.RMGrouping;
 import com.reportmill.graphics.*;
 import java.util.*;
 import java.util.List;
 import snap.gfx.*;
+import snap.text.TextFormat;
 import snap.util.*;
 
 /**
@@ -794,7 +794,7 @@ public class RMGraph extends RMParentShape {
     /**
      * Override to allow for ProxyShape.
      */
-    public RMFormat getFormat()
+    public TextFormat getFormat()
     {
         return useProxy() ? _proxyShape.getFormat() : super.getFormat();
     }
@@ -802,7 +802,7 @@ public class RMGraph extends RMParentShape {
     /**
      * Override to allow for ProxyShape and trigger relayout.
      */
-    public void setFormat(RMFormat aFormat)
+    public void setFormat(TextFormat aFormat)
     {
         if (_proxyShape != null)
             _proxyShape.setFormat(aFormat);

@@ -8,6 +8,7 @@ import java.util.*;
 import snap.geom.*;
 import snap.gfx.*;
 import snap.props.*;
+import snap.text.TextFormat;
 import snap.util.*;
 import com.reportmill.shape.RMArchiver.*;
 import snap.view.*;
@@ -960,12 +961,12 @@ public class RMShape implements Cloneable, RMTypes, Archivable, Key.GetSet {
     /**
      * Returns the format for the shape.
      */
-    public RMFormat getFormat()  { return null; }
+    public TextFormat getFormat()  { return null; }
 
     /**
      * Sets the format for the shape.
      */
-    public void setFormat(RMFormat aFormat)
+    public void setFormat(TextFormat aFormat)
     {
         // Add format to first binding
         //if((aFmt==null || aFmt instanceof java.text.Format) && getBindingCount()>0) getBinding(0).setFormat(aFmt);

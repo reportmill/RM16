@@ -2,7 +2,6 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package com.reportmill.shape;
-import com.reportmill.base.RMFormat;
 import com.reportmill.graphics.*;
 import java.util.*;
 import java.util.List;
@@ -205,7 +204,7 @@ public class RMTextShape extends RMRectShape {
     /**
      * Returns the format for char 0.
      */
-    public RMFormat getFormat()
+    public TextFormat getFormat()
     {
         if (isTextEditorSet())
             return getTextEditor().getFormat();
@@ -215,7 +214,7 @@ public class RMTextShape extends RMRectShape {
     /**
      * Sets the format for all characters.
      */
-    public void setFormat(RMFormat aFormat)
+    public void setFormat(TextFormat aFormat)
     {
         if (isTextEditorSet())
             getTextEditor().setFormat(aFormat);

@@ -3,7 +3,6 @@
  */
 package com.reportmill.app;
 import com.reportmill.apptools.*;
-import com.reportmill.base.RMFormat;
 import com.reportmill.base.RMNumberFormat;
 import com.reportmill.graphics.*;
 import com.reportmill.shape.*;
@@ -11,6 +10,7 @@ import java.util.*;
 import snap.geom.Pos;
 import snap.gfx.*;
 import snap.props.Undoer;
+import snap.text.TextFormat;
 import snap.util.*;
 import snap.view.*;
 import snap.viewx.*;
@@ -91,7 +91,7 @@ public class RMEditorPaneToolBar extends RMEditorPane.SupportPane {
         setViewEnabled("RedoButton", undoer != null && undoer.getLastRedoSet() != null);
 
         // Update MoneyButton, PercentButton, CommaButton
-        RMFormat fmt = RMEditorUtils.getFormat(editor);
+        TextFormat fmt = RMEditorUtils.getFormat(editor);
         RMNumberFormat nfmt = fmt instanceof RMNumberFormat ? (RMNumberFormat) fmt : null;
         setViewValue("MoneyButton", nfmt != null && nfmt.isLocalCurrencySymbolUsed());
         setViewValue("PercentButton", nfmt != null && nfmt.isPercentSymbolUsed());

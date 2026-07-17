@@ -12,6 +12,7 @@ import org.apache.poi.hssf.util.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import snap.geom.Rect;
 import snap.gfx.*;
+import snap.text.TextFormat;
 import snap.util.*;
 
 /**
@@ -387,22 +388,19 @@ public class RMExcelWriter {
         string = StringUtils.replace(string, "\t", " ");
 
         // Get text format, if available and declare local variable for format string
-        RMFormat format = aText.getFormat();
+        TextFormat format = aText.getFormat();
         String formatString = null;
 
         // Handle numeric cells (number formatted)
-        if (format instanceof RMNumberFormat) {
-            RMNumberFormat numFormat = (RMNumberFormat) format;
+        if (format instanceof RMNumberFormat numFormat) {
 
             // Get format string
             formatString = numFormat.getPattern();
 
             // Get the cell value as number
             Number number = null;
-            try {
-                number = numFormat.parse(string);
-            } catch (Exception e) {
-            }
+            try { number = numFormat.parse(string); }
+            catch (Exception ignore) { }
 
             // Set cell double value
             if (number != null)
@@ -416,18 +414,15 @@ public class RMExcelWriter {
         }
 
         // Handle date cells (date formatted)
-        else if (format instanceof RMDateFormat) {
-            RMDateFormat dateFormat = (RMDateFormat) format;
+        else if (format instanceof RMDateFormat dateFormat) {
 
             // Get the format string
             formatString = dateFormat.getPattern();
 
             // Get the cell value as date
             Date date = null;
-            try {
-                date = dateFormat.parse(string);
-            } catch (Exception e) {
-            }
+            try { date = dateFormat.parse(string); }
+            catch (Exception ignore) { }
 
             // If date is non null, set date value and try to get equivalent excel format string
             if (date != null) {

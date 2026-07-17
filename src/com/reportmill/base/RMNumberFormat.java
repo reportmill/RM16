@@ -7,6 +7,7 @@ import java.text.*;
 import java.util.Locale;
 import java.util.Objects;
 import com.reportmill.shape.RMArchiver;
+import snap.text.TextFormat;
 import snap.text.TextStyle;
 import snap.util.*;
 
@@ -27,7 +28,7 @@ import snap.util.*;
  * <p>
  * I suppose we should instead have a syntax explicitly declaring decimal and group separators: "$ #,##0.00;ds=,;gs=.".
  */
-public class RMNumberFormat implements RMFormat, Cloneable {
+public class RMNumberFormat implements TextFormat, Cloneable, RMArchiver.Archivable {
 
     // The decimal format
     DecimalFormat _fmt = new DecimalFormat();

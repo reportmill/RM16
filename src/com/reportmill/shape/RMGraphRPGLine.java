@@ -15,7 +15,7 @@ class RMGraphRPGLine extends RMGraphRPGBar {
     double _minX = 0, _maxX = 1;
 
     /**
-     * Creates a bar graph maker.
+     * Constructor.
      */
     public RMGraphRPGLine(RMGraph aGraph, ReportOwner anRptOwner)
     {
@@ -44,7 +44,7 @@ class RMGraphRPGLine extends RMGraphRPGBar {
                 // Get bounds of bar chart bar and line graph point
                 Rect barBounds = getBarBounds(i, j);
                 double lineX = barBounds.getMidX();
-                double lineY = barBounds.getMinY();
+                double lineY = barBounds.y;
 
                 // If first series point, do MoveTo, otherwise LineTo
                 if (j == 0) path.moveTo(lineX, lineY);
@@ -95,7 +95,7 @@ class RMGraphRPGLine extends RMGraphRPGBar {
 
                 // Get line graph point
                 double lineX = barBounds.getMidX();
-                double lineY = barBounds.getMinY();
+                double lineY = barBounds.y;
 
                 // Create new linePointShape
                 RMShape linePointShape = new RMRectShape();
@@ -120,5 +120,4 @@ class RMGraphRPGLine extends RMGraphRPGBar {
             }
         }
     }
-
 }

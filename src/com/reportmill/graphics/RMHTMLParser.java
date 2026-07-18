@@ -8,6 +8,7 @@ import javax.swing.text.*;
 import javax.swing.text.html.*;
 import javax.swing.text.html.parser.*;
 import snap.geom.HPos;
+import snap.text.TextLineStyle;
 import snap.util.*;
 
 /**
@@ -27,10 +28,10 @@ public class RMHTMLParser {
     /**
      * Returns an xstring for the given html string and a default font.
      */
-    public static RMXString parse(String html, RMFont baseFont, RMParagraph aPGraph)
+    public static RMXString parse(String html, RMFont baseFont, TextLineStyle textLineStyle)
     {
         // Get HTML String from HTMLParser
-        RMXString s = new HTMLParser(html, baseFont, aPGraph).getXString();
+        RMXString s = new HTMLParser(html, baseFont, textLineStyle).getXString();
 
         // Find the start of any trailing whitespace characters in string HTML string
         int whitespaceStart = s.length();
@@ -56,8 +57,8 @@ public class RMHTMLParser {
         // The current set of attributes (during parsing)
         Map<String,Object> _attrs = new Hashtable<>();
 
-        // The current paragraph attributes
-        RMParagraph _pgraph;
+        // The current line style attributes
+        TextLineStyle _textLineStyle;
 
         // The current stack of fonts (during parsing)
         List<RMFont> _fontStack = new ArrayList<>();
@@ -71,12 +72,12 @@ public class RMHTMLParser {
         /**
          * Creates a new parser for an html string and a default font.
          */
-        public HTMLParser(String aString, RMFont baseFont, RMParagraph aPGraph)
+        public HTMLParser(String aString, RMFont baseFont, TextLineStyle textLineStyle)
         {
             // Initialize attributes map, FontStack and PGraph
             _attrs.put(RMTextStyle.FONT_KEY, baseFont);
             _fontStack.add(baseFont);
-            _pgraph = aPGraph != null ? aPGraph : RMParagraph.DEFAULT;
+            _textLineStyle = textLineStyle != null ? textLineStyle : TextLineStyle.DEFAULT;
 
             // Convert known character entity references to unicode chars
             String s2 = aString;
@@ -152,9 +153,9 @@ public class RMHTMLParser {
                 _listLevel++;
                 if (!_string.getRunLast().toString().endsWith("\n")) _string.addChars("\n");
                 RMFont font = (RMFont) _attrs.get(RMTextStyle.FONT_KEY);
-                double firstIndent = _pgraph.getTab(_listLevel - 1);
+                double firstIndent = _textLineStyle.getTab(_listLevel - 1);
                 double leftIndent = firstIndent + font.getStringAdvance(((char) 8226) + " ");
-                _pgraph = _pgraph.copyForIndents(firstIndent, leftIndent, _pgraph.getRightIndent());
+                _textLineStyle = _textLineStyle.copyForIndents(firstIndent, leftIndent, _textLineStyle.getRightIndent());
             }
 
             // Handle List item (<LI>)
@@ -227,7 +228,7 @@ public class RMHTMLParser {
 
             // Handle CENTER
             if (aTag.equals(HTML.Tag.CENTER))
-                _pgraph = _pgraph.copyForAlign(HPos.CENTER);
+                _textLineStyle = _textLineStyle.copyForAlign(HPos.CENTER);
 
             // Handle super-scripting
             if (aTag.equals(HTML.Tag.SUP))
@@ -270,16 +271,16 @@ public class RMHTMLParser {
                 _listLevel = Math.max(0, _listLevel - 1);
                 if (!_string.getRunLast().toString().endsWith("\n")) _string.addChars("\n");
                 RMFont font = (RMFont) _attrs.get(RMTextStyle.FONT_KEY);
-                double firstIndent = _listLevel == 0 ? 0 : _pgraph.getTab(_listLevel - 1);
+                double firstIndent = _listLevel == 0 ? 0 : _textLineStyle.getTab(_listLevel - 1);
                 double leftIndent = _listLevel == 0 ? 0 : firstIndent + font.getStringAdvance(((char) 8226) + " ");
-                _pgraph = _pgraph.copyForIndents(firstIndent, leftIndent, _pgraph.getRightIndent());
+                _textLineStyle = _textLineStyle.copyForIndents(firstIndent, leftIndent, _textLineStyle.getRightIndent());
             }
 
             // Handle CENTER
             if (t.equals(HTML.Tag.CENTER)) {
                 if (!_string.getRunLast().toString().endsWith("\n"))
                     _string.addChars("\n");
-                _pgraph = _pgraph.copyForAlign(HPos.LEFT);
+                _textLineStyle = _textLineStyle.copyForAlign(HPos.LEFT);
             }
 
             // Handle super-scripting
@@ -305,7 +306,7 @@ public class RMHTMLParser {
             String str = new String(data);
             int len = _string.length();
             _string.addChars(str, _attrs);
-            _string.setParagraph(_pgraph, len, len + str.length());
+            _string.setLineStyle(_textLineStyle, len, len + str.length());
         }
 
         /**
@@ -575,5 +576,4 @@ public class RMHTMLParser {
             };
         }
     }
-
 }

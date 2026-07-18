@@ -592,7 +592,7 @@ public class RMXString implements Cloneable, CharSequence, RMArchiver.Archivable
 
                     // If string is HTML formatted text, parse into RMXString
                     if (StringUtils.startsWithIC(string, "<html"))
-                        valString = RMEnv.getEnv().parseHTML(string, keyRun.getFont(), keyRun.getParagraph());
+                        valString = RMEnv.getEnv().parseHTML(string, keyRun.getFont(), keyRun.getLineStyle());
 
                         // If string is RTF formatted text, parse into RMXString
                     else if (string.startsWith("{\\rtf"))

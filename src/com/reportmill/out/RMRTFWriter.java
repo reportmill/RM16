@@ -8,6 +8,7 @@ import java.io.*;
 import java.util.*;
 import snap.geom.Rect;
 import snap.gfx.*;
+import snap.text.TextLineStyle;
 import snap.util.ASCIICodec;
 
 /**
@@ -22,7 +23,7 @@ public class RMRTFWriter {
     private List<RMColor> _colorTable;
 
     // settings that persist across shapes
-    private RMParagraph _currentParagraph;
+    private TextLineStyle _currentTextLineStyle;
     private RMFont _currentFont;
     private RMColor _currentColor;
 
@@ -46,9 +47,9 @@ public class RMRTFWriter {
         _colorTable = new ArrayList<>();
         _colorTable.add(RMColor.black); // Init with black
 
-        // Set the current color & paragraph styles to the defaults
+        // Set the current color & line styles to the defaults
         _currentColor = RMColor.black;
-        _currentParagraph = getRTFParagraphDefaults();
+        _currentTextLineStyle = TextLineStyle.DEFAULT;
         _currentFont = null;
         _isBold = _isItalic = _isUnderline = false;
 
@@ -111,34 +112,32 @@ public class RMRTFWriter {
     /**
      * Writes an entry in the font table for a particular font.
      */
-    public void writeFont(PrintStream aPS, FontFile aFontFile)
+    private void writeFont(PrintStream aPS, FontFile aFontFile)
     {
-        aPS.print(getRTFFontFamily(aFontFile) + " ");
+        aPS.print(getRtfFontFamily(aFontFile) + " ");
         aPS.print("\\fcharset" + getRTFFontCharset(aFontFile) + " ");
         aPS.print(aFontFile.getName() + ";");
     }
 
-    public String getRTFFontFamily(FontFile f)
-    {
-        /*  Figure out which of
-         *  \froman (proportionally spaced, serif)
-         *  \fswiss (proportionally spaced, sans serif)
-         *  \fmodern (fixed pitch, sans serif)
-         *  \fscript (script)
-         *  \fdecor  (decorative)
-         *  \ftech (Technical, Symbol, & Mathematical)
-         *  \fbidi (bi-directional - yeah, right)
-         */
-        return "\\fnil";   // \fnil means unknown
-    }
+    /**
+     * Figure out which of
+     *  \froman (proportionally spaced, serif)
+     *  \fswiss (proportionally spaced, sans serif)
+     *  \fmodern (fixed pitch, sans serif)
+     *  \fscript (script)
+     *  \fdecor  (decorative)
+     *  \ftech (Technical, Symbol, & Mathematical)
+     *  \fbidi (bi-directional - yeah, right)
+     */
+    private String getRtfFontFamily(FontFile fontFile)  { return "\\fnil"; }   // \fnil means unknown
 
     // Really just a shot in the dark
-    public int getRTFFontCharset(FontFile f)  { return 77; } // Mac
+    private int getRTFFontCharset(FontFile fontFile)  { return 77; } // Mac
 
     /**
      * Output all the fonts as an RTF fonttable. Fonts are all referenced by name, never embedded.
      */
-    public void writeColorTable(PrintStream ps)
+    private void writeColorTable(PrintStream ps)
     {
         int colorCount = _colorTable.size();
 
@@ -366,31 +365,31 @@ public class RMRTFWriter {
     public void appendText(RMXString s, PrintStream ps)
     {
         String text = s.toString();
-        boolean newParagraph = true;
+        boolean newLineStyle = true;
 
         // Iterate over runs
         for (int i = 0, n = s.getRunCount(); i < n; ++i) {
             RMXStringRun run = s.getRun(i);
 
-            // new paragraph at the start and then at each carriage return (when is \par used?)
-            if (newParagraph || !run.getParagraph().equals(_currentParagraph)) {
+            // new line style at the start and then at each carriage return (when is \par used?)
+            if (newLineStyle || !run.getLineStyle().equals(_currentTextLineStyle)) {
 
-                // Reset paragraph defaults and currentParagraph
+                // Reset line style defaults and current line style
                 ps.print("\\pard");
-                _currentParagraph = getRTFParagraphDefaults();
+                _currentTextLineStyle = TextLineStyle.DEFAULT;
 
                 // we're always somewhere inside a table
                 ps.print("\\intbl\\itap" + _tableLevel);
-                RMParagraph par = run.getParagraph();
+                TextLineStyle lineStyle = run.getLineStyle();
 
-                //if any of the paragraph settings have changed, set them
-                if (!par.equals(_currentParagraph)) {
+                //if any of line style settings have changed, set them
+                if (!lineStyle.equals(_currentTextLineStyle)) {
 
-                    // paragraph justify, alignment
-                    if (par.isJustify() != _currentParagraph.isJustify())
+                    // Justify, alignment
+                    if (lineStyle.isJustify() != _currentTextLineStyle.isJustify())
                         ps.print("\\qj");
-                    else if (par.getAlign() != _currentParagraph.getAlign()) {
-                        switch (par.getAlign()) {
+                    else if (lineStyle.getAlign() != _currentTextLineStyle.getAlign()) {
+                        switch (lineStyle.getAlign()) {
                             case CENTER -> ps.print("\\qc");
                             case LEFT -> ps.print("\\ql");
                             case RIGHT -> ps.print("\\qr");
@@ -398,23 +397,23 @@ public class RMRTFWriter {
                     }
 
                     // tabs
-                    if (!Arrays.equals(par.getTabs(), _currentParagraph.getTabs()) ||
-                            !Arrays.equals(par.getTabTypes(), _currentParagraph.getTabTypes())) {
-                        for (int j = 0, ntabs = par.getTabCount(); j < ntabs; ++j) {
-                            switch (par.getTabType(j)) {
-                                case RMParagraph.TAB_LEFT -> { }
-                                case RMParagraph.TAB_RIGHT -> ps.print("\\tqr");
-                                case RMParagraph.TAB_CENTER -> ps.print("\\tqc");
-                                case RMParagraph.TAB_DECIMAL -> ps.print("\\tqdec");
+                    if (!Arrays.equals(lineStyle.getTabs(), _currentTextLineStyle.getTabs()) ||
+                            !Arrays.equals(lineStyle.getTabTypes(), _currentTextLineStyle.getTabTypes())) {
+                        for (int j = 0, ntabs = lineStyle.getTabCount(); j < ntabs; ++j) {
+                            switch (lineStyle.getTabType(j)) {
+                                case TextLineStyle.TAB_LEFT -> { }
+                                case TextLineStyle.TAB_RIGHT -> ps.print("\\tqr");
+                                case TextLineStyle.TAB_CENTER -> ps.print("\\tqc");
+                                case TextLineStyle.TAB_DECIMAL -> ps.print("\\tqdec");
                             }
-                            ps.print("\\tx" + twip(par.getTab(j)));
+                            ps.print("\\tx" + twip(lineStyle.getTab(j)));
                         }
                     }
 
                     // left indent, right indent, line spacing, etc. goes here
-                    _currentParagraph = par;
+                    _currentTextLineStyle = lineStyle;
                 }
-                newParagraph = false;
+                newLineStyle = false;
             }
 
             // Update current font
@@ -504,20 +503,10 @@ public class RMRTFWriter {
     /**
      * Returns the rtf control string for borders. Currently only does on or off.  RTF has a zillion other possibilities.
      */
-    private String getRTFBorderStyle(boolean show, int width)
-    {
-        return show ? ("\\brdrs\\brdrw" + width) : "\\brdrnil";
-    }
+    private String getRTFBorderStyle(boolean show, int width)  { return show ? ("\\brdrs\\brdrw" + width) : "\\brdrnil"; }
 
     /**
-     * Creates and RMParagraph object whose values are set to the defaults assigned by the RTF spec.
-     * The RMParagraph defaultParagraph is very similar to the rtf defaults:
-     * tabs every 36 points (720 twips) align = left, leftIndent = rightIndent=0, lineSpacing=1
-     */
-    private RMParagraph getRTFParagraphDefaults()  { return new RMParagraph(); }
-
-    /**
-     * Convert an rm coord to rtf 'twips'.  A twip is a 20th of a point.
+     * Convert rm coord to rtf 'twips'.  A twip is a 20th of a point.
      */
     private static int twip(double x)  { return (int) (20 * x); }
 }

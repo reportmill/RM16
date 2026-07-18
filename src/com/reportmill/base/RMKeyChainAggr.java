@@ -152,7 +152,7 @@ public class RMKeyChainAggr {
             return meth;
 
         // Lookup method on registered classes
-        for (Class cls : RMKeyChainFuncs._funcClasses) {
+        for (Class<?> cls : RMKeyChainFuncs._funcClasses) {
             meth = ClassUtils.getMethod(cls, aName, _argClasses);
             if (meth != null)
                 return meth;

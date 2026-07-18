@@ -17,12 +17,6 @@ public class RMParagraph {
     public static final RMParagraph DEFAULT = new RMParagraph();
     public static final RMParagraph CENTERED = DEFAULT.copyForAlign(HPos.CENTER);
 
-    // Constants for tab types
-    public static final char TAB_LEFT = TextLineStyle.TAB_LEFT;
-    public static final char TAB_RIGHT = TextLineStyle.TAB_RIGHT;
-    public static final char TAB_CENTER = TextLineStyle.TAB_CENTER;
-    public static final char TAB_DECIMAL = TextLineStyle.TAB_DECIMAL;
-
     /**
      * Constructor.
      */
@@ -79,53 +73,9 @@ public class RMParagraph {
     public float getLineHeightMax()  { return (float) _lineStyle.getMaxHeight(); }
 
     /**
-     * Returns the spacing between paragraphs in printer points associated with this paragraph.
-     */
-    public float getParagraphSpacing()  { return (float) _lineStyle.getNewlineSpacing(); }
-
-    /**
-     * Returns the number of tabs associated with this paragraph.
-     */
-    public int getTabCount()  { return _lineStyle.getTabCount(); }
-
-    /**
-     * Returns the specific tab value for the given index in printer points.
-     */
-    public float getTab(int anIndex)  { return (float) _lineStyle.getTab(anIndex); }
-
-    /**
-     * Returns the type of tab at the given index.
-     */
-    public char getTabType(int anIndex)  { return _lineStyle.getTabType(anIndex); }
-
-    /**
-     * Returns the raw tab array
-     */
-    public float[] getTabs()
-    {
-        double[] tabs = _lineStyle.getTabs();
-        float[] ftabs = new float[tabs.length];
-        for (int i = 0; i < tabs.length; i++) ftabs[i] = (float) tabs[i];
-        return ftabs;
-    }
-
-    /**
-     * Returns the raw tab type array
-     */
-    public char[] getTabTypes()  { return _lineStyle.getTabTypes(); }
-
-    /**
      * Returns a paragraph identical to the receiver, but with the given alignment.
      */
     public RMParagraph copyForAlign(HPos alignX)  { return new RMParagraph(_lineStyle.copyForAlign(alignX)); }
-
-    /**
-     * Returns a paragraph identical to the receiver, but with the given indentation values.
-     */
-    public RMParagraph copyForIndents(double firstIndent, double leftIndent, double rightIndent)
-    {
-        return new RMParagraph(_lineStyle.copyForIndents(firstIndent, leftIndent, rightIndent));
-    }
 
     /**
      * Returns a paragraph identical to the receiver, but with the given line spacing.

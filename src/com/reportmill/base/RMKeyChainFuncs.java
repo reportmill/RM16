@@ -7,6 +7,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import snap.text.TextFormat;
+import snap.text.TextLineStyle;
 import snap.util.*;
 
 /**
@@ -15,13 +16,13 @@ import snap.util.*;
 public class RMKeyChainFuncs {
 
     // The function method
-    Method _method;
+    private Method _method;
 
     // The function args list
-    Object _args[];
+    private Object[] _args;
 
     // A list of classes to search for global functions
-    static Class _funcClasses[] = {};
+    static Class<?>[] _funcClasses = {};
 
     /**
      * Find the Method to invoke for evaluating the given key chain (assumed to be a function) on the given object.
@@ -34,13 +35,13 @@ public class RMKeyChainFuncs {
         RMKeyChain argList = aKeyChain.getChildKeyChain(1);
 
         // Create list for args and evaluate
-        Object args[] = new Object[argList.getChildCount()];
+        Object[] args = new Object[argList.getChildCount()];
         for (int i = 0, iMax = argList.getChildCount(); i < iMax; i++)
             args[i] = RMKeyChain.getValue(aRoot, argList.getChild(i));
 
         // Try to find method on anObj that takes a single keyChain
         // (if found, set args to first argument for one arg funcs, or argument list for multiple arg funcs)
-        Class cls = ClassUtils.getClass(anObj);
+        Class<?> cls = ClassUtils.getClass(anObj);
         Method method = ClassUtils.getMethod(cls, name, RMKeyChain.class);
         if (method != null)
             args = ArrayUtils.add(args, argList.getChildCount() == 1 ? argList.getChild(0) : argList, 0);
@@ -49,7 +50,7 @@ public class RMKeyChainFuncs {
         if (method == null) {
 
             // Create a Class array of the same size as the argument list loaded with Object.class
-            Class argTypes[] = new Class[argList.getChildCount()];
+            Class<?>[] argTypes = new Class[argList.getChildCount()];
             Arrays.fill(argTypes, Object.class);
 
             // Look for method with given args
@@ -58,7 +59,7 @@ public class RMKeyChainFuncs {
             // If object doesn't implement the method, see if we have a Category implementation.
             // A category takes the target object as the first argument.
             if (method == null) {
-                Class argTypes2[] = ArrayUtils.add(argTypes, ClassUtils.getClass(anObj), 0);
+                Class<?>[] argTypes2 = ArrayUtils.add(argTypes, ClassUtils.getClass(anObj), 0);
                 method = getMethod(name, argTypes2);
                 if (method != null)
                     args = ArrayUtils.add(args, anObj, 0);
@@ -70,7 +71,7 @@ public class RMKeyChainFuncs {
 
             // If object doesn't implement method, try to find category method for registered functions that takes args
             if (method == null) {
-                Class argTypes2[] = ArrayUtils.add(argTypes, Object.class, 0);
+                Class<?>[] argTypes2 = ArrayUtils.add(argTypes, Object.class, 0);
                 method = getMethod(name, argTypes2);
                 if (method != null)
                     args = ArrayUtils.add(args, anObj, 0);
@@ -91,7 +92,7 @@ public class RMKeyChainFuncs {
     /**
      * Creates a function call.
      */
-    public RMKeyChainFuncs(Method aMethod, Object theArgs[])
+    public RMKeyChainFuncs(Method aMethod, Object[] theArgs)
     {
         _method = aMethod;
         _args = theArgs;
@@ -108,14 +109,14 @@ public class RMKeyChainFuncs {
     /**
      * Returns a method for a method name and the given argument classes.
      */
-    private static Method getMethod(String aName, Class... argClasses)
+    private static Method getMethod(String aName, Class<?> ... argClasses)
     {
         // Lookup method on RMKeyChainFuncs.class
         Method meth = ClassUtils.getMethod(RMKeyChainFuncs.class, aName, argClasses);
         if (meth != null) return meth;
 
         // Lookup method on registered classes
-        for (Class cls : _funcClasses) {
+        for (Class<?> cls : _funcClasses) {
             meth = ClassUtils.getMethod(cls, aName, argClasses);
             if (meth != null) return meth;
         }
@@ -127,7 +128,7 @@ public class RMKeyChainFuncs {
     /**
      * Adds a class to the list of classes that RM queries for functions.
      */
-    public static void addFunctionClass(Class aClass)
+    public static void addFunctionClass(Class<?> aClass)
     {
         _funcClasses = ArrayUtils.add(_funcClasses, aClass);
     }
@@ -135,34 +136,22 @@ public class RMKeyChainFuncs {
     /**
      * Returns whether given string is empty (or null).
      */
-    public boolean isEmpty(Object anObject)
-    {
-        return anObject == null || anObject.toString().length() == 0;
-    }
+    public boolean isEmpty(Object anObject)  { return anObject == null || anObject.toString().isEmpty(); }
 
     /**
      * Returns the given value as a double rounded up to the nest largest integer.
      */
-    public static long ceil(Object val)
-    {
-        return (long) Math.ceil(Convert.doubleValue(val));
-    }
+    public static long ceil(Object val)  { return (long) Math.ceil(Convert.doubleValue(val)); }
 
     /**
      * Returns the given value as a double truncated down to the nest smallest integer.
      */
-    public static long floor(Object val)
-    {
-        return (long) Math.floor(Convert.doubleValue(val));
-    }
+    public static long floor(Object val)  { return (long) Math.floor(Convert.doubleValue(val)); }
 
     /**
      * Returns the given double value rounded to the nearest whole number.
      */
-    public static long round(Object val)
-    {
-        return Math.round(Convert.doubleValue(val));
-    }
+    public static long round(Object val)  { return Math.round(Convert.doubleValue(val)); }
 
     /**
      * Returns the given double value rounded to given number of decimal places.
@@ -232,10 +221,10 @@ public class RMKeyChainFuncs {
         RMXString xstr = aValue instanceof RMXString ? (RMXString) aValue : null;
         String str = xstr != null ? xstr.getText() : aValue.toString();
         RMFont font = xstr != null ? xstr.getFontAt(0) : RMFont.getDefaultFont();
-        RMParagraph pgraph = xstr != null ? xstr.getParagraphAt(0) : RMParagraph.DEFAULT;
+        TextLineStyle textLineStyle = xstr != null ? xstr.getLineStyleForCharIndex(0) : TextLineStyle.DEFAULT;
 
         // Return result of parsing html from val string
-        return RMEnv.getEnv().parseHTML(str, font, pgraph);
+        return RMEnv.getEnv().parseHTML(str, font, textLineStyle);
     }
 
     /**
@@ -250,19 +239,6 @@ public class RMKeyChainFuncs {
 
         // Return result of parsing rtf from val string
         return RMEnv.getEnv().parseRTF(aValue.toString(), font);
-    }
-
-    /**
-     * Returns the trueVal if condition is true, otherwise null.
-     */
-    public static Object RMConditional(Object v, Object t)
-    {
-        return Convert.boolValue(v) ? t : null;
-    }
-
-    public static Object RMConditional(Object v, Object t, Object f)
-    {
-        return Convert.boolValue(v) ? t : f;
     }
 
     /**
@@ -353,10 +329,9 @@ public class RMKeyChainFuncs {
     public static String join(Object aList, Object aKeyChain, Object aDelimiter)
     {
         // If object is list, do join
-        if (aList instanceof List) {
-            List list = (List) aList, joinParts = new ArrayList(list.size());
-            for (int i = 0, iMax = list.size(); i < iMax; i++)
-                joinParts.add(RMKeyChain.getValue(list.get(i), aKeyChain));
+        if (aList instanceof List<?> list) {
+            List<Object> joinParts = new ArrayList<>(list.size());
+            for (Object o : list) joinParts.add(RMKeyChain.getValue(o, aKeyChain));
             return ListUtils.joinStrings(joinParts, aDelimiter.toString());
         }
 
@@ -369,7 +344,7 @@ public class RMKeyChainFuncs {
      */
     public static Object RMUnicode(Object num)
     {
-        char c[] = {(char) Convert.intValue(num)};
+        char[] c = { (char) Convert.intValue(num) };
         return new String(c);
     }
 
@@ -379,7 +354,7 @@ public class RMKeyChainFuncs {
     public static Object RMUnicodeRange(Object c1, Object c2)
     {
         int i1 = Convert.intValue(c1), i2 = Convert.intValue(c2), charCount = Math.max(i2 - i1 + 1, 0);
-        char chars[] = new char[charCount];
+        char[] chars = new char[charCount];
         for (int i = 0; i < charCount; i++) chars[i] = (char) (i1 + i);
         return new String(chars);
     }
@@ -391,8 +366,7 @@ public class RMKeyChainFuncs {
     {
         String name = fontName.toString();
         RMFont font = RMFont.getFont(name, 12);
-        if (font == null) return "Font not found";
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 
         for (char c = 1; c < 0xffff; c++) {
             if (font.canDisplay(c)) {
@@ -473,7 +447,7 @@ public class RMKeyChainFuncs {
             return str;
 
         // Create string buffer, add pad and return
-        StringBuffer sb = new StringBuffer(str);
+        StringBuilder sb = new StringBuilder(str);
         while (sb.length() < len) sb.append(aPad);
         return sb.toString();
     }
@@ -491,7 +465,7 @@ public class RMKeyChainFuncs {
             return str;
 
         // Create string buffer, add pad, return string
-        StringBuffer sb = new StringBuffer(str);
+        StringBuilder sb = new StringBuilder(str);
         while (sb.length() < length) sb.insert(0, aPad);
         return sb.toString();
     }
@@ -525,12 +499,12 @@ public class RMKeyChainFuncs {
     /**
      * Returns a list of the given args.
      */
-    public static List list(Object... theObjects)
+    public static List<?> list(Object... theObjects)
     {
         // If a single object passed in and it is a List or Array, return it as a List
-        if (theObjects != null && theObjects.length == 1) {
-            if (theObjects[0] instanceof List)
-                return (List) theObjects[0];
+        if (theObjects.length == 1) {
+            if (theObjects[0] instanceof List<?> list)
+                return list;
             if (theObjects[0] instanceof Object[])
                 return Arrays.asList((Object[]) theObjects[0]);
         }
@@ -555,10 +529,7 @@ public class RMKeyChainFuncs {
     /**
      * Formats the given object in roman numerals. If anObj is a date object, the year is formatted.
      */
-    public static String roman(Number aNumber)
-    {
-        return romanNumeralFormat(aNumber.intValue());
-    }
+    public static String roman(Number aNumber)  { return romanNumeralFormat(aNumber.intValue()); }
 
     /**
      * Return a roman numeral representation of the number as a string.
@@ -570,8 +541,8 @@ public class RMKeyChainFuncs {
         if (aValue > 4999 || aValue <= 0) return "" + aValue;
 
         // Declare parts and string buffer
-        char dparts[][] = {{'X', 'I', 'V'}, {'C', 'X', 'L'}, {'M', 'C', 'D'}};
-        StringBuffer digs[] = new StringBuffer[4];
+        char[][] dparts = {{'X', 'I', 'V'}, {'C', 'X', 'L'}, {'M', 'C', 'D'}};
+        StringBuffer[] digs = new StringBuffer[4];
 
         // Iterate over something
         for (int i = 0; i < 3; i++) {
@@ -610,9 +581,5 @@ public class RMKeyChainFuncs {
     /**
      * Utility method to append n occurrences of a character to a string buffer
      */
-    private static void fill(StringBuffer s, int n, char c)
-    {
-        while (n-- > 0) s.append(c);
-    }
-
+    private static void fill(StringBuffer sb, int count, char aChar)  { while (count-- > 0) sb.append(aChar); }
 }

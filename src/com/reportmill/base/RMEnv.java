@@ -1,8 +1,6 @@
 package com.reportmill.base;
 import com.reportmill.graphics.*;
-import com.reportmill.out.RMExcelWriter;
-import com.reportmill.shape.RMDocument;
-import snap.util.SnapEnv;
+import snap.text.TextLineStyle;
 import java.lang.reflect.Method;
 import java.sql.ResultSet;
 import java.util.List;
@@ -19,9 +17,9 @@ public class RMEnv {
     /**
      * Returns a RichText for the given html string and a default font.
      */
-    public RMXString parseHTML(String html, RMFont baseFont, RMParagraph aLineStyle)
+    public RMXString parseHTML(String html, RMFont baseFont, TextLineStyle textLineStyle)
     {
-        return RMHTMLParser.parse(html, baseFont, aLineStyle);
+        return RMHTMLParser.parse(html, baseFont, textLineStyle);
     }
 
     /**

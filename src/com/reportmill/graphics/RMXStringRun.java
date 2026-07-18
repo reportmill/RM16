@@ -90,11 +90,6 @@ public class RMXStringRun implements CharSequence {
     public TextLineStyle getLineStyle()  { return _textLine.getLineStyle(); }
 
     /**
-     * Returns the paragraph for this run.
-     */
-    public RMParagraph getParagraph()  { return new RMParagraph(_textLine.getLineStyle()); }
-
-    /**
      * Returns whether this run is underlined.
      */
     public boolean isUnderlined()  { return getStyle().isUnderlined(); }
@@ -116,8 +111,5 @@ public class RMXStringRun implements CharSequence {
     /**
      * Returns a string representation of this run.
      */
-    public String toString()
-    {
-        return _xstr.subSequence(_start, _end).toString();
-    }
+    public String toString()  { return _xstr.subSequence(_start, _end).toString(); }
 }

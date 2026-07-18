@@ -6,6 +6,8 @@ import com.reportmill.base.*;
 import com.reportmill.graphics.*;
 import com.reportmill.shape.*;
 import java.util.*;
+
+import snap.geom.HPos;
 import snap.util.*;
 import snap.web.WebURL;
 
@@ -250,7 +252,7 @@ public class Shell {
         headerRow.setNumberOfColumns(1);
         headerRow.setHeight(205);
         headerRow.getColumn(0).setText("Hollywood Report\n\nTable of Contents");
-        headerRow.getColumn(0).setAlignmentX(RMTypes.AlignX.Center);
+        headerRow.getColumn(0).setAlignX(HPos.CENTER);
         headerRow.getColumn(0).getXString().setAttribute(RMFont.getFont("Times Bold", 72));
         headerRow.getColumn(0).getXString().setAttribute(RMFont.getFont("Times", 18), 16, 35);
         headerRow.setVersion("Reprint");
@@ -263,7 +265,7 @@ public class Shell {
         RMTableRow tableRow = (RMTableRow) table.getChildWithTitle("Objects Details");
         tableRow.getColumn(1).setText("@row@. @getStudio.getName@");
         tableRow.getColumn(2).setText("........................ @page@");
-        tableRow.getColumn(2).setAlignmentX(RMTypes.AlignX.Right);
+        tableRow.getColumn(2).setAlignX(HPos.RIGHT);
         tableRow.getColumn(0).setWidth(.5f);
         tableRow.getColumn(1).setWidth(2);
         tableRow.getColumn(2).setWidth(2);

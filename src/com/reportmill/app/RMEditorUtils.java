@@ -6,6 +6,8 @@ import com.reportmill.apptools.*;
 import com.reportmill.graphics.*;
 import com.reportmill.shape.*;
 import java.util.*;
+
+import snap.geom.HPos;
 import snap.geom.Point;
 import snap.geom.Shape;
 import snap.geom.Size;
@@ -733,14 +735,6 @@ public class RMEditorUtils {
     }
 
     /**
-     * Returns whether selected shape is justified.
-     */
-    public static boolean isJustify(RMEditor anEditor)
-    {
-        return anEditor.getSelectedOrSuperSelectedShape() instanceof RMTextShape textShape && textShape.isJustify();
-    }
-
-    /**
      * Sets whether selected shape is justified.
      */
     public static void setJustify(RMEditor anEditor, boolean aValue)
@@ -752,18 +746,13 @@ public class RMEditorUtils {
     }
 
     /**
-     * Returns the horizontal alignment of the text of the currently selected shapes.
-     */
-    public static RMTypes.AlignX getAlignmentX(RMEditor anEditor)  { return anEditor.getSelectedOrSuperSelectedShape().getAlignmentX(); }
-
-    /**
      * Sets the horizontal alignment of the text of the currently selected shapes.
      */
-    public static void setAlignmentX(RMEditor anEditor, RMTypes.AlignX anAlign)
+    public static void setAlignmentX(RMEditor anEditor, HPos alignX)
     {
         anEditor.undoerSetUndoTitle("Alignment Change");
         for (RMShape shape : anEditor.getSelectedOrSuperSelectedShapes())
-            shape.setAlignmentX(anAlign);
+            shape.setAlignX(alignX);
     }
 
     /**

@@ -4,8 +4,10 @@
 package com.reportmill.shape;
 import com.reportmill.base.RMKeyChain;
 import com.reportmill.graphics.*;
+import snap.geom.HPos;
 import snap.geom.Pos;
 import snap.geom.Rect;
+import snap.geom.VPos;
 import snap.gfx.*;
 import snap.util.*;
 
@@ -15,25 +17,31 @@ import snap.util.*;
 public class RMPDFShape extends RMRectShape {
 
     // The key used to get pdf data during RPG
-    String _key;
+    private String _key;
 
     // The pdf data
-    RMPDFData _pdfData;
+    private RMPDFData _pdfData;
 
     // The page index
-    int _pageIndex;
+    private int _pageIndex;
+
+    // Align X
+    private HPos _alignX = HPos.CENTER;
+
+    // Align Y
+    private VPos _alignY = VPos.CENTER;
 
     // The padding
-    int _padding;
+    private int _padding;
 
     // Whether to grow page to fit available area if shape larger than page.
-    boolean _growToFit = true;
+    private boolean _growToFit = true;
 
     // Whether to preserve the natural width to height ratio of page
-    boolean _preserveRatio = true;
+    private boolean _preserveRatio = true;
 
     /**
-     * Creates a RMPDFShape.
+     * Constructor.
      */
     public RMPDFShape()
     {
@@ -132,46 +140,31 @@ public class RMPDFShape extends RMRectShape {
     /**
      * Returns the horizontal alignment.
      */
-    public AlignX getAlignmentX()
-    {
-        return _alignX;
-    }
-
-    AlignX _alignX = AlignX.Center;
+    @Override
+    public HPos getAlignX()  { return _alignX; }
 
     /**
      * Sets the horizontal alignment.
      */
-    public void setAlignmentX(AlignX anAlignX)
-    {
-        _alignX = anAlignX;
-    }
+    @Override
+    public void setAlignX(HPos alignX)  { _alignX = alignX; }
 
     /**
      * Returns the vertical alignment.
      */
-    public AlignY getAlignmentY()
-    {
-        return _alignY;
-    }
-
-    AlignY _alignY = AlignY.Middle;
+    @Override
+    public VPos getAlignY()  { return _alignY; }
 
     /**
      * Sets the vertical alignment.
      */
-    public void setAlignmentY(AlignY anAlignY)
-    {
-        _alignY = anAlignY;
-    }
+    @Override
+    public void setAlignY(VPos alignY)  { _alignY = alignY; }
 
     /**
      * Returns whether to grow page to fit available area if shape larger than page.
      */
-    public boolean isGrowToFit()
-    {
-        return _growToFit;
-    }
+    public boolean isGrowToFit()  { return _growToFit; }
 
     /**
      * Sets whether to grow page to fit available area if shape larger than page.
@@ -185,10 +178,7 @@ public class RMPDFShape extends RMRectShape {
     /**
      * Returns whether to preserve the natural width to height ratio of page.
      */
-    public boolean getPreserveRatio()
-    {
-        return _preserveRatio;
-    }
+    public boolean getPreserveRatio()  { return _preserveRatio; }
 
     /**
      * Sets whether to preserve the natural width to height ratio of page.
@@ -233,7 +223,7 @@ public class RMPDFShape extends RMRectShape {
 
         // If key: Evaluate key for PDF data and set
         String key = getKey();
-        if (key != null && key.length() > 0) {
+        if (key != null && !key.isEmpty()) {
             Object value = RMKeyChain.getValue(aRptOwner, getKey());
             if (value instanceof RMKeyChain) value = ((RMKeyChain) value).getValue();
             clone.setPDFData(value);
@@ -310,10 +300,10 @@ public class RMPDFShape extends RMRectShape {
         }
 
         // Get image bounds x/y for width/height and return rect
-        AlignX ax = getAlignmentX();
-        AlignY ay = getAlignmentY();
-        double x = ax == AlignX.Center ? (sw - w) / 2 : ax == AlignX.Left ? pd : (sw - w);
-        double y = ay == AlignY.Middle ? (sh - h) / 2 : ay == AlignY.Top ? pd : (sh - h);
+        HPos alignX = getAlignX();
+        VPos alignY = getAlignY();
+        double x = alignX == HPos.CENTER ? (sw - w) / 2 : alignX == HPos.LEFT ? pd : (sw - w);
+        double y = alignY == VPos.CENTER ? (sh - h) / 2 : alignY == VPos.TOP ? pd : (sh - h);
         return new Rect(x, y, w, h);
     }
 
@@ -334,9 +324,9 @@ public class RMPDFShape extends RMRectShape {
 
         // Archive PageIndex, Key, Padding, Alignment, GrowToFit, PreserveRatio
         if (_pageIndex > 0) e.add("PageIndex", _pageIndex);
-        if (_key != null && _key.length() > 0) e.add("key", _key);
+        if (_key != null && !_key.isEmpty()) e.add("key", _key);
         if (_padding > 0) e.add("Padding", _padding);
-        if (getAlignment() != Pos.CENTER) e.add("Alignment", getAlignment());
+        if (getAlign() != Pos.CENTER) e.add("Alignment", getAlign());
         if (!isGrowToFit()) e.add("GrowToFit", isGrowToFit());
         if (!getPreserveRatio()) e.add("PreserveRatio", getPreserveRatio());
 
@@ -358,7 +348,7 @@ public class RMPDFShape extends RMRectShape {
         // Unarchive PDF file resource: get resource bytes, page and set PDF data
         String rname = anElement.getAttributeValue("resource");
         if (rname != null) {
-            byte bytes[] = anArchiver.getResource(rname);
+            byte[] bytes = anArchiver.getResource(rname);
             _pdfData = RMPDFData.getPDFData(bytes);
             int page = anElement.getAttributeIntValue("PageIndex");
             if (page > 0 && _pdfData != null) _pdfData = _pdfData.getPage(page);
@@ -374,10 +364,10 @@ public class RMPDFShape extends RMRectShape {
         // Legacy alignment (RM14)
         if (anElement.hasAttribute("Alignment")) {
             String as = anElement.getAttributeValue("Alignment");
-            String s[] = {"TopLeft", "TopCenter", "TopRight", "CenterLeft", "Center", "CenterRight",
+            String[] s = {"TopLeft", "TopCenter", "TopRight", "CenterLeft", "Center", "CenterRight",
                     "BottomLeft", "BottomCenter", "BottomRight"};
             int i = ArrayUtils.indexOf(s, as);
-            if (i >= 0) setAlignment(Pos.values()[i]);
+            if (i >= 0) setAlign(Pos.values()[i]);
         }
 
         // Return
@@ -406,5 +396,4 @@ public class RMPDFShape extends RMRectShape {
         // Return doc
         return doc;
     }
-
 }

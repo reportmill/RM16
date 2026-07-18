@@ -5,9 +5,8 @@ package com.reportmill.shape;
 import com.reportmill.graphics.*;
 import java.util.*;
 import java.util.List;
-import snap.geom.Insets;
-import snap.geom.Rect;
-import snap.geom.Shape;
+
+import snap.geom.*;
 import snap.gfx.*;
 import snap.props.PropChange;
 import snap.props.PropChangeListener;
@@ -34,7 +33,7 @@ public class RMTextShape extends RMRectShape {
     Insets _margin = getMarginDefault();
 
     // Vertical alignment of text
-    AlignY _alignY = AlignY.Top;
+    VPos _alignY = VPos.TOP;
 
     // Specifies how text should handle overflow during RPG (ignore it, shrink it or paginate it)
     byte _wraps;
@@ -300,7 +299,8 @@ public class RMTextShape extends RMRectShape {
     /**
      * Returns the alignment for char 0.
      */
-    public AlignX getAlignmentX()
+    @Override
+    public HPos getAlignX()
     {
         if (isTextEditorSet())
             return getTextEditor().getAlignX();
@@ -310,24 +310,27 @@ public class RMTextShape extends RMRectShape {
     /**
      * Sets the align for all chars.
      */
-    public void setAlignmentX(AlignX anAlignX)
+    @Override
+    public void setAlignX(HPos alignX)
     {
         if (isTextEditorSet())
-            getTextEditor().setAlignX(anAlignX);
-        else getXString().setAlignX(anAlignX);
+            getTextEditor().setAlignX(alignX);
+        else getXString().setAlignX(alignX);
     }
 
     /**
      * Returns the vertical alignment.
      */
-    public AlignY getAlignmentY()  { return _alignY; }
+    @Override
+    public VPos getAlignY()  { return _alignY; }
 
     /**
      * Sets the vertical alignment.
      */
-    public void setAlignmentY(AlignY anAlignment)
+    @Override
+    public void setAlignY(VPos alignY)
     {
-        firePropChange("AlignmentY", _alignY, _alignY = anAlignment);
+        firePropChange("AlignmentY", _alignY, _alignY = alignY);
         revalidate();
         repaint();
     }
@@ -720,7 +723,7 @@ public class RMTextShape extends RMRectShape {
         // Set StartCharIndex
         _textModel.setStartCharIndex(getVisibleStart());
         _textModel.setLinked(getLinkedText() != null);
-        _textModel.setAlignY(getAlignmentY().vpos());
+        _textModel.setAlignY(getAlignY());
         _textModel.setBoundsPath(!(getPath() instanceof Rect) || getPerformsWrap() ? getPath() : null);
         _textModel.setHyphenate(RMTextEditor.isHyphenating());
         _textModel.setFontScale(1);
@@ -834,8 +837,8 @@ public class RMTextShape extends RMRectShape {
         pages.add(this);
 
         // Cache vertical alignment and set to Top
-        AlignY verticalAlignment = getAlignmentY();
-        setAlignmentY(AlignY.Top);
+        VPos alignY = getAlignY();
+        setAlignY(VPos.TOP);
 
         // Get linked texts until all text visible
         RMTextShape text = this;
@@ -845,7 +848,7 @@ public class RMTextShape extends RMRectShape {
         }
 
         // Restore alignment on last text and return list
-        text.setAlignmentY(verticalAlignment);
+        text.setAlignY(alignY);
         return pages;
     }
 
@@ -968,7 +971,7 @@ public class RMTextShape extends RMRectShape {
 
         // Archive Margin, AlignmentY
         if (getMargin() != getMarginDefault()) e.add("margin", getMarginString());
-        if (_alignY != AlignY.Top) e.add("valign", getAlignmentY().toString().toLowerCase());
+        if (getAlignY() != VPos.TOP) e.add("valign", getAlignYString());
 
         // Archive Wraps, PerformsWrap
         if (_wraps != 0) e.add("wrap", _wraps == WRAP_BASIC ? "wrap" : "shrink");
@@ -1021,7 +1024,7 @@ public class RMTextShape extends RMRectShape {
         // Unarchive Margin, AlignmentY
         if (anElement.hasAttribute("margin")) setMarginString(anElement.getAttributeValue("margin"));
         if (anElement.hasAttribute("valign"))
-            setAlignmentY(EnumUtils.valueOfIC(AlignY.class, anElement.getAttributeValue("valign")));
+            setAlignYString(anElement.getAttributeValue("valign"));
 
         // Unarchive Wraps, PerformsWrap
         String wrap = anElement.getAttributeValue("wrap", "none");

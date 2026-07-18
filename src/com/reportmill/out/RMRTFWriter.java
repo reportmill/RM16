@@ -315,10 +315,10 @@ public class RMRTFWriter {
 
                 // Vertical alignment
                 ps.print("\\clvertal");
-                switch (rmcell.getAlignmentY()) {
-                    case Top: ps.print("t"); break;
-                    case Middle: ps.print("c"); break;
-                    default: ps.print("b");
+                switch (rmcell.getAlignY()) {
+                    case TOP -> ps.print("t");
+                    case CENTER -> ps.print("c");
+                    default -> ps.print("b");
                 }
 
                 // Cell height - this doesn't seem to be a real rtf control word, but TextEdit needs it.  The ignore row

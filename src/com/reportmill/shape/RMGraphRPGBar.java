@@ -489,7 +489,7 @@ class RMGraphRPGBar extends RMGraphRPG {
         if (label.getWidth() > labelMaxWidth && isVertical() && label.getRoll() == 0) {
             label.setWidth(labelMaxWidth);
             label.setHeight(label.getBestHeight());
-            label.setAlignment(Pos.CENTER);
+            label.setAlign(Pos.CENTER);
         }
 
         // Get point by graph that we want label to be aligned with
@@ -563,7 +563,7 @@ class RMGraphRPGBar extends RMGraphRPG {
         if (label.getWidth() > labelMaxWidth && isVertical() && label.getRoll() == 0) {
             label.setWidth(labelMaxWidth);
             label.setHeight(label.getBestHeight());
-            label.setAlignment(Pos.CENTER);
+            label.setAlign(Pos.CENTER);
         }
 
         // Get bar rect

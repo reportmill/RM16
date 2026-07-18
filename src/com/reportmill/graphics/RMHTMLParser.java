@@ -7,6 +7,7 @@ import java.util.*;
 import javax.swing.text.*;
 import javax.swing.text.html.*;
 import javax.swing.text.html.parser.*;
+import snap.geom.HPos;
 import snap.util.*;
 
 /**
@@ -15,13 +16,13 @@ import snap.util.*;
 public class RMHTMLParser {
 
     // A map of color names & their hex values - used for translating common color names to RGB
-    private static Hashtable _colorNames;
+    private static Map<String,String> _colorNames;
 
     // An array of symbol maps for unicode mapping
-    private static SymMap _symMap[] = SymMap.symMap();
+    private static SymMap[] _symMap = SymMap.symMap();
 
     // An array of symbol chars
-    private static char _symChars[] = SymMap.symChars();
+    private static char[] _symChars = SymMap.symChars();
 
     /**
      * Returns an xstring for the given html string and a default font.
@@ -59,7 +60,7 @@ public class RMHTMLParser {
         RMParagraph _pgraph;
 
         // The current stack of fonts (during parsing)
-        List _fontStack = new ArrayList();
+        List<RMFont> _fontStack = new ArrayList<>();
 
         // The number of list elements that we have parsed into (during parsing)
         int _listLevel = 0;
@@ -80,8 +81,8 @@ public class RMHTMLParser {
             // Convert known character entity references to unicode chars
             String s2 = aString;
             if (aString.indexOf(';') > aString.indexOf('&')) {
-                for (int i = 0, iMax = _symMap.length; i < iMax; i++) {
-                    aString = aString.replace(_symMap[i].ce, _symMap[i].str);
+                for (SymMap symMap : _symMap) {
+                    aString = aString.replace(symMap.ce, symMap.str);
                     if (aString != s2) {
                         if (aString.indexOf(';') > aString.indexOf('&'))
                             s2 = aString;
@@ -153,7 +154,7 @@ public class RMHTMLParser {
                 RMFont font = (RMFont) _attrs.get(RMTextStyle.FONT_KEY);
                 double firstIndent = _pgraph.getTab(_listLevel - 1);
                 double leftIndent = firstIndent + font.getStringAdvance(((char) 8226) + " ");
-                _pgraph = _pgraph.deriveIndent(firstIndent, leftIndent, _pgraph.getRightIndent());
+                _pgraph = _pgraph.copyForIndents(firstIndent, leftIndent, _pgraph.getRightIndent());
             }
 
             // Handle List item (<LI>)
@@ -177,12 +178,12 @@ public class RMHTMLParser {
                     // Handle font color
                     if (name.equalsIgnoreCase("color")) {
                         if (!string.startsWith("#"))
-                            string = (String) colorNames().get(string.toLowerCase());
+                            string = colorNames().get(string.toLowerCase());
 
                         if (string != null) {
-                            float r = Integer.decode("0x" + string.substring(1, 3)).intValue() / 255f;
-                            float g = Integer.decode("0x" + string.substring(3, 5)).intValue() / 255f;
-                            float b = Integer.decode("0x" + string.substring(5, 7)).intValue() / 255f;
+                            float r = Integer.decode("0x" + string.substring(1, 3)) / 255f;
+                            float g = Integer.decode("0x" + string.substring(3, 5)) / 255f;
+                            float b = Integer.decode("0x" + string.substring(5, 7)) / 255f;
                             RMColor color = new RMColor(r, g, b);
                             _attrs.put(RMTextStyle.COLOR_KEY, color);
                         }
@@ -198,13 +199,13 @@ public class RMHTMLParser {
 
                     // Handle font face
                     if (name.equalsIgnoreCase("face")) {
-                        List names = StringUtils.separate(string, ",");
-                        for (int i = 0; i < names.size(); i++) {
-                            String n = (String) names.get(i);
-                            RMFont f = new RMFont(n, font.getSize());
-                            if (!f.isSubstitute()) {
-                                if (f.getNameEnglish().startsWith("Symbol")) _isSymbol = true; //else
-                                font = f;
+                        List<String> names = StringUtils.separate(string, ",");
+                        for (String propName : names) {
+                            RMFont font1 = new RMFont(propName, font.getSize());
+                            if (!font1.isSubstitute()) {
+                                if (font1.getNameEnglish().startsWith("Symbol"))
+                                    _isSymbol = true; //else
+                                font = font1;
                                 break;
                             }
                         }
@@ -217,7 +218,7 @@ public class RMHTMLParser {
             }
 
             // Handle paragraph start (make sure it's two lines below last text)
-            if (aTag.equals(HTML.Tag.P) && _string.length() > 0) {
+            if (aTag.equals(HTML.Tag.P) && !_string.isEmpty()) {
                 if (!_string.getRunLast().toString().endsWith("\n"))
                     _string.addChars("\n");
                 if (!_string.toString().endsWith("\n\n"))
@@ -226,7 +227,7 @@ public class RMHTMLParser {
 
             // Handle CENTER
             if (aTag.equals(HTML.Tag.CENTER))
-                _pgraph = _pgraph.deriveAligned(RMTypes.AlignX.Center);
+                _pgraph = _pgraph.copyForAlign(HPos.CENTER);
 
             // Handle super-scripting
             if (aTag.equals(HTML.Tag.SUP))
@@ -246,7 +247,7 @@ public class RMHTMLParser {
             if (t.equals(HTML.Tag.B) || t.equals(HTML.Tag.STRONG) ||
                     t.equals(HTML.Tag.I) || t.equals(HTML.Tag.EM) || t.equals(HTML.Tag.FONT)) {
                 if (_fontStack.size() > 1) ListUtils.removeLast(_fontStack);
-                RMFont font = (RMFont) ListUtils.getLast(_fontStack);
+                RMFont font = ListUtils.getLast(_fontStack);
                 _attrs.put(RMTextStyle.FONT_KEY, font);
                 if (t.equals(HTML.Tag.FONT))
                     _isSymbol = false;
@@ -271,13 +272,14 @@ public class RMHTMLParser {
                 RMFont font = (RMFont) _attrs.get(RMTextStyle.FONT_KEY);
                 double firstIndent = _listLevel == 0 ? 0 : _pgraph.getTab(_listLevel - 1);
                 double leftIndent = _listLevel == 0 ? 0 : firstIndent + font.getStringAdvance(((char) 8226) + " ");
-                _pgraph = _pgraph.deriveIndent(firstIndent, leftIndent, _pgraph.getRightIndent());
+                _pgraph = _pgraph.copyForIndents(firstIndent, leftIndent, _pgraph.getRightIndent());
             }
 
             // Handle CENTER
             if (t.equals(HTML.Tag.CENTER)) {
-                if (!_string.getRunLast().toString().endsWith("\n")) _string.addChars("\n");
-                _pgraph = _pgraph.deriveAligned(RMTypes.AlignX.Left);
+                if (!_string.getRunLast().toString().endsWith("\n"))
+                    _string.addChars("\n");
+                _pgraph = _pgraph.copyForAlign(HPos.LEFT);
             }
 
             // Handle super-scripting
@@ -292,7 +294,7 @@ public class RMHTMLParser {
         /**
          * Called to handle text.
          */
-        public void handleText(char data[], int pos)
+        public void handleText(char[] data, int pos)
         {
             // If _isSymbol font, map chars from Symbol char set to unicode
             if (_isSymbol)
@@ -318,10 +320,10 @@ public class RMHTMLParser {
     /**
      * Returns map of color names and their hex strings. used for translating common color names to RGB.
      */
-    private static Hashtable colorNames()
+    private static Map<String,String> colorNames()
     {
         if (_colorNames == null) {
-            _colorNames = new Hashtable();
+            _colorNames = new HashMap<>();
             _colorNames.put("black", "#000000");
             _colorNames.put("silver", "#C0C0C0");
             _colorNames.put("gray", "#808080");
@@ -374,15 +376,14 @@ public class RMHTMLParser {
         public static char[] symChars()
         {
             // Create array of 256 chars
-            char chars[] = new char[256];
+            char[] chars = new char[256];
 
             // Initialize to char index
             for (char i = 0; i < 256; i++)
                 chars[i] = i;
 
             // Re-initialize symbol characters explicitly defined below
-            for (int i = 0; i < _symMap.length; i++)
-                chars[_symMap[i].sym] = _symMap[i].map;
+            for (SymMap symMap : _symMap) chars[symMap.sym] = symMap.map;
 
             // Return char array
             return chars;

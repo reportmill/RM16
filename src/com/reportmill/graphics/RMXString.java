@@ -6,6 +6,8 @@ import com.reportmill.base.*;
 import static com.reportmill.graphics.RMTextStyle.*;
 import com.reportmill.shape.*;
 import java.util.*;
+
+import snap.geom.HPos;
 import snap.text.*;
 import snap.util.*;
 
@@ -20,7 +22,7 @@ import snap.util.*;
  *    xstring.addAttribute(RMFont.getFont("Arial BoldItalic", 12), 6, xstring.length());
  * </pre></blockquote><p>
  */
-public class RMXString implements Cloneable, CharSequence, RMTypes, RMArchiver.Archivable {
+public class RMXString implements Cloneable, CharSequence, RMArchiver.Archivable {
 
     // The TextModel
     private TextModel _richText;
@@ -316,20 +318,33 @@ public class RMXString implements Cloneable, CharSequence, RMTypes, RMArchiver.A
     }
 
     /**
-     * Returns the current paragraph at the given character index.
+     * Returns the text line style at the given character index.
      */
-    public RMParagraph getParagraphAt(int anIndex)
+    public TextLineStyle getLineStyleForCharIndex(int anIndex)
     {
         TextLine line = _richText.getLineForCharIndex(anIndex);
-        return new RMParagraph(line.getLineStyle());
+        return line.getLineStyle();
     }
+
+    /**
+     * Returns the text line style at the given character index.
+     */
+    public void setLineStyle(TextLineStyle lineStyle, int aStart, int anEnd)
+    {
+        _richText.setLineStyle(lineStyle, aStart, anEnd);
+    }
+
+    /**
+     * Returns the current paragraph at the given character index.
+     */
+    public RMParagraph getParagraphAt(int anIndex)  { return new RMParagraph(getLineStyleForCharIndex(anIndex)); }
 
     /**
      * Sets the paragraph for the given character index range.
      */
     public void setParagraph(RMParagraph aPG, int aStart, int anEnd)
     {
-        _richText.setLineStyle(aPG._lineStyle, aStart, anEnd);
+        setLineStyle(aPG._lineStyle, aStart, anEnd);
     }
 
     /**
@@ -343,17 +358,14 @@ public class RMXString implements Cloneable, CharSequence, RMTypes, RMArchiver.A
     /**
      * Returns the horizontal alignment of the first paragraph of the xstring.
      */
-    public AlignX getAlignX()
-    {
-        return getParagraphAt(0).getAlignmentX();
-    }
+    public HPos getAlignX()  { return getLineStyleForCharIndex(0).getAlign(); }
 
     /**
      * Sets the horizontal alignment of the xstring.
      */
-    public void setAlignX(AlignX anAlignX)
+    public void setAlignX(HPos alignX)
     {
-        _richText.setLineStyleValue(TextLineStyle.Align_Prop, anAlignX.hpos(), 0, length());
+        _richText.setLineStyleValue(TextLineStyle.Align_Prop, alignX, 0, length());
     }
 
     /**

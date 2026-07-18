@@ -4,6 +4,7 @@
 package com.reportmill.app;
 import com.reportmill.apptools.RMTableRowTool;
 import com.reportmill.graphics.*;
+import snap.geom.HPos;
 import snap.props.Undoer;
 import snap.util.*;
 import snap.view.*;
@@ -149,11 +150,11 @@ public class RMEditorPaneMenuBar extends RMEditorPane.SupportPane {
             editorStyler.setTextOutlined(!editorStyler.isTextOutlined());
 
         if (anEvent.equals("AlignLeftMenuItem"))
-            RMEditorUtils.setAlignmentX(editor, RMTypes.AlignX.Left);
+            RMEditorUtils.setAlignmentX(editor, HPos.LEFT);
         if (anEvent.equals("AlignCenterMenuItem"))
-            RMEditorUtils.setAlignmentX(editor, RMTypes.AlignX.Center);
+            RMEditorUtils.setAlignmentX(editor, HPos.CENTER);
         if (anEvent.equals("AlignRightMenuItem"))
-            RMEditorUtils.setAlignmentX(editor, RMTypes.AlignX.Right);
+            RMEditorUtils.setAlignmentX(editor, HPos.RIGHT);
         if (anEvent.equals("AlignFullMenuItem"))
             RMEditorUtils.setJustify(editor, true);
         if (anEvent.equals("SuperscriptMenuItem")) RMEditorUtils.setSuperscript(editor);

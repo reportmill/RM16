@@ -30,7 +30,7 @@ import snap.view.*;
  *   shape.setOpacity(.667f);
  * </pre></blockquote>
  */
-public class RMShape implements Cloneable, RMTypes, Archivable, Key.GetSet {
+public class RMShape implements Cloneable, Archivable, Key.GetSet {
 
     // X location of shape
     double _x = 0;
@@ -70,13 +70,13 @@ public class RMShape implements Cloneable, RMTypes, Archivable, Key.GetSet {
     Object _springInfo;
 
     // Map to hold less used attributes (name, url, etc.)
-    RMSharedMap _attrMap = SHARED_MAP;
+    private RMSharedMap _attrMap = SHARED_MAP;
 
     // The PropChangeSupport
     PropChangeSupport _pcs = PropChangeSupport.EMPTY;
 
     // A shared/root RMSharedMap (cloned to turn on shared flag)
-    static final RMSharedMap SHARED_MAP = new RMSharedMap().clone();
+    private static final RMSharedMap SHARED_MAP = new RMSharedMap().clone();
 
     // Constants for properties
     public static final String X_Prop = "X";
@@ -906,57 +906,53 @@ public class RMShape implements Cloneable, RMTypes, Archivable, Key.GetSet {
     /**
      * Returns the alignment.
      */
-    public Pos getAlignment()
-    {
-        AlignX ax = getAlignmentX();
-        AlignY ay = getAlignmentY();
-        if (ax == AlignX.Left && ay == AlignY.Top) return Pos.TOP_LEFT;
-        if (ax == AlignX.Center && ay == AlignY.Top) return Pos.TOP_CENTER;
-        if (ax == AlignX.Right && ay == AlignY.Top) return Pos.TOP_RIGHT;
-        if (ax == AlignX.Left && ay == AlignY.Middle) return Pos.CENTER_LEFT;
-        if (ax == AlignX.Center && ay == AlignY.Middle) return Pos.CENTER;
-        if (ax == AlignX.Right && ay == AlignY.Middle) return Pos.CENTER_RIGHT;
-        if (ax == AlignX.Left && ay == AlignY.Bottom) return Pos.BOTTOM_LEFT;
-        if (ax == AlignX.Center && ay == AlignY.Bottom) return Pos.BOTTOM_CENTER;
-        return Pos.BOTTOM_RIGHT;
-    }
+    public Pos getAlign()  { return Pos.get(getAlignX(), getAlignY()); }
 
     /**
      * Sets the alignment.
      */
-    public void setAlignment(Pos aPos)
+    public void setAlign(Pos aPos)
     {
-        switch (aPos.getHPos()) {
-            case LEFT: setAlignmentX(AlignX.Left); break;
-            case CENTER: setAlignmentX(AlignX.Center); break;
-            case RIGHT: setAlignmentX(AlignX.Right); break;
-        }
-        switch (aPos.getVPos()) {
-            case TOP: setAlignmentY(AlignY.Top); break;
-            case CENTER: setAlignmentY(AlignY.Middle); break;
-            case BOTTOM: setAlignmentY(AlignY.Bottom); break;
-        }
+        setAlignX(aPos.getHPos());
+        setAlignY(aPos.getVPos());
     }
 
     /**
      * Returns the horizontal alignment.
      */
-    public AlignX getAlignmentX()  { return AlignX.Left; }
+    public HPos getAlignX()  { return HPos.LEFT; }
 
     /**
      * Sets the horizontal alignment.
      */
-    public void setAlignmentX(AlignX anAlignX)  { }
+    public void setAlignX(HPos alignX)  { }
 
     /**
      * Returns the vertical alignment.
      */
-    public AlignY getAlignmentY()  { return AlignY.Top; }
+    public VPos getAlignY()  { return VPos.TOP; }
 
     /**
      * Sets the vertical alignment.
      */
-    public void setAlignmentY(AlignY anAlignY)  { }
+    public void setAlignY(VPos alignY)  { }
+
+    /**
+     * Returns y alignment string.
+     */
+    String getAlignYString()  { return getAlignY() == VPos.CENTER ? "middle" : getAlignY().toString().toLowerCase(); }
+
+    /**
+     * Returns y alignment string.
+     */
+    void setAlignYString(String aString)
+    {
+        setAlignY(switch (aString.toLowerCase()) {
+            case "center", "middle" -> VPos.CENTER;
+            case "bottom" -> VPos.BOTTOM;
+            default -> VPos.TOP;
+        });
+    }
 
     /**
      * Returns the format for the shape.
@@ -1027,29 +1023,14 @@ public class RMShape implements Cloneable, RMTypes, Archivable, Key.GetSet {
      * of explicitly including ivars for them. The map that holds these properties is shared so that there is only ever one
      * instance of the map for each unique permutation of attributes.
      */
-    public Object get(String aName)
-    {
-        return _attrMap.get(aName);
-    }
-
-    /**
-     * Returns the value associated with given key, using the given default if not found.
-     */
-    public Object get(String aName, Object aDefault)
-    {
-        Object val = get(aName);
-        return val != null ? val : aDefault;
-    }
+    public Object get(String aName)  { return _attrMap.get(aName); }
 
     /**
      * Sets a value to be associated with the given name for the shape.
      */
     public Object put(String aName, Object anObj)
     {
-        // If map shared, clone it for real
         if (_attrMap.isShared) _attrMap = _attrMap.cloneReal();
-
-        // Put value (or remove if null)
         return anObj != null ? _attrMap.put(aName, anObj) : _attrMap.remove(aName);
     }
 
@@ -2492,7 +2473,7 @@ public class RMShape implements Cloneable, RMTypes, Archivable, Key.GetSet {
     /**
      * A HashMap subclass to hold uncommon attributes, with Shared flag to indicate whether it has to be copied when modded.
      */
-    private static class RMSharedMap extends HashMap {
+    private static class RMSharedMap extends HashMap<String,Object> {
 
         // Whether this map is being shared
         boolean isShared = false;

@@ -26,10 +26,10 @@ public class RMExcelWriter {
     HSSFWorkbook _workbook;
 
     // The list of workbook styles found in this workbook
-    List<WorkbookStyle> _styles = new ArrayList();
+    List<WorkbookStyle> _styles = new ArrayList<>();
 
     // The list of fonts in this workbook
-    List<WorkbookFont> _fonts = new ArrayList();
+    List<WorkbookFont> _fonts = new ArrayList<>();
 
     // The currently selected cell in the sheet
     HSSFCell _activeCell;
@@ -78,7 +78,7 @@ public class RMExcelWriter {
         aDoc.resolvePageReferences();
 
         // Allocate the array of shapes that ultimately will become the spreadsheet
-        List<RMShape> sheetShapes = new ArrayList();
+        List<RMShape> sheetShapes = new ArrayList<>();
 
         // Iterate through pages and have each one append XLS
         for (int i = 0, iMax = aDoc.getPageCount(); i < iMax; i++) {
@@ -270,22 +270,21 @@ public class RMExcelWriter {
             newShape = rmSheet.addLine(aShape, aParent);
 
             // Handle RMImageShape (creates a new picture every time!!)
-        else if (aShape instanceof RMImageShape) {
-            RMImageShape imgShape = (RMImageShape) aShape;
+        else if (aShape instanceof RMImageShape imgShape) {
 
             // Get image data (if not available or invalid, just return)
             Image img = imgShape.getImage();
             if (img == null) return;
 
-            String type = img.getType();
-            int poiType = 0;
-            if (type.equalsIgnoreCase("png"))
-                poiType = HSSFWorkbook.PICTURE_TYPE_PNG;
-            else if (type.equalsIgnoreCase("jpg") || type.equalsIgnoreCase("jpeg"))
-                poiType = HSSFWorkbook.PICTURE_TYPE_JPEG;
-            else {
-                System.err.println("Image type \"" + type + "\" not supported in Excel files. Should be png or jpg.");
-                return;
+            String type = img.getType().toLowerCase();
+            int poiType;
+            switch (type) {
+                case "png" -> poiType = HSSFWorkbook.PICTURE_TYPE_PNG;
+                case "jpg", "jpeg" -> poiType = HSSFWorkbook.PICTURE_TYPE_JPEG;
+                default -> {
+                    System.err.println("Image type \"" + type + "\" not supported in Excel files. Should be png or jpg.");
+                    return;
+                }
             }
 
             // Add picture
@@ -295,8 +294,7 @@ public class RMExcelWriter {
         }
 
         // Handle text
-        else if (aShape instanceof RMTextShape) {
-            RMTextShape text = (RMTextShape) aShape;
+        else if (aShape instanceof RMTextShape text) {
 
             // POI does something weird with empty rich texts, so toss it
             if (text.length() > 0) {
@@ -510,7 +508,7 @@ public class RMExcelWriter {
     public HSSFRichTextString createRichText(RMXString anXString)
     {
         // If null or empty xstring, just return empty poi rich text string)
-        if (anXString == null || anXString.length() == 0)
+        if (anXString == null || anXString.isEmpty())
             return new HSSFRichTextString();
 
         // Create poi RichTextString
@@ -554,8 +552,8 @@ public class RMExcelWriter {
         public boolean isMatch(RMTextShape aText, String aFormat)
         {
             if (!Objects.equals(aText.getFont(), _text.getFont())) return false;
-            if (aText.getAlignmentX() != _text.getAlignmentX()) return false;
-            if (aText.getAlignmentY() != _text.getAlignmentY()) return false;
+            if (aText.getAlignX() != _text.getAlignX()) return false;
+            if (aText.getAlignY() != _text.getAlignY()) return false;
             if (!Objects.equals(aText.getFill(), _text.getFill())) return false;
             if (!Objects.equals(aText.getStroke(), _text.getStroke())) return false;
             if (!Objects.equals(aText.getTextColor(), _text.getTextColor())) return false;
@@ -581,29 +579,17 @@ public class RMExcelWriter {
                 _style.setFont(getWorkbookFont(_text.getFont(), _text.getTextColor()));
 
             // Set style horizontal alignment
-            switch (_text.getAlignmentX()) {
-                case Left:
-                    _style.setAlignment(HSSFCellStyle.ALIGN_LEFT);
-                    break;
-                case Center:
-                    _style.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-                    break;
-                case Right:
-                    _style.setAlignment(HSSFCellStyle.ALIGN_RIGHT);
-                    break;
+            switch (_text.getAlignX()) {
+                case LEFT -> _style.setAlignment(HSSFCellStyle.ALIGN_LEFT);
+                case CENTER -> _style.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+                case RIGHT -> _style.setAlignment(HSSFCellStyle.ALIGN_RIGHT);
             }
 
             // Set vertical alignment
-            switch (_text.getAlignmentY()) {
-                case Top:
-                    _style.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
-                    break;
-                case Bottom:
-                    _style.setVerticalAlignment(HSSFCellStyle.VERTICAL_BOTTOM);
-                    break;
-                case Middle:
-                    _style.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
-                    break;
+            switch (_text.getAlignY()) {
+                case TOP -> _style.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
+                case BOTTOM -> _style.setVerticalAlignment(HSSFCellStyle.VERTICAL_BOTTOM);
+                case CENTER -> _style.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
             }
 
             // If format is provided, set style format
@@ -722,8 +708,8 @@ public class RMExcelWriter {
         // Iterate over HSSFColors
         for (Map.Entry ent : (Set<Map.Entry>) cols.entrySet()) {
             HSSFColor xc = (HSSFColor) ent.getValue();
-            short rgb[] = xc.getTriplet();
-            float lab[] = rgbToLab(rgb[0] / 255d, rgb[1] / 255d, rgb[2] / 255d);
+            short[] rgb = xc.getTriplet();
+            float[] lab = rgbToLab(rgb[0] / 255d, rgb[1] / 255d, rgb[2] / 255d);
 
             // Get squared distance
             float squaredDistance = (target_lab[0] - lab[0]) * (target_lab[0] - lab[0]) +
@@ -747,7 +733,7 @@ public class RMExcelWriter {
     {
         // Rather than try to translate all possible format patterns, this is just a list of the ones in the
         // RMStudio formatter panel and one or two others.
-        String rmtoexcelmap[][] = {
+        String[][] rmtoexcelmap = {
                 {"EEEE, MMMM d, yyyy", "dddd\", \"mmmm\" \"d\", \"yyyy"},
                 {"MMMM d, yyyy", "mmmm\" \"d\", \"yyyy"},
                 {"d MMMM yyyy", "d\\ mmmm\\ yyyy"},
@@ -766,9 +752,9 @@ public class RMExcelWriter {
         // Note that toLowerCase() might do a half-assed job. Plain characters (spaces, commas, etc) would have
         // to be escaped: E->d, and EE->ddd
         // There's a conflict over mm used as both month & minutes no timezones: a ->  am/pm
-        for (int i = 0; i < rmtoexcelmap.length; ++i)
-            if (javaPattern.equals(rmtoexcelmap[i][0]))
-                return rmtoexcelmap[i][1];
+        for (String[] strings : rmtoexcelmap)
+            if (javaPattern.equals(strings[0]))
+                return strings[1];
 
         // Since format not found, see if we should print warning (only first time)
         if (!_foundErrors.contains(javaPattern)) {
@@ -781,7 +767,7 @@ public class RMExcelWriter {
     }
 
     // A map to hold encountered errors
-    private static Set _foundErrors = new HashSet();
+    private static Set<String> _foundErrors = new HashSet<>();
 
     /**
      * Converts this color to a CIELab triplet
@@ -798,10 +784,10 @@ public class RMExcelWriter {
     {
         // Get the standard rgb space and convert from RGB to XYZ conversion space
         ColorSpace rgbSpace = ColorSpace.getInstance(ColorSpace.CS_sRGB);
-        float xyz[] = rgbSpace.toCIEXYZ(new float[]{(float) r, (float) g, (float) b});
+        float[] xyz = rgbSpace.toCIEXYZ(new float[]{(float) r, (float) g, (float) b});
 
         // This is the D50 whitepoint as defined by awt
-        double d50[] = {.9642, 1.0, .8249};
+        double[] d50 = {.9642, 1.0, .8249};
 
         // Convert from XYZ to LAB
         double fy = LABTransformFn(xyz[1] / d50[1]);

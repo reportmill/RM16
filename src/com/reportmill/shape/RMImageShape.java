@@ -5,10 +5,7 @@ package com.reportmill.shape;
 import com.reportmill.base.RMKeyChain;
 import com.reportmill.graphics.*;
 import com.reportmill.graphics.ImageRef;
-import snap.geom.Pos;
-import snap.geom.Rect;
-import snap.geom.Shape;
-import snap.geom.Transform;
+import snap.geom.*;
 import snap.gfx.*;
 import snap.util.*;
 import snap.web.WebURL;
@@ -28,10 +25,10 @@ public class RMImageShape extends RMRectShape {
     private int  _padding;
 
     // X alignment
-    private AlignX  _alignX = AlignX.Center;
+    private HPos _alignX = HPos.CENTER;
 
     // Y alignment
-    private AlignY  _alignY = AlignY.Middle;
+    private VPos _alignY = VPos.CENTER;
 
     // Whether to grow image to fit available area if shape larger than image.
     private boolean  _growToFit = true;
@@ -131,29 +128,26 @@ public class RMImageShape extends RMRectShape {
     /**
      * Returns the horizontal alignment.
      */
-    public AlignX getAlignmentX()  { return _alignX; }
-
+    @Override
+    public HPos getAlignX()  { return _alignX; }
 
     /**
      * Sets the horizontal alignment.
      */
-    public void setAlignmentX(AlignX anAlignX)
-    {
-        _alignX = anAlignX;
-    }
+    @Override
+    public void setAlignX(HPos alignX)  { _alignX = alignX; }
 
     /**
      * Returns the vertical alignment.
      */
-    public AlignY getAlignmentY()  { return _alignY; }
+    @Override
+    public VPos getAlignY()  { return _alignY; }
 
     /**
      * Sets the vertical alignment.
      */
-    public void setAlignmentY(AlignY anAlignY)
-    {
-        _alignY = anAlignY;
-    }
+    @Override
+    public void setAlignY(VPos alignY)  { _alignY = alignY; }
 
     /**
      * Returns whether to grow image to fit available area if shape larger than image.
@@ -223,7 +217,7 @@ public class RMImageShape extends RMRectShape {
 
         // If key: Evaluate key for image and set
         String key = getKey();
-        if (key != null && key.length() > 0) {
+        if (key != null && !key.isEmpty()) {
 
             // Get key value
             Object value = RMKeyChain.getValue(aRptOwner, key);
@@ -321,10 +315,10 @@ public class RMImageShape extends RMRectShape {
         }
 
         // Get image bounds x/y for width/height and return rect
-        AlignX alignX = getAlignmentX();
-        AlignY alignY = getAlignmentY();
-        double boundsX = alignX == AlignX.Center ? (shapeW - boundsW) / 2 : alignX == AlignX.Left ? padding : (shapeW - boundsW);
-        double boundsY = alignY == AlignY.Middle ? (shapeH - boundsH) / 2 : alignY == AlignY.Top ? padding : (shapeH - boundsH);
+        HPos alignX = getAlignX();
+        VPos alignY = getAlignY();
+        double boundsX = alignX == HPos.CENTER ? (shapeW - boundsW) / 2 : alignX == HPos.LEFT ? padding : (shapeW - boundsW);
+        double boundsY = alignY == VPos.CENTER ? (shapeH - boundsH) / 2 : alignY == VPos.TOP ? padding : (shapeH - boundsH);
         return new Rect(boundsX, boundsY, boundsW, boundsH);
     }
 
@@ -347,9 +341,9 @@ public class RMImageShape extends RMRectShape {
         }
 
         // Archive Key, Padding, Alignment, GrowToFit, PreserveRatio
-        if (_key != null && _key.length() > 0) e.add("key", _key);
+        if (_key != null && !_key.isEmpty()) e.add("key", _key);
         if (_padding > 0) e.add("Padding", _padding);
-        if (getAlignment() != Pos.CENTER) e.add("Alignment", getAlignment());
+        if (getAlign() != Pos.CENTER) e.add("Alignment", getAlign());
         if (!isGrowToFit()) e.add("GrowToFit", isGrowToFit());
         if (!getPreserveRatio()) e.add("PreserveRatio", getPreserveRatio());
 
@@ -395,17 +389,15 @@ public class RMImageShape extends RMRectShape {
             String[] s = {"TopLeft", "TopCenter", "TopRight", "CenterLeft", "Center", "CenterRight",
                     "BottomLeft", "BottomCenter", "BottomRight"};
             int i = ArrayUtils.indexOf(s, as);
-            if (i >= 0) setAlignment(Pos.values()[i]);
+            if (i >= 0) setAlign(Pos.values()[i]);
         }
 
         // Legacy: If Fill is ImageFill and no ImageRef+Key or ImageFill.ImageRef, set ImageRef from IFill and clear fill
-        if (getFill() instanceof RMImageFill) {
-            RMImageFill ifill = (RMImageFill) getFill();
+        if (getFill() instanceof RMImageFill ifill) {
 
             // If ImageFill.ImageRef.Source is byte array and PDF, return PDF shape
             ImageRef iref = ifill.getImageRef();
-            if (iref != null && iref.getSource() instanceof byte[]) {
-                byte[] bytes = (byte[]) iref.getSource();
+            if (iref != null && iref.getSource() instanceof byte[] bytes) {
                 if (RMPDFData.canRead(bytes))
                     return new RMPDFShape(bytes);
             }
@@ -431,9 +423,11 @@ public class RMImageShape extends RMRectShape {
                     setPreserveRatio(true);
                 }
                 double x = fill.getAttributeFloatValue("x");
-                if (x != 0) setAlignmentX(x < 0 ? AlignX.Left : AlignX.Right);
+                if (x != 0)
+                    setAlignX(x < 0 ? HPos.LEFT : HPos.RIGHT);
                 double y = fill.getAttributeFloatValue("y");
-                if (y != 0) setAlignmentY(y < 0 ? AlignY.Top : AlignY.Bottom);
+                if (y != 0)
+                    setAlignY(y < 0 ? VPos.TOP : VPos.BOTTOM);
             } else if (iref == null) setFill(null);
             setPadding(fill.getAttributeIntValue("margin"));
         }

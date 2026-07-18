@@ -87,9 +87,9 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
         setViewValue("AlignFullButton", lineStyle.isJustify());
 
         // Update AlignTopButton, AlignMiddleButton, AlignBottomButton
-        setViewValue("AlignTopButton", text.getAlignmentY() == RMTypes.AlignY.Top);
-        setViewValue("AlignMiddleButton", text.getAlignmentY() == RMTypes.AlignY.Middle);
-        setViewValue("AlignBottomButton", text.getAlignmentY() == RMTypes.AlignY.Bottom);
+        setViewValue("AlignTopButton", text.getAlignY() == VPos.TOP);
+        setViewValue("AlignMiddleButton", text.getAlignY() == VPos.CENTER);
+        setViewValue("AlignBottomButton", text.getAlignY() == VPos.BOTTOM);
 
         // Set TextView TextModel to text shape text model
         _textView.setTextModel(text.getTextModel());
@@ -161,13 +161,13 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
         texts.forEach(RMTextShape::repaint);
 
         // Handle AlignLeftButton, AlignCenterButton, AlignRightButton, AlignFullButton, AlignTopButton, AlignMiddleButton
-        if (anEvent.equals("AlignLeftButton")) RMEditorUtils.setAlignmentX(editor, RMTypes.AlignX.Left);
-        if (anEvent.equals("AlignCenterButton")) RMEditorUtils.setAlignmentX(editor, RMTypes.AlignX.Center);
-        if (anEvent.equals("AlignRightButton")) RMEditorUtils.setAlignmentX(editor, RMTypes.AlignX.Right);
+        if (anEvent.equals("AlignLeftButton")) RMEditorUtils.setAlignmentX(editor, HPos.LEFT);
+        if (anEvent.equals("AlignCenterButton")) RMEditorUtils.setAlignmentX(editor, HPos.CENTER);
+        if (anEvent.equals("AlignRightButton")) RMEditorUtils.setAlignmentX(editor, HPos.RIGHT);
         if (anEvent.equals("AlignFullButton")) RMEditorUtils.setJustify(editor, true);
-        if (anEvent.equals("AlignTopButton")) for (RMTextShape txt : texts) txt.setAlignmentY(RMTypes.AlignY.Top);
-        if (anEvent.equals("AlignMiddleButton")) for (RMTextShape txt : texts) txt.setAlignmentY(RMTypes.AlignY.Middle);
-        if (anEvent.equals("AlignBottomButton")) for (RMTextShape txt : texts) txt.setAlignmentY(RMTypes.AlignY.Bottom);
+        if (anEvent.equals("AlignTopButton")) for (RMTextShape txt : texts) txt.setAlignY(VPos.TOP);
+        if (anEvent.equals("AlignMiddleButton")) for (RMTextShape txt : texts) txt.setAlignY(VPos.CENTER);
+        if (anEvent.equals("AlignBottomButton")) for (RMTextShape txt : texts) txt.setAlignY(VPos.BOTTOM);
 
         // If RoundingThumb or RoundingText, make sure shapes have stroke
         if (anEvent.equals("RoundingThumb") || anEvent.equals("RoundingText"))
@@ -909,18 +909,12 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
     /**
      * Returns the shape class that this tool edits.
      */
-    public Class getShapeClass()
-    {
-        return RMTextShape.class;
-    }
+    public Class getShapeClass()  { return RMTextShape.class; }
 
     /**
      * Returns the name of this tool to be displayed by inspector.
      */
-    public String getWindowTitle()
-    {
-        return "Text Inspector";
-    }
+    public String getWindowTitle()  { return "Text Inspector"; }
 
     /**
      * Returns whether text tool should convert to text.

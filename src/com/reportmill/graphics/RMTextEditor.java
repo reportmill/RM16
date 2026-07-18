@@ -2,6 +2,7 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package com.reportmill.graphics;
+import snap.geom.HPos;
 import snap.gfx.*;
 import snap.text.*;
 import snap.util.*;
@@ -133,15 +134,15 @@ public class RMTextEditor extends TextAdapter {
     /**
      * Returns the alignment for current selection.
      */
-    public RMTypes.AlignX getAlignX()  { return getInputParagraph().getAlignmentX(); }
+    public HPos getAlignX()  { return getInputLineStyle().getAlign(); }
 
     /**
      * Sets the alignment for current selection.
      */
-    public void setAlignX(RMTypes.AlignX anAlignX)
+    public void setAlignX(HPos alignX)
     {
-        RMParagraph pg = getInputParagraph().deriveAligned(anAlignX);
-        setInputParagraph(pg);
+        TextLineStyle lineStyle = getInputLineStyle().copyForAlign(alignX);
+        setInputLineStyle(lineStyle);
     }
 
     /**

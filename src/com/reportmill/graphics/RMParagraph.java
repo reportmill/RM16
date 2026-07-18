@@ -2,28 +2,20 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package com.reportmill.graphics;
-import com.reportmill.shape.RMArchiverHpr;
-import com.reportmill.shape.RMArchiver;
 import snap.geom.HPos;
 import snap.text.TextLineStyle;
-import snap.util.*;
 
 /**
- * This class represents attributes of a paragraph in an RMXString (all of the characters up to and including each
- * newline in an RMXString make up a paragraph). Paragraphs can have their own alignment, indentation, min/max line
- * height, etc. You might use this class like this:
- * <p><blockquote><pre>
- *   RMParagraph pgraph = RMParagraph.defaultParagraph.deriveAligned(RMParagraph.ALIGN_RIGHT);
- *   RMXString xstring = new RMXString("Hello World", pgraph);
+ * This class represents attributes of a paragraph in an RMXString.
  */
-public class RMParagraph implements Cloneable, RMTypes, RMArchiver.Archivable {
+public class RMParagraph {
 
     // The line style
     TextLineStyle _lineStyle = TextLineStyle.DEFAULT;
 
     // Default paragraph
     public static final RMParagraph DEFAULT = new RMParagraph();
-    public static final RMParagraph CENTERED = DEFAULT.deriveAligned(RMTypes.AlignX.Center);
+    public static final RMParagraph CENTERED = DEFAULT.copyForAlign(HPos.CENTER);
 
     // Constants for tab types
     public static final char TAB_LEFT = TextLineStyle.TAB_LEFT;
@@ -60,21 +52,6 @@ public class RMParagraph implements Cloneable, RMTypes, RMArchiver.Archivable {
      * Returns the alignment.
      */
     public HPos getAlign()  { return _lineStyle.getAlign(); }
-
-    /**
-     * Returns the alignment associated with this paragraph.
-     */
-    public AlignX getAlignmentX()  { return AlignX.get(_lineStyle.getAlign()); }
-
-    /**
-     * Returns indentation of first line in paragraph (this can be set different than successive lines).
-     */
-    public double getFirstIndent()  { return _lineStyle.getFirstIndent(); }
-
-    /**
-     * Returns the left side indentation of this paragraph.
-     */
-    public double getLeftIndent()  { return _lineStyle.getLeftIndent(); }
 
     /**
      * Returns the right side indentation of this paragraph.
@@ -140,23 +117,14 @@ public class RMParagraph implements Cloneable, RMTypes, RMArchiver.Archivable {
     /**
      * Returns a paragraph identical to the receiver, but with the given alignment.
      */
-    public RMParagraph deriveAligned(AlignX anAlign)
-    {
-        RMParagraph ps = clone();
-        ps._lineStyle = _lineStyle.copyForAlign(anAlign.hpos());
-        return ps;
-    }
+    public RMParagraph copyForAlign(HPos alignX)  { return new RMParagraph(_lineStyle.copyForAlign(alignX)); }
 
     /**
      * Returns a paragraph identical to the receiver, but with the given indentation values.
      */
-    public RMParagraph deriveIndent(double firstIndent, double leftIndent, double rightIndent)
+    public RMParagraph copyForIndents(double firstIndent, double leftIndent, double rightIndent)
     {
-        RMParagraph ps = clone();
-        ps._lineStyle = ps._lineStyle.copyForPropKeyValue(TextLineStyle.FirstIndent_Prop, firstIndent);
-        ps._lineStyle = ps._lineStyle.copyForPropKeyValue(TextLineStyle.LeftIndent_Prop, leftIndent);
-        ps._lineStyle = ps._lineStyle.copyForPropKeyValue(TextLineStyle.RightIndent_Prop, rightIndent);
-        return ps;
+        return new RMParagraph(_lineStyle.copyForIndents(firstIndent, leftIndent, rightIndent));
     }
 
     /**
@@ -164,9 +132,7 @@ public class RMParagraph implements Cloneable, RMTypes, RMArchiver.Archivable {
      */
     public RMParagraph deriveLineSpacing(float aHeight)
     {
-        RMParagraph ps = clone();
-        ps._lineStyle = _lineStyle.copyForPropKeyValue(TextLineStyle.SpacingFactor_Prop, aHeight);
-        return ps;
+        return new RMParagraph(_lineStyle.copyForPropKeyValue(TextLineStyle.SpacingFactor_Prop, aHeight));
     }
 
     /**
@@ -174,9 +140,7 @@ public class RMParagraph implements Cloneable, RMTypes, RMArchiver.Archivable {
      */
     public RMParagraph deriveLineGap(float aHeight)
     {
-        RMParagraph ps = clone();
-        ps._lineStyle = _lineStyle.copyForPropKeyValue(TextLineStyle.Spacing_Prop, aHeight);
-        return ps;
+        return new RMParagraph(_lineStyle.copyForPropKeyValue(TextLineStyle.Spacing_Prop, aHeight));
     }
 
     /**
@@ -184,9 +148,7 @@ public class RMParagraph implements Cloneable, RMTypes, RMArchiver.Archivable {
      */
     public RMParagraph deriveLineHeightMin(float aHeight)
     {
-        RMParagraph ps = clone();
-        ps._lineStyle = _lineStyle.copyForPropKeyValue(TextLineStyle.MinHeight_Prop, aHeight);
-        return ps;
+        return new RMParagraph(_lineStyle.copyForPropKeyValue(TextLineStyle.MinHeight_Prop, aHeight));
     }
 
     /**
@@ -194,18 +156,7 @@ public class RMParagraph implements Cloneable, RMTypes, RMArchiver.Archivable {
      */
     public RMParagraph deriveLineHeightMax(float aHeight)
     {
-        RMParagraph ps = clone();
-        ps._lineStyle = _lineStyle.copyForPropKeyValue(TextLineStyle.MaxHeight_Prop, aHeight);
-        return ps;
-    }
-
-    /**
-     * Standard clone of this object.
-     */
-    public RMParagraph clone()
-    {
-        try { return (RMParagraph) super.clone(); }
-        catch (CloneNotSupportedException e) { throw new RuntimeException(e); }
+        return new RMParagraph(_lineStyle.copyForPropKeyValue(TextLineStyle.MaxHeight_Prop, aHeight));
     }
 
     /**
@@ -217,23 +168,6 @@ public class RMParagraph implements Cloneable, RMTypes, RMArchiver.Archivable {
         if (!(anObj instanceof RMParagraph other)) return false;
         if (!other._lineStyle.equals(_lineStyle)) return false;
         return true;
-    }
-
-    /**
-     * XML archival.
-     */
-    public XMLElement toXML(RMArchiver anArchiver)
-    {
-        return RMArchiverHpr.lineStyleToXML(_lineStyle);
-    }
-
-    /**
-     * XML unarchival.
-     */
-    public Object fromXML(RMArchiver anArchiver, XMLElement anElement)
-    {
-        _lineStyle = RMArchiverHpr.lineStyleFromXML(anElement);
-        return this;
     }
 
     /**

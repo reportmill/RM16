@@ -17,26 +17,24 @@ public class RMGraphPartSeries extends RMShape {
     RMGraph _graph;
 
     // The title of the series
-    String _title;
+    private String _title;
 
     // The currently selected label position
-    LabelPos _position = LabelPos.Middle;
+    private LabelPos _position = LabelPos.Middle;
 
     // The map of label shapes for label positions
-    Map<LabelPos, RMTextShape> _labelShapes = new HashMap();
-
-    // Default cell paragraph (aligned center)
-    static RMParagraph _defaultParagraph = RMParagraph.DEFAULT.deriveAligned(RMTypes.AlignX.Center);
+    private Map<LabelPos, RMTextShape> _labelShapes = new HashMap<>();
 
     // Constants for value label positions
-    public enum LabelPos {Top, Middle, Bottom, Above, Below}
+    public enum LabelPos { Top, Middle, Bottom, Above, Below }
 
     /**
      * Returns the title of the series.
      */
     public String getTitle()
     {
-        return _title != null ? _title : (_title = getTitleDefault());
+        if (_title != null) return _title;
+        return _title = getTitleDefault();
     }
 
     /**
@@ -61,10 +59,7 @@ public class RMGraphPartSeries extends RMShape {
     /**
      * Returns the value label position (top, middle, bottom, outside).
      */
-    public LabelPos getPosition()
-    {
-        return _position;
-    }
+    public LabelPos getPosition()  { return _position; }
 
     /**
      * Sets the value label position (top, middle, bottom, outside).

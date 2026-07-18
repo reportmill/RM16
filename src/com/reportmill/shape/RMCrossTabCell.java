@@ -5,6 +5,7 @@ package com.reportmill.shape;
 import com.reportmill.base.RMGroup;
 import com.reportmill.base.RMGrouping;
 import snap.geom.Insets;
+import snap.geom.VPos;
 import snap.gfx.*;
 import snap.text.TextLineStyle;
 import snap.util.*;
@@ -48,176 +49,108 @@ public class RMCrossTabCell extends RMTextShape {
     static Insets _defaultMargin = new Insets(5);
 
     /**
-     * Creates a new RMCrossTabCell.
+     * Constructor.
      */
     public RMCrossTabCell()
     {
-        setAlignmentY(AlignY.Middle);
+        setAlignY(VPos.CENTER);
         getRichText().setDefaultLineStyle(TextLineStyle.DEFAULT_CENTERED);
     }
 
     /**
      * Returns the table for this cell.
      */
-    public RMCrossTab getTable()
-    {
-        return (RMCrossTab) getParent();
-    }
+    public RMCrossTab getTable()  { return (RMCrossTab) getParent(); }
 
     /**
      * Returns the row of this cell.
      */
-    public int getRow()
-    {
-        return _row;
-    }
+    public int getRow()  { return _row; }
 
     /**
      * Returns the column of this cell.
      */
-    public int getCol()
-    {
-        return _col;
-    }
+    public int getCol()  { return _col; }
 
     /**
      * Returns the number of columns this cell spans.
      */
-    public int getColSpan()
-    {
-        return _colSpan;
-    }
+    public int getColSpan()  { return _colSpan; }
 
     /**
      * Returns the number of rows this cell spans.
      */
-    public int getRowSpan()
-    {
-        return _rowSpan;
-    }
+    public int getRowSpan()  { return _rowSpan; }
 
     /**
      * Returns the end row of this cell.
      */
-    public int getRowEnd()
-    {
-        return _row + _rowSpan - 1;
-    }
+    public int getRowEnd()  { return _row + _rowSpan - 1; }
 
     /**
      * Returns whether cell shows left border.
      */
-    public boolean isShowLeftBorder()
-    {
-        return _showLeftBorder;
-    }
+    public boolean isShowLeftBorder()  { return _showLeftBorder; }
 
     /**
      * Sets whether cell shows left border.
      */
-    public void setShowLeftBorder(boolean aFlag)
-    {
-        _showLeftBorder = aFlag;
-    }
+    public void setShowLeftBorder(boolean aFlag)  { _showLeftBorder = aFlag; }
 
     /**
      * Returns whether cell shows right border.
      */
-    public boolean isShowRightBorder()
-    {
-        return _showRightBorder;
-    }
+    public boolean isShowRightBorder()  { return _showRightBorder; }
 
     /**
      * Sets whether cell shows right border.
      */
-    public void setShowRightBorder(boolean aFlag)
-    {
-        _showRightBorder = aFlag;
-    }
+    public void setShowRightBorder(boolean aFlag)  { _showRightBorder = aFlag; }
 
     /**
      * Returns whether cell shows top border.
      */
-    public boolean isShowTopBorder()
-    {
-        return _showTopBorder;
-    }
+    public boolean isShowTopBorder()  { return _showTopBorder; }
 
     /**
      * Sets whether cell shows top border.
      */
-    public void setShowTopBorder(boolean aFlag)
-    {
-        _showTopBorder = aFlag;
-    }
+    public void setShowTopBorder(boolean aFlag)  { _showTopBorder = aFlag; }
 
     /**
      * Returns whether cell shows bottom border.
      */
-    public boolean isShowBottomBorder()
-    {
-        return _showBottomBorder;
-    }
+    public boolean isShowBottomBorder()  { return _showBottomBorder; }
 
     /**
      * Sets whether cell shows bottom border.
      */
-    public void setShowBottomBorder(boolean aFlag)
-    {
-        _showBottomBorder = aFlag;
-    }
-
-    /**
-     * Convenience method to set all borders at once
-     */
-    public void setShowBorders(boolean left, boolean right, boolean top, boolean bottom)
-    {
-        setShowLeftBorder(left);
-        setShowRightBorder(right);
-        setShowTopBorder(top);
-        setShowBottomBorder(bottom);
-    }
+    public void setShowBottomBorder(boolean aFlag)  { _showBottomBorder = aFlag; }
 
     /**
      * Returns the grouping.
      */
-    public RMGrouping getGrouping()
-    {
-        return _grouping;
-    }
+    public RMGrouping getGrouping()  { return _grouping; }
 
     /**
      * Sets the grouping.
      */
-    public void setGrouping(RMGrouping aGrouping)
-    {
-        _grouping = aGrouping;
-    }
+    public void setGrouping(RMGrouping aGrouping)  { _grouping = aGrouping; }
 
     /**
      * Returns the group for this cell.
      */
-    public RMGroup getGroup()
-    {
-        return _group;
-    }
+    public RMGroup getGroup()  { return _group; }
 
     /**
      * Sets the group for this cell.
      */
-    protected void setGroup(RMGroup aGroup)
-    {
-        _group = aGroup;
-    }
+    protected void setGroup(RMGroup aGroup)  { _group = aGroup; }
 
     /**
      * Returns the end column of this cell.
      */
-    public int getColEnd()
-    {
-        return _col + _colSpan - 1;
-    }
+    public int getColEnd()  { return _col + _colSpan - 1; }
 
     /**
      * Returns the cell before, or to the left of, this cell.
@@ -298,10 +231,7 @@ public class RMCrossTabCell extends RMTextShape {
     /**
      * Returns the default text margin for RMCell (top=5, left=5, right=5, bottom=5).
      */
-    public Insets getMarginDefault()
-    {
-        return _defaultMargin;
-    }
+    public Insets getMarginDefault()  { return _defaultMargin; }
 
     /**
      * Clears the text and grouping from this cell.
@@ -368,11 +298,11 @@ public class RMCrossTabCell extends RMTextShape {
         e.removeAttribute("height");
 
         // Override RMText vertical alignment: if is RMCell's default, ALIGN_MIDDLE, remove attribute
-        if (getAlignmentY() == AlignY.Middle) e.removeAttribute("valign");
-
-            // Override RMText vertical alignment: if is RMText's default, ALIGN_TOP, add attribute
-        else if (getAlignmentY() == AlignY.Top)
-            e.add("valign", getAlignmentY().toString().toLowerCase());
+        // Override RMText vertical alignment: if is RMText's default, ALIGN_TOP, add attribute
+        switch (getAlignY()) {
+            case CENTER -> e.removeAttribute("valign");
+            case TOP -> e.add("valign", getAlignYString());
+        }
 
         // Return element
         return e;
@@ -405,5 +335,4 @@ public class RMCrossTabCell extends RMTextShape {
         // Return this cell
         return this;
     }
-
 }

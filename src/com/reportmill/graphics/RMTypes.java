@@ -11,15 +11,15 @@ import snap.geom.VPos;
 public interface RMTypes {
 
     // Constants for X/Y alignment
-    public enum Align {
+    enum Align {
         TopLeft, TopCenter, TopRight,
         CenterLeft, Center, CenterRight,
         BottomLeft, BottomCenter, BottomRight
     }
 
     // Constants for horizontal alignment
-    public enum AlignX {
-        Left, Right, Center, Full;
+    enum AlignX {
+        Left, Right, Center;
 
         // Conversions to/from Snap
         public HPos hpos()
@@ -34,7 +34,7 @@ public interface RMTypes {
     }
 
     // Constants for vertical alignment
-    public enum AlignY {
+    enum AlignY {
         Top, Middle, Bottom;
 
         // Conversions to/from Snap

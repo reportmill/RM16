@@ -148,14 +148,14 @@ public class RMEditorPaneMenuBar extends RMEditorPane.SupportPane {
         if (anEvent.equals("OutlineMenuItem"))
             editorStyler.setTextOutlined(!editorStyler.isTextOutlined());
 
-        if (anEvent.equals("AlignLeftMenuItem") || anEvent.equals("AlignLeftButton"))
+        if (anEvent.equals("AlignLeftMenuItem"))
             RMEditorUtils.setAlignmentX(editor, RMTypes.AlignX.Left);
-        if (anEvent.equals("AlignCenterMenuItem") || anEvent.equals("AlignCenterButton"))
+        if (anEvent.equals("AlignCenterMenuItem"))
             RMEditorUtils.setAlignmentX(editor, RMTypes.AlignX.Center);
-        if (anEvent.equals("AlignRightMenuItem") || anEvent.equals("AlignRightButton"))
+        if (anEvent.equals("AlignRightMenuItem"))
             RMEditorUtils.setAlignmentX(editor, RMTypes.AlignX.Right);
-        if (anEvent.equals("AlignFullMenuItem") || anEvent.equals("AlignFullButton"))
-            RMEditorUtils.setAlignmentX(editor, RMTypes.AlignX.Full);
+        if (anEvent.equals("AlignFullMenuItem"))
+            RMEditorUtils.setJustify(editor, true);
         if (anEvent.equals("SuperscriptMenuItem")) RMEditorUtils.setSuperscript(editor);
         if (anEvent.equals("SubscriptMenuItem")) RMEditorUtils.setSubscript(editor);
 

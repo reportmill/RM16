@@ -4,6 +4,7 @@
 package com.reportmill.graphics;
 import com.reportmill.shape.RMArchiverHpr;
 import com.reportmill.shape.RMArchiver;
+import snap.geom.HPos;
 import snap.text.TextLineStyle;
 import snap.util.*;
 
@@ -46,13 +47,24 @@ public class RMParagraph implements Cloneable, RMTypes, RMArchiver.Archivable {
     }
 
     /**
+     * Returns the line style.
+     */
+    public TextLineStyle getLineStyle()  { return _lineStyle; }
+
+    /**
+     * Returns whether is justified.
+     */
+    public boolean isJustify()  { return _lineStyle.isJustify(); }
+
+    /**
+     * Returns the alignment.
+     */
+    public HPos getAlign()  { return _lineStyle.getAlign(); }
+
+    /**
      * Returns the alignment associated with this paragraph.
      */
-    public AlignX getAlignmentX()
-    {
-        if (_lineStyle.isJustify()) return AlignX.Full;
-        return AlignX.get(_lineStyle.getAlign());
-    }
+    public AlignX getAlignmentX()  { return AlignX.get(_lineStyle.getAlign()); }
 
     /**
      * Returns indentation of first line in paragraph (this can be set different than successive lines).
@@ -131,8 +143,7 @@ public class RMParagraph implements Cloneable, RMTypes, RMArchiver.Archivable {
     public RMParagraph deriveAligned(AlignX anAlign)
     {
         RMParagraph ps = clone();
-        if (anAlign == AlignX.Full) ps._lineStyle = _lineStyle.copyForPropKeyValue(TextLineStyle.Justify_Prop, true);
-        else ps._lineStyle = _lineStyle.copyForAlign(anAlign.hpos());
+        ps._lineStyle = _lineStyle.copyForAlign(anAlign.hpos());
         return ps;
     }
 

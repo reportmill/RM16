@@ -278,6 +278,26 @@ public class RMTextShape extends RMRectShape {
     }
 
     /**
+     * Returns whether text is justified.
+     */
+    public boolean isJustify()
+    {
+        if (isTextEditorSet())
+            return getTextEditor().getInputLineStyle().isJustify();
+        return getRichText().getLineStyleForCharIndex(0).isJustify();
+    }
+
+    /**
+     * Sets whether text is justified.
+     */
+    public void setJustify(boolean aValue)
+    {
+        if (isTextEditorSet())
+            getTextEditor().setInputLineStyle(getTextEditor().getInputLineStyle().copyForPropKeyValue(TextLineStyle.Justify_Prop, aValue));
+        else getRichText().setLineStyleValue(TextLineStyle.Justify_Prop, aValue, 0, length());
+    }
+
+    /**
      * Returns the alignment for char 0.
      */
     public AlignX getAlignmentX()

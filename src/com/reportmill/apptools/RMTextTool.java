@@ -10,6 +10,7 @@ import snap.geom.*;
 import snap.gfx.*;
 import snap.props.PropChange;
 import snap.props.PropChangeListener;
+import snap.text.TextLineStyle;
 import snap.text.TextModel;
 import snap.text.TextLine;
 import snap.text.TextRun;
@@ -71,20 +72,19 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
             return;
 
         // Get paragraph from text
-        int selStart = 0;
-        if (_textView.isFocused()) selStart = _textView.getSelStart();
-        RMParagraph pgraph = text.getXString().getParagraphAt(selStart);
+        int selStart = _textView.isFocused() ? _textView.getSelStart() : 0;
+        TextLineStyle lineStyle = text.getRichText().getLineStyleForCharIndex(selStart);
 
         // If editor is text editing, get paragraph from text editor instead
         RMTextEditor textEditor = editor.getTextEditor();
         if (textEditor != null)
-            pgraph = textEditor.getInputParagraph();
+            lineStyle = textEditor.getInputLineStyle();
 
         // Update AlignLeftButton, AlignCenterButton, AlignRightButton, AlignFullButton
-        setViewValue("AlignLeftButton", pgraph.getAlignmentX() == RMTypes.AlignX.Left);
-        setViewValue("AlignCenterButton", pgraph.getAlignmentX() == RMTypes.AlignX.Center);
-        setViewValue("AlignRightButton", pgraph.getAlignmentX() == RMTypes.AlignX.Right);
-        setViewValue("AlignFullButton", pgraph.getAlignmentX() == RMTypes.AlignX.Full);
+        setViewValue("AlignLeftButton", !lineStyle.isJustify() && lineStyle.getAlign() == HPos.LEFT);
+        setViewValue("AlignCenterButton", !lineStyle.isJustify() && lineStyle.getAlign() == HPos.CENTER);
+        setViewValue("AlignRightButton", !lineStyle.isJustify() && lineStyle.getAlign() == HPos.RIGHT);
+        setViewValue("AlignFullButton", lineStyle.isJustify());
 
         // Update AlignTopButton, AlignMiddleButton, AlignBottomButton
         setViewValue("AlignTopButton", text.getAlignmentY() == RMTypes.AlignY.Top);
@@ -164,7 +164,7 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
         if (anEvent.equals("AlignLeftButton")) RMEditorUtils.setAlignmentX(editor, RMTypes.AlignX.Left);
         if (anEvent.equals("AlignCenterButton")) RMEditorUtils.setAlignmentX(editor, RMTypes.AlignX.Center);
         if (anEvent.equals("AlignRightButton")) RMEditorUtils.setAlignmentX(editor, RMTypes.AlignX.Right);
-        if (anEvent.equals("AlignFullButton")) RMEditorUtils.setAlignmentX(editor, RMTypes.AlignX.Full);
+        if (anEvent.equals("AlignFullButton")) RMEditorUtils.setJustify(editor, true);
         if (anEvent.equals("AlignTopButton")) for (RMTextShape txt : texts) txt.setAlignmentY(RMTypes.AlignY.Top);
         if (anEvent.equals("AlignMiddleButton")) for (RMTextShape txt : texts) txt.setAlignmentY(RMTypes.AlignY.Middle);
         if (anEvent.equals("AlignBottomButton")) for (RMTextShape txt : texts) txt.setAlignmentY(RMTypes.AlignY.Bottom);

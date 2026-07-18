@@ -353,8 +353,7 @@ public class RMXString implements Cloneable, CharSequence, RMTypes, RMArchiver.A
      */
     public void setAlignX(AlignX anAlignX)
     {
-        if (anAlignX == AlignX.Full) _richText.setLineStyleValue(TextLineStyle.Justify_Prop, true, 0, length());
-        else _richText.setLineStyleValue(TextLineStyle.Align_Prop, anAlignX.hpos(), 0, length());
+        _richText.setLineStyleValue(TextLineStyle.Align_Prop, anAlignX.hpos(), 0, length());
     }
 
     /**

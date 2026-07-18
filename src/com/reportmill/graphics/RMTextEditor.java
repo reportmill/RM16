@@ -43,19 +43,28 @@ public class RMTextEditor extends TextAdapter {
     public void setInputAttribute(String aKey, Object aValue)  { setSelTextStyleValue(aKey, aValue); }
 
     /**
-     * Returns the paragraph of the current selection or cursor position.
+     * Returns the line style of the current selection or cursor position.
      */
-    public RMParagraph getInputParagraph()
+    public TextLineStyle getInputLineStyle()
     {
         int selStart = getSelStart();
-        TextLine line = getLineForCharIndex(selStart);
-        return new RMParagraph(line.getLineStyle());
+        return getLineForCharIndex(selStart).getLineStyle();
     }
 
     /**
      * Sets the paragraph of the current selection or cursor position.
      */
-    public void setInputParagraph(RMParagraph ps)  { _textModel.setLineStyle(ps._lineStyle, getSelStart(), getSelEnd()); }
+    public void setInputLineStyle(TextLineStyle lineStyle)  { _textModel.setLineStyle(lineStyle, getSelStart(), getSelEnd()); }
+
+    /**
+     * Returns the paragraph of the current selection or cursor position.
+     */
+    public RMParagraph getInputParagraph()  { return new RMParagraph(getInputLineStyle()); }
+
+    /**
+     * Sets the paragraph of the current selection or cursor position.
+     */
+    public void setInputParagraph(RMParagraph ps)  { setInputLineStyle(ps._lineStyle); }
 
     /**
      * Returns the color of the current selection or cursor.

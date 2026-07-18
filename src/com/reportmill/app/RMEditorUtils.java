@@ -733,12 +733,28 @@ public class RMEditorUtils {
     }
 
     /**
+     * Returns whether selected shape is justified.
+     */
+    public static boolean isJustify(RMEditor anEditor)
+    {
+        return anEditor.getSelectedOrSuperSelectedShape() instanceof RMTextShape textShape && textShape.isJustify();
+    }
+
+    /**
+     * Sets whether selected shape is justified.
+     */
+    public static void setJustify(RMEditor anEditor, boolean aValue)
+    {
+        anEditor.undoerSetUndoTitle("Justify change");
+        for (RMShape shape : anEditor.getSelectedOrSuperSelectedShapes())
+            if (shape instanceof RMTextShape textShape)
+                textShape.setJustify(aValue);
+    }
+
+    /**
      * Returns the horizontal alignment of the text of the currently selected shapes.
      */
-    public static RMTypes.AlignX getAlignmentX(RMEditor anEditor)
-    {
-        return anEditor.getSelectedOrSuperSelectedShape().getAlignmentX();
-    }
+    public static RMTypes.AlignX getAlignmentX(RMEditor anEditor)  { return anEditor.getSelectedOrSuperSelectedShape().getAlignmentX(); }
 
     /**
      * Sets the horizontal alignment of the text of the currently selected shapes.

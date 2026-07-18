@@ -3,10 +3,7 @@
  */
 package com.reportmill.graphics;
 import com.reportmill.base.*;
-import snap.text.TextFormat;
-import snap.text.TextLine;
-import snap.text.TextRun;
-import snap.text.TextStyle;
+import snap.text.*;
 
 /**
  * The Run class represents a range of characters in an xstring that share common attributes.
@@ -86,6 +83,11 @@ public class RMXStringRun implements CharSequence {
      * Returns the format for this run.
      */
     public TextFormat getFormat()  { return getStyle().getFormat(); }
+
+    /**
+     * Returns the line style for this run.
+     */
+    public TextLineStyle getLineStyle()  { return _textLine.getLineStyle(); }
 
     /**
      * Returns the paragraph for this run.

@@ -386,13 +386,14 @@ public class RMRTFWriter {
                 //if any of the paragraph settings have changed, set them
                 if (!par.equals(_currentParagraph)) {
 
-                    // paragraph alignment
-                    if (par.getAlignmentX() != _currentParagraph.getAlignmentX()) {
-                        switch (par.getAlignmentX()) {
-                            case Center: ps.print("\\qc"); break;
-                            case Full: ps.print("\\qj"); break;
-                            case Left: ps.print("\\ql"); break;
-                            case Right: ps.print("\\qr"); break;
+                    // paragraph justify, alignment
+                    if (par.isJustify() != _currentParagraph.isJustify())
+                        ps.print("\\qj");
+                    else if (par.getAlign() != _currentParagraph.getAlign()) {
+                        switch (par.getAlign()) {
+                            case CENTER -> ps.print("\\qc");
+                            case LEFT -> ps.print("\\ql");
+                            case RIGHT -> ps.print("\\qr");
                         }
                     }
 
@@ -401,10 +402,10 @@ public class RMRTFWriter {
                             !Arrays.equals(par.getTabTypes(), _currentParagraph.getTabTypes())) {
                         for (int j = 0, ntabs = par.getTabCount(); j < ntabs; ++j) {
                             switch (par.getTabType(j)) {
-                                case RMParagraph.TAB_LEFT: break; // the default
-                                case RMParagraph.TAB_RIGHT: ps.print("\\tqr"); break;
-                                case RMParagraph.TAB_CENTER: ps.print("\\tqc"); break;
-                                case RMParagraph.TAB_DECIMAL: ps.print("\\tqdec"); break;
+                                case RMParagraph.TAB_LEFT -> { }
+                                case RMParagraph.TAB_RIGHT -> ps.print("\\tqr");
+                                case RMParagraph.TAB_CENTER -> ps.print("\\tqc");
+                                case RMParagraph.TAB_DECIMAL -> ps.print("\\tqdec");
                             }
                             ps.print("\\tx" + twip(par.getTab(j)));
                         }

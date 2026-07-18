@@ -112,19 +112,9 @@ public class RMEditorPaneToolBar extends RMEditorPane.SupportPane {
         String fontSizeStr = _fontSizeComboBox.getTextForItem(font.getSize());
         _fontSizeComboBox.setText(fontSizeStr);
 
-        // Reset BoldButton, ItalicButton, UnderlineButton
+        // Reset BoldButton
         setViewValue("BoldButton", font.isBold());
         setViewEnabled("BoldButton", font.getBold() != null);
-        //setViewValue("ItalicButton", font.isItalic());
-        //setViewEnabled("ItalicButton", font.getItalic()!=null);
-        //setViewValue("UnderlineButton", RMEditorUtils.isUnderlined(editor));
-
-        // Update AlignLeftButton, AlignCenterButton, AlignRightButton, AlignFullButton, AlignTopButton, AlignMiddleButton
-        //RMTypes.AlignX alignX = RMEditorUtils.getAlignmentX(editor);
-        //setViewValue("AlignLeftButton", alignX==RMTypes.AlignX.Left);
-        //setViewValue("AlignCenterButton", alignX==RMTypes.AlignX.Center);
-        //setViewValue("AlignRightButton", alignX==RMTypes.AlignX.Right);
-        //setViewValue("AlignFullButton", alignX==RMTypes.AlignX.Full);
 
         // Update ColorWell
         RMEditorStyler editorStyler = editor.getStyler();
@@ -277,12 +267,6 @@ public class RMEditorPaneToolBar extends RMEditorPane.SupportPane {
         if (anEvent.equals("BoldButton")) RMEditorUtils.setFontBold(editor, anEvent.getBoolValue());
         if (anEvent.equals("ItalicButton")) RMEditorUtils.setFontItalic(editor, anEvent.getBoolValue());
         if (anEvent.equals("UnderlineButton")) RMEditorUtils.setUnderlined(editor);
-
-        // Handle AlignLeftButton, AlignCenterButton, AlignRightButton, AlignFullButton
-        if (anEvent.equals("AlignLeftButton")) RMEditorUtils.setAlignmentX(editor, RMTypes.AlignX.Left);
-        if (anEvent.equals("AlignCenterButton")) RMEditorUtils.setAlignmentX(editor, RMTypes.AlignX.Center);
-        if (anEvent.equals("AlignRightButton")) RMEditorUtils.setAlignmentX(editor, RMTypes.AlignX.Right);
-        if (anEvent.equals("AlignFullButton")) RMEditorUtils.setAlignmentX(editor, RMTypes.AlignX.Full);
 
         // Handle AddTableButton, AddGraphButton, AddLabelsButton, AddCrossTabFrameButton
         if (anEvent.equals("AddTableButton")) RMTableTool.addTable(getEditor(), null);

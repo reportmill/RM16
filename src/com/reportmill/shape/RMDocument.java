@@ -723,34 +723,22 @@ public class RMDocument extends RMParentShape {
     /**
      * Returns the document as an XML byte array.
      */
-    public byte[] getBytes()
-    {
-        return getXML().getBytes();
-    }
+    public byte[] getBytes()  { return getXML().getBytes(); }
 
     /**
      * Returns the document as a byte array of a PDF file.
      */
-    public byte[] getBytesPDF()
-    {
-        return new com.reportmill.out.RMPDFWriter().getBytes(this);
-    }
+    public byte[] getBytesPDF()  { return new RMPDFWriter().getBytes(this); }
 
     /**
      * Returns the document as a byte array of an HTML file.
      */
-    public byte[] getBytesHTML()
-    {
-        return new RMHtmlFile(this).getBytes();
-    }
+    public byte[] getBytesHTML()  { return new RMHtmlFile(this).getBytes(); }
 
     /**
      * Returns the document as a byte array of a CSV file.
      */
-    public byte[] getBytesCSV()
-    {
-        return getBytesDelimitedAscii(",", "\n", true);
-    }
+    public byte[] getBytesCSV()  { return getBytesDelimitedAscii(",", "\n", true); }
 
     /**
      * Returns the document as a byte array of a delimited ASCII file (using given field, record separator strings).
@@ -763,42 +751,27 @@ public class RMDocument extends RMParentShape {
     /**
      * Returns the document as byte array of an Excel file.
      */
-    public byte[] getBytesExcel()
-    {
-        return RMEnv.getEnv().getBytesExcel(this);
-    }
+    public byte[] getBytesExcel()  { return new RMExcelWriter().getBytes(this); }
 
     /**
      * Returns the document as byte array of an Excel file.
      */
-    public byte[] getBytesRTF()
-    {
-        return new RMRTFWriter().getBytes(this);
-    }
+    public byte[] getBytesRTF()  { return new RMRTFWriter().getBytes(this); }
 
     /**
      * Returns the document as byte array of a JPEG file.
      */
-    public byte[] getBytesJPEG()
-    {
-        return RMShapeUtils.createImage(getPage(0), Color.WHITE).getBytesJPEG();
-    }
+    public byte[] getBytesJPEG()  { return RMShapeUtils.createImage(getPage(0), Color.WHITE).getBytesJPEG(); }
 
     /**
      * Returns the document as byte array of PNG file.
      */
-    public byte[] getBytesPNG()
-    {
-        return RMShapeUtils.createImage(getPage(0), null).getBytesPNG();
-    }
+    public byte[] getBytesPNG()  { return RMShapeUtils.createImage(getPage(0), null).getBytesPNG(); }
 
     /**
      * Returns the document as a string of a CSV file.
      */
-    public String getStringCSV()
-    {
-        return getStringDelimitedText(",", "\n", true);
-    }
+    public String getStringCSV()  { return getStringDelimitedText(",", "\n", true); }
 
     /**
      * Returns the document as a string of a delimited text file.

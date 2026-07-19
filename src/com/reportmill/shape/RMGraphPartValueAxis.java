@@ -5,6 +5,7 @@ package com.reportmill.shape;
 import com.reportmill.base.*;
 import com.reportmill.graphics.RMColor;
 import com.reportmill.graphics.RMFont;
+import snap.gfx.Font;
 import snap.text.TextFormat;
 import snap.util.*;
 
@@ -35,20 +36,17 @@ public class RMGraphPartValueAxis extends RMTextShape {
     boolean _unarchiving;
 
     /**
-     * Creates RMGraphPartValueAxis.
+     * Constructor.
      */
     public RMGraphPartValueAxis()
     {
-        getRichText().setDefaultFont(RMFont.Helvetica10);
+        getRichText().setDefaultFont(Font.Arial10);
     }
 
     /**
      * Returns whether the graph draws axis labels.
      */
-    public boolean getShowAxisLabels()
-    {
-        return _showAxisLabels;
-    }
+    public boolean getShowAxisLabels()  { return _showAxisLabels; }
 
     /**
      * Sets whether the graph draws axis labels.

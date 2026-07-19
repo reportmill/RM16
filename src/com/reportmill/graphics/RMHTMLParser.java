@@ -8,7 +8,10 @@ import javax.swing.text.*;
 import javax.swing.text.html.*;
 import javax.swing.text.html.parser.*;
 import snap.geom.HPos;
+import snap.gfx.Color;
+import snap.gfx.Font;
 import snap.text.TextLineStyle;
+import snap.text.TextStyle;
 import snap.util.*;
 
 /**
@@ -28,7 +31,7 @@ public class RMHTMLParser {
     /**
      * Returns an xstring for the given html string and a default font.
      */
-    public static RMXString parse(String html, RMFont baseFont, TextLineStyle textLineStyle)
+    public static RMXString parse(String html, Font baseFont, TextLineStyle textLineStyle)
     {
         // Get HTML String from HTMLParser
         RMXString s = new HTMLParser(html, baseFont, textLineStyle).getXString();
@@ -61,7 +64,7 @@ public class RMHTMLParser {
         TextLineStyle _textLineStyle;
 
         // The current stack of fonts (during parsing)
-        List<RMFont> _fontStack = new ArrayList<>();
+        List<Font> _fontStack = new ArrayList<>();
 
         // The number of list elements that we have parsed into (during parsing)
         int _listLevel = 0;
@@ -72,7 +75,7 @@ public class RMHTMLParser {
         /**
          * Creates a new parser for an html string and a default font.
          */
-        public HTMLParser(String aString, RMFont baseFont, TextLineStyle textLineStyle)
+        public HTMLParser(String aString, Font baseFont, TextLineStyle textLineStyle)
         {
             // Initialize attributes map, FontStack and PGraph
             _attrs.put(RMTextStyle.FONT_KEY, baseFont);
@@ -130,16 +133,16 @@ public class RMHTMLParser {
         {
             // Handle Bold (<B> and <STRONG>)
             if (aTag.equals(HTML.Tag.B) || aTag.equals(HTML.Tag.STRONG)) {
-                RMFont font = (RMFont) _attrs.get(RMTextStyle.FONT_KEY);
-                RMFont bold = font.getBold() == null ? font : font.getBold();
+                Font font = (Font) _attrs.get(RMTextStyle.FONT_KEY);
+                Font bold = font.getBold() == null ? font : font.getBold();
                 _attrs.put(RMTextStyle.FONT_KEY, bold);
                 _fontStack.add(bold);
             }
 
             // Handle Italic (<I> and <EM>)
             if (aTag.equals(HTML.Tag.I) || aTag.equals(HTML.Tag.EM)) {
-                RMFont font = (RMFont) _attrs.get(RMTextStyle.FONT_KEY);
-                RMFont italic = font.getItalic() == null ? font : font.getItalic();
+                Font font = (Font) _attrs.get(RMTextStyle.FONT_KEY);
+                Font italic = font.getItalic() == null ? font : font.getItalic();
                 _attrs.put(RMTextStyle.FONT_KEY, italic);
                 _fontStack.add(italic);
             }
@@ -152,7 +155,7 @@ public class RMHTMLParser {
             if (aTag.equals(HTML.Tag.UL) || aTag.equals(HTML.Tag.OL)) {
                 _listLevel++;
                 if (!_string.getRunLast().toString().endsWith("\n")) _string.addChars("\n");
-                RMFont font = (RMFont) _attrs.get(RMTextStyle.FONT_KEY);
+                Font font = (Font) _attrs.get(RMTextStyle.FONT_KEY);
                 double firstIndent = _textLineStyle.getTab(_listLevel - 1);
                 double leftIndent = firstIndent + font.getStringAdvance(((char) 8226) + " ");
                 _textLineStyle = _textLineStyle.copyForIndents(firstIndent, leftIndent, _textLineStyle.getRightIndent());
@@ -166,12 +169,10 @@ public class RMHTMLParser {
             if (aTag.equals(HTML.Tag.FONT)) {
 
                 // Get base font
-                RMFont font = (RMFont) _attrs.get(RMTextStyle.FONT_KEY);
+                Font font = (Font) _attrs.get(RMTextStyle.FONT_KEY);
 
                 // Iterate over Tag attributes to get new font
-                for (Enumeration e = anAttributeSet.getAttributeNames(); e.hasMoreElements(); ) {
-
-                    // Get attribute
+                for (Enumeration<?> e = anAttributeSet.getAttributeNames(); e.hasMoreElements(); ) {
                     Object attr = e.nextElement();
                     String name = attr.toString();
                     String string = anAttributeSet.getAttribute(attr).toString();
@@ -185,8 +186,8 @@ public class RMHTMLParser {
                             float r = Integer.decode("0x" + string.substring(1, 3)) / 255f;
                             float g = Integer.decode("0x" + string.substring(3, 5)) / 255f;
                             float b = Integer.decode("0x" + string.substring(5, 7)) / 255f;
-                            RMColor color = new RMColor(r, g, b);
-                            _attrs.put(RMTextStyle.COLOR_KEY, color);
+                            Color color = new Color(r, g, b);
+                            _attrs.put(TextStyle.COLOR_KEY, color);
                         }
                     }
 
@@ -202,7 +203,7 @@ public class RMHTMLParser {
                     if (name.equalsIgnoreCase("face")) {
                         List<String> names = StringUtils.separate(string, ",");
                         for (String propName : names) {
-                            RMFont font1 = new RMFont(propName, font.getSize());
+                            Font font1 = new Font(propName, font.getSize());
                             if (!font1.isSubstitute()) {
                                 if (font1.getNameEnglish().startsWith("Symbol"))
                                     _isSymbol = true; //else
@@ -248,7 +249,7 @@ public class RMHTMLParser {
             if (t.equals(HTML.Tag.B) || t.equals(HTML.Tag.STRONG) ||
                     t.equals(HTML.Tag.I) || t.equals(HTML.Tag.EM) || t.equals(HTML.Tag.FONT)) {
                 if (_fontStack.size() > 1) ListUtils.removeLast(_fontStack);
-                RMFont font = ListUtils.getLast(_fontStack);
+                Font font = ListUtils.getLast(_fontStack);
                 _attrs.put(RMTextStyle.FONT_KEY, font);
                 if (t.equals(HTML.Tag.FONT))
                     _isSymbol = false;
@@ -270,7 +271,7 @@ public class RMHTMLParser {
             if (t.equals(HTML.Tag.UL) || t.equals(HTML.Tag.OL)) {
                 _listLevel = Math.max(0, _listLevel - 1);
                 if (!_string.getRunLast().toString().endsWith("\n")) _string.addChars("\n");
-                RMFont font = (RMFont) _attrs.get(RMTextStyle.FONT_KEY);
+                Font font = (Font) _attrs.get(RMTextStyle.FONT_KEY);
                 double firstIndent = _listLevel == 0 ? 0 : _textLineStyle.getTab(_listLevel - 1);
                 double leftIndent = _listLevel == 0 ? 0 : firstIndent + font.getStringAdvance(((char) 8226) + " ");
                 _textLineStyle = _textLineStyle.copyForIndents(firstIndent, leftIndent, _textLineStyle.getRightIndent());

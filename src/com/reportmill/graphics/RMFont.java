@@ -12,8 +12,6 @@ public class RMFont extends Font {
 
     // Some common fonts (using Arial since it seems more reliable on Windows & Mac)
     static public RMFont Helvetica10 = new RMFont("Arial", 10d);
-    static public RMFont Helvetica12 = Helvetica10.copyForSize(12d);
-    static public RMFont Helvetica14 = Helvetica10.copyForSize(14d);
 
     /**
      * Creates a new font (Arial 10).

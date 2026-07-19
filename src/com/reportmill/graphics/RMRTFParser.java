@@ -7,6 +7,7 @@ import java.io.*;
 import java.util.Enumeration;
 import javax.swing.text.*;
 import javax.swing.text.rtf.RTFEditorKit;
+import snap.gfx.Font;
 
 /**
  * Parses rtf data from a string and returns it as an xstring.
@@ -16,20 +17,16 @@ public class RMRTFParser {
     /**
      * Returns an xstring from the given rtf string and default font.
      */
-    public static RMXString parse(String rtf, RMFont baseFont)
+    public static RMXString parse(String rtf, Font baseFont)
     {
-        try {
-            return parseRTF(rtf, baseFont);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+        try { return parseRTF(rtf, baseFont); }
+        catch (Exception e) { e.printStackTrace(); return null; }
     }
 
     /**
      * Returns an xstring from the given rtf string and default font.
      */
-    public static RMXString parseRTF(String rtf, RMFont baseFont) throws Exception
+    public static RMXString parseRTF(String rtf, Font baseFont) throws Exception
     {
         // Use RTFEditorKit to do the real parsing work
         EditorKit kit = new RTFEditorKit();
@@ -43,7 +40,7 @@ public class RMRTFParser {
 
         // Declare return string and loop attribute variables
         RMXString result = new RMXString();
-        RMFont font = baseFont;
+        Font font = baseFont;
         RMColor color = null;
         boolean underline = false;
 
@@ -57,9 +54,7 @@ public class RMRTFParser {
                 String content = doc.getText(elem.getStartOffset(), elem.getEndOffset() - elem.getStartOffset());
 
                 // Iterate over attribute names
-                for (Enumeration e = elem.getAttributeNames(); e.hasMoreElements(); ) {
-
-                    // Get attribute and attribute name
+                for (Enumeration<?> e = elem.getAttributeNames(); e.hasMoreElements(); ) {
                     Object attr = e.nextElement();
                     String attrName = attr.toString();
 
@@ -90,7 +85,7 @@ public class RMRTFParser {
                     // Handle font family
                     if (attrName == "family") {
                         String fontName = (String) elem.getAttribute(attr);
-                        RMFont f = new RMFont(fontName, font.getSize());
+                        Font f = new Font(fontName, font.getSize());
                         if (!f.isSubstitute())
                             font = f;
                     }
@@ -111,5 +106,4 @@ public class RMRTFParser {
         // Return rtf xstring
         return result;
     }
-
 }

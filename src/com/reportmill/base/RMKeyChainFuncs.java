@@ -6,6 +6,7 @@ import com.reportmill.graphics.*;
 import java.lang.reflect.*;
 import java.util.*;
 
+import snap.gfx.Font;
 import snap.text.TextFormat;
 import snap.text.TextLineStyle;
 import snap.util.*;
@@ -220,7 +221,7 @@ public class RMKeyChainFuncs {
         // Get default font (or if val is xstring, get its first font)
         RMXString xstr = aValue instanceof RMXString ? (RMXString) aValue : null;
         String str = xstr != null ? xstr.getText() : aValue.toString();
-        RMFont font = xstr != null ? xstr.getFontAt(0) : RMFont.getDefaultFont();
+        Font font = xstr != null ? xstr.getFontAt(0) : Font.getDefaultFont();
         TextLineStyle textLineStyle = xstr != null ? xstr.getLineStyleForCharIndex(0) : TextLineStyle.DEFAULT;
 
         // Return result of parsing html from val string
@@ -233,7 +234,7 @@ public class RMKeyChainFuncs {
     public static Object RMRTF(Object aValue)
     {
         // Get default font (or if val is xstring, get its first font)
-        RMFont font = RMFont.getDefaultFont();
+        Font font = Font.getDefaultFont();
         if (aValue instanceof RMXString)
             font = ((RMXString) aValue).getFontAt(0);
 
@@ -365,7 +366,7 @@ public class RMKeyChainFuncs {
     public static Object RMAllFontGlyphs(Object fontName)
     {
         String name = fontName.toString();
-        RMFont font = RMFont.getFont(name, 12);
+        Font font = Font.getFont(name, 12);
         StringBuilder sb = new StringBuilder();
 
         for (char c = 1; c < 0xffff; c++) {
@@ -386,8 +387,8 @@ public class RMKeyChainFuncs {
     {
         int size = MathUtils.clamp(Convert.intValue(aSize), 8, 80);
         RMXString string = new RMXString();
-        for (String fontName : RMFont.getFontNames()) {
-            RMFont font = RMFont.getFont(fontName, size);
+        for (String fontName : Font.getFontNames()) {
+            Font font = Font.getFont(fontName, size);
             string.addChars(fontName + "\n", font);
         }
         return string;

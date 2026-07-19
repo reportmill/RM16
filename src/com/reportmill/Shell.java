@@ -3,11 +3,10 @@
  */
 package com.reportmill;
 import com.reportmill.base.*;
-import com.reportmill.graphics.*;
 import com.reportmill.shape.*;
 import java.util.*;
-
 import snap.geom.HPos;
+import snap.gfx.Font;
 import snap.util.*;
 import snap.web.WebURL;
 
@@ -95,7 +94,7 @@ public class Shell {
 
             // Check for fonts: Get list of fonts and print
             if (arg.startsWith("-fonts")) {
-                String[] fonts = arg.equals("-fonts") ? RMFont.getFontNames() : RMFont.getFamilyNames();
+                String[] fonts = arg.equals("-fonts") ? Font.getFontNames() : Font.getFamilyNames();
                 for (String font : fonts)
                     System.err.println(font);
             }
@@ -138,7 +137,7 @@ public class Shell {
             // Load fonts
             System.err.println("Loading Fonts... ");
             long time = System.currentTimeMillis();
-            RMFont.getFontNames();
+            Font.getFontNames();
             float seconds = (System.currentTimeMillis() - time) / 1000f;
             System.err.println("Font Loading... (" + seconds + " seconds)");
 
@@ -253,11 +252,11 @@ public class Shell {
         headerRow.setHeight(205);
         headerRow.getColumn(0).setText("Hollywood Report\n\nTable of Contents");
         headerRow.getColumn(0).setAlignX(HPos.CENTER);
-        headerRow.getColumn(0).getXString().setAttribute(RMFont.getFont("Times Bold", 72));
-        headerRow.getColumn(0).getXString().setAttribute(RMFont.getFont("Times", 18), 16, 35);
+        headerRow.getColumn(0).getXString().setAttribute(Font.getFont("Times Bold", 72));
+        headerRow.getColumn(0).getXString().setAttribute(Font.getFont("Times", 18), 16, 35);
         headerRow.setVersion("Reprint");
         headerRow.getColumn(0).setText("Table of Contents (Continued)");
-        headerRow.getColumn(0).getXString().setAttribute(RMFont.getFont("Times", 18));
+        headerRow.getColumn(0).getXString().setAttribute(Font.getFont("Times", 18));
         headerRow.setHeight(30);
         headerRow.layout();
 

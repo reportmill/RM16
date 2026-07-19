@@ -101,7 +101,7 @@ public class FontPanel extends ViewController {
     {
         // Get current font
         RMEditor editor = getEditor();
-        RMFont font = RMEditorUtils.getFont(editor);
+        Font font = RMEditorUtils.getFont(editor);
 
         // Get family name and size
         String familyName = font.getFamily();
@@ -123,7 +123,7 @@ public class FontPanel extends ViewController {
         setViewValue("OutlineButton", editorStyler.isTextOutlined());
 
         // Get font names in currently selected font's family
-        String[] familyNames = RMFont.getFontNames(font.getFamily());
+        String[] familyNames = Font.getFontNames(font.getFamily());
 
         // Reset FontNameComboBox Items, SelItem and Enabled
         setViewItems("FontNameComboBox", familyNames);
@@ -160,12 +160,10 @@ public class FontPanel extends ViewController {
 
         // Handle FontPickerButton
         if (anEvent.equals("FontPickerButton")) {
-            RMFont ofont = RMEditorUtils.getFont(editor);
+            Font ofont = RMEditorUtils.getFont(editor);
             Font font = new FontPicker().showPicker(getEditorPane().getUI(), ofont);
-            if (font != null) {
-                RMFont rfont = RMFont.get(font);
-                RMEditorUtils.setFontFamily(editor, rfont);
-            }
+            if (font != null)
+                RMEditorUtils.setFontFamily(editor, font);
         }
 
         // Handle SizesList
@@ -179,11 +177,11 @@ public class FontPanel extends ViewController {
         // Handle FamilyList, FamilyComboBox
         if (anEvent.equals("FamilyList") || (anEvent.equals("FamilyComboBox") && anEvent.isActionEvent())) {
             String familyName = getViewStringValue("FamilyList");
-            String[] fontNames = RMFont.getFontNames(familyName);
+            String[] fontNames = Font.getFontNames(familyName);
             if (fontNames.length == 0)
                 return;
             String fontName = fontNames[0];
-            RMFont font = RMFont.getFont(fontName, 12);
+            Font font = Font.getFont(fontName, 12);
             RMEditorUtils.setFontFamily(editor, font);
         }
 
@@ -193,7 +191,7 @@ public class FontPanel extends ViewController {
 
         // Handle FontNameComboBox
         if (anEvent.equals("FontNameComboBox")) {
-            RMFont font = RMFont.getFont(anEvent.getStringValue(), 12);
+            Font font = Font.getFont(anEvent.getStringValue(), 12);
             RMEditorUtils.setFontName(editor, font);
         }
     }

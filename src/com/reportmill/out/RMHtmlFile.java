@@ -29,13 +29,13 @@ public class RMHtmlFile {
     String _imageRoot = "images";
 
     // A map of files
-    Map<String, byte[]> _files = new HashMap();
+    Map<String, byte[]> _files = new HashMap<>();
 
     // Whether to show border around page
     boolean _showBorder = true;
 
     /**
-     * Creates a new RMHtmlFile for given document.
+     * Constructor.
      */
     public RMHtmlFile(RMDocument aDoc)
     {
@@ -147,11 +147,8 @@ public class RMHtmlFile {
         for (String iname : _files.keySet()) {
             byte bytes[] = _files.get(iname);
             File file = new File(dir, iname);
-            try {
-                FileUtils.writeBytes(file, bytes);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+            try { FileUtils.writeBytes(file, bytes); }
+            catch (Exception e) { throw new RuntimeException(e); }
         }
     }
 
@@ -283,38 +280,36 @@ public class RMHtmlFile {
         protected String writeFill(T aShape, RMFill aFill, RMHtmlFile aFile, XMLElement anXML)
         {
             // Handle RMImageFill
-            if (aFill instanceof RMImageFill) {
-                RMImageFill ifill = (RMImageFill) aFill;
-                Image img = ifill.getImage();
+            if (aFill instanceof RMImageFill imageFill) {
+                Image img = imageFill.getImage();
                 String id = imageName(aFile, aShape, img);
                 XMLElement fxml = new XMLElement("pattern");
                 fxml.add("id", id);
-                fxml.add("width", ifill.isTiled() ? img.getWidth() : aShape.getWidth());
-                fxml.add("height", ifill.isTiled() ? img.getHeight() : aShape.getHeight());
+                fxml.add("width", imageFill.isTiled() ? img.getWidth() : aShape.getWidth());
+                fxml.add("height", imageFill.isTiled() ? img.getHeight() : aShape.getHeight());
                 fxml.add("patternUnits", "userSpaceOnUse");
                 XMLElement ixml = new XMLElement("image");
                 ixml.add("xlink:href", aFile._imageRoot + '/' + id);
-                ixml.add("width", ifill.isTiled() ? img.getWidth() : aShape.getWidth());
-                ixml.add("height", ifill.isTiled() ? img.getHeight() : aShape.getHeight());
-                if (!ifill.isTiled()) ixml.add("preserveAspectRatio", "none");
+                ixml.add("width", imageFill.isTiled() ? img.getWidth() : aShape.getWidth());
+                ixml.add("height", imageFill.isTiled() ? img.getHeight() : aShape.getHeight());
+                if (!imageFill.isTiled()) ixml.add("preserveAspectRatio", "none");
                 fxml.addElement(ixml);
                 anXML.addElement(fxml);
                 return "url(#" + id + ")";
             }
 
             // Handle RMGradientFill
-            if (aFill instanceof RMGradientFill) {
-                RMGradientFill gfill = (RMGradientFill) aFill;
+            if (aFill instanceof RMGradientFill gradientFill) {
                 XMLElement gxml = new XMLElement("linearGradient");
                 gxml.add("id", "grad");
                 gxml.add("x1", "0%");
                 gxml.add("y1", "0%");
                 gxml.add("x2", "100%");
                 gxml.add("y2", "0%");
-                for (int i = 0, iMax = gfill.getStopCount(); i < iMax; i++) {
+                for (int i = 0, iMax = gradientFill.getStopCount(); i < iMax; i++) {
                     XMLElement sxml = new XMLElement("stop");
-                    sxml.add("offset", Math.round(gfill.getStopOffset(i) * 100) + "%");
-                    sxml.add("style", "stop-color:" + '#' + gfill.getStopColor(i).toHexString());
+                    sxml.add("offset", Math.round(gradientFill.getStopOffset(i) * 100) + "%");
+                    sxml.add("style", "stop-color:" + '#' + gradientFill.getStopColor(i).toHexString());
                     gxml.addElement(sxml);
                 }
                 anXML.addElement(gxml);
@@ -331,8 +326,7 @@ public class RMHtmlFile {
         protected String writeFilter(T aShape, Effect anEffect, RMHtmlFile aFile, XMLElement anXML)
         {
             // Handle ShadowEffect
-            if (anEffect instanceof ShadowEffect) {
-                ShadowEffect shadow = (ShadowEffect) anEffect;
+            if (anEffect instanceof ShadowEffect shadow) {
                 XMLElement filter = new XMLElement("filter");
                 filter.add("id", "filt");
                 filter.add("width", "200%");
@@ -358,8 +352,7 @@ public class RMHtmlFile {
             }
 
             // Handle BlurEffect
-            else if (anEffect instanceof BlurEffect) {
-                BlurEffect blurEf = (BlurEffect) anEffect;
+            else if (anEffect instanceof BlurEffect blurEf) {
                 XMLElement filter = new XMLElement("filter");
                 filter.add("id", "filt");
                 XMLElement blur = new XMLElement("feGaussianBlur");
@@ -397,9 +390,9 @@ public class RMHtmlFile {
         protected String imageName(RMHtmlFile aWriter, RMShape aShape, Image anImage)
         {
             // See if imageBytes are already in _files, if so return respective key
-            byte imageBytes[] = anImage.getBytes();
+            byte[] imageBytes = anImage.getBytes();
             for (String key : aWriter._files.keySet()) {
-                byte bytes[] = aWriter._files.get(key);
+                byte[] bytes = aWriter._files.get(key);
                 if (ArrayUtils.equals(imageBytes, bytes))
                     return key;
             }
@@ -489,7 +482,8 @@ public class RMHtmlFile {
                     tspan.add("font-style", rfont.isItalic() ? "italic" : "normal");
                     tspan.add("font-weight", rfont.isBold() ? "bold" : "normal");
                     tspan.add("font-size", (int) rfont.getSize());
-                    if (!rcolor.equals(RMColor.black)) tspan.add("fill", '#' + rcolor.toHexString());
+                    if (!rcolor.equals(RMColor.black))
+                        tspan.add("fill", '#' + rcolor.toHexString());
                     tspan.setValue(str);
                     text.addElement(tspan);
                 }
@@ -550,24 +544,14 @@ public class RMHtmlFile {
         public SVGPathMaker append(Shape aShape)
         {
             PathIter pi = aShape.getPathIter(null);
-            double pts[] = new double[6];
+            double[] pts = new double[6];
             while (pi.hasNext()) {
                 switch (pi.getNext(pts)) {
-                    case MoveTo:
-                        moveTo(pts[0], pts[1]);
-                        break;
-                    case LineTo:
-                        lineTo(pts[0], pts[1]);
-                        break;
-                    case QuadTo:
-                        quadTo(pts[0], pts[1], pts[2], pts[3]);
-                        break;
-                    case CubicTo:
-                        cubeTo(pts[0], pts[1], pts[2], pts[3], pts[4], pts[5]);
-                        break;
-                    case Close:
-                        closePath();
-                        break;
+                    case MoveTo -> moveTo(pts[0], pts[1]);
+                    case LineTo -> lineTo(pts[0], pts[1]);
+                    case QuadTo -> quadTo(pts[0], pts[1], pts[2], pts[3]);
+                    case CubicTo -> cubeTo(pts[0], pts[1], pts[2], pts[3], pts[4], pts[5]);
+                    case Close -> closePath();
                 }
             }
             return this;

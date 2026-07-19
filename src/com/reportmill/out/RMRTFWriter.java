@@ -20,12 +20,12 @@ public class RMRTFWriter {
     private List<FontFile> _fontTable;
 
     // Color table
-    private List<RMColor> _colorTable;
+    private List<Color> _colorTable;
 
     // settings that persist across shapes
     private TextLineStyle _currentTextLineStyle;
-    private RMFont _currentFont;
-    private RMColor _currentColor;
+    private Font _currentFont;
+    private Color _currentColor;
 
     // Current font style
     private boolean _isBold, _isItalic, _isUnderline;
@@ -45,10 +45,10 @@ public class RMRTFWriter {
         // Allocate font & color tables
         _fontTable = new ArrayList<>();
         _colorTable = new ArrayList<>();
-        _colorTable.add(RMColor.black); // Init with black
+        _colorTable.add(Color.BLACK); // Init with black
 
         // Set the current color & line styles to the defaults
-        _currentColor = RMColor.black;
+        _currentColor = Color.BLACK;
         _currentTextLineStyle = TextLineStyle.DEFAULT;
         _currentFont = null;
         _isBold = _isItalic = _isUnderline = false;
@@ -78,9 +78,9 @@ public class RMRTFWriter {
      * Looks up a font in the font table and adds it if it's not there.
      * Returns the name that represents the font in the rtf ("f0", "f1", etc.)
      */
-    public int getFontIndex(RMFont f)
+    public int getFontIndex(Font aFont)
     {
-        FontFile fontfile = f.getFontFile();
+        FontFile fontfile = aFont.getFontFile();
         int fontIndex = _fontTable.indexOf(fontfile);
         if (fontIndex < 0) {
             fontIndex = _fontTable.size();
@@ -143,7 +143,7 @@ public class RMRTFWriter {
 
         if (colorCount > 0) {
             ps.print("{\\colortbl");
-            for (RMColor c : _colorTable) {
+            for (Color c : _colorTable) {
                 int r = c.getRedInt(), g = c.getGreenInt(), b = c.getBlueInt();
 
                 // black is special
@@ -155,7 +155,7 @@ public class RMRTFWriter {
         }
     }
 
-    public int getColorIndex(RMColor c)
+    public int getColorIndex(Color c)
     {
         int colorIndex = _colorTable.indexOf(c);
         if (colorIndex < 0) {
@@ -417,7 +417,7 @@ public class RMRTFWriter {
             }
 
             // Update current font
-            RMFont font = run.getFont();
+            Font font = run.getFont();
             if (_currentFont == null || !_currentFont.equals(font)) {
 
                 // Font size units are half-points.  Who comes up with this shit?
@@ -437,7 +437,7 @@ public class RMRTFWriter {
             }
 
             // Update text color
-            RMColor color = run.getColor();
+            Color color = run.getColor();
             if (!_currentColor.equals(color)) {
                 ps.print("\\cf" + getColorIndex(color));
                 _currentColor = color;

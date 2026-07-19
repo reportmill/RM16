@@ -186,8 +186,8 @@ public class RMTextShape extends RMRectShape {
     public RMFont getFont()
     {
         if (isTextEditorSet())
-            return getTextEditor().getFont();
-        return getXString().getFontAt(0);
+            return RMFont.get(getTextEditor().getFont());
+        return RMFont.get(getXString().getFontAt(0));
     }
 
     /**

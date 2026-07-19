@@ -75,7 +75,7 @@ public class RMTextEditor extends TextAdapter {
     /**
      * Sets the color of the current selection or cursor.
      */
-    public void setColor(RMColor color)  { setInputAttribute(RMTextStyle.COLOR_KEY, color); }
+    public void setColor(Color color)  { setInputAttribute(TextStyle.Color_Prop, color); }
 
     /**
      * Returns the font of the current selection or cursor.
@@ -85,7 +85,7 @@ public class RMTextEditor extends TextAdapter {
     /**
      * Sets the font of the current selection or cursor.
      */
-    public void setFont(RMFont font)  { setInputAttribute(RMTextStyle.FONT_KEY, font); }
+    public void setFont(Font font)  { setInputAttribute(TextStyle.Font_Prop, font); }
 
     /**
      * Returns the format of the current selection or cursor.

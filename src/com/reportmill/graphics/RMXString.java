@@ -8,6 +8,7 @@ import com.reportmill.shape.*;
 import java.util.*;
 
 import snap.geom.HPos;
+import snap.gfx.Font;
 import snap.text.*;
 import snap.util.*;
 
@@ -270,10 +271,9 @@ public class RMXString implements Cloneable, CharSequence, RMArchiver.Archivable
     /**
      * Returns the XString run that contains or ends at given index.
      */
-    public RMXStringRun getRunForCharRange(int startIndex, int endIndex)
+    public TextRun getRunForCharRange(int startIndex, int endIndex)
     {
-        TextRun run = _richText.getRunForCharRange(startIndex, endIndex);
-        return new RMXStringRun(this, run);
+        return _richText.getRunForCharRange(startIndex, endIndex);
     }
 
     /**
@@ -312,7 +312,7 @@ public class RMXString implements Cloneable, CharSequence, RMArchiver.Archivable
     /**
      * Returns the current font at the given character index.
      */
-    public RMFont getFontAt(int anIndex)
+    public Font getFontAt(int anIndex)
     {
         return getRunForCharIndex(anIndex).getFont();
     }
@@ -469,7 +469,7 @@ public class RMXString implements Cloneable, CharSequence, RMArchiver.Archivable
             Object valString = null;
 
             // Get the run at the given location
-            RMXStringRun keyRun = outString.getRunForCharRange(keyStart, keyEnd);
+            TextRun keyRun = outString.getRunForCharRange(keyStart, keyEnd);
 
             // If there is a key between the @-signs, evaluate it for substitution string
             if (keyEnd > keyStart) {
@@ -592,7 +592,7 @@ public class RMXString implements Cloneable, CharSequence, RMArchiver.Archivable
 
                     // If string is HTML formatted text, parse into RMXString
                     if (StringUtils.startsWithIC(string, "<html"))
-                        valString = RMEnv.getEnv().parseHTML(string, keyRun.getFont(), keyRun.getLineStyle());
+                        valString = RMEnv.getEnv().parseHTML(string, keyRun.getFont(), keyRun.getLine().getLineStyle());
 
                         // If string is RTF formatted text, parse into RMXString
                     else if (string.startsWith("{\\rtf"))

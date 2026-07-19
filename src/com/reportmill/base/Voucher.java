@@ -1,11 +1,10 @@
 package com.reportmill.base;
-
-import com.reportmill.graphics.RMColor;
-import com.reportmill.graphics.RMFont;
 import com.reportmill.graphics.RMXString;
 import com.reportmill.shape.RMDocument;
 import com.reportmill.shape.RMParentShape;
 import com.reportmill.shape.RMTextShape;
+import snap.gfx.Color;
+import snap.gfx.Font;
 import snap.util.*;
 
 /**
@@ -115,8 +114,8 @@ public class Voucher {
     private static void addWatermark(RMParentShape aShape)
     {
         // Get attributed string with REPORTMILL in 72pt grey (with R & M in 100pt)
-        RMFont font72 = RMFont.getFont("Arial Bold", 72), font100 = font72.copyForSize(100);
-        RMXString xstring = new RMXString("REPORTMILL", font72, new RMColor(.9));
+        Font font72 = Font.getFont("Arial Bold", 72), font100 = font72.copyForSize(100);
+        RMXString xstring = new RMXString("REPORTMILL", font72, new Color(.9));
         xstring.setAttribute(font100, 0, 1);
         xstring.setAttribute(font100, 6, 7); // Set R & M in 100pt
 
@@ -129,7 +128,7 @@ public class Voucher {
 
         // Get attributed string with bottom eval message in 12pt
         String msg = "ReportMill Evaluation - for more information go to reportmill.com.";
-        xstring = new RMXString(msg, RMFont.Helvetica12);
+        xstring = new RMXString(msg, Font.Arial12);
 
         // Create evalShape license string in lower left corner
         evalShape = new RMTextShape(xstring);

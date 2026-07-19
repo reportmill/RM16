@@ -3,6 +3,7 @@
  */
 package com.reportmill.graphics;
 import com.reportmill.base.*;
+import snap.gfx.Font;
 import snap.text.*;
 
 /**
@@ -72,7 +73,7 @@ public class RMXStringRun implements CharSequence {
     /**
      * Returns the font for this run.
      */
-    public RMFont getFont()  { return getStyle().getFont(); }
+    public Font getFont()  { return _style.getFont(); }
 
     /**
      * Returns the color for this run.

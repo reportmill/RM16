@@ -972,8 +972,9 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
     private static Rect getDefaultBounds(RMTextShape aText, Point aPoint)
     {
         // Get text font (or default font, if not available) and margin
-        RMFont font = aText.getFont();
-        if (font == null) font = RMFont.getDefaultFont();
+        Font font = aText.getFont();
+        if (font == null)
+            font = Font.getDefaultFont();
         Insets margin = aText.getMargin();
 
         // Default width is a standard char plus margin, default height is font line height plus margin

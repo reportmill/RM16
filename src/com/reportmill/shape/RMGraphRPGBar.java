@@ -10,6 +10,7 @@ import snap.geom.*;
 import snap.geom.Point;
 import snap.gfx.Color;
 import snap.text.TextFormat;
+import snap.text.TextLineStyle;
 import snap.util.MathUtils;
 
 /**
@@ -420,7 +421,7 @@ class RMGraphRPGBar extends RMGraphRPG {
             // Get string for intervalNumber
             String str = format.format(interval);
             RMXString xstr = new RMXString(str, valueAxis.getFont(), valueAxis.getTextColor());
-            xstr.setParagraph(RMParagraph.CENTERED, 0, xstr.length());
+            xstr.setLineStyle(TextLineStyle.DEFAULT_CENTERED, 0, xstr.length());
 
             // Create new text for label, copy value axis text shape attributes and size to fit
             RMTextShape label = new RMTextShape(xstr);
@@ -483,7 +484,7 @@ class RMGraphRPGBar extends RMGraphRPG {
         RMTextShape label = new RMTextShape(labelAxis.getItemKey()); // Create new RMText with attributes of label axis
         label.copyShape(labelAxis);
         label.setFont(labelAxis.getFont());
-        label.getXString().setParagraph(RMParagraph.CENTERED, 0, label.length());
+        label.getXString().setLineStyle(TextLineStyle.DEFAULT_CENTERED, 0, label.length());
         label.getXString().rpgClone(_rptOwner, aGroup, null, false); // Do rpg on label string
         label.setBestSize();  // Resize label to best size
 

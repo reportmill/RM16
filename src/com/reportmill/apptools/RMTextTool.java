@@ -129,8 +129,8 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
 
         // Update CharSpacingSpinner, LineSpacingSpinner, LineGapSpinner
         setViewValue("CharSpacingSpinner", text.getCharSpacing());
-        setViewValue("LineSpacingSpinner", text.getLineSpacing());
-        setViewValue("LineGapSpinner", text.getLineGap());
+        setViewValue("LineSpacingSpinner", text.getLineSpacingFactor());
+        setViewValue("LineGapSpinner", text.getLineSpacing());
 
         // If line height min not set (0), update LineHeightMinSpinner with current font size
         // If valid line height min, update LineHeightMinSpinner with line height
@@ -1026,7 +1026,7 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
         anEditor.undoerSetUndoTitle("Line Spacing Change");
         for (RMShape shape : anEditor.getSelectedOrSuperSelectedShapes())
             if (shape instanceof RMTextShape)
-                ((RMTextShape) shape).setLineSpacing(aHeight);
+                ((RMTextShape) shape).setLineSpacingFactor(aHeight);
     }
 
     /**
@@ -1037,7 +1037,7 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
         anEditor.undoerSetUndoTitle("Line Gap Change");
         for (RMShape shape : anEditor.getSelectedOrSuperSelectedShapes())
             if (shape instanceof RMTextShape)
-                ((RMTextShape) shape).setLineGap(aHeight);
+                ((RMTextShape) shape).setLineSpacing(aHeight);
     }
 
     /**
@@ -1048,7 +1048,7 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
         anEditor.undoerSetUndoTitle("Min Line Height Change");
         for (RMShape shape : anEditor.getSelectedOrSuperSelectedShapes())
             if (shape instanceof RMTextShape)
-                ((RMTextShape) shape).setLineHeightMin(aHeight);
+                ((RMTextShape) shape).setLineMinHeight(aHeight);
     }
 
     /**
@@ -1059,6 +1059,6 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
         anEditor.undoerSetUndoTitle("Max Line Height Change");
         for (RMShape shape : anEditor.getSelectedOrSuperSelectedShapes())
             if (shape instanceof RMTextShape)
-                ((RMTextShape) shape).setLineHeightMax(aHeight);
+                ((RMTextShape) shape).setLineMaxHeight(aHeight);
     }
 }

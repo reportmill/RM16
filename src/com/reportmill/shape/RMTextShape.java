@@ -396,104 +396,89 @@ public class RMTextShape extends RMRectShape {
     }
 
     /**
-     * Returns the line spacing at char 0.
+     * Returns the line spacing.
      */
-    public float getLineSpacing()
+    public double getLineSpacing()
     {
         if (isTextEditorSet())
             return getTextEditor().getLineSpacing();
-        return getXString().getParagraphAt(0).getLineSpacing();
+        return getRichText().getLineStyleForCharIndex(0).getSpacing();
     }
 
     /**
      * Sets the line spacing for all chars.
      */
-    public void setLineSpacing(float aHeight)
+    public void setLineSpacing(double aHeight)
     {
         if (isTextEditorSet())
             getTextEditor().setLineSpacing(aHeight);
-        else {
-            RMParagraph ps = getXString().getParagraphAt(0).deriveLineSpacing(aHeight);
-            getXString().setParagraph(ps, 0, length());
-        }
+        else getRichText().setLineStyleValue(TextLineStyle.Spacing_Prop, aHeight, 0, length());
     }
 
     /**
-     * Returns the line gap at char 0.
+     * Returns the line spacing factor.
      */
-    public float getLineGap()
+    public double getLineSpacingFactor()
     {
         if (isTextEditorSet())
-            return getTextEditor().getLineGap();
-        return getXString().getParagraphAt(0).getLineGap();
+            return getTextEditor().getLineSpacingFactor();
+        return getRichText().getLineStyleForCharIndex(0).getSpacingFactor();
     }
 
     /**
-     * Sets the line gap for all chars.
+     * Sets the line spacing factor for all chars.
      */
-    public void setLineGap(float aHeight)
+    public void setLineSpacingFactor(double aHeight)
     {
         if (isTextEditorSet())
-            getTextEditor().setLineGap(aHeight);
-        else {
-            RMParagraph ps = getXString().getParagraphAt(0).deriveLineGap(aHeight);
-            getXString().setParagraph(ps, 0, length());
-        }
+            getTextEditor().setLineSpacingFactor(aHeight);
+        else getRichText().setLineStyleValue(TextLineStyle.SpacingFactor_Prop, aHeight, 0, length());
     }
 
     /**
      * Returns the minimum line height at char 0.
      */
-    public float getLineHeightMin()
+    public double getLineMinHeight()
     {
         if (isTextEditorSet())
-            return getTextEditor().getLineHeightMin();
-        return getXString().getParagraphAt(0).getLineHeightMin();
+            return getTextEditor().getLineMinHeight();
+        return getRichText().getLineStyleForCharIndex(0).getMinHeight();
     }
 
     /**
      * Sets the minimum line height for all chars.
      */
-    public void setLineHeightMin(float aHeight)
+    public void setLineMinHeight(double aHeight)
     {
         if (isTextEditorSet())
-            getTextEditor().setLineHeightMin(aHeight);
-        else {
-            RMParagraph ps = getXString().getParagraphAt(0).deriveLineHeightMin(aHeight);
-            getXString().setParagraph(ps, 0, length());
-        }
+            getTextEditor().setLineMinHeight(aHeight);
+        else getRichText().setLineStyleValue(TextLineStyle.MinHeight_Prop, aHeight, 0, length());
     }
 
     /**
      * Returns the maximum line height at char 0.
      */
-    public float getLineHeightMax()
+    public double getLineMaxHeight()
     {
         if (isTextEditorSet())
-            return getTextEditor().getLineHeightMax();
-        return getXString().getParagraphAt(0).getLineHeightMax();
+            return getTextEditor().getLineMaxHeight();
+        return getRichText().getLineStyleForCharIndex(0).getMaxHeight();
     }
 
     /**
      * Sets the maximum line height for all chars.
      */
-    public void setLineHeightMax(float aHeight)
+    public void setLineMaxHeight(double aHeight)
     {
         if (isTextEditorSet())
-            getTextEditor().setLineHeightMax(aHeight);
-        else {
-            RMParagraph ps = getXString().getParagraphAt(0).deriveLineHeightMax(aHeight);
-            getXString().setParagraph(ps, 0, length());
-        }
+            getTextEditor().setLineMaxHeight(aHeight);
+        else getRichText().setLineStyleValue(TextLineStyle.MaxHeight_Prop, aHeight, 0, length());
     }
 
     /**
      * Returns margin.
      */
-    public Insets getMargin()
-    {
-        return _margin;
-    }
+    public Insets getMargin()  { return _margin; }
 
     /**
      * Sets margin.

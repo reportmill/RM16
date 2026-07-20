@@ -330,19 +330,6 @@ public class RMXString implements Cloneable, CharSequence, RMArchiver.Archivable
     }
 
     /**
-     * Returns the current paragraph at the given character index.
-     */
-    public RMParagraph getParagraphAt(int anIndex)  { return new RMParagraph(getLineStyleForCharIndex(anIndex)); }
-
-    /**
-     * Sets the paragraph for the given character index range.
-     */
-    public void setParagraph(RMParagraph aPG, int aStart, int anEnd)
-    {
-        setLineStyle(aPG._lineStyle, aStart, anEnd);
-    }
-
-    /**
      * Sets the xstring to be underlined.
      */
     public void setUnderlined(boolean aFlag)

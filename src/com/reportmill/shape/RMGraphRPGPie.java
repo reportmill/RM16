@@ -8,6 +8,7 @@ import snap.gfx3d.Scene3D;
 import com.reportmill.graphics.*;
 import java.util.*;
 import snap.geom.Rect;
+import snap.text.TextLineStyle;
 import snap.util.MathUtils;
 
 /**
@@ -71,7 +72,7 @@ class RMGraphRPGPie extends RMGraphRPG {
         if (labelAxis.getShowAxisLabels()) {
             String itemKey = labelAxis.getItemKey();
             barLabelString = new RMXString(itemKey, labelAxis.getFont());
-            barLabelString.setParagraph(RMParagraph.CENTERED, 0, barLabelString.length());
+            barLabelString.setLineStyle(TextLineStyle.DEFAULT_CENTERED, 0, barLabelString.length());
         }
 
         // Get wedge prototype

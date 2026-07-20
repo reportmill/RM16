@@ -49,16 +49,6 @@ public class RMTextEditor extends TextAdapter {
     public void setInputLineStyle(TextLineStyle lineStyle)  { _textModel.setLineStyle(lineStyle, getSelStart(), getSelEnd()); }
 
     /**
-     * Returns the paragraph of the current selection or cursor position.
-     */
-    public RMParagraph getInputParagraph()  { return new RMParagraph(getInputLineStyle()); }
-
-    /**
-     * Sets the paragraph of the current selection or cursor position.
-     */
-    public void setInputParagraph(RMParagraph ps)  { setInputLineStyle(ps._lineStyle); }
-
-    /**
      * Returns the color of the current selection or cursor.
      */
     public Color getColor()  { return getSelTextStyle().getColor(); }
@@ -139,60 +129,53 @@ public class RMTextEditor extends TextAdapter {
     /**
      * Returns the line spacing for current selection.
      */
-    public float getLineSpacing()  { return getInputParagraph().getLineSpacing(); }
+    public double getLineSpacingFactor()  { return getInputLineStyle().getSpacingFactor(); }
 
     /**
      * Sets the line spacing for current selection.
      */
-    public void setLineSpacing(float aHeight)
+    public void setLineSpacingFactor(double aHeight)
     {
-        RMParagraph pg = getInputParagraph().deriveLineSpacing(aHeight);
-        setInputParagraph(pg);
+        setInputLineStyle(getInputLineStyle().copyForPropKeyValue(TextLineStyle.SpacingFactor_Prop, aHeight));
     }
 
     /**
      * Returns the line gap for current selection.
      */
-    public float getLineGap()  { return getInputParagraph().getLineGap(); }
+    public double getLineSpacing()  { return getInputLineStyle().getSpacing(); }
 
     /**
      * Sets the line gap for current selection.
      */
-    public void setLineGap(float aHeight)
+    public void setLineSpacing(double aHeight)
     {
-        RMParagraph pg = getInputParagraph().deriveLineGap(aHeight);
-        setInputParagraph(pg);
+        setInputLineStyle(getInputLineStyle().copyForPropKeyValue(TextLineStyle.Spacing_Prop, aHeight));
     }
 
     /**
      * Returns the min line height for current selection.
      */
-    public float getLineHeightMin()  { return getInputParagraph().getLineHeightMin(); }
+    public double getLineMinHeight()  { return getInputLineStyle().getMinHeight(); }
 
     /**
      * Sets the min line height for current selection.
      */
-    public void setLineHeightMin(float aHeight)
+    public void setLineMinHeight(double aHeight)
     {
-        RMParagraph pg = getInputParagraph().deriveLineHeightMin(aHeight);
-        setInputParagraph(pg);
+        setInputLineStyle(getInputLineStyle().copyForPropKeyValue(TextLineStyle.MinHeight_Prop, aHeight));
     }
 
     /**
      * Returns the maximum line height for a line of text (even if font size would dictate higher).
      */
-    public float getLineHeightMax()
-    {
-        return getInputParagraph().getLineHeightMax();
-    }
+    public double getLineMaxHeight()  { return getInputLineStyle().getMaxHeight(); }
 
     /**
      * Sets the maximum line height for a line of text (even if font size would dictate higher).
      */
-    public void setLineHeightMax(float aHeight)
+    public void setLineMaxHeight(double aHeight)
     {
-        RMParagraph pg = getInputParagraph().deriveLineHeightMax(aHeight);
-        setInputParagraph(pg);
+        setInputLineStyle(getInputLineStyle().copyForPropKeyValue(TextLineStyle.MaxHeight_Prop, aHeight));
     }
 
     /**

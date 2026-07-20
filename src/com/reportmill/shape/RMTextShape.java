@@ -985,7 +985,7 @@ public class RMTextShape extends RMRectShape {
         if (!(this instanceof RMLinkedText)) {
 
             // Get the xml element for the xstring
-            XMLElement xse = anArchiver.toXML(getXString());
+            XMLElement xse = anArchiver.writeObjectToXml(getXString());
 
             // Add individual child elements to this text's xml element
             for (int i = 0, iMax = xse.size(); i < iMax; i++)
@@ -1005,7 +1005,7 @@ public class RMTextShape extends RMRectShape {
             e.add(pathShapeElement);
 
             // Archive path shape to path-shape element
-            XMLElement pathShapeElementZero = anArchiver.toXML(pathShape);
+            XMLElement pathShapeElementZero = anArchiver.writeObjectToXml(pathShape);
             pathShapeElement.add(pathShapeElementZero);
         }
 
@@ -1051,7 +1051,7 @@ public class RMTextShape extends RMRectShape {
             XMLElement pathShapeElementZero = pathShapeElement.get(0);
 
             // Unarchive the path shape and set
-            RMShape pathShape = (RMShape) anArchiver.fromXML(pathShapeElementZero, null);
+            RMShape pathShape = (RMShape) anArchiver.readObjectFromXml(pathShapeElementZero, null);
             setPathShape(pathShape);
         }
 

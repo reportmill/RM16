@@ -2342,8 +2342,8 @@ public class RMShape implements Cloneable, Archivable, Key.GetSet {
         if (getSkewY() != 0) e.add("skewy", getSkewY());
 
         // Archive Stroke, Fill, Effect
-        if (getStroke() != null) e.add(anArchiver.toXML(getStroke(), this));
-        if (getFill() != null) e.add(anArchiver.toXML(getFill(), this));
+        if (getStroke() != null) e.add(anArchiver.writeObjectToXml(getStroke(), this));
+        if (getFill() != null) e.add(anArchiver.writeObjectToXml(getFill(), this));
         if (getEffect() != null) e.add("effect", getEffect().codeString());
 
         // Archive font
@@ -2399,13 +2399,13 @@ public class RMShape implements Cloneable, Archivable, Key.GetSet {
 
         // Unarchive Stroke
         for (int i = anArchiver.indexOf(anElement, RMStroke.class); i >= 0; i = -1) {
-            RMStroke stroke = (RMStroke) anArchiver.fromXML(anElement.get(i), this);
+            RMStroke stroke = (RMStroke) anArchiver.readObjectFromXml(anElement.get(i), this);
             setStroke(stroke);
         }
 
         // Unarchive Fill
         for (int i = anArchiver.indexOf(anElement, RMFill.class); i >= 0; i = -1) {
-            RMFill fill = (RMFill) anArchiver.fromXML(anElement.get(i), this);
+            RMFill fill = (RMFill) anArchiver.readObjectFromXml(anElement.get(i), this);
             setFill(fill);
         }
 

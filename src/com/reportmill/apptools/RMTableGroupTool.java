@@ -92,7 +92,7 @@ public class RMTableGroupTool<T extends RMTableGroup> extends RMParentShapeTool<
 
         // Handle PasteTableMenuItem
         if (anEvent.equals("PasteTableMenuItem")) {
-            Object pasteShape = RMEditorClipboard.getShapeFromClipboard(getEditor());
+            Object pasteShape = RMEditorClipboard.getShapeFromClipboard();
             if (pasteShape instanceof RMTable) {
                 tableGroup.undoerSetUndoTitle("Paste Table");
                 tableGroup.addPeerTable((RMTable) pasteShape);

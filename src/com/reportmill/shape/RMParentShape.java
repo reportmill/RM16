@@ -691,7 +691,7 @@ public class RMParentShape extends RMShape implements PropChange.DoChange {
         // Archive children
         for (int i = 0, iMax = getChildCount(); i < iMax; i++) {
             RMShape child = getChild(i);
-            anElement.add(anArchiver.toXML(child, this));
+            anElement.add(anArchiver.writeObjectToXml(child, this));
         }
     }
 
@@ -733,7 +733,7 @@ public class RMParentShape extends RMShape implements PropChange.DoChange {
             // Get child class - if RMShape, unarchive and add
             Class childClass = anArchiver.getClassForName(childXML.getName());
             if (childClass != null && RMShape.class.isAssignableFrom(childClass)) {
-                RMShape shape = (RMShape) anArchiver.fromXML(childXML, this);
+                RMShape shape = (RMShape) anArchiver.readObjectFromXml(childXML, this);
                 addChild(shape);
             }
         }

@@ -50,8 +50,11 @@ public class RMArchiverHpr {
                 // If format changed for run, write format
                 if (!Objects.equals(format, run.getFormat())) {
                     format = run.getFormat();
-                    if (format == null) xml.add(new XMLElement("format"));
-                    else xml.add(anArchiver.toXML(format));
+                    if (format == null)
+                        xml.add(new XMLElement("format"));
+                    else if (format instanceof RMArchiver.Archivable archivableFormat)
+                        xml.add(anArchiver.writeObjectToXml(archivableFormat));
+                    else System.err.println("RMArchiver.textModelToXML: Format not archivable: " + format);
                 }
 
                 // If paragraph style changed for run, write paragraph
@@ -148,7 +151,7 @@ public class RMArchiverHpr {
 
                 // If format changed for segment, write format
                 case "format" -> {
-                    Object fmt = anArchiver.fromXML(e, null);
+                    Object fmt = anArchiver.readObjectFromXml(e, null);
                     style = style.copyForStyleKeyValue(TextStyle.Format_Prop, fmt);
                 }
 
@@ -348,8 +351,8 @@ public class RMArchiverHpr {
         public Object fromXML(RMArchiver anArchiver, XMLElement anElmnt)
         {
             String type = anElmnt.getAttributeValue("type", "");
-            if (type.equals("number")) return anArchiver.fromXML(anElmnt, RMNumberFormat.class, null);
-            if (type.equals("date")) return anArchiver.fromXML(anElmnt, RMDateFormat.class, null);
+            if (type.equals("number")) return anArchiver.readObjectFromXmlForClass(anElmnt, RMNumberFormat.class, null);
+            if (type.equals("date")) return anArchiver.readObjectFromXmlForClass(anElmnt, RMDateFormat.class, null);
             if (!type.isEmpty()) System.err.println("RMFormatStub: Unknown format type " + type);
             return null;
         }

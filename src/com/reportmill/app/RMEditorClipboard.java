@@ -2,7 +2,6 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package com.reportmill.app;
-import com.reportmill.graphics.RMXString;
 import com.reportmill.shape.*;
 import java.util.*;
 import snap.geom.Point;
@@ -15,8 +14,8 @@ import snap.view.*;
  */
 public class RMEditorClipboard {
 
-    // The MIME type for reportmill xstring
-    public static final String RM_XML_TYPE = "reportmill/xml";
+    // The MIME type for reportmill shapes
+    public static final String RM_SHAPES_LIST = "reportmill/xml";
 
     /**
      * Handles editor cut operation.
@@ -49,23 +48,23 @@ public class RMEditorClipboard {
                 !(anEditor.getSelectedOrSuperSelectedShape() instanceof RMPage)) {
 
             // Get system clipboard
-            Clipboard cb = Clipboard.getCleared();
+            Clipboard clipboard = Clipboard.getCleared();
 
-            // Get xml for selected shapes as string and add as RM_XML_TYPE
+            // Get xml for selected shapes as string and add as RM_SHAPES_LIST
             List<RMShape> shapes = anEditor.getSelectedOrSuperSelectedShapes();
-            XMLElement xml = new RMArchiver().writeObjectToXml(shapes);
+            XMLElement xml = new RMArchiver().writeShapesToXml(shapes);
             String xmlStr = xml.getString();
-            cb.addDataForMimeType(xmlStr, RM_XML_TYPE);
+            clipboard.addDataForMimeType(xmlStr, RM_SHAPES_LIST);
 
             // If only one shape, add as image too
             RMShape shape = shapes.size() == 1 ? anEditor.getSelectedShape() : null;
             if (shape != null) {
                 Image image = RMShapeUtils.createImage(shape, null);
-                cb.addData(image);
+                clipboard.addData(image);
             }
 
             // Add RM_XML as plain string (probably stupid)
-            cb.addData(xmlStr);
+            clipboard.addData(xmlStr);
 
             // Reset Editor.LastCopyShape/LastPasteShape
             anEditor._lastCopyShape = anEditor.getSelectedShape(0);
@@ -101,28 +100,26 @@ public class RMEditorClipboard {
         RMShape pastedShape = null;
 
         // If PasteBoard has ReportMill Data, paste it
-        if (clipboard.hasDataForMimeType(RM_XML_TYPE)) {
+        if (clipboard.hasDataForMimeType(RM_SHAPES_LIST)) {
 
             // Unarchive shapes from clipboard bytes
-            Object object = getShapesFromClipboard(clipboard);
+            List<RMShape> shapesList = getShapesFromClipboard(clipboard);
 
             // If data is list of previously copied shapes, add them
-            if (object instanceof List shapes) {
-                anEditor.undoerSetUndoTitle("Paste Shape" + (shapes.size() > 1 ? "s" : ""));
-                anEditor.addShapesToShape(shapes, aParent, true);
-                anEditor.setSelectedShapes(shapes);
-            }
+            anEditor.undoerSetUndoTitle("Paste Shape" + (shapesList.size() > 1 ? "s" : ""));
+            anEditor.addShapesToShape(shapesList, aParent, true);
+            anEditor.setSelectedShapes(shapesList);
 
             // If data is text, create text object and add it
-            else if (object instanceof RMXString) {
-                RMTextShape text = new RMTextShape((RMXString) object);
-                double width = Math.min(text.getPrefWidth(), aParent.getWidth());
-                double height = Math.min(text.getPrefHeight(), aParent.getHeight());
-                text.setSize(width, height);
-                anEditor.undoerSetUndoTitle("Paste Text");
-                anEditor.addShapesToShape(List.of(text), aParent, true);
-                anEditor.setSelectedShape(text);
-            }
+//            else if (object instanceof RMXString) {
+//                RMTextShape text = new RMTextShape((RMXString) object);
+//                double width = Math.min(text.getPrefWidth(), aParent.getWidth());
+//                double height = Math.min(text.getPrefHeight(), aParent.getHeight());
+//                text.setSize(width, height);
+//                anEditor.undoerSetUndoTitle("Paste Text");
+//                anEditor.addShapesToShape(List.of(text), aParent, true);
+//                anEditor.setSelectedShape(text);
+//            }
 
             // Promote _smartPastedShape to anchor and set new _smartPastedShape
             if (anEditor._lastPasteShape != null)
@@ -133,8 +130,8 @@ public class RMEditorClipboard {
 
         // Paste Image
         else if (clipboard.hasImage()) {
-            ClipboardData idata = clipboard.getImageData();
-            byte[] bytes = idata.getBytes();
+            ClipboardData imageData = clipboard.getImageData();
+            byte[] bytes = imageData.getBytes();
             pastedShape = new RMImageShape(bytes);
         }
 
@@ -177,28 +174,26 @@ public class RMEditorClipboard {
     /**
      * Returns the first Shape read from the system clipboard.
      */
-    public static RMShape getShapeFromClipboard(RMEditor anEditor)
+    public static RMShape getShapeFromClipboard()
     {
-        Object shapes = getShapesFromClipboard(null);
-        if (shapes instanceof List<?> shapesList)
-            shapes = ListUtils.get(shapesList, 0);
-        return shapes instanceof RMShape ? (RMShape) shapes : null;
+        List<RMShape> shapesList = getShapesFromClipboard(null);
+        return !shapesList.isEmpty() ? shapesList.get(0) : null;
     }
 
     /**
      * Returns the shape or shapes read from the given clipboard (uses system clipboard if null).
      */
-    private static Object getShapesFromClipboard(Clipboard aClipboard)
+    private static List<RMShape> getShapesFromClipboard(Clipboard aClipboard)
     {
         Clipboard clipboard = aClipboard != null ? aClipboard : Clipboard.get();
 
-        // Handle RMData: Get unarchived object from clipboard bytes
-        if (clipboard.hasDataForMimeType(RM_XML_TYPE)) {
-            byte[] bytes = clipboard.getDataBytes(RM_XML_TYPE);
-            return new RMArchiver().readObjectFromXmlBytes(bytes);
+        // Handle RM_SHAPES_LIST: Get unarchived object from clipboard bytes
+        if (clipboard.hasDataForMimeType(RM_SHAPES_LIST)) {
+            byte[] bytes = clipboard.getDataBytes(RM_SHAPES_LIST);
+            return new RMArchiver().readShapesFromXmlBytes(bytes);
         }
 
-        return null;
+        return Collections.emptyList();
     }
 
     /**

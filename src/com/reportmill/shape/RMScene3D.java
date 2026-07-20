@@ -316,7 +316,7 @@ public class RMScene3D extends RMParentShape {
         if (getShapeRMCount() > 0) {
             XMLElement shapesXML = new XMLElement("shapes");
             for (int i = 0, iMax = getShapeRMCount(); i < iMax; i++)
-                shapesXML.add(anArchiver.toXML(getShapeRM(i)));
+                shapesXML.add(anArchiver.writeObjectToXml(getShapeRM(i)));
             e.add(shapesXML);
         }
 
@@ -359,6 +359,6 @@ public class RMScene3D extends RMParentShape {
         XMLElement shapesXML = anElement.get("shapes");
         if (shapesXML != null)
             for (int i = 0, iMax = shapesXML.size(); i < iMax; i++)
-                addShapeRM((RMShape) anArchiver.fromXML(shapesXML.get(i), this));
+                addShapeRM((RMShape) anArchiver.readObjectFromXml(shapesXML.get(i), this));
     }
 }

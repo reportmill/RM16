@@ -54,8 +54,8 @@ public class RMArchiver {
     // The map of classes for unarchival
     private Map<String,Class<?>> _classMap;
 
-    // The stack of parents
-    private Deque<Object> _parentStack = new ArrayDeque<>();
+    // Constant for RM Shapes list xml name
+    private static final String RM_SHAPES_LIST_NAME = "RMShapesList";
 
     /**
      * Constructor.
@@ -221,6 +221,24 @@ public class RMArchiver {
     }
 
     /**
+     * Reads shapes from given XML.
+     */
+    public List<RMShape> readShapesFromXmlBytes(byte[] theBytes)
+    {
+        XMLElement shapesListXml = XMLElement.readXmlFromBytes(theBytes);
+        if (shapesListXml == null || !shapesListXml.getName().equals(RM_SHAPES_LIST_NAME)) {
+            System.err.println("RMArchiver.readShapesFromXmlBytes: XML element not found");
+            return Collections.emptyList();
+        }
+
+        // Read shapes list
+        List<RMShape> shapesList = new ArrayList<>();
+        for (int i = 0, iMax = shapesListXml.size(); i < iMax; i++)
+            shapesList.add((RMShape) readObjectFromXml(shapesListXml.get(i), null));
+        return shapesList;
+    }
+
+    /**
      * Returns a root object unarchived from a generic input source (a File, String path, InputStream, URL, byte[], etc.).
      */
     public Object readObjectFromXmlUrl(WebURL sourceUrl)
@@ -232,7 +250,7 @@ public class RMArchiver {
         // Get string and read
         String xmlStr = sourceUrl.getText();
         if (xmlStr == null)
-            throw new RuntimeException("XMLArchiver.readXmlFromUrl: Cannot read url: " + sourceUrl);
+            throw new RuntimeException("RMArchiver.readXmlFromUrl: Cannot read url: " + sourceUrl);
         return readObjectFromXmlString(xmlStr);
     }
 
@@ -271,20 +289,18 @@ public class RMArchiver {
         getResources(_root);
 
         // Unarchive from xml and return
-        Object object = fromXML(_root, null);
+        Object object = readObjectFromXml(_root, null);
 
         // Return object
         return object;
     }
 
     /**
-     * Returns an xml element for a given object.
-     * This top level method encodes resources, in addition to doing the basic toXML stuff.
+     * Writes the given document to XML.
      */
-    public XMLElement writeObjectToXml(Object anObj)
+    public XMLElement writeDocumentToXml(RMDocument aDoc)
     {
-        // Write object
-        XMLElement xml = toXML(anObj);
+        XMLElement xml = writeObjectToXml(aDoc);
 
         // Archive resources
         for (Resource resource : getResources()) {
@@ -294,31 +310,48 @@ public class RMArchiver {
             xml.add(resourceXML);
         }
 
-        // Return xml
         return xml;
+    }
+
+    /**
+     * Writes the given shapes list to XML.
+     */
+    public XMLElement writeShapesToXml(List<RMShape> shapesList)
+    {
+        XMLElement shapesXml = new XMLElement(RM_SHAPES_LIST_NAME);
+        shapesList.forEach(shape -> shapesXml.add(writeObjectToXml(shape)));
+        return shapesXml;
+    }
+
+    /**
+     * Writes the given object to XML.
+     */
+    public XMLElement writeObjectToXml(Archivable anObj)
+    {
+        return writeObjectToXml(anObj, null);
+    }
+
+    /**
+     * Writes the given object to XML.
+     */
+    public XMLElement writeObjectToXml(Archivable anObj, Archivable anOwner)
+    {
+        return anObj.toXML(this);
     }
 
     /**
      * Returns an object unarchived from the given element.
      */
-    public Object fromXML(XMLElement anElement, Object anOwner)
+    public Object readObjectFromXml(XMLElement anElement, Object anOwner)
     {
-        return fromXML(anElement, null, anOwner);
+        return readObjectFromXmlForClass(anElement, null, anOwner);
     }
 
     /**
      * Returns an object unarchived from the given element by instantiating the given class.
      */
-    public <T> T fromXML(XMLElement anElement, Class<T> aClass, Object anOwner)
+    public <T> T readObjectFromXmlForClass(XMLElement anElement, Class<T> aClass, Object anOwner)
     {
-        // Handle Lists Special
-        if (anElement.getName().equals("alist")) {
-            List<Object> list = new ArrayList<>();
-            for (int i = 0, iMax = anElement.size(); i < iMax; i++)
-                list.add(fromXML(anElement.get(i), anOwner));
-            return (T) list;
-        }
-
         // See if anElement has already been read
         Object readObject = _readElements.get(anElement);
         if (readObject != null && (aClass == null || aClass.isInstance(readObject)))
@@ -328,7 +361,7 @@ public class RMArchiver {
         if (anElement == _root && getRootObject() != null)
             readObject = getRootObject();
 
-            // If class was provided, try to instantiate
+        // If class was provided, try to instantiate
         else {
 
             // Get class
@@ -338,7 +371,7 @@ public class RMArchiver {
 
             // If no class, throw exception
             if (cls == null)
-                throw new RuntimeException("XMLArchiver: Can't find class for element: " + anElement.getName());
+                throw new RuntimeException("RMArchiver: Can't find class for element: " + anElement.getName());
 
             // Create new object
             readObject = newInstance(cls);
@@ -346,7 +379,7 @@ public class RMArchiver {
 
         // If couldn't create new instance, return null (should throw exception instead, I think)
         if (readObject == null) {
-            System.err.println("XMLArchiver.fromXML: Couldn't find class for: " + anElement.getName());
+            System.err.println("RMArchiver.fromXML: Couldn't find class for: " + anElement.getName());
             return null;
         }
 
@@ -354,7 +387,7 @@ public class RMArchiver {
         _readElements.put(anElement, readObject);
 
         // Call fromXML on object
-        Object obj = fromXML(anElement, readObject, anOwner);
+        Object obj = ((Archivable) readObject).fromXML(this, anElement);
 
         // If fromXML returned a different object, swap it in
         if (obj != readObject)
@@ -362,47 +395,6 @@ public class RMArchiver {
 
         // Return read object
         return (T) readObject;
-    }
-
-    /**
-     * Calls fromXML on given object.
-     */
-    public Object fromXML(XMLElement anElement, Object anObj, Object anOwner)
-    {
-        // Archive given object (with given owner on top of ParentStack)
-        if (anOwner != null)
-            pushParent(anOwner);
-        Object obj = ((Archivable) anObj).fromXML(this, anElement);
-        if (anOwner != null)
-            popParent();
-        return obj;
-    }
-
-    /**
-     * Writes the given object to XML elements.
-     */
-    public XMLElement toXML(Object anObj)
-    {
-        return toXML(anObj, null);
-    }
-
-    /**
-     * Writes the given object to XML elements.
-     */
-    public XMLElement toXML(Object anObj, Object anOwner)
-    {
-        // Handle Lists Special
-        if (anObj instanceof List<?> list) {
-            XMLElement listXml = new XMLElement("alist");
-            list.forEach(item -> listXml.add(toXML(item)));
-            return listXml;
-        }
-
-        // Unarchive given object (with given Owner on top of ParentStack)
-        if (anOwner != null) pushParent(anOwner);
-        XMLElement xml = ((Archivable) anObj).toXML(this);
-        if (anOwner != null) popParent();
-        return xml;
     }
 
     /**
@@ -480,7 +472,7 @@ public class RMArchiver {
     {
         // If anElement has matching xref attribute/id, return unarchived object
         if (anElement.getAttributeIntValue("xref", -1) == xref)
-            return fromXML(anElement, null);
+            return readObjectFromXml(anElement, null);
 
         // Iterate over element's children and recurse
         for (int i = 0, iMax = anElement.size(); i < iMax; i++) {
@@ -528,7 +520,7 @@ public class RMArchiver {
         // If name is provided, iterate over elements, unarchive and add to list
         if (aName != null) {
             for (XMLElement e : anElement.getElements(aName)) {
-                Object obj = fromXML(e, aClass, anOwner);
+                Object obj = readObjectFromXmlForClass(e, aClass, anOwner);
                 list.add(obj);
             }
         }
@@ -536,7 +528,7 @@ public class RMArchiver {
         // Iterate over elements, unarchive, and if class, add to list
         else for (int i = 0, iMax = anElement.size(); i < iMax; i++) {
             XMLElement xml = anElement.get(i);
-            Object obj = fromXML(xml, anOwner);
+            Object obj = readObjectFromXml(xml, anOwner);
             if (aClass.isInstance(obj))
                 list.add(obj);
         }
@@ -548,39 +540,13 @@ public class RMArchiver {
     /**
      * Returns a copy of the given object using archival.
      */
-    public <T> T copy(T anObj)
+    public <T extends Archivable> T copy(T anObj)
     {
-        XMLElement xml = toXML(anObj);
+        XMLElement xml = writeObjectToXml(anObj);
         if (isIgnoreCase())
             xml.setIgnoreCase(true);
-        return (T) fromXML(xml, null);
+        return (T) readObjectFromXml(xml, null);
     }
-
-    /**
-     * Returns the top parent from the parent stack.
-     */
-    public Object getParent()  { return _parentStack.peekFirst(); }
-
-    /**
-     * Returns the first parent from the parent stack of given class.
-     */
-    public <T> T getParent(Class<T> aClass)
-    {
-        for (Object o : _parentStack)
-            if (aClass.isInstance(o))
-                return (T) o;
-        return null;
-    }
-
-    /**
-     * Pushes a parent on the parent stack.
-     */
-    protected void pushParent(Object anObj)  { _parentStack.addFirst(anObj); }
-
-    /**
-     * Pops a parent from the parent stack.
-     */
-    protected void popParent()  { _parentStack.removeFirst(); }
 
     /**
      * Returns the list of optional resources associated with this archiver.

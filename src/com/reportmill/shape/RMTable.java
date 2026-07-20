@@ -669,7 +669,7 @@ public class RMTable extends RMParentShape {
             XMLElement childXML = anElement.get(i);
             Class childClass = anArchiver.getClassForName(childXML.getName());
             if (childClass != null && RMTableRow.class.isAssignableFrom(childClass)) {
-                RMShape shape = (RMTableRow) anArchiver.fromXML(childXML, this);
+                RMShape shape = (RMTableRow) anArchiver.readObjectFromXml(childXML, this);
                 addChild(shape);
             }
         }

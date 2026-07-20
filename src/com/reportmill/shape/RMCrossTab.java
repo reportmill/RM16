@@ -715,7 +715,7 @@ public class RMCrossTab extends RMParentShape {
             for (int j = 0, jMax = getColCount(); j < jMax; j++) {
                 RMCrossTabCell cell = getCell(i, j);
                 if (cell.getRow() != i || cell.getCol() != j) continue;
-                XMLElement cxml = anArchiver.toXML(cell, this);
+                XMLElement cxml = anArchiver.writeObjectToXml(cell, this);
                 cxml.add("row", i);
                 cxml.add("col", j);
                 e.add(cxml);
@@ -751,7 +751,7 @@ public class RMCrossTab extends RMParentShape {
         // Unarchive columns and add to CrossTab
         for (int i = anElement.indexOf("column"); i >= 0; i = anElement.indexOf("column", i + 1)) {
             XMLElement cxml = anElement.get(i);
-            RMCrossTabCol col = anArchiver.fromXML(cxml, RMCrossTabCol.class, this);
+            RMCrossTabCol col = anArchiver.readObjectFromXmlForClass(cxml, RMCrossTabCol.class, this);
             _cols.add(col);
             col._table = this;
         }
@@ -759,14 +759,14 @@ public class RMCrossTab extends RMParentShape {
         // Unarchive rows and add to CrossTab
         for (int i = anElement.indexOf("row"), ri = 0; i >= 0; i = anElement.indexOf("row", i + 1), ri++) {
             XMLElement rxml = anElement.get(i);
-            RMCrossTabRow row = anArchiver.fromXML(rxml, RMCrossTabRow.class, this);
+            RMCrossTabRow row = anArchiver.readObjectFromXmlForClass(rxml, RMCrossTabRow.class, this);
             _rows.add(ri, row);
             row._table = this;
 
             // Legacy: Unarchive row cells
             for (int j = rxml.indexOf("cell"), ci = 0; j >= 0; j = rxml.indexOf("cell", j + 1)) {
                 XMLElement cellX = rxml.get(j);
-                RMCrossTabCell cell = anArchiver.fromXML(cellX, RMCrossTabCell.class, this);
+                RMCrossTabCell cell = anArchiver.readObjectFromXmlForClass(cellX, RMCrossTabCell.class, this);
                 setCell(cell, ri, ci, 1, cell.getColSpan());
                 ci += cell.getColSpan();
             }
@@ -775,7 +775,7 @@ public class RMCrossTab extends RMParentShape {
         // Unarchive CrossTab cells
         for (int i = anElement.indexOf("cell"); i >= 0; i = anElement.indexOf("cell", i + 1)) {
             XMLElement cxml = anElement.get(i);
-            RMCrossTabCell cell = anArchiver.fromXML(cxml, RMCrossTabCell.class, this);
+            RMCrossTabCell cell = anArchiver.readObjectFromXmlForClass(cxml, RMCrossTabCell.class, this);
             int row = cxml.getAttributeIntValue("row"), col = cxml.getAttributeIntValue("col");
             setCell(cell, row, col, cell.getRowSpan(), cell.getColSpan());
         }

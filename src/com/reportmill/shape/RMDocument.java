@@ -3,7 +3,6 @@
  */
 package com.reportmill.shape;
 import com.reportmill.base.*;
-import com.reportmill.graphics.*;
 import com.reportmill.out.*;
 import java.util.*;
 import java.io.File;
@@ -1043,7 +1042,7 @@ public class RMDocument extends RMParentShape {
     {
         layoutDeep();
         resolvePageReferences();
-        return new RMArchiver().writeObjectToXml(this);
+        return new RMArchiver().writeDocumentToXml(this);
     }
 
     /**
@@ -1078,7 +1077,7 @@ public class RMDocument extends RMParentShape {
         e.add("version", ReportMill.getVersion());
 
         // Archive DataSource
-        XMLElement dxml = _dataSource != null ? anArchiver.toXML(_dataSource, this) : null;
+        XMLElement dxml = _dataSource != null ? anArchiver.writeObjectToXml(_dataSource, this) : null;
         if (dxml != null && dxml.getAttributeCount() > 0) e.add(dxml);
 
         // Archive PageLayout, Unit
@@ -1113,7 +1112,7 @@ public class RMDocument extends RMParentShape {
     {
         // Archive pages
         for (int i = 0, iMax = getPageCount(); i < iMax; i++)
-            anElement.add(anArchiver.toXML(getPage(i), this));
+            anElement.add(anArchiver.writeObjectToXml(getPage(i), this));
     }
 
     /**
@@ -1131,8 +1130,9 @@ public class RMDocument extends RMParentShape {
         anArchiver.setVersion(_version);
 
         // Unarchive Datasource
-        XMLElement dxml = anElement.get("datasource");
-        if (dxml != null) setDataSource(anArchiver.fromXML(dxml, RMDataSource.class, this));
+        XMLElement datasourceXML = anElement.get("datasource");
+        if (datasourceXML != null)
+            setDataSource(anArchiver.readObjectFromXmlForClass(datasourceXML, RMDataSource.class, this));
 
         // Unarchive PageLayout, Unit
         if (anElement.hasAttribute("page-layout")) setPageLayout(anElement.getAttributeValue("page-layout"));

@@ -867,21 +867,21 @@ public class RMGraph extends RMParentShape {
         if (getItemsLayout() != ItemLayout.Abreast) e.add("items-layout", getItemsLayout());
 
         // Archive ValueAxis, LabelAxis, Bar, Pie, 3D
-        XMLElement valueAxis = anArchiver.toXML(_valueAxis, this);
+        XMLElement valueAxis = anArchiver.writeObjectToXml(_valueAxis, this);
         if (valueAxis.getAttributeCount() + valueAxis.size() > 0) e.add(valueAxis);
-        XMLElement labelAxis = anArchiver.toXML(_labelAxis, this);
+        XMLElement labelAxis = anArchiver.writeObjectToXml(_labelAxis, this);
         if (labelAxis.getAttributeCount() + labelAxis.size() > 0) e.add(labelAxis);
-        XMLElement bars = anArchiver.toXML(_bars, this);
+        XMLElement bars = anArchiver.writeObjectToXml(_bars, this);
         if (bars.getAttributeCount() + bars.size() > 0) e.add(bars);
-        XMLElement pie = anArchiver.toXML(_pie, this);
+        XMLElement pie = anArchiver.writeObjectToXml(_pie, this);
         if (pie.getAttributeCount() + pie.size() > 0) e.add(pie);
-        XMLElement td = anArchiver.toXML(_3d, this);
+        XMLElement td = anArchiver.writeObjectToXml(_3d, this);
         if (td.getAttributeCount() + td.size() > 0) e.add(td);
 
         // Archive series
         for (int i = 0; i < getSeriesCount(); i++) {
             RMGraphPartSeries series = getSeries(i);
-            e.add(anArchiver.toXML(series, this));
+            e.add(anArchiver.writeObjectToXml(series, this));
         }
 
         // Archive Draw3d, ColorItems

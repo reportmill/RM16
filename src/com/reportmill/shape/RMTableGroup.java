@@ -438,7 +438,7 @@ public class RMTableGroup extends RMParentShape {
 
             // Get table xml, unarchive table, add child table and recurse for child table's child tables
             XMLElement tableXML = anElement.get(i);
-            RMTable table = (RMTable) anArchiver.fromXML(tableXML, this);
+            RMTable table = (RMTable) anArchiver.readObjectFromXml(tableXML, this);
             addChildTable(table, aParentTable);
             if (!MathUtils.equals(table.getWidth(), getWidth()) && anArchiver.getVersion() < 14) fixWidths(table);
             fromXMLChildTables(anArchiver, tableXML, table);

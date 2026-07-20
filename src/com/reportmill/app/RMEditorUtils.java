@@ -635,20 +635,19 @@ public class RMEditorUtils {
     /**
      * Returns the font of editor's selected shape.
      */
-    public static RMFont getFont(RMEditor anEditor)
+    public static Font getFont(RMEditor anEditor)
     {
-        RMFont font = null;
+        Font font = null;
         for (int i = 0, iMax = anEditor.getSelectedOrSuperSelectedShapeCount(); i < iMax && font == null; i++) {
             RMShape shape = anEditor.getSelectedOrSuperSelectedShape(i);
-            RMTool<?> tool = anEditor.getTool(shape);
-            font = tool.getFont(anEditor, shape);
+            font = shape.getFont();
         }
         for (int i = 0, iMax = anEditor.getSelectedOrSuperSelectedShapeCount(); i < iMax && font == null; i++) {
             RMShape shape = anEditor.getSelectedOrSuperSelectedShape(i);
             RMTool<?> tool = anEditor.getTool(shape);
             font = tool.getFontDeep(anEditor, shape);
         }
-        return font != null ? font : RMFont.getDefaultFont();
+        return font != null ? font : Font.getDefaultFont();
     }
 
     /**
@@ -656,11 +655,10 @@ public class RMEditorUtils {
      */
     public static void setFontFamily(RMEditor anEditor, Font aFont)
     {
-        RMFont font = RMFont.get(aFont);
         for (int i = 0, iMax = anEditor.getSelectedOrSuperSelectedShapeCount(); i < iMax; i++) {
             RMShape shape = anEditor.getSelectedOrSuperSelectedShape(i);
             RMTool<?> tool = anEditor.getTool(shape);
-            tool.setFontKeyDeep(anEditor, shape, RMTool.FontFamily_Key, font);
+            tool.setFontKeyDeep(anEditor, shape, RMTool.FontFamily_Key, aFont);
         }
     }
 
@@ -669,11 +667,10 @@ public class RMEditorUtils {
      */
     public static void setFontName(RMEditor anEditor, Font aFont)
     {
-        RMFont font = RMFont.get(aFont);
         for (int i = 0, iMax = anEditor.getSelectedOrSuperSelectedShapeCount(); i < iMax; i++) {
             RMShape shape = anEditor.getSelectedOrSuperSelectedShape(i);
             RMTool<?> tool = anEditor.getTool(shape);
-            tool.setFontKeyDeep(anEditor, shape, RMTool.FontName_Key, font);
+            tool.setFontKeyDeep(anEditor, shape, RMTool.FontName_Key, aFont);
         }
     }
 

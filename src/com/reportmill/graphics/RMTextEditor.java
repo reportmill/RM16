@@ -80,7 +80,7 @@ public class RMTextEditor extends TextAdapter {
     /**
      * Returns the font of the current selection or cursor.
      */
-    public RMFont getFont()  { return getSelStyle().getFont(); }
+    public Font getFont()  { return getSelStyle().getFont(); }
 
     /**
      * Sets the font of the current selection or cursor.

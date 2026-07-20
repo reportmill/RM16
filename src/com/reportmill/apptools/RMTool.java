@@ -260,26 +260,9 @@ public class RMTool<T extends RMShape> extends ViewController {
     /**
      * Returns the font for the given shape.
      */
-    public RMFont getFont(RMEditor anEditor, RMShape aShape)
+    public Font getFontDeep(RMEditor anEditor, RMShape aShape)
     {
-        return aShape.getFont();
-    }
-
-    /**
-     * Sets the font for the given shape.
-     */
-    public void setFont(RMEditor anEditor, RMShape aShape, RMFont aFont)
-    {
-        aShape.setFont(aFont);
-    }
-
-    /**
-     * Returns the font for the given shape.
-     */
-    public RMFont getFontDeep(RMEditor anEditor, RMShape aShape)
-    {
-        // Look for font from shape
-        RMFont font = getFont(anEditor, aShape);
+        Font font = aShape.getFont();
 
         // If not found, look for font in children
         for (int i = 0, iMax = aShape.getChildCount(); i < iMax && font == null; i++)
@@ -292,7 +275,6 @@ public class RMTool<T extends RMShape> extends ViewController {
             font = tool.getFontDeep(anEditor, child);
         }
 
-        // Return font
         return font;
     }
 
@@ -301,28 +283,21 @@ public class RMTool<T extends RMShape> extends ViewController {
      */
     public void setFontKey(RMEditor anEditor, RMShape aShape, String aKey, Object aVal)
     {
-        // Get current font
-        RMFont font = getFont(anEditor, aShape);
+        Font font = aShape.getFont();
 
-        // Handle given key
         switch (aKey) {
 
-            // Handle FontName
-            case FontName_Key: {
-
-                // Get new font for name and current shape size and set
-                RMFont aFont = (RMFont) aVal;
-                RMFont font2 = font != null ? aFont.copyForSize(font.getSize()) : aFont;
-                setFont(anEditor, aShape, font2);
-                break;
+            // Handle FontName: Get new font for name and current shape size and set
+            case FontName_Key -> {
+                Font aFont = (Font) aVal;
+                Font font2 = font != null ? aFont.copyForSize(font.getSize()) : aFont;
+                aShape.setFont(font2);
             }
 
-            // Handle FontFamily
-            case FontFamily_Key: {
-
-                // Get new font for given font family font and current shape font size/style and set
-                RMFont aFont = (RMFont) aVal;
-                RMFont font2 = aFont;
+            // Handle FontFamily: Get new font for given font family font and current shape font size/style and set
+            case FontFamily_Key -> {
+                Font aFont = (Font) aVal;
+                Font font2 = aFont;
                 if (font != null) {
                     if (font.isBold() != font2.isBold() && font2.getBold() != null)
                         font2 = font2.getBold();
@@ -330,59 +305,43 @@ public class RMTool<T extends RMShape> extends ViewController {
                         font2 = font2.getItalic();
                     font2 = font2.copyForSize(font.getSize());
                 }
-                setFont(anEditor, aShape, font2);
-                break;
+                aShape.setFont(font2);
             }
 
-            // Handle FontSize
-            case FontSize_Key: {
-
-                // Get new font for current shape font at new size and set
+            // Handle FontSize: Get new font for current shape font at new size and set
+            case FontSize_Key -> {
                 double aSize = Convert.doubleValue(aVal);
                 if (font == null) return;
-                RMFont font2 = font.copyForSize(aSize);
-                setFont(anEditor, aShape, font2);
-                break;
+                aShape.setFont(font.copyForSize(aSize));
             }
 
-            // Handle FontSizeDelta
-            case FontSizeDelta_Key: {
-
-                // Get new font for current shape font at new size and set
+            // Handle FontSizeDelta: Get new font for current shape font at new size and set
+            case FontSizeDelta_Key -> {
                 double aSize = Convert.doubleValue(aVal);
                 if (font == null) return;
-                RMFont font2 = font.copyForSize(font.getSize() + aSize);
-                setFont(anEditor, aShape, font2);
-                break;
+                aShape.setFont(font.copyForSize(font.getSize() + aSize));
             }
 
-            // Handle FontBold
-            case FontBold_Key: {
-
-                // Get new font
+            // Handle FontBold: Get new font
+            case FontBold_Key -> {
                 boolean aFlag = Convert.boolValue(aVal);
                 if (font == null || font.isBold() == aFlag) return;
-                RMFont font2 = font.getBold();
+                Font font2 = font.getBold();
                 if (font2 == null) return;
-                setFont(anEditor, aShape, font2);
-                break;
+                aShape.setFont(font2);
             }
 
             // Handle FontItalic
-            case FontItalic_Key: {
-
-                // Get new font
+            case FontItalic_Key -> {
                 boolean aFlag = Convert.boolValue(aVal);
                 if (font == null || font.isItalic() == aFlag) return;
-                RMFont font2 = font.getItalic();
+                Font font2 = font.getItalic();
                 if (font2 == null) return;
-                setFont(anEditor, aShape, font2);
-                break;
+                aShape.setFont(font2);
             }
 
             // Handle anything else
-            default:
-                System.err.println("RMTool.setFontKey: Unknown key: " + aKey);
+            default -> System.err.println("RMTool.setFontKey: Unknown key: " + aKey);
         }
     }
 

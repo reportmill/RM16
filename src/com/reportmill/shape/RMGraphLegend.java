@@ -8,6 +8,7 @@ import com.reportmill.graphics.*;
 import java.util.*;
 
 import snap.geom.Rect;
+import snap.gfx.Font;
 import snap.util.*;
 
 /**
@@ -16,18 +17,23 @@ import snap.util.*;
 public class RMGraphLegend extends RMParentShape {
 
     // The legend text
-    String _legendText;
+    private String _legendText;
 
     // The font
-    RMFont _font;
+    private Font _font;
+
+    /**
+     * Constructor.
+     */
+    public RMGraphLegend()
+    {
+        super();
+    }
 
     /**
      * Returns the legend text.
      */
-    public String getLegendText()
-    {
-        return _legendText;
-    }
+    public String getLegendText()  { return _legendText; }
 
     /**
      * Sets the legend text.
@@ -50,23 +56,17 @@ public class RMGraphLegend extends RMParentShape {
     /**
      * Returns whether font has been set.
      */
-    public boolean isFontSet()
-    {
-        return _font != null;
-    }
+    public boolean isFontSet()  { return _font != null; }
 
     /**
      * Return current font.
      */
-    public RMFont getFont()
-    {
-        return _font != null ? _font : RMFont.Helvetica10;
-    }
+    public Font getFont()  { return _font != null ? _font : Font.Arial10; }
 
     /**
      * Set current font.
      */
-    public void setFont(RMFont aFont)
+    public void setFont(Font aFont)
     {
         _font = aFont;
     }

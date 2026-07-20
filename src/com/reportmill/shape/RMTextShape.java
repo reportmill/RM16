@@ -183,17 +183,17 @@ public class RMTextShape extends RMRectShape {
     /**
      * Returns the font for char 0.
      */
-    public RMFont getFont()
+    public Font getFont()
     {
         if (isTextEditorSet())
-            return RMFont.get(getTextEditor().getFont());
-        return RMFont.get(getXString().getFontAt(0));
+            return getTextEditor().getFont();
+        return getXString().getFontAt(0);
     }
 
     /**
      * Sets the font for all characters.
      */
-    public void setFont(RMFont aFont)
+    public void setFont(Font aFont)
     {
         if (isTextEditorSet())
             getTextEditor().setFont(aFont);

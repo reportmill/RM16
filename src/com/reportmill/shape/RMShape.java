@@ -883,7 +883,7 @@ public class RMShape implements Cloneable, Archivable, Key.GetSet {
     /**
      * Returns the font for the shape (defaults to parent font).
      */
-    public RMFont getFont()
+    public Font getFont()
     {
         return getParent() != null ? getParent().getFont() : null;
     }
@@ -891,7 +891,7 @@ public class RMShape implements Cloneable, Archivable, Key.GetSet {
     /**
      * Sets the font for the shape.
      */
-    public void setFont(RMFont aFont)  { }
+    public void setFont(Font aFont)  { }
 
     /**
      * Returns whether the shape is underlined.
@@ -1891,15 +1891,15 @@ public class RMShape implements Cloneable, Archivable, Key.GetSet {
                     else size = getFont() == null ? 12 : getFont().getSize();
 
                     // Get root font (use default font if not found), and modified font
-                    RMFont font = getFont();
+                    Font font = getFont();
                     if (font == null)
-                        font = RMFont.getDefaultFont();
+                        font = Font.getDefaultFont();
                     if (fontStr.equalsIgnoreCase("Bold"))
                         font = font.getBold();
                     else if (fontStr.equalsIgnoreCase("Italic"))
                         font = font.getItalic();
                     else if (!fontStr.isEmpty()) // If there is anything in string, try to parse font name
-                        font = new RMFont(fontStr, size);
+                        font = Font.getFont(fontStr, size);
 
                     // Get font at right size and apply it
                     font = font.copyForSize(size);
@@ -2416,7 +2416,7 @@ public class RMShape implements Cloneable, Archivable, Key.GetSet {
         // Unarchive font
         XMLElement fontXML = anElement.getElement("font");
         if (fontXML != null)
-            setFont(RMFont.get(RMArchiverHpr.fontFromXML(fontXML)));
+            setFont(RMArchiverHpr.fontFromXML(fontXML));
 
         // Unarchive Opacity, Visible
         setOpacity(anElement.getAttributeFloatValue("opacity", 1));

@@ -3,6 +3,7 @@
  */
 package com.reportmill.shape;
 import com.reportmill.graphics.*;
+import snap.gfx.Font;
 import snap.util.*;
 
 /**
@@ -11,24 +12,29 @@ import snap.util.*;
 public class RMGraphPartLabelAxis extends RMShape {
 
     // Whether to show axis labels
-    boolean _showAxisLabels = true;
+    private boolean _showAxisLabels = true;
 
     // Whether to show grid lines between label axis sections
-    boolean _showGridLines = true;
+    private boolean _showGridLines = true;
 
     // The label axis item key
-    String _itemKey = "@Row@";
+    private String _itemKey = "@Row@";
 
     // The font
-    RMFont _font;
+    private Font _font;
+
+    /**
+     * Constructor.
+     */
+    public RMGraphPartLabelAxis()
+    {
+        super();
+    }
 
     /**
      * Returns whether the graph shows axis labels.
      */
-    public boolean getShowAxisLabels()
-    {
-        return _showAxisLabels;
-    }
+    public boolean getShowAxisLabels()  { return _showAxisLabels; }
 
     /**
      * Sets whether the graph shows axis labels.
@@ -42,10 +48,7 @@ public class RMGraphPartLabelAxis extends RMShape {
     /**
      * Returns whether the graph shows grid lines between label axis sections.
      */
-    public boolean getShowGridLines()
-    {
-        return _showGridLines;
-    }
+    public boolean getShowGridLines()  { return _showGridLines; }
 
     /**
      * Sets whether the graph shows grid lines between label axis sections.
@@ -59,10 +62,7 @@ public class RMGraphPartLabelAxis extends RMShape {
     /**
      * Returns the item key.
      */
-    public String getItemKey()
-    {
-        return _itemKey;
-    }
+    public String getItemKey()  { return _itemKey; }
 
     /**
      * Sets the item key.
@@ -76,23 +76,17 @@ public class RMGraphPartLabelAxis extends RMShape {
     /**
      * Returns whether font has been set.
      */
-    public boolean isFontSet()
-    {
-        return _font != null;
-    }
+    public boolean isFontSet()  { return _font != null; }
 
     /**
      * Return current font.
      */
-    public RMFont getFont()
-    {
-        return _font != null ? _font : RMFont.Helvetica10;
-    }
+    public Font getFont()  { return _font != null ? _font : Font.Arial10; }
 
     /**
      * Set current font.
      */
-    public void setFont(RMFont aFont)
+    public void setFont(Font aFont)
     {
         _font = aFont;
         relayoutParent();
@@ -119,7 +113,7 @@ public class RMGraphPartLabelAxis extends RMShape {
         // Archive ShowAxisLabels, ShowGridLines, ItemKey
         if (!_showAxisLabels) e.add("show-labels", false);
         if (!_showGridLines) e.add("show-grid", false);
-        if (_itemKey != null && _itemKey.length() > 0) e.add("item-key", _itemKey);
+        if (_itemKey != null && !_itemKey.isEmpty()) e.add("item-key", _itemKey);
 
         // Return xml element
         return e;
@@ -141,5 +135,4 @@ public class RMGraphPartLabelAxis extends RMShape {
         // Return this graph
         return this;
     }
-
 }

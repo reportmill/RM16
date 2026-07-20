@@ -5,6 +5,7 @@ package com.reportmill.shape;
 import com.reportmill.graphics.*;
 import java.util.*;
 import snap.gfx.Effect;
+import snap.gfx.Font;
 import snap.text.TextFormat;
 import snap.util.*;
 
@@ -116,162 +117,102 @@ public class RMGraphPartSeries extends RMShape {
     /**
      * Returns the proxy, determined by the current position.
      */
-    public RMTextShape getProxy()
-    {
-        return getLabelShape(getPosition());
-    }
+    public RMTextShape getProxy()  { return getLabelShape(getPosition()); }
 
     /**
      * Override to handle proxy.
      */
-    public RMStroke getStroke()
-    {
-        return getProxy().getStroke();
-    }
+    public RMStroke getStroke()  { return getProxy().getStroke(); }
 
     /**
      * Override to handle proxy.
      */
-    public void setStroke(RMStroke aStroke)
-    {
-        getProxy().setStroke(aStroke);
-    }
+    public void setStroke(RMStroke aStroke)  { getProxy().setStroke(aStroke); }
 
     /**
      * Override to handle proxy.
      */
-    public RMFill getFill()
-    {
-        return getProxy().getFill();
-    }
+    public RMFill getFill()  { return getProxy().getFill(); }
 
     /**
      * Override to handle proxy.
      */
-    public void setFill(RMFill aFill)
-    {
-        getProxy().setFill(aFill);
-    }
+    public void setFill(RMFill aFill)  { getProxy().setFill(aFill); }
 
     /**
      * Override to handle proxy.
      */
-    public Effect getEffect()
-    {
-        return getProxy().getEffect();
-    }
+    public Effect getEffect()  { return getProxy().getEffect(); }
 
     /**
      * Override to handle proxy.
      */
-    public void setEffect(Effect anEffect)
-    {
-        getProxy().setEffect(anEffect);
-    }
+    public void setEffect(Effect anEffect)  { getProxy().setEffect(anEffect); }
 
     /**
      * Override to handle proxy.
      */
-    public double getOpacity()
-    {
-        return getProxy().getOpacity();
-    }
+    public double getOpacity()  { return getProxy().getOpacity(); }
 
     /**
      * Override to handle proxy.
      */
-    public void setOpacity(double aValue)
-    {
-        getProxy().setOpacity(aValue);
-    }
+    public void setOpacity(double aValue)  { getProxy().setOpacity(aValue); }
 
     /**
      * Override to handle proxy.
      */
-    public RMColor getTextColor()
-    {
-        return getProxy().getTextColor();
-    }
+    public RMColor getTextColor()  { return getProxy().getTextColor(); }
 
     /**
      * Override to handle proxy.
      */
-    public void setTextColor(RMColor aColor)
-    {
-        getProxy().setTextColor(aColor);
-    }
+    public void setTextColor(RMColor aColor)  { getProxy().setTextColor(aColor); }
 
     /**
      * Override to handle proxy.
      */
-    public RMFont getFont()
-    {
-        return getProxy().getFont();
-    }
+    public Font getFont()  { return getProxy().getFont(); }
 
     /**
      * Override to handle proxy.
      */
-    public void setFont(RMFont aFont)
-    {
-        getProxy().setFont(aFont);
-    }
+    public void setFont(Font aFont)  { getProxy().setFont(aFont); }
 
     /**
      * Override to handle proxy.
      */
-    public boolean isUnderlined()
-    {
-        return getProxy().isUnderlined();
-    }
+    public boolean isUnderlined()  { return getProxy().isUnderlined(); }
 
     /**
      * Override to handle proxy.
      */
-    public void setUnderlined(boolean aFlag)
-    {
-        getProxy().setUnderlined(aFlag);
-    }
+    public void setUnderlined(boolean aFlag)  { getProxy().setUnderlined(aFlag); }
 
     /**
      * Override to handle proxy.
      */
-    public TextFormat getFormat()
-    {
-        return getProxy().getFormat();
-    }
+    public TextFormat getFormat()  { return getProxy().getFormat(); }
 
     /**
      * Override to handle proxy.
      */
-    public void setFormat(TextFormat aFormat)
-    {
-        getProxy().setFormat(aFormat);
-    }
+    public void setFormat(TextFormat aFormat)  { getProxy().setFormat(aFormat); }
 
     /**
      * Override to handle proxy.
      */
-    public String getURL()
-    {
-        return getProxy() != null ? getProxy().getURL() : super.getURL();
-    }
+    public String getURL()  { return getProxy().getURL(); }
 
     /**
      * Override to handle proxy.
      */
-    public void setURL(String aURL)
-    {
-        getProxy().setURL(aURL);
-    }
+    public void setURL(String aURL)  { getProxy().setURL(aURL); }
 
     /**
      * Override to handle proxy.
      */
-    public double getRoll()
-    {
-        return getProxy().getRoll();
-    }
+    public double getRoll()  { return getProxy().getRoll(); }
 
     /**
      * Override to handle proxy.
@@ -344,5 +285,4 @@ public class RMGraphPartSeries extends RMShape {
         // Return this graph
         return this;
     }
-
 }

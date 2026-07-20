@@ -3,6 +3,7 @@
  */
 package com.reportmill.shape;
 import com.reportmill.graphics.*;
+import snap.gfx.Font;
 import snap.util.*;
 
 /**
@@ -11,17 +12,18 @@ import snap.util.*;
 public class RMLinkedText extends RMTextShape {
 
     // Points to previous text
-    RMTextShape _previousText;
+    private RMTextShape _previousText;
 
     /**
-     * Creates a new linked text.
+     * Constructor.
      */
     public RMLinkedText()
     {
+        super();
     }
 
     /**
-     * Creates a new overfloat text for the given text shape.
+     * Constructor.
      */
     public RMLinkedText(RMTextShape aText)
     {
@@ -33,10 +35,7 @@ public class RMLinkedText extends RMTextShape {
     /**
      * Returns the text that this text is linked from.
      */
-    public RMTextShape getPreviousText()
-    {
-        return _previousText;
-    }
+    public RMTextShape getPreviousText()  { return _previousText; }
 
     /**
      * Sets the text that this text is linked from.
@@ -49,18 +48,12 @@ public class RMLinkedText extends RMTextShape {
     /**
      * Returns the same xstring as previoust text.
      */
-    public RMXString getXString()
-    {
-        return getPreviousText().getXString();
-    }
+    public RMXString getXString()  { return getPreviousText().getXString(); }
 
     /**
      * Returns the font for char 0 of the start text.
      */
-    public RMFont getFont()
-    {
-        return getPreviousText().getFont();
-    }
+    public Font getFont()  { return getPreviousText().getFont(); }
 
     /**
      * Overrides text implementation to return index where previous text left off.
@@ -100,5 +93,4 @@ public class RMLinkedText extends RMTextShape {
         // Return element
         return e;
     }
-
 }

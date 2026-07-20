@@ -371,17 +371,15 @@ public class RMEditorStyler extends Styler {
      */
     public void setFontForShape(RMShape aShape, Font aFont)
     {
-        RMFont font = RMFont.get(aFont);
-
         // Handle RMTextShape + TextEditorSet
         RMTextEditor textEditor = getTextEditorForShape(aShape);
         if (textEditor != null) {
-            textEditor.setFont(font);
+            textEditor.setFont(aFont);
             return;
         }
 
         // Set in shape
-        aShape.setFont(font);
+        aShape.setFont(aFont);
     }
 
     /**
@@ -390,11 +388,8 @@ public class RMEditorStyler extends Styler {
     private static RMTextEditor getTextEditorForShape(RMShape aShape)
     {
         // Handle RMTextShape with TextEditorSet
-        if (aShape instanceof RMTextShape) {
-            RMTextShape textShape = (RMTextShape) aShape;
-            if (textShape.isTextEditorSet())
-                return textShape.getTextEditor();
-        }
+        if (aShape instanceof RMTextShape textShape && textShape.isTextEditorSet())
+            return textShape.getTextEditor();
 
         // Return not found
         return null;
@@ -410,10 +405,8 @@ public class RMEditorStyler extends Styler {
             return null;
 
         // Handle BorderStroke
-        if (aStroke instanceof RMBorderStroke) {
-            RMBorderStroke bs = (RMBorderStroke) aStroke;
-            return new Borders.EdgeBorder(bs.isShowTop(), bs.isShowRight(), bs.isShowBottom(), bs.isShowLeft());
-        }
+        if (aStroke instanceof RMBorderStroke borderStroke)
+            return new Borders.EdgeBorder(borderStroke.isShowTop(), borderStroke.isShowRight(), borderStroke.isShowBottom(), borderStroke.isShowLeft());
 
         // Handle normal stroke
         Color color = aStroke.getColor();
@@ -431,10 +424,8 @@ public class RMEditorStyler extends Styler {
             return null;
 
         // Handle EdgeBorder
-        if (aBorder instanceof Borders.EdgeBorder) {
-            Borders.EdgeBorder eb = (Borders.EdgeBorder) aBorder;
-            return new RMBorderStroke(eb.isShowTop(), eb.isShowRight(), eb.isShowBottom(), eb.isShowLeft());
-        }
+        if (aBorder instanceof Borders.EdgeBorder edgeBorder)
+            return new RMBorderStroke(edgeBorder.isShowTop(), edgeBorder.isShowRight(), edgeBorder.isShowBottom(), edgeBorder.isShowLeft());
 
         // Handle normal stroke
         RMColor color = RMColor.get(aBorder.getColor());

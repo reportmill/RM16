@@ -163,7 +163,6 @@ public class RMArchiver {
 
         // Graphics
         classMap.put("color", RMColor.class);
-        classMap.put("font", RMFont.class);
         classMap.put("format", RMArchiverHpr.RMFormatStub.class);
         classMap.put("pgraph", RMParagraph.class);
         classMap.put("xstring", RMXString.class);

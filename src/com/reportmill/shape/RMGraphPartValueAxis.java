@@ -4,7 +4,6 @@
 package com.reportmill.shape;
 import com.reportmill.base.*;
 import com.reportmill.graphics.RMColor;
-import com.reportmill.graphics.RMFont;
 import snap.gfx.Font;
 import snap.text.TextFormat;
 import snap.util.*;
@@ -15,31 +14,32 @@ import snap.util.*;
 public class RMGraphPartValueAxis extends RMTextShape {
 
     // Whether to draw axis labels
-    boolean _showAxisLabels = true;
+    private boolean _showAxisLabels = true;
 
     // Whether to show major grid lines
-    boolean _showMajorGrid = true;
+    private boolean _showMajorGrid = true;
 
     // Whether to show minor grid lines
-    boolean _showMinorGrid = true;
+    private boolean _showMinorGrid = true;
 
     // The axis minimum
-    float _axisMin = Float.MIN_VALUE;
+    private float _axisMin = Float.MIN_VALUE;
 
     // The axis maximum
-    float _axisMax = Float.MIN_VALUE;
+    private float _axisMax = Float.MIN_VALUE;
 
     // The number of axis steps
-    int _axisCount = 0;
+    private int _axisCount = 0;
 
     // Whether shape is unarchiving
-    boolean _unarchiving;
+    private boolean _unarchiving;
 
     /**
      * Constructor.
      */
     public RMGraphPartValueAxis()
     {
+        super();
         getRichText().setDefaultFont(Font.Arial10);
     }
 
@@ -60,10 +60,7 @@ public class RMGraphPartValueAxis extends RMTextShape {
     /**
      * Returns whether the graph draws the major axis.
      */
-    public boolean getShowMajorGrid()
-    {
-        return _showMajorGrid;
-    }
+    public boolean getShowMajorGrid()  { return _showMajorGrid; }
 
     /**
      * Sets whether the graph draws the major axis.
@@ -77,10 +74,7 @@ public class RMGraphPartValueAxis extends RMTextShape {
     /**
      * Returns whether the graph draws the minor axis.
      */
-    public boolean getShowMinorGrid()
-    {
-        return _showMinorGrid;
-    }
+    public boolean getShowMinorGrid()  { return _showMinorGrid; }
 
     /**
      * Sets whether the graph draws the minor axis.
@@ -94,10 +88,7 @@ public class RMGraphPartValueAxis extends RMTextShape {
     /**
      * Returns the axis minimum.
      */
-    public float getAxisMin()
-    {
-        return _axisMin;
-    }
+    public float getAxisMin()  { return _axisMin; }
 
     /**
      * Sets the axis minimum.
@@ -111,10 +102,7 @@ public class RMGraphPartValueAxis extends RMTextShape {
     /**
      * Returns the axis maximum.
      */
-    public float getAxisMax()
-    {
-        return _axisMax;
-    }
+    public float getAxisMax()  { return _axisMax; }
 
     /**
      * Sets the axis maximum.
@@ -128,10 +116,7 @@ public class RMGraphPartValueAxis extends RMTextShape {
     /**
      * Returns the number of increments in the axis.
      */
-    public int getAxisCount()
-    {
-        return _axisCount;
-    }
+    public int getAxisCount()  { return _axisCount; }
 
     /**
      * Sets the number of increments in the axis.
@@ -145,7 +130,7 @@ public class RMGraphPartValueAxis extends RMTextShape {
     /**
      * Set current font.
      */
-    public void setFont(RMFont aFont)
+    public void setFont(Font aFont)
     {
         if (getXString().isEmpty() && !_unarchiving)
             getXString().addChars(" ");
@@ -235,5 +220,4 @@ public class RMGraphPartValueAxis extends RMTextShape {
         // Return this graph
         return this;
     }
-
 }

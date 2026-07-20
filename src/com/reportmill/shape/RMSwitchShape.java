@@ -378,7 +378,7 @@ public class RMSwitchShape extends RMParentShape {
             for (int i = 0, iMax = alternatesXML.size(); i < iMax; i++) {
                 XMLElement altElm = alternatesXML.get(i);
                 String altKey = altElm.getAttributeValue("alt-key");
-                RMSwitchShape shape = (RMSwitchShape) anArchiver.readObjectFromXml(altElm, this);
+                RMSwitchShape shape = (RMSwitchShape) anArchiver.readObjectFromXml(altElm);
                 shape._parent = null; // Bogus, this can go when shape unarchival stops setting this
                 getAlternates(true).put(altKey, shape);
             }

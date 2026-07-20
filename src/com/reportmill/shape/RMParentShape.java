@@ -18,54 +18,50 @@ import snap.util.*;
 public class RMParentShape extends RMShape implements PropChange.DoChange {
 
     // The children of this shape
-    List<RMShape> _children = new ArrayList();
+    protected List<RMShape> _children = new ArrayList<>();
 
     // Whether children need layout
-    boolean _needsLayout, _needsLayoutDeep;
+    private boolean _needsLayout, _needsLayoutDeep;
 
     // Whether layout is in the process of being done
-    boolean _inLayout, _inLayoutDeep;
+    protected boolean _inLayout, _inLayoutDeep;
 
     // A listener to catch child PropChange (for editor undo)
-    PropChangeListener _childPCL;
+    private PropChangeListener _childPCL;
 
     // A listener to catch child DeepChange (for editor undo)
-    DeepChangeListener _childDCL;
+    private DeepChangeListener _childDCL;
 
     // Constants for properties
     public static final String Child_Prop = "Child";
 
     /**
+     * Constructor.
+     */
+    public RMParentShape()
+    {
+        super();
+    }
+
+    /**
      * Returns the number of children associated with this shape.
      */
-    public int getChildCount()
-    {
-        return _children.size();
-    }
+    public int getChildCount()  { return _children.size(); }
 
     /**
      * Returns the child at the given index.
      */
-    public RMShape getChild(int anIndex)
-    {
-        return _children.get(anIndex);
-    }
+    public RMShape getChild(int anIndex)  { return _children.get(anIndex); }
 
     /**
      * Returns the list of children associated with this shape.
      */
-    public List<RMShape> getChildren()
-    {
-        return _children;
-    }
+    public List<RMShape> getChildren()  { return _children; }
 
     /**
      * Adds the given child to the end of this shape's children list.
      */
-    public final void addChild(RMShape aChild)
-    {
-        addChild(aChild, getChildCount());
-    }
+    public final void addChild(RMShape aChild)  { addChild(aChild, getChildCount()); }
 
     /**
      * Adds the given child to this shape's children list at the given index.
@@ -97,7 +93,7 @@ public class RMParentShape extends RMShape implements PropChange.DoChange {
     }
 
     /**
-     * Remove's the child at the given index from this shape's children list.
+     * Removes the child at the given index from this shape's children list.
      */
     public RMShape removeChild(int anIndex)
     {
@@ -134,26 +130,17 @@ public class RMParentShape extends RMShape implements PropChange.DoChange {
     /**
      * Returns the index of the given child in this shape's children list.
      */
-    public int indexOfChild(RMShape aChild)
-    {
-        return ListUtils.indexOfId(_children, aChild);
-    }
+    public int indexOfChild(RMShape aChild)  { return ListUtils.indexOfId(_children, aChild); }
 
     /**
      * Returns the last child of this shape.
      */
-    public RMShape getChildLast()
-    {
-        return getChildCount() > 0 ? getChild(getChildCount() - 1) : null;
-    }
+    public RMShape getChildLast()  { return getChildCount() > 0 ? getChild(getChildCount() - 1) : null; }
 
     /**
      * Returns a copy of the children as an array.
      */
-    public RMShape[] getChildArray()
-    {
-        return _children.toArray(new RMShape[getChildCount()]);
-    }
+    public RMShape[] getChildArray()  { return _children.toArray(new RMShape[0]); }
 
     /**
      * Removes all children from this shape (in reverse order).
@@ -169,16 +156,17 @@ public class RMParentShape extends RMShape implements PropChange.DoChange {
     public Rect getBoundsOfChildren()
     {
         // Iterate over (visible) children and union child frames
-        Rect rect = null;
+        Rect childrenBounds = null;
         for (int i = 0, iMax = getChildCount(); i < iMax; i++) {
             RMShape child = getChild(i);
             if (!child.isVisible()) continue;
-            if (rect == null) rect = child.getFrame();
-            else rect.unionEvenIfEmpty(child.getFrame());
+            if (childrenBounds == null)
+                childrenBounds = child.getFrame();
+            else childrenBounds.unionEvenIfEmpty(child.getFrame());
         }
 
         // Return frame (or bounds inside if null)
-        return rect != null ? rect : getBoundsInside();
+        return childrenBounds != null ? childrenBounds : getBoundsInside();
     }
 
     /**
@@ -232,7 +220,7 @@ public class RMParentShape extends RMShape implements PropChange.DoChange {
      */
     public <T extends RMShape> List<T> getChildrenWithClass(Class<T> aClass)
     {
-        return getChildrenWithClass(aClass, new ArrayList());
+        return getChildrenWithClass(aClass, new ArrayList<>());
     }
 
     /**
@@ -317,30 +305,15 @@ public class RMParentShape extends RMShape implements PropChange.DoChange {
     }
 
     /**
-     * Returns whether children need to be laid out.
-     */
-    public boolean isNeedsLayout()
-    {
-        return _needsLayout;
-    }
-
-    /**
      * Sets whether children need to be laid out.
      */
-    protected void setNeedsLayout(boolean aValue)
+    void setNeedsLayout(boolean aValue)
     {
         if (aValue == _needsLayout || _inLayout) return;
         _needsLayout = aValue;
         RMParentShape par = getParent();
-        if (par != null) par.setNeedsLayoutDeep(true);
-    }
-
-    /**
-     * Returns whether any children need layout.
-     */
-    public boolean isNeedsLayoutDeep()
-    {
-        return _needsLayoutDeep;
+        if (par != null)
+            par.setNeedsLayoutDeep(true);
     }
 
     /**
@@ -358,10 +331,7 @@ public class RMParentShape extends RMShape implements PropChange.DoChange {
     /**
      * Returns whether shape is currently performing layout.
      */
-    public boolean isInLayout()
-    {
-        return _inLayout;
-    }
+    public boolean isInLayout()  { return _inLayout; }
 
     /**
      * Lays out children deep.
@@ -388,10 +358,9 @@ public class RMParentShape extends RMShape implements PropChange.DoChange {
     protected void layoutDeepImpl()
     {
         for (RMShape child : getChildren())
-            if (child instanceof RMParentShape) {
-                RMParentShape par = (RMParentShape) child;
-                if (par._needsLayout || par._needsLayoutDeep)
-                    par.layoutDeep();
+            if (child instanceof RMParentShape parentShape) {
+                if (parentShape._needsLayout || parentShape._needsLayoutDeep)
+                    parentShape.layoutDeep();
             }
     }
 
@@ -412,17 +381,12 @@ public class RMParentShape extends RMShape implements PropChange.DoChange {
     /**
      * Called to reposition/resize children.
      */
-    protected void layoutImpl()
-    {
-    }
+    protected void layoutImpl()  { }
 
     /**
      * Returns whether given child shape is hittable.
      */
-    protected boolean isHittable(RMShape aChild)
-    {
-        return aChild.isVisible();
-    }
+    protected boolean isHittable(RMShape aChild)  { return aChild.isVisible(); }
 
     /**
      * Override to trigger layout.
@@ -465,8 +429,7 @@ public class RMParentShape extends RMShape implements PropChange.DoChange {
      */
     public List<RMShape> getChildrenIntersecting(Shape aPath)
     {
-        // Create list for intersecting children
-        List hit = new ArrayList();
+        List<RMShape> hitShapes = new ArrayList<>();
 
         // Iterate over children
         for (int i = 0, iMax = getChildCount(); i < iMax; i++) {
@@ -482,11 +445,10 @@ public class RMParentShape extends RMShape implements PropChange.DoChange {
             // Get path converted to child and if child intersects path, add child to hit list
             Shape path = child.parentToLocal(aPath);
             if (child.intersects(path))
-                hit.add(child);
+                hitShapes.add(child);
         }
 
-        // Return hit list
-        return hit;
+        return hitShapes;
     }
 
     /**
@@ -533,9 +495,9 @@ public class RMParentShape extends RMShape implements PropChange.DoChange {
                 bottomShape.addChild(childBottom);
 
                 // Reset autosizing so that child bottom is nailed to bottomShape top
-                StringBuffer as = new StringBuffer(childBottom.getAutosizing());
-                as.setCharAt(4, '-');
-                childBottom.setAutosizing(as.toString());
+                StringBuilder autosizing = new StringBuilder(childBottom.getAutosizing());
+                autosizing.setCharAt(4, '-');
+                childBottom.setAutosizing(autosizing.toString());
             }
         }
 
@@ -583,34 +545,38 @@ public class RMParentShape extends RMShape implements PropChange.DoChange {
     protected RMShape rpgChildren(ReportOwner anRptOwner, RMParentShape aParent)
     {
         RMParentShape parent = aParent;
-        ReportOwner.ShapeList slists[] = null;
+        ReportOwner.ShapeList[] shapeLists = null;
         for (int i = 0, iMax = getChildCount(); i < iMax; i++) {
             RMShape child = getChild(i);
             RMShape crpg = anRptOwner.rpg(child, aParent);
             if (crpg instanceof ReportOwner.ShapeList) {
-                if (slists == null) slists = new ReportOwner.ShapeList[iMax];
-                slists[i] = (ReportOwner.ShapeList) crpg;
+                if (shapeLists == null)
+                    shapeLists = new ReportOwner.ShapeList[iMax];
+                shapeLists[i] = (ReportOwner.ShapeList) crpg;
                 aParent.addChild(crpg.getChild(0));
             } else aParent.addChild(crpg);
         }
 
         // If ShapesList child was encountered, create a ShapesList for this shape
-        if (slists != null) {
+        if (shapeLists != null) {
             int iMax = 0;
-            for (ReportOwner.ShapeList slist : slists) if (slist != null) iMax = Math.max(iMax, slist.getChildCount());
+            for (ReportOwner.ShapeList shapeList : shapeLists)
+                if (shapeList != null)
+                    iMax = Math.max(iMax, shapeList.getChildCount());
             parent = new ReportOwner.ShapeList();
             parent.addChild(aParent);
             for (int i = 1; i < iMax; i++) {
                 RMParentShape page = clone();
                 parent.addChild(page);
-                for (int j = 0; j < slists.length; j++) {
-                    ReportOwner.ShapeList slist = slists[j];
+                for (int j = 0; j < shapeLists.length; j++) {
+                    ReportOwner.ShapeList slist = shapeLists[j];
                     if (slist == null) {
                         RMShape ch = aParent.getChild(j), clone = ch.cloneDeep();
                         page.addChild(clone);
                         if (ListUtils.containsId(anRptOwner.getPageReferenceShapes(), ch))
                             anRptOwner.addPageReferenceShape(clone);
-                    } else if (i < slist.getChildCount())
+                    }
+                    else if (i < slist.getChildCount())
                         page.addChild(slist.getChild(i));
                 }
             }
@@ -626,7 +592,7 @@ public class RMParentShape extends RMShape implements PropChange.DoChange {
     public RMParentShape clone()
     {
         RMParentShape clone = (RMParentShape) super.clone();
-        clone._children = new ArrayList();
+        clone._children = new ArrayList<>();
         clone._childPCL = null;
         clone._childDCL = null;
         return clone;
@@ -638,7 +604,8 @@ public class RMParentShape extends RMShape implements PropChange.DoChange {
     public RMParentShape cloneDeep()
     {
         RMParentShape clone = clone();
-        for (int i = 0, iMax = getChildCount(); i < iMax; i++) clone.addChild(getChild(i).cloneDeep());
+        for (int i = 0, iMax = getChildCount(); i < iMax; i++)
+            clone.addChild(getChild(i).cloneDeep());
         return clone;
     }
 
@@ -662,7 +629,8 @@ public class RMParentShape extends RMShape implements PropChange.DoChange {
             int ind = aPC.getIndex();
             if (oldC == null) addChild(newC, ind);
             else removeChild(ind);
-        } else setKeyValue(pname, newVal);
+        }
+        else setKeyValue(pname, newVal);
     }
 
     /**
@@ -670,9 +638,9 @@ public class RMParentShape extends RMShape implements PropChange.DoChange {
      */
     public XMLElement toXML(RMArchiver anArchiver)
     {
-        XMLElement e = toXMLShape(anArchiver); // Archive shape
-        toXMLChildren(anArchiver, e); // Archive children
-        return e; // Return xml element
+        XMLElement xml = toXMLShape(anArchiver);
+        toXMLChildren(anArchiver, xml);
+        return xml;
     }
 
     /**
@@ -691,7 +659,7 @@ public class RMParentShape extends RMShape implements PropChange.DoChange {
         // Archive children
         for (int i = 0, iMax = getChildCount(); i < iMax; i++) {
             RMShape child = getChild(i);
-            anElement.add(anArchiver.writeObjectToXml(child, this));
+            anElement.add(anArchiver.writeObjectToXml(child));
         }
     }
 
@@ -701,14 +669,12 @@ public class RMParentShape extends RMShape implements PropChange.DoChange {
     public RMShape fromXML(RMArchiver anArchiver, XMLElement anElement)
     {
         // Legacy
-        if (getClass() == RMParentShape.class) {
-            //if(anElement.getElement("layout")!=null) return new RMFlowShape().fromXML(anArchiver, anElement);
-            if (anElement.getName().equals("shape")) return new RMSpringShape().fromXML(anArchiver, anElement);
-        }
+        if (getClass() == RMParentShape.class && anElement.getName().equals("shape"))
+            return new RMSpringShape().fromXML(anArchiver, anElement);
 
         // Unarchive shape and children and return
-        fromXMLShape(anArchiver, anElement); // Unarchive shape
-        fromXMLChildren(anArchiver, anElement); // Unarchive children
+        fromXMLShape(anArchiver, anElement);
+        fromXMLChildren(anArchiver, anElement);
         layoutDeep();
         return this;
     }
@@ -729,14 +695,11 @@ public class RMParentShape extends RMShape implements PropChange.DoChange {
         // Iterate over child elements and unarchive shapes
         for (int i = 0, iMax = anElement.size(); i < iMax; i++) {
             XMLElement childXML = anElement.get(i);
-
-            // Get child class - if RMShape, unarchive and add
-            Class childClass = anArchiver.getClassForName(childXML.getName());
+            Class<?> childClass = anArchiver.getClassForName(childXML.getName());
             if (childClass != null && RMShape.class.isAssignableFrom(childClass)) {
-                RMShape shape = (RMShape) anArchiver.readObjectFromXml(childXML, this);
+                RMShape shape = (RMShape) anArchiver.readObjectFromXml(childXML);
                 addChild(shape);
             }
         }
     }
-
 }

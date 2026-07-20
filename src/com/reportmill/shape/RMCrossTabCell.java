@@ -330,7 +330,7 @@ public class RMCrossTabCell extends RMTextShape {
 
         // Unarchive grouping
         if (anElement.get("grouping") != null)
-            _grouping = anArchiver.readObjectFromXmlForClass(anElement.get("grouping"), RMGrouping.class, null);
+            _grouping = anArchiver.readObjectFromXmlForClass(anElement.get("grouping"), RMGrouping.class);
 
         // Return this cell
         return this;

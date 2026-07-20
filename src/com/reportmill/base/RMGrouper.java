@@ -15,19 +15,19 @@ import snap.util.*;
 public class RMGrouper implements Cloneable, RMArchiver.Archivable {
 
     // The list of groupings
-    List<RMGrouping> _groupings = new ArrayList();
+    private List<RMGrouping> _groupings = new ArrayList<>();
 
     // Selected group index (editing only)
-    int _selectedGroupingIndex = 0;
+    private int _selectedGroupingIndex = 0;
 
     // The PropChangeSupport
-    PropChangeSupport _pcs = PropChangeSupport.EMPTY;
+    private PropChangeSupport _pcs = PropChangeSupport.EMPTY;
 
     // A listener to catch RMGrouping PropChange
-    PropChangeListener _groupingLsnr = pc -> groupingDidPropChange(pc);
+    private PropChangeListener _groupingLsnr = this::handleGroupingPropChange;
 
     /**
-     * Creates an empty grouper.
+     * Constructor.
      */
     public RMGrouper()
     {
@@ -36,34 +36,22 @@ public class RMGrouper implements Cloneable, RMArchiver.Archivable {
     /**
      * Returns the number of groupings in this grouper.
      */
-    public int getGroupingCount()
-    {
-        return _groupings.size();
-    }
+    public int getGroupingCount()  { return _groupings.size(); }
 
     /**
      * Returns the grouping at the given index.
      */
-    public RMGrouping getGrouping(int anIndex)
-    {
-        return _groupings.get(anIndex);
-    }
+    public RMGrouping getGrouping(int anIndex)  { return _groupings.get(anIndex); }
 
     /**
      * Returns the list of groupings
      */
-    public List<RMGrouping> getGroupings()
-    {
-        return _groupings;
-    }
+    public List<RMGrouping> getGroupings()  { return _groupings; }
 
     /**
      * Adds a given grouping to grouper's list of groupings.
      */
-    public void addGrouping(RMGrouping aGrouping)
-    {
-        addGrouping(aGrouping, getGroupingCount());
-    }
+    public void addGrouping(RMGrouping aGrouping)  { addGrouping(aGrouping, getGroupingCount()); }
 
     /**
      * Adds a given grouping to grouper's list of groupings.
@@ -109,42 +97,23 @@ public class RMGrouper implements Cloneable, RMArchiver.Archivable {
      */
     public RMGrouping getGrouping(String aKey)
     {
-        // Get index for grouping key (just return null if not found)
         int index = indexOf(aKey);
-        if (index < 0)
-            return null;
-
-        // Return grouping for index
-        return getGrouping(index);
+        return index >= 0 ? getGrouping(index) : null;
     }
 
     /**
      * Returns the last grouping.
      */
-    public RMGrouping getGroupingLast()
-    {
-        return getGrouping(getGroupingCount() - 1);
-    }
-
-    /**
-     * Return the key for the grouping at the given index.
-     */
-    public String getGroupingKey(int anIndex)
-    {
-        return getGrouping(anIndex)._key;
-    }
+    public RMGrouping getGroupingLast()  { return getGrouping(getGroupingCount() - 1); }
 
     /**
      * Returns the index for the grouping with the given key.
      */
     public int indexOf(String aKey)
     {
-        // Iterate over groupings and return index of grouping with given key
         for (int i = 0, iMax = getGroupingCount(); i < iMax; i++)
             if (getGrouping(i).getKey().equals(aKey))
                 return i;
-
-        // Return -1 if grouping with key not found
         return -1;
     }
 
@@ -160,32 +129,26 @@ public class RMGrouper implements Cloneable, RMArchiver.Archivable {
     /**
      * Adds a new grouping with the given key.
      */
-    public RMGrouping addGroupingForKey(String aKey)
+    public void addGroupingForKey(String aKey)
     {
-        return addGroupingForKey(aKey, getGroupingCount());
+        addGroupingForKey(aKey, getGroupingCount());
     }
 
     /**
      * Adds a new grouping with the given key at the given index.
      */
-    public RMGrouping addGroupingForKey(String aKey, int anIndex)
+    public void addGroupingForKey(String aKey, int anIndex)
     {
-        // Create grouping for key
         RMGrouping grouping = new RMGrouping(aKey);
-
-        // Add grouping at given index
         addGrouping(grouping, anIndex);
-
-        // Return grouping
-        return grouping;
     }
 
     /**
      * Removes the given grouping.
      */
-    public boolean removeGrouping(RMGrouping aGrouping)
+    public void removeGrouping(RMGrouping aGrouping)
     {
-        return removeGrouping(ListUtils.indexOfId(_groupings, aGrouping)) != null;
+        removeGrouping(ListUtils.indexOfId(_groupings, aGrouping));
     }
 
     /**
@@ -202,46 +165,32 @@ public class RMGrouper implements Cloneable, RMArchiver.Archivable {
     /**
      * Returns the currently selected grouping's index (for editing, mostly).
      */
-    public int getSelectedGroupingIndex()
-    {
-        return _selectedGroupingIndex;
-    }
+    public int getSelectedGroupingIndex()  { return _selectedGroupingIndex; }
 
     /**
      * Sets the currently selected grouping by index (for editing, mostly).
      */
-    public void setSelectedGroupingIndex(int anIndex)
-    {
-        _selectedGroupingIndex = anIndex;
-    }
+    public void setSelectedGroupingIndex(int anIndex)  { _selectedGroupingIndex = anIndex; }
 
     /**
      * Returns the currently selected grouping (while editing only).
      */
-    public RMGrouping getSelectedGrouping()
-    {
-        return getGrouping(_selectedGroupingIndex);
-    }
+    public RMGrouping getSelectedGrouping()  { return getGrouping(_selectedGroupingIndex); }
 
     /**
      * Separates given objects into RMGroups defined by groupings.
      */
-    public RMGroup groupObjects(List aList)
+    public RMGroup groupObjects(List<?> aList)
     {
-        // Create new group for given list
         RMGroup group = new RMGroup(aList);
-
-        // Group by this grouper
         group.groupBy(this, 0);
-
-        // Return group
         return group;
     }
 
     /**
      * Listen for property changes and forward to grouper's property change listeners.
      */
-    protected void groupingDidPropChange(PropChange anEvent)
+    protected void handleGroupingPropChange(PropChange anEvent)
     {
         firePropChange(anEvent);
     }
@@ -297,18 +246,15 @@ public class RMGrouper implements Cloneable, RMArchiver.Archivable {
     public RMGrouper clone()
     {
         // Do normal clone
-        RMGrouper clone = null;
-        try {
-            clone = (RMGrouper) super.clone();
-        } catch (CloneNotSupportedException e) {
-            throw new RuntimeException(e);
-        }
+        RMGrouper clone;
+        try { clone = (RMGrouper) super.clone(); }
+        catch (CloneNotSupportedException e) { throw new RuntimeException(e); }
 
         // Clear PropChangeSupport
         clone._pcs = PropChangeSupport.EMPTY;
 
         // Clone deep grouping
-        clone._groupings = new ArrayList();
+        clone._groupings = new ArrayList<>();
         for (RMGrouping grp : _groupings) {
             RMGrouping grp2 = grp.clone();
             clone.addGrouping(grp2);
@@ -323,16 +269,8 @@ public class RMGrouper implements Cloneable, RMArchiver.Archivable {
      */
     public boolean equals(Object anObj)
     {
-        // Check identity and get other grouper
         if (anObj == this) return true;
-        RMGrouper other = anObj instanceof RMGrouper ? (RMGrouper) anObj : null;
-        if (other == null) return false;
-
-        // Check groupings
-        if (!other._groupings.equals(_groupings)) return false;
-
-        // Return true if all checks passed
-        return true;
+        return anObj instanceof RMGrouper other && other._groupings.equals(_groupings);
     }
 
     /**
@@ -340,7 +278,7 @@ public class RMGrouper implements Cloneable, RMArchiver.Archivable {
      */
     public String toString()
     {
-        StringBuffer sb = new StringBuffer("RMGrouper { Keys=");
+        StringBuilder sb = new StringBuilder("RMGrouper { Keys=");
         for (RMGrouping grp : getGroupings())
             sb.append(grp.getKey()).append(", ");
         if (getGroupingCount() > 0)
@@ -353,14 +291,9 @@ public class RMGrouper implements Cloneable, RMArchiver.Archivable {
      */
     public XMLElement toXML(RMArchiver anArchiver)
     {
-        // Get new element named grouper
         XMLElement e = new XMLElement("grouper");
-
-        // Archive child groupings
         for (int i = 0, iMax = getGroupingCount(); i < iMax; i++)
             e.add(getGrouping(i).toXML(anArchiver));
-
-        // Return xml element
         return e;
     }
 
@@ -369,11 +302,7 @@ public class RMGrouper implements Cloneable, RMArchiver.Archivable {
      */
     public Object fromXML(RMArchiver anArchiver, XMLElement anElement)
     {
-        // Unarchive grouping List
-        _groupings = anArchiver.fromXMLList(anElement, "grouping", null, this);
-
-        // Return this grouper
+        _groupings = anArchiver.readListFromXmlForNameAndClass(anElement, "grouping", RMGrouping.class);
         return this;
     }
-
 }

@@ -1077,7 +1077,7 @@ public class RMDocument extends RMParentShape {
         e.add("version", ReportMill.getVersion());
 
         // Archive DataSource
-        XMLElement dxml = _dataSource != null ? anArchiver.writeObjectToXml(_dataSource, this) : null;
+        XMLElement dxml = _dataSource != null ? anArchiver.writeObjectToXml(_dataSource) : null;
         if (dxml != null && dxml.getAttributeCount() > 0) e.add(dxml);
 
         // Archive PageLayout, Unit
@@ -1112,7 +1112,7 @@ public class RMDocument extends RMParentShape {
     {
         // Archive pages
         for (int i = 0, iMax = getPageCount(); i < iMax; i++)
-            anElement.add(anArchiver.writeObjectToXml(getPage(i), this));
+            anElement.add(anArchiver.writeObjectToXml(getPage(i)));
     }
 
     /**
@@ -1132,7 +1132,7 @@ public class RMDocument extends RMParentShape {
         // Unarchive Datasource
         XMLElement datasourceXML = anElement.get("datasource");
         if (datasourceXML != null)
-            setDataSource(anArchiver.readObjectFromXmlForClass(datasourceXML, RMDataSource.class, this));
+            setDataSource(anArchiver.readObjectFromXmlForClass(datasourceXML, RMDataSource.class));
 
         // Unarchive PageLayout, Unit
         if (anElement.hasAttribute("page-layout")) setPageLayout(anElement.getAttributeValue("page-layout"));

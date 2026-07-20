@@ -667,15 +667,15 @@ public class RMTable extends RMParentShape {
         // Iterate over child elements and unarchive table rows
         for (int i = 0, iMax = anElement.size(); i < iMax; i++) {
             XMLElement childXML = anElement.get(i);
-            Class childClass = anArchiver.getClassForName(childXML.getName());
+            Class<?> childClass = anArchiver.getClassForName(childXML.getName());
             if (childClass != null && RMTableRow.class.isAssignableFrom(childClass)) {
-                RMShape shape = (RMTableRow) anArchiver.readObjectFromXml(childXML, this);
+                RMShape shape = (RMTableRow) anArchiver.readObjectFromXml(childXML);
                 addChild(shape);
             }
         }
 
         // Unarchive grouper's groupings
-        List groupings = anArchiver.fromXMLList(anElement, "grouping", null, this);
+        List<RMGrouping> groupings = anArchiver.readListFromXmlForNameAndClass(anElement, "grouping", RMGrouping.class);
         RMGrouper grouper = new RMGrouper();
         grouper.addGroupings(groupings);
         setGrouper(grouper);

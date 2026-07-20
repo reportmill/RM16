@@ -39,9 +39,6 @@ public class RMArchiver {
     // The version of unarchived object
     private double _version;
 
-    // Whether element should ignore case when asking for attributes/elements by name
-    private boolean _ignoreCase;
-
     // Unarchival keeps track of read elements to guarantee that each element results in one instance
     private Map<XMLElement, Object> _readElements = new HashMap<>();
 
@@ -108,194 +105,6 @@ public class RMArchiver {
     public void setVersion(double aVersion)  { _version = aVersion; }
 
     /**
-     * Returns whether element should ignore case when asking for attributes/elements by name.
-     */
-    public boolean isIgnoreCase()  { return _ignoreCase; }
-
-    /**
-     * Sets whether element should ignore case when asking for attributes/elements by name.
-     */
-    public void setIgnoreCase(boolean aVal)  { _ignoreCase = aVal; }
-
-    /**
-     * Returns the class map.
-     */
-    public Map<String, Class<?>> getClassMap()
-    {
-        if (_classMap != null) return _classMap;
-        return _classMap = createClassMap();
-    }
-
-    /**
-     * Creates the class map.
-     */
-    protected Map<String, Class<?>> createClassMap()
-    {
-        // Create class map and add classes
-        Map<String,Class<?>> classMap = new HashMap<>();
-
-        // Shape classes
-        classMap.put("arrow-head", RMLineShape.ArrowHead.class);
-        classMap.put("cell-table", RMCrossTab.class);
-        classMap.put("cell-table-frame", RMCrossTabFrame.class);
-        classMap.put("document", RMDocument.class);
-        classMap.put("flow-shape", RMParentShape.class);
-        classMap.put("graph", RMGraph.class);
-        classMap.put("graph-legend", RMGraphLegend.class);
-        classMap.put("image-shape", RMImageShape.class);
-        classMap.put("label", RMLabel.class);
-        classMap.put("labels", RMLabels.class);
-        classMap.put("line", RMLineShape.class);
-        classMap.put("oval", RMOvalShape.class);
-        classMap.put("page", RMPage.class);
-        classMap.put("polygon", RMPolygonShape.class);
-        classMap.put("rect", RMRectShape.class);
-        classMap.put("shape", RMParentShape.class);
-        classMap.put("spring-shape", RMSpringShape.class);
-        classMap.put("subreport", RMSubreport.class);
-        classMap.put("switchshape", RMSwitchShape.class);
-        classMap.put("table", RMTable.class);
-        classMap.put("table-group", RMTableGroup.class);
-        classMap.put("tablerow", RMTableRow.class);
-        classMap.put("text", RMTextShape.class);
-        classMap.put("linked-text", RMLinkedText.class);
-        classMap.put("scene3d", RMScene3D.class);
-
-        // Graphics
-        classMap.put("color", RMColor.class);
-        classMap.put("format", RMArchiverHpr.RMFormatStub.class);
-        classMap.put("pgraph", RMParagraph.class);
-        classMap.put("xstring", RMXString.class);
-
-        // Strokes
-        classMap.put("stroke", RMStroke.class);
-        classMap.put("double-stroke", RMStroke.class);
-        classMap.put("border-stroke", com.reportmill.graphics.RMBorderStroke.class);
-
-        // Fills
-        classMap.put("fill", RMFill.class);
-        classMap.put("gradient-fill", RMGradientFill.class);
-        classMap.put("radial-fill", RMGradientFill.class);
-        classMap.put("image-fill", RMImageFill.class);
-
-        // Sorts, Grouping
-        classMap.put("sort", com.reportmill.base.RMSort.class);
-        classMap.put("top-n-sort", com.reportmill.base.RMTopNSort.class);
-        classMap.put("value-sort", com.reportmill.base.RMValueSort.class);
-        classMap.put("grouper", RMGrouper.class);
-        classMap.put("grouping", RMGrouping.class);
-
-        // Return classmap
-        return classMap;
-    }
-
-    /**
-     * Reads a document for given .rpt file source.
-     */
-    public RMDocument readDocumentForRptSource(Object aSource, RMDocument aBaseDoc)
-    {
-        // If source is a document, just return it
-        if (aSource instanceof RMDocument) return (RMDocument) aSource;
-
-        // Get URL and/or bytes (complain if not found)
-        WebURL url = WebURL.getUrl(aSource);
-        byte[] bytes = url != null ? url.getBytes() : SnapUtils.getBytes(aSource);
-        if (bytes == null)
-            throw new RuntimeException("RMArchiver.getDoc: Cannot read source: " + (url != null ? url : aSource));
-
-        // If PDF, return PDF Doc
-        if (RMPDFData.canRead(bytes))
-            return RMPDFShape.getDocPDF(url != null ? url : bytes, aBaseDoc);
-
-        // Create archiver, read, set source and return
-        setRootObject(aBaseDoc);
-
-        RMDocument doc;
-        if (url != null)
-            doc = (RMDocument) readObjectFromXmlUrl(url);
-        else doc = (RMDocument) readObjectFromXmlBytes(bytes);
-
-        // Set Source URL and return
-        doc.setSourceURL(getSourceURL());
-        return doc;
-    }
-
-    /**
-     * Reads shapes from given XML.
-     */
-    public List<RMShape> readShapesFromXmlBytes(byte[] theBytes)
-    {
-        XMLElement shapesListXml = XMLElement.readXmlFromBytes(theBytes);
-        if (shapesListXml == null || !shapesListXml.getName().equals(RM_SHAPES_LIST_NAME)) {
-            System.err.println("RMArchiver.readShapesFromXmlBytes: XML element not found");
-            return Collections.emptyList();
-        }
-
-        // Read shapes list
-        List<RMShape> shapesList = new ArrayList<>();
-        for (int i = 0, iMax = shapesListXml.size(); i < iMax; i++)
-            shapesList.add((RMShape) readObjectFromXml(shapesListXml.get(i), null));
-        return shapesList;
-    }
-
-    /**
-     * Returns a root object unarchived from a generic input source (a File, String path, InputStream, URL, byte[], etc.).
-     */
-    public Object readObjectFromXmlUrl(WebURL sourceUrl)
-    {
-        // Set source URL
-        if (getSourceURL() == null)
-            setSourceURL(sourceUrl);
-
-        // Get string and read
-        String xmlStr = sourceUrl.getText();
-        if (xmlStr == null)
-            throw new RuntimeException("RMArchiver.readXmlFromUrl: Cannot read url: " + sourceUrl);
-        return readObjectFromXmlString(xmlStr);
-    }
-
-    /**
-     * Returns a root object unarchived from a generic XML source (File, String path, InputStream, URL, byte[], etc.).
-     */
-    public Object readObjectFromXmlString(String xmlString)
-    {
-        XMLElement xml = XMLElement.readXmlFromString(xmlString);
-        return readObjectFromXml(xml);
-    }
-
-    /**
-     * Returns a root object unarchived from an RMByteSource.
-     */
-    public Object readObjectFromXmlBytes(byte[] theBytes)
-    {
-        XMLElement xml = XMLElement.readXmlFromBytes(theBytes);
-        return readObjectFromXml(xml);
-    }
-
-    /**
-     * Returns a root object unarchived from the XML source (a File, String path, InputStream, URL, byte[], etc.).
-     * You can also provide a root object to be read "into", and an owner that the object is being read "for".
-     */
-    public Object readObjectFromXml(XMLElement theXML)
-    {
-        // Set IgnoreCase property
-        if (isIgnoreCase())
-            theXML.setIgnoreCase(true);
-
-        // Read xml
-        _root = theXML;
-
-        // Get resources from top level xml
-        getResources(_root);
-
-        // Unarchive from xml and return
-        Object object = readObjectFromXml(_root, null);
-
-        // Return object
-        return object;
-    }
-
-    /**
      * Writes the given document to XML.
      */
     public XMLElement writeDocumentToXml(RMDocument aDoc)
@@ -328,29 +137,120 @@ public class RMArchiver {
      */
     public XMLElement writeObjectToXml(Archivable anObj)
     {
-        return writeObjectToXml(anObj, null);
+        return anObj.toXML(this);
     }
 
     /**
-     * Writes the given object to XML.
+     * Reads a document for given .rpt file source.
      */
-    public XMLElement writeObjectToXml(Archivable anObj, Archivable anOwner)
+    public RMDocument readDocumentForRptSource(Object aSource, RMDocument aBaseDoc)
     {
-        return anObj.toXML(this);
+        // If source is a document, just return it
+        if (aSource instanceof RMDocument) return (RMDocument) aSource;
+
+        // Get URL and/or bytes (complain if not found)
+        WebURL url = WebURL.getUrl(aSource);
+        byte[] bytes = url != null ? url.getBytes() : SnapUtils.getBytes(aSource);
+        if (bytes == null)
+            throw new RuntimeException("RMArchiver.readDocumentForRptSource: Cannot read source: " + (url != null ? url : aSource));
+
+        // If PDF, return PDF Doc
+        if (RMPDFData.canRead(bytes))
+            return RMPDFShape.getDocPDF(url != null ? url : bytes, aBaseDoc);
+
+        // Create archiver, read, set source and return
+        setRootObject(aBaseDoc);
+
+        RMDocument doc;
+        if (url != null)
+            doc = (RMDocument) readObjectFromXmlUrl(url);
+        else doc = (RMDocument) readObjectFromXmlBytes(bytes);
+
+        // Set Source URL and return
+        doc.setSourceURL(getSourceURL());
+        return doc;
+    }
+
+    /**
+     * Reads shapes from given XML.
+     */
+    public List<RMShape> readShapesFromXmlBytes(byte[] theBytes)
+    {
+        XMLElement shapesListXml = XMLElement.readXmlFromBytes(theBytes);
+        if (shapesListXml == null || !shapesListXml.getName().equals(RM_SHAPES_LIST_NAME)) {
+            System.err.println("RMArchiver.readShapesFromXmlBytes: XML element not found");
+            return Collections.emptyList();
+        }
+
+        // Read shapes list
+        List<RMShape> shapesList = new ArrayList<>();
+        for (int i = 0, iMax = shapesListXml.size(); i < iMax; i++)
+            shapesList.add((RMShape) readObjectFromXml(shapesListXml.get(i)));
+        return shapesList;
+    }
+
+    /**
+     * Returns a root object unarchived from a generic input source (a File, String path, InputStream, URL, byte[], etc.).
+     */
+    public Object readObjectFromXmlUrl(WebURL sourceUrl)
+    {
+        // Set source URL
+        if (getSourceURL() == null)
+            setSourceURL(sourceUrl);
+
+        // Get string and read
+        String xmlStr = sourceUrl.getText();
+        if (xmlStr == null)
+            throw new RuntimeException("RMArchiver.readObjectFromXmlUrl: Cannot read url: " + sourceUrl);
+        return readObjectFromXmlString(xmlStr);
+    }
+
+    /**
+     * Returns a root object unarchived from a generic XML source (File, String path, InputStream, URL, byte[], etc.).
+     */
+    public Object readObjectFromXmlString(String xmlString)
+    {
+        XMLElement xml = XMLElement.readXmlFromString(xmlString);
+        return readRootObjectFromXml(xml);
+    }
+
+    /**
+     * Returns a root object unarchived from an RMByteSource.
+     */
+    public Object readObjectFromXmlBytes(byte[] theBytes)
+    {
+        XMLElement xml = XMLElement.readXmlFromBytes(theBytes);
+        return readRootObjectFromXml(xml);
+    }
+
+    /**
+     * Returns a root object unarchived from the XML source (a File, String path, InputStream, URL, byte[], etc.).
+     * You can also provide a root object to be read "into", and an owner that the object is being read "for".
+     */
+    public Object readRootObjectFromXml(XMLElement theXML)
+    {
+        // Set root
+        _root = theXML;
+
+        // Get resources from top level xml
+        getResources(theXML);
+
+        // Unarchive from xml and return
+        return readObjectFromXmlForClass(theXML, null);
     }
 
     /**
      * Returns an object unarchived from the given element.
      */
-    public Object readObjectFromXml(XMLElement anElement, Object anOwner)
+    public Object readObjectFromXml(XMLElement anElement)
     {
-        return readObjectFromXmlForClass(anElement, null, anOwner);
+        return readObjectFromXmlForClass(anElement, null);
     }
 
     /**
      * Returns an object unarchived from the given element by instantiating the given class.
      */
-    public <T> T readObjectFromXmlForClass(XMLElement anElement, Class<T> aClass, Object anOwner)
+    public <T> T readObjectFromXmlForClass(XMLElement anElement, Class<T> aClass)
     {
         // See if anElement has already been read
         Object readObject = _readElements.get(anElement);
@@ -398,9 +298,61 @@ public class RMArchiver {
     }
 
     /**
+     * Returns the list of objects of the given class unarchived from the given element.
+     */
+    public <T> List<T> readListFromXmlForClass(XMLElement anElement, Class<T> aClass)
+    {
+        List<T> list = new ArrayList<>();
+
+        // Iterate over elements, unarchive, and if class, add to list
+        for (int i = 0, iMax = anElement.size(); i < iMax; i++) {
+            XMLElement xml = anElement.get(i);
+            T obj = readObjectFromXmlForClass(xml, aClass);
+            if (aClass.isInstance(obj))
+                list.add(obj);
+        }
+
+        return list;
+    }
+
+    /**
+     * Returns the list of objects of the given name unarchived from the given element.
+     */
+    public <T> List<T> readListFromXmlForNameAndClass(XMLElement anElement, String aName, Class<T> aClass)
+    {
+        List<T> list = new ArrayList<>();
+
+        // Iterate over elements, unarchive and add to list
+        for (XMLElement e : anElement.getElements(aName)) {
+            T obj = aClass.cast(readObjectFromXml(e));
+            list.add(obj);
+        }
+
+        return list;
+    }
+
+    /**
+     * Returns a copy of the given object using archival.
+     */
+    public <T extends Archivable> T copy(T anObj)
+    {
+        XMLElement xml = writeObjectToXml(anObj);
+        return (T) readObjectFromXml(xml);
+    }
+
+    /**
+     * Returns the class map.
+     */
+    public Map<String, Class<?>> getClassMap()
+    {
+        if (_classMap != null) return _classMap;
+        return _classMap = createClassMap();
+    }
+
+    /**
      * Returns the class for a given element.
      */
-    protected Class<?> getClassForXML(XMLElement anElement)
+    private Class<?> getClassForXML(XMLElement anElement)
     {
         // If ClassName attribute is present, try that
         String className = anElement.getAttributeValue("ClassName");
@@ -436,54 +388,14 @@ public class RMArchiver {
      */
     public int getReference(Object anObj)
     {
-        return getReference(anObj, true);
-    }
-
-    /**
-     * Returns a reference id for given object if in references list with option to add if absent (used in archival).
-     */
-    public int getReference(Object anObj, boolean add)
-    {
         // If object is in list (or if not asked to add) return its current index
         int index = ListUtils.indexOfId(_references, anObj);
-        if (index >= 0 || !add)
+        if (index >= 0)
             return index;
 
         // Add object to references and return id
         _references.add(anObj);
         return _references.size() - 1;
-    }
-
-    /**
-     * Returns an object for a given reference (used in unarchival).
-     */
-    public Object getReference(String aName, XMLElement anElement)
-    {
-        // Get xref id and recursively search for element that contains it
-        int xref = anElement.getAttributeIntValue(aName, -1);
-        if (xref < 0) return null;
-        return getReference(xref, _root);
-    }
-
-    /**
-     * Returns an object unarchived from element that has the given xref id.
-     */
-    private Object getReference(int xref, XMLElement anElement)
-    {
-        // If anElement has matching xref attribute/id, return unarchived object
-        if (anElement.getAttributeIntValue("xref", -1) == xref)
-            return readObjectFromXml(anElement, null);
-
-        // Iterate over element's children and recurse
-        for (int i = 0, iMax = anElement.size(); i < iMax; i++) {
-            XMLElement e = anElement.get(i);
-            Object obj = getReference(xref, e);
-            if (obj != null)
-                return obj;
-        }
-
-        // If xref not found it this element or its children, return null
-        return null;
     }
 
     /**
@@ -507,45 +419,6 @@ public class RMArchiver {
                 return i;
         }
         return -1; // Return -1 since element name not found
-    }
-
-    /**
-     * Returns the list of objects of the given name and/or class (either can be null) unarchived from the given element.
-     */
-    public List fromXMLList(XMLElement anElement, String aName, Class<?> aClass, Object anOwner)
-    {
-        // Declare variable for list
-        List<Object> list = new ArrayList<>();
-
-        // If name is provided, iterate over elements, unarchive and add to list
-        if (aName != null) {
-            for (XMLElement e : anElement.getElements(aName)) {
-                Object obj = readObjectFromXmlForClass(e, aClass, anOwner);
-                list.add(obj);
-            }
-        }
-
-        // Iterate over elements, unarchive, and if class, add to list
-        else for (int i = 0, iMax = anElement.size(); i < iMax; i++) {
-            XMLElement xml = anElement.get(i);
-            Object obj = readObjectFromXml(xml, anOwner);
-            if (aClass.isInstance(obj))
-                list.add(obj);
-        }
-
-        // Return to list
-        return list;
-    }
-
-    /**
-     * Returns a copy of the given object using archival.
-     */
-    public <T extends Archivable> T copy(T anObj)
-    {
-        XMLElement xml = writeObjectToXml(anObj);
-        if (isIgnoreCase())
-            xml.setIgnoreCase(true);
-        return (T) readObjectFromXml(xml, null);
     }
 
     /**
@@ -605,6 +478,62 @@ public class RMArchiver {
             // Add resource bytes for name
             addResource(bytes, name);
         }
+    }
+
+    /**
+     * Creates the class map.
+     */
+    private static Map<String, Class<?>> createClassMap()
+    {
+        Map<String,Class<?>> classMap = new HashMap<>();
+
+        // Shape classes
+        classMap.put("arrow-head", RMLineShape.ArrowHead.class);
+        classMap.put("cell-table", RMCrossTab.class);
+        classMap.put("cell-table-frame", RMCrossTabFrame.class);
+        classMap.put("document", RMDocument.class);
+        classMap.put("graph", RMGraph.class);
+        classMap.put("graph-legend", RMGraphLegend.class);
+        classMap.put("image-shape", RMImageShape.class);
+        classMap.put("label", RMLabel.class);
+        classMap.put("labels", RMLabels.class);
+        classMap.put("line", RMLineShape.class);
+        classMap.put("oval", RMOvalShape.class);
+        classMap.put("page", RMPage.class);
+        classMap.put("polygon", RMPolygonShape.class);
+        classMap.put("rect", RMRectShape.class);
+        classMap.put("shape", RMParentShape.class);
+        classMap.put("spring-shape", RMSpringShape.class);
+        classMap.put("subreport", RMSubreport.class);
+        classMap.put("switchshape", RMSwitchShape.class);
+        classMap.put("table", RMTable.class);
+        classMap.put("table-group", RMTableGroup.class);
+        classMap.put("tablerow", RMTableRow.class);
+        classMap.put("text", RMTextShape.class);
+        classMap.put("linked-text", RMLinkedText.class);
+        classMap.put("scene3d", RMScene3D.class);
+
+        // Graphics
+        classMap.put("color", RMColor.class);
+        classMap.put("fill", RMFill.class);
+        classMap.put("gradient-fill", RMGradientFill.class);
+        classMap.put("radial-fill", RMGradientFill.class);
+        classMap.put("image-fill", RMImageFill.class);
+        classMap.put("stroke", RMStroke.class);
+        classMap.put("double-stroke", RMStroke.class);
+        classMap.put("border-stroke", com.reportmill.graphics.RMBorderStroke.class);
+        classMap.put("format", RMArchiverHpr.RMFormatStub.class);
+        classMap.put("pgraph", RMParagraph.class);
+        classMap.put("xstring", RMXString.class);
+
+        // Sorts, Grouping
+        classMap.put("sort", com.reportmill.base.RMSort.class);
+        classMap.put("top-n-sort", com.reportmill.base.RMTopNSort.class);
+        classMap.put("value-sort", com.reportmill.base.RMValueSort.class);
+        classMap.put("grouper", RMGrouper.class);
+        classMap.put("grouping", RMGrouping.class);
+
+        return classMap;
     }
 
     /**

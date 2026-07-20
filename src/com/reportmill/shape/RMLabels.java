@@ -353,7 +353,7 @@ public class RMLabels extends RMParentShape {
 
         // Unarchive DatasetKey, Sorts
         setDatasetKey(anElement.getAttributeValue("list-key"));
-        List sorts = anArchiver.fromXMLList(anElement, "sort", null, this);
+        List<RMSort> sorts = anArchiver.readListFromXmlForNameAndClass(anElement, "sort", RMSort.class);
         _grouping.addSorts(sorts);
 
         // Unarchive NumberOfRows, NumberOfColumns, SpacingWidth, SpacingHeight

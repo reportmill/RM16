@@ -15,50 +15,50 @@ import snap.util.*;
 public class RMGrouping implements Cloneable, RMArchiver.Archivable {
 
     // The grouping key
-    String _key;
+    private String _key;
 
     // The list of sorts
-    List<RMSort> _sorts = new Vector();
+    private List<RMSort> _sorts = new ArrayList<>();
 
     // The top N sort
-    RMTopNSort _topNSort = new RMTopNSort(null, RMSort.ORDER_ASCEND, 0, false);
+    private RMTopNSort _topNSort = new RMTopNSort(null, RMSort.ORDER_ASCEND, 0, false);
 
     // Values (in the form of comma separated keychain keys) explicitly defined to sort or to include
-    String _values;
+    private String _values;
 
     // Whether to sort on explicitly defined values
-    boolean _sortOnValues;
+    private boolean _sortOnValues;
 
     // Whether to explicitly include explicitly defined values
-    boolean _includeValues;
+    private boolean _includeValues;
 
     // Whether grouping includes all values for grouping key found in entire dataset in every subgroup
-    boolean _includeAllValues = false;
+    private boolean _includeAllValues = false;
 
     // Whether grouping has header
-    boolean _hasHeader = false;
+    private boolean _hasHeader = false;
 
     // Whether grouping has details
-    boolean _hasDetails = false;
+    private boolean _hasDetails = false;
 
     // Whether grouping has summary
-    boolean _hasSummary = false;
+    private boolean _hasSummary = false;
 
     // Selected sort index (used in editer only)
-    int _selectedSortIndex = -1;
+    private int _selectedSortIndex = -1;
 
     // The PropChangeSupport
-    PropChangeSupport _pcs = PropChangeSupport.EMPTY;
+    private PropChangeSupport _pcs = PropChangeSupport.EMPTY;
 
     /**
-     * Creates an empty grouping.
+     * Constructor.
      */
     public RMGrouping()
     {
     }
 
     /**
-     * Creates a grouping with the given key.
+     * Constructor with given key.
      */
     public RMGrouping(String aKey)
     {
@@ -68,10 +68,7 @@ public class RMGrouping implements Cloneable, RMArchiver.Archivable {
     /**
      * Returns the grouping key.
      */
-    public String getKey()
-    {
-        return _key;
-    }
+    public String getKey()  { return _key; }
 
     /**
      * Sets the grouping key.
@@ -85,35 +82,22 @@ public class RMGrouping implements Cloneable, RMArchiver.Archivable {
     /**
      * Returns the groupings list of sorts.
      */
-    public List<RMSort> getSorts()
-    {
-        return _sorts;
-    }
+    public List<RMSort> getSorts()  { return _sorts; }
 
     /**
      * Returns the number of sorts in the grouping.
      */
-    public int getSortCount()
-    {
-        return _sorts.size();
-    }
+    public int getSortCount()  { return _sorts.size(); }
 
     /**
      * Returns the individual sort at the given index.
      */
-    public RMSort getSort(int anIndex)
-    {
-        return _sorts.get(anIndex);
-    }
+    public RMSort getSort(int anIndex)  { return _sorts.get(anIndex); }
 
     /**
      * Adds the given sort to the grouping.
      */
-    public RMGrouping addSort(RMSort aSort)
-    {
-        addSort(aSort, getSortCount());
-        return this;
-    }
+    public void addSort(RMSort aSort)  { addSort(aSort, getSortCount()); }
 
     /**
      * Adds the given sort to the grouping.
@@ -147,21 +131,12 @@ public class RMGrouping implements Cloneable, RMArchiver.Archivable {
     }
 
     /**
-     * Adds a sort to the grouping for the given sort key.
-     */
-    public void addSort(String aSortKey)
-    {
-        addSort(new RMSort(aSortKey));
-    }
-
-    /**
      * Removes the given sort from the grouping.
      */
-    public int removeSort(RMSort aSort)
+    public void removeSort(RMSort aSort)
     {
         int index = ListUtils.indexOfId(getSorts(), aSort);
         if (index >= 0) removeSort(index);
-        return index;
     }
 
     /**
@@ -176,10 +151,7 @@ public class RMGrouping implements Cloneable, RMArchiver.Archivable {
     /**
      * Returns the top N sort for the grouping.
      */
-    public RMTopNSort getTopNSort()
-    {
-        return _topNSort;
-    }
+    public RMTopNSort getTopNSort()  { return _topNSort; }
 
     /**
      * Sets the top N sort for the grouping.
@@ -193,10 +165,7 @@ public class RMGrouping implements Cloneable, RMArchiver.Archivable {
     /**
      * Returns whether the grouping includes all values.
      */
-    public boolean getIncludeAllValues()
-    {
-        return _includeAllValues;
-    }
+    public boolean getIncludeAllValues()  { return _includeAllValues; }
 
     /**
      * Sets whether the grouping includes all values.
@@ -210,10 +179,7 @@ public class RMGrouping implements Cloneable, RMArchiver.Archivable {
     /**
      * Returns the values (in the form of comma separated keychain keys) explicitly defined to sort or to include.
      */
-    public String getValuesString()
-    {
-        return _values;
-    }
+    public String getValuesString()  { return _values; }
 
     /**
      * Sets the values (in the form of comma separated keychain keys) explicitly defined to sort or to include.
@@ -227,50 +193,31 @@ public class RMGrouping implements Cloneable, RMArchiver.Archivable {
     /**
      * Returns a list of explicit values for this grouping.
      */
-    public List getValues()
+    public List<?> getValues()
     {
-        // Create list to return
-        List valuesList = new ArrayList();
+        if (_values == null) return Collections.emptyList();
 
-        // If no values string, just return
-        if (_values == null)
-            return valuesList;
-
-        // Get values with commas replaced by newlines
+        // Get value strings
         String valuesString = _values.replace(',', '\n');
-
-        // Convert to string array
-        String valueStrings[] = valuesString.split("\n");
+        String[] valueStrings = valuesString.split("\n");
+        List<Object> valuesList = new ArrayList<>();
 
         // Iterate over values strings
-        for (int i = 0; i < valueStrings.length; i++) {
-
-            // Get current loop value trimmed
-            String valueString = valueStrings[i].trim();
-
-            // If length is non-zero, evaluate and add
-            if (valueString.length() > 0) {
-
-                // Evaluate value string as key (maybe it would be useful to support keys on aReportMill one day?)
+        for (String valueString : valueStrings) {
+            if (!valueString.isBlank()) {
                 Object value = RMKeyChain.getValue(new Object(), valueString);
-
-                // If value is non-null, add it
                 if (value != null)
                     valuesList.add(value);
             }
         }
 
-        // Return valuesList
         return valuesList;
     }
 
     /**
      * Returns whether to sort on values explicitly provided.
      */
-    public boolean getSortOnValues()
-    {
-        return _sortOnValues;
-    }
+    public boolean getSortOnValues()  { return _sortOnValues; }
 
     /**
      * Sets whether to sort on values explicitly provided.
@@ -284,10 +231,7 @@ public class RMGrouping implements Cloneable, RMArchiver.Archivable {
     /**
      * Returns whether to include values explicitly provided.
      */
-    public boolean getIncludeValues()
-    {
-        return _includeValues;
-    }
+    public boolean getIncludeValues()  { return _includeValues; }
 
     /**
      * Sets whether to include values explicitly provided.
@@ -301,10 +245,7 @@ public class RMGrouping implements Cloneable, RMArchiver.Archivable {
     /**
      * Returns whether the grouping has a header.
      */
-    public boolean getHasHeader()
-    {
-        return _hasHeader;
-    }
+    public boolean getHasHeader()  { return _hasHeader; }
 
     /**
      * Sets whether the grouping has a header.
@@ -318,10 +259,7 @@ public class RMGrouping implements Cloneable, RMArchiver.Archivable {
     /**
      * Returns whether the grouping has a details.
      */
-    public boolean getHasDetails()
-    {
-        return _hasDetails;
-    }
+    public boolean getHasDetails()  { return _hasDetails; }
 
     /**
      * Sets whether the grouping has a details.
@@ -335,10 +273,7 @@ public class RMGrouping implements Cloneable, RMArchiver.Archivable {
     /**
      * Returns whether the grouping has a summary.
      */
-    public boolean getHasSummary()
-    {
-        return _hasSummary;
-    }
+    public boolean getHasSummary()  { return _hasSummary; }
 
     /**
      * Sets whether the grouping has a summary.
@@ -352,29 +287,20 @@ public class RMGrouping implements Cloneable, RMArchiver.Archivable {
     /**
      * Returns the currently selected grouping's currently selected sort (for editing, mostly).
      */
-    public int getSelectedSortIndex()
-    {
-        return _selectedSortIndex;
-    }
+    public int getSelectedSortIndex()  { return _selectedSortIndex; }
 
     /**
      * Sets the currently selected grouping's currently selected sort (for editing, mostly).
      */
-    public void setSelectedSortIndex(int anIndex)
-    {
-        _selectedSortIndex = anIndex;
-    }
+    public void setSelectedSortIndex(int anIndex)  { _selectedSortIndex = anIndex; }
 
     /**
      * Returns the currently selected grouping's sort (while editing only).
      */
     public RMSort getSelectedSort()
     {
-        // If selected sort index is out of bounds, just return null
         if (_selectedSortIndex < 0 || _selectedSortIndex >= getSortCount())
             return null;
-
-        // Return selected sort
         return getSort(_selectedSortIndex);
     }
 
@@ -390,10 +316,7 @@ public class RMGrouping implements Cloneable, RMArchiver.Archivable {
     /**
      * Remove listener.
      */
-    public void removePropChangeListener(PropChangeListener aLsnr)
-    {
-        _pcs.removePropChangeListener(aLsnr);
-    }
+    public void removePropChangeListener(PropChangeListener aLsnr)  { _pcs.removePropChangeListener(aLsnr); }
 
     /**
      * Fires a property change for given property name, old value, new value and index.
@@ -426,27 +349,15 @@ public class RMGrouping implements Cloneable, RMArchiver.Archivable {
     /**
      * Standard clone implementation.
      */
+    @Override
     public RMGrouping clone()
     {
         // Do normal clone
-        RMGrouping clone = null;
-        try {
-            clone = (RMGrouping) super.clone();
-        } catch (CloneNotSupportedException e) {
-            throw new RuntimeException(e);
-        }
-
-        // Clear PropChangeSupport
+        RMGrouping clone;
+        try { clone = (RMGrouping) super.clone(); }
+        catch (CloneNotSupportedException e) { throw new RuntimeException(e); }
         clone._pcs = PropChangeSupport.EMPTY;
-
-        // Clone Sorts
-        clone._sorts = new ArrayList(_sorts.size());
-        for (RMSort s : _sorts) {
-            RMSort s2 = s.clone();
-            clone.addSort(s2);
-        }
-
-        // Clone TopNSort and return
+        clone._sorts = _sorts.stream().map(RMSort::clone).toList();
         clone._topNSort = (RMTopNSort) _topNSort.clone();
         return clone;
     }
@@ -454,6 +365,7 @@ public class RMGrouping implements Cloneable, RMArchiver.Archivable {
     /**
      * Standard equals implementation.
      */
+    @Override
     public boolean equals(Object anObj)
     {
         // Check identity and get other grouping
@@ -496,12 +408,12 @@ public class RMGrouping implements Cloneable, RMArchiver.Archivable {
         XMLElement e = new XMLElement("grouping");
 
         // Archive key, sorts
-        if (_key != null && _key.length() > 0) e.add("key", _key);
+        if (_key != null && !_key.isEmpty()) e.add("key", _key);
         for (int i = 0, iMax = _sorts.size(); i < iMax; i++)
             e.add(getSort(i).toXML(anArchiver));
 
         // Archive top n sort key, order, count, include others, pad
-        if (_topNSort.getKey() != null && _topNSort.getKey().length() > 0) e.add("topn", _topNSort.getKey());
+        if (_topNSort.getKey() != null && !_topNSort.getKey().isEmpty()) e.add("topn", _topNSort.getKey());
         if (_topNSort.getOrder() != RMSort.ORDER_ASCEND) e.add("topn-order", _topNSort.getOrderString());
         if (_topNSort.getCount() > 0) e.add("topn-count", _topNSort.getCount());
         if (_topNSort.getIncludeOthers()) e.add("topn-include", true);
@@ -509,7 +421,7 @@ public class RMGrouping implements Cloneable, RMArchiver.Archivable {
 
         // Archive includeAllValues, values string, sortOnValues, includeValues
         if (_includeAllValues) e.add("allvalues", true);
-        if (_values != null && _values.length() > 0) e.add("values", _values);
+        if (_values != null && !_values.isEmpty()) e.add("values", _values);
         if (_sortOnValues) e.add("sort-on-values", _sortOnValues);
         if (_includeValues) e.add("include-values", _includeValues);
 
@@ -530,7 +442,7 @@ public class RMGrouping implements Cloneable, RMArchiver.Archivable {
             setKey(anElement.getAttributeValue("key"));
 
         // Unarchive sorts
-        _sorts = anArchiver.fromXMLList(anElement, "sort", null, this);
+        _sorts = anArchiver.readListFromXmlForNameAndClass(anElement, "sort", RMSort.class);
 
         // Unarchive top n sort key
         if (anElement.hasAttribute("topn"))
@@ -572,5 +484,4 @@ public class RMGrouping implements Cloneable, RMArchiver.Archivable {
         setHasSummary(anElement.getAttributeBoolValue("summary"));
         return this; // Return this grouping
     }
-
 }

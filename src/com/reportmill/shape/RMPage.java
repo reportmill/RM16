@@ -40,23 +40,21 @@ public class RMPage extends RMParentShape {
     int _layerIndex = 0;
 
     // The list of layers for this page
-    List<RMPageLayer> _layers = new Vector();
+    List<RMPageLayer> _layers = new ArrayList<>();
 
     /**
-     * Creates a plain empty page.
+     * Constructor.
      */
     public RMPage()
     {
+        super();
         resetLayers();
     }
 
     /**
      * Returns the dataset key associated with the table.
      */
-    public String getDatasetKey()
-    {
-        return _datasetKey;
-    }
+    public String getDatasetKey()  { return _datasetKey; }
 
     /**
      * Sets the dataset key associated with the table.
@@ -70,10 +68,7 @@ public class RMPage extends RMParentShape {
     /**
      * Returns whether to paint white background even if not explicitly defined and drop shadow.
      */
-    public boolean getPaintBackground()
-    {
-        return _paintBackground;
-    }
+    public boolean getPaintBackground()  { return _paintBackground; }
 
     /**
      * Sets whether to paint white background even if not explicitly defined and drop shadow.
@@ -88,34 +83,22 @@ public class RMPage extends RMParentShape {
     /**
      * Returns the number of layers associated with this page.
      */
-    public int getLayerCount()
-    {
-        return _layers == null ? 0 : _layers.size();
-    }
+    public int getLayerCount()  { return _layers == null ? 0 : _layers.size(); }
 
     /**
      * Returns the layer at the given index.
      */
-    public RMPageLayer getLayer(int anIndex)
-    {
-        return _layers.get(anIndex);
-    }
+    public RMPageLayer getLayer(int anIndex)  { return _layers.get(anIndex); }
 
     /**
      * Returns the list of page layers.
      */
-    public List<RMPageLayer> getLayers()
-    {
-        return _layers;
-    }
+    public List<RMPageLayer> getLayers()  { return _layers; }
 
     /**
      * Adds a layer to page.
      */
-    public void addLayer(RMPageLayer aLayer)
-    {
-        addLayer(aLayer, getLayerCount());
-    }
+    public void addLayer(RMPageLayer aLayer)  { addLayer(aLayer, getLayerCount()); }
 
     /**
      * Adds a layer to page.
@@ -126,7 +109,7 @@ public class RMPage extends RMParentShape {
         if (ListUtils.containsId(_layers, aLayer)) return;
 
         // If list is missing, create it
-        if (_layers == null) _layers = new Vector();
+        if (_layers == null) _layers = new ArrayList<>();
 
         // Register for repaint
         repaint();
@@ -146,10 +129,10 @@ public class RMPage extends RMParentShape {
     /**
      * Removes the layer at given index (and its children).
      */
-    public RMPageLayer removeLayer(int anIndex)
+    public void removeLayer(int anIndex)
     {
         // If last layer, bail (shouldn't need this)
-        if (getLayerCount() < 2) return null;
+        if (getLayerCount() < 2) return;
 
         // Request repaint
         repaint();
@@ -166,34 +149,16 @@ public class RMPage extends RMParentShape {
 
         // Ensure selected layer index is valid
         _layerIndex = Math.min(_layerIndex, getLayerCount() - 1);
-
-        // Return layer
-        return layer;
     }
 
     /**
      * Removes the given layer.
      */
-    public int removeLayer(RMPageLayer aLayer)
+    public void removeLayer(RMPageLayer aLayer)
     {
         int index = ListUtils.indexOfId(_layers, aLayer);
         if (index >= 0)
             removeLayer(index);
-        return index;
-    }
-
-    /**
-     * Returns the layer with the given name.
-     */
-    public RMPageLayer getLayer(String aString)
-    {
-        // Iterate over layers and return the first encountered with matching name
-        for (int i = 0; i < getLayerCount(); i++)
-            if (getLayer(i).getName().equals(aString))
-                return getLayer(i);
-
-        // Return null if no layers matched given name
-        return null;
     }
 
     /**
@@ -244,18 +209,12 @@ public class RMPage extends RMParentShape {
     /**
      * Returns the index of the selected layer.
      */
-    public int getSelectedLayerIndex()
-    {
-        return _layerIndex;
-    }
+    public int getSelectedLayerIndex()  { return _layerIndex; }
 
     /**
      * Returns the selected layer.
      */
-    public RMPageLayer getSelectedLayer()
-    {
-        return _layerIndex < getLayerCount() ? getLayer(_layerIndex) : null;
-    }
+    public RMPageLayer getSelectedLayer()  { return _layerIndex < getLayerCount() ? getLayer(_layerIndex) : null; }
 
     /**
      * Selects the given layer.
@@ -264,14 +223,6 @@ public class RMPage extends RMParentShape {
     {
         repaint();
         _layerIndex = aLayer.getIndex();
-    }
-
-    /**
-     * Selects the layer with the given name.
-     */
-    public void selectLayer(String aString)
-    {
-        selectLayer(getLayer(aString));
     }
 
     /**
@@ -330,7 +281,7 @@ public class RMPage extends RMParentShape {
     /**
      * Overrides shape implementation to keep shapes in their proper layers.
      */
-    public void bringShapesToFront(List shapes)
+    public void bringShapesToFront(List<RMShape> shapes)
     {
         // Register for repaint
         repaint();
@@ -346,7 +297,7 @@ public class RMPage extends RMParentShape {
     /**
      * Overrides shape implementation to keep shapes in their proper layers.
      */
-    public void sendShapesToBack(List shapes)
+    public void sendShapesToBack(List<RMShape> shapes)
     {
         // Register for repaint
         repaint();
@@ -362,7 +313,7 @@ public class RMPage extends RMParentShape {
     /**
      * Creates a new layer and adds the shapes in the given list to it.
      */
-    public void moveToNewLayer(List shapes)
+    public void moveToNewLayer(List<RMShape> shapes)
     {
         // Register for repaint
         repaint();
@@ -549,7 +500,7 @@ public class RMPage extends RMParentShape {
     public RMShape rpgAll(ReportOwner anRptOwner, RMShape aParent)
     {
         // Get page objects - if none, do normal version and return
-        List objects = getDatasetKey() != null ? anRptOwner.getKeyChainListValue(getDatasetKey()) : null;
+        List<?> objects = getDatasetKey() != null ? anRptOwner.getKeyChainListValue(getDatasetKey()) : null;
         if (objects == null)
             return super.rpgAll(anRptOwner, aParent);
 
@@ -557,8 +508,7 @@ public class RMPage extends RMParentShape {
         ReportOwner.ShapeList pagesShape = new ReportOwner.ShapeList();
 
         // Generate parts reports
-        for (int i = 0, iMax = objects.size(); i < iMax; i++) {
-            Object obj = objects.get(i);
+        for (Object obj : objects) {
             anRptOwner.pushDataStack(obj);
             RMParentShape prpg = (RMParentShape) super.rpgAll(anRptOwner, aParent);
             anRptOwner.popDataStack();
@@ -589,7 +539,7 @@ public class RMPage extends RMParentShape {
         aParent.setSize(springShape.getWidth(), springShape.getHeight());
 
         // Add children back to given parent
-        RMShape children[] = springShape.getChildren().toArray(new RMShape[springShape.getChildCount()]);
+        RMShape[] children = springShape.getChildren().toArray(new RMShape[springShape.getChildCount()]);
         for (RMShape child : children) aParent.addChild(child);
 
         // Return given parent
@@ -617,7 +567,7 @@ public class RMPage extends RMParentShape {
         e.setName("page");
 
         // Archive DatasetKey, PaintBackground, ClipChildren
-        if (getDatasetKey() != null && getDatasetKey().length() > 0) e.add("dataset-key", getDatasetKey());
+        if (getDatasetKey() != null && !getDatasetKey().isEmpty()) e.add("dataset-key", getDatasetKey());
         if (!getPaintBackground()) e.add("paint-background", false);
 
         // Return xml element
@@ -641,7 +591,7 @@ public class RMPage extends RMParentShape {
             XMLElement layerXML = new XMLElement("layer");
 
             // Archive Layer Name, Visible, Locked
-            if (layer.getName() != null && layer.getName().length() > 0) layerXML.add("name", layer.getName());
+            if (layer.getName() != null && !layer.getName().isEmpty()) layerXML.add("name", layer.getName());
             if (!layer.isVisible()) layerXML.add("visible", false);
             //if(layer.isLocked()) layerXML.add("locked", true);
 
@@ -696,7 +646,7 @@ public class RMPage extends RMParentShape {
                 if (layerXML.hasAttribute("locked")) layer.setLocked(layerXML.getAttributeBoolValue("locked"));
 
                 // Unarchive children, add to layer and add layer to page
-                List children = anArchiver.fromXMLList(layerXML, null, RMShape.class, this);
+                List<RMShape> children = anArchiver.readListFromXmlForClass(layerXML, RMShape.class);
                 layer.addChildren(children);
                 addLayer(layer);
             }
@@ -706,17 +656,10 @@ public class RMPage extends RMParentShape {
     /**
      * Editor method - indicates that page supports added children.
      */
-    public boolean acceptsChildren()
-    {
-        return true;
-    }
+    public boolean acceptsChildren()  { return true; }
 
     /**
      * Editor method - indicates that pages can be super-selected.
      */
-    public boolean superSelectable()
-    {
-        return true;
-    }
-
+    public boolean superSelectable()  { return true; }
 }

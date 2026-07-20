@@ -88,7 +88,7 @@ public class RMLinkedText extends RMTextShape {
         e.setName("linked-text");
 
         // Add xref id (someday this may happen automatically, just by having source text reference us)
-        e.add("xref", anArchiver.getReference(this, true));
+        e.add("xref", anArchiver.getReference(this));
 
         // Return element
         return e;

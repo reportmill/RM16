@@ -1051,7 +1051,7 @@ public class RMTextShape extends RMRectShape {
             XMLElement pathShapeElementZero = pathShapeElement.get(0);
 
             // Unarchive the path shape and set
-            RMShape pathShape = (RMShape) anArchiver.readObjectFromXml(pathShapeElementZero, null);
+            RMShape pathShape = (RMShape) anArchiver.readObjectFromXml(pathShapeElementZero);
             setPathShape(pathShape);
         }
 

@@ -151,7 +151,7 @@ public class RMArchiverHpr {
 
                 // If format changed for segment, write format
                 case "format" -> {
-                    Object fmt = anArchiver.readObjectFromXml(e, null);
+                    Object fmt = anArchiver.readObjectFromXml(e);
                     style = style.copyForStyleKeyValue(TextStyle.Format_Prop, fmt);
                 }
 
@@ -351,8 +351,8 @@ public class RMArchiverHpr {
         public Object fromXML(RMArchiver anArchiver, XMLElement anElmnt)
         {
             String type = anElmnt.getAttributeValue("type", "");
-            if (type.equals("number")) return anArchiver.readObjectFromXmlForClass(anElmnt, RMNumberFormat.class, null);
-            if (type.equals("date")) return anArchiver.readObjectFromXmlForClass(anElmnt, RMDateFormat.class, null);
+            if (type.equals("number")) return anArchiver.readObjectFromXmlForClass(anElmnt, RMNumberFormat.class);
+            if (type.equals("date")) return anArchiver.readObjectFromXmlForClass(anElmnt, RMDateFormat.class);
             if (!type.isEmpty()) System.err.println("RMFormatStub: Unknown format type " + type);
             return null;
         }

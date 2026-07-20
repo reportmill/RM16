@@ -78,7 +78,7 @@ public class RMHTMLParser {
         public HTMLParser(String aString, Font baseFont, TextLineStyle textLineStyle)
         {
             // Initialize attributes map, FontStack and PGraph
-            _attrs.put(RMTextStyle.FONT_KEY, baseFont);
+            _attrs.put(TextStyle.Font_Prop, baseFont);
             _fontStack.add(baseFont);
             _textLineStyle = textLineStyle != null ? textLineStyle : TextLineStyle.DEFAULT;
 
@@ -133,29 +133,29 @@ public class RMHTMLParser {
         {
             // Handle Bold (<B> and <STRONG>)
             if (aTag.equals(HTML.Tag.B) || aTag.equals(HTML.Tag.STRONG)) {
-                Font font = (Font) _attrs.get(RMTextStyle.FONT_KEY);
+                Font font = (Font) _attrs.get(TextStyle.Font_Prop);
                 Font bold = font.getBold() == null ? font : font.getBold();
-                _attrs.put(RMTextStyle.FONT_KEY, bold);
+                _attrs.put(TextStyle.Font_Prop, bold);
                 _fontStack.add(bold);
             }
 
             // Handle Italic (<I> and <EM>)
             if (aTag.equals(HTML.Tag.I) || aTag.equals(HTML.Tag.EM)) {
-                Font font = (Font) _attrs.get(RMTextStyle.FONT_KEY);
+                Font font = (Font) _attrs.get(TextStyle.Font_Prop);
                 Font italic = font.getItalic() == null ? font : font.getItalic();
-                _attrs.put(RMTextStyle.FONT_KEY, italic);
+                _attrs.put(TextStyle.Font_Prop, italic);
                 _fontStack.add(italic);
             }
 
             // Handle Underline (<U>)
             if (aTag.equals(HTML.Tag.U))
-                _attrs.put(RMTextStyle.UNDERLINE_KEY, 1);
+                _attrs.put(TextStyle.Underline_Prop, 1);
 
             // Handle List start (<UL> and <OL>)
             if (aTag.equals(HTML.Tag.UL) || aTag.equals(HTML.Tag.OL)) {
                 _listLevel++;
                 if (!_string.getRunLast().toString().endsWith("\n")) _string.addChars("\n");
-                Font font = (Font) _attrs.get(RMTextStyle.FONT_KEY);
+                Font font = (Font) _attrs.get(TextStyle.Font_Prop);
                 double firstIndent = _textLineStyle.getTab(_listLevel - 1);
                 double leftIndent = firstIndent + font.getStringAdvance(((char) 8226) + " ");
                 _textLineStyle = _textLineStyle.copyForIndents(firstIndent, leftIndent, _textLineStyle.getRightIndent());
@@ -169,7 +169,7 @@ public class RMHTMLParser {
             if (aTag.equals(HTML.Tag.FONT)) {
 
                 // Get base font
-                Font font = (Font) _attrs.get(RMTextStyle.FONT_KEY);
+                Font font = (Font) _attrs.get(TextStyle.Font_Prop);
 
                 // Iterate over Tag attributes to get new font
                 for (Enumeration<?> e = anAttributeSet.getAttributeNames(); e.hasMoreElements(); ) {
@@ -215,7 +215,7 @@ public class RMHTMLParser {
                 }
 
                 // Install new font
-                _attrs.put(RMTextStyle.FONT_KEY, font);
+                _attrs.put(TextStyle.Font_Prop, font);
                 _fontStack.add(font);
             }
 
@@ -233,11 +233,11 @@ public class RMHTMLParser {
 
             // Handle super-scripting
             if (aTag.equals(HTML.Tag.SUP))
-                _attrs.put(RMTextStyle.SCRIPTING_KEY, 1);
+                _attrs.put(TextStyle.Scripting_Prop, 1);
 
             // Handle subscripting
             if (aTag.equals(HTML.Tag.SUB))
-                _attrs.put(RMTextStyle.SCRIPTING_KEY, -1);
+                _attrs.put(TextStyle.Scripting_Prop, -1);
         }
 
         /**
@@ -250,14 +250,14 @@ public class RMHTMLParser {
                     t.equals(HTML.Tag.I) || t.equals(HTML.Tag.EM) || t.equals(HTML.Tag.FONT)) {
                 if (_fontStack.size() > 1) ListUtils.removeLast(_fontStack);
                 Font font = ListUtils.getLast(_fontStack);
-                _attrs.put(RMTextStyle.FONT_KEY, font);
+                _attrs.put(TextStyle.Font_Prop, font);
                 if (t.equals(HTML.Tag.FONT))
                     _isSymbol = false;
             }
 
             // Handle Underline (<U>)
             if (t.equals(HTML.Tag.U))
-                _attrs.put(RMTextStyle.UNDERLINE_KEY, 0);
+                _attrs.put(TextStyle.Scripting_Prop, 0);
 
             // Handle paragraph end (</P>)
             if (t.equals(HTML.Tag.P))
@@ -271,7 +271,7 @@ public class RMHTMLParser {
             if (t.equals(HTML.Tag.UL) || t.equals(HTML.Tag.OL)) {
                 _listLevel = Math.max(0, _listLevel - 1);
                 if (!_string.getRunLast().toString().endsWith("\n")) _string.addChars("\n");
-                Font font = (Font) _attrs.get(RMTextStyle.FONT_KEY);
+                Font font = (Font) _attrs.get(TextStyle.Font_Prop);
                 double firstIndent = _listLevel == 0 ? 0 : _textLineStyle.getTab(_listLevel - 1);
                 double leftIndent = _listLevel == 0 ? 0 : firstIndent + font.getStringAdvance(((char) 8226) + " ");
                 _textLineStyle = _textLineStyle.copyForIndents(firstIndent, leftIndent, _textLineStyle.getRightIndent());
@@ -286,11 +286,11 @@ public class RMHTMLParser {
 
             // Handle super-scripting
             if (t.equals(HTML.Tag.SUP))
-                _attrs.remove(RMTextStyle.SCRIPTING_KEY);
+                _attrs.remove(TextStyle.Scripting_Prop);
 
             // Handle subscripting
             if (t.equals(HTML.Tag.SUB))
-                _attrs.remove(RMTextStyle.SCRIPTING_KEY);
+                _attrs.remove(TextStyle.Scripting_Prop);
         }
 
         /**

@@ -30,15 +30,6 @@ public class RMTextEditor extends TextAdapter {
     }
 
     /**
-     * Returns the text style applied to any input characters.
-     */
-    public RMTextStyle getSelStyle()
-    {
-        TextStyle textStyle = getSelTextStyle();
-        return new RMTextStyle(textStyle);
-    }
-
-    /**
      * Sets the attributes that are applied to current selection or newly typed chars.
      */
     public void setInputAttribute(String aKey, Object aValue)  { setSelTextStyleValue(aKey, aValue); }
@@ -70,7 +61,7 @@ public class RMTextEditor extends TextAdapter {
     /**
      * Returns the color of the current selection or cursor.
      */
-    public Color getColor()  { return getSelStyle().getColor(); }
+    public Color getColor()  { return getSelTextStyle().getColor(); }
 
     /**
      * Sets the color of the current selection or cursor.
@@ -80,7 +71,7 @@ public class RMTextEditor extends TextAdapter {
     /**
      * Returns the font of the current selection or cursor.
      */
-    public Font getFont()  { return getSelStyle().getFont(); }
+    public Font getFont()  { return getSelTextStyle().getFont(); }
 
     /**
      * Sets the font of the current selection or cursor.
@@ -90,7 +81,7 @@ public class RMTextEditor extends TextAdapter {
     /**
      * Returns the format of the current selection or cursor.
      */
-    public TextFormat getFormat()  { return getSelStyle().getFormat(); }
+    public TextFormat getFormat()  { return getSelTextStyle().getFormat(); }
 
     /**
      * Sets the format of the current selection or cursor, after trying to expand the selection to encompass currently
@@ -108,28 +99,28 @@ public class RMTextEditor extends TextAdapter {
             return;
 
         // If there is a format, add it to current attributes and set for selected text
-        setInputAttribute(RMTextStyle.FORMAT_KEY, aFormat);
+        setInputAttribute(TextStyle.Format_Prop, aFormat);
     }
 
     /**
      * Returns whether current selection is outlined.
      */
-    public Border getTextBorder()  { return getSelStyle().getBorder(); }
+    public Border getTextBorder()  { return getSelTextStyle().getBorder(); }
 
     /**
      * Sets whether current selection is outlined.
      */
-    public void setTextBorder(Border aBorder)  { setInputAttribute(RMTextStyle.BORDER_KEY, aBorder); }
+    public void setTextBorder(Border aBorder)  { setInputAttribute(TextStyle.Border_Prop, aBorder); }
 
     /**
      * Returns the character spacing of the current selection or cursor.
      */
-    public float getCharSpacing()  { return (float) getSelStyle().getCharSpacing(); }
+    public float getCharSpacing()  { return (float) getSelTextStyle().getCharSpacing(); }
 
     /**
      * Returns the character spacing of the current selection or cursor.
      */
-    public void setCharSpacing(float aValue)  { setInputAttribute(RMTextStyle.CHAR_SPACING_KEY, aValue); }
+    public void setCharSpacing(float aValue)  { setInputAttribute(TextStyle.CharSpacing_Prop, aValue); }
 
     /**
      * Returns the alignment for current selection.

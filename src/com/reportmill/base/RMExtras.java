@@ -8,6 +8,7 @@ import com.reportmill.shape.*;
 import java.util.*;
 import snap.geom.Rect;
 import snap.text.TextFormat;
+import snap.text.TextStyle;
 import snap.util.*;
 import snap.web.WebURL;
 
@@ -174,13 +175,13 @@ public class RMExtras {
             for (RMShape child : aShape.getChildren())
                 replaceFormat(child, aFormat);
 
-            // Handle Text
+        // Handle Text
         else if (aShape instanceof RMTextShape text) {
             RMXString xstring = text.getXString();
             for (int i = 0, iMax = xstring.getRunCount(); i < iMax; i++) {
                 RMXStringRun run = xstring.getRun(i);
                 if (run.getFormat() != null && run.getFormat().getClass() == aFormat.getClass())
-                    xstring.setAttribute(RMTextStyle.FORMAT_KEY, aFormat, run.start(), run.end());
+                    xstring.setAttribute(TextStyle.Format_Prop, aFormat, run.start(), run.end());
             }
         }
 

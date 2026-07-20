@@ -67,11 +67,6 @@ public class RMXStringRun implements CharSequence {
     }
 
     /**
-     * Returns the text style.
-     */
-    public RMTextStyle getStyle()  { return new RMTextStyle(_style); }
-
-    /**
      * Returns the font for this run.
      */
     public Font getFont()  { return _style.getFont(); }
@@ -79,12 +74,12 @@ public class RMXStringRun implements CharSequence {
     /**
      * Returns the color for this run.
      */
-    public Color getColor()  { return getStyle().getColor(); }
+    public Color getColor()  { return _style.getColor(); }
 
     /**
      * Returns the format for this run.
      */
-    public TextFormat getFormat()  { return getStyle().getFormat(); }
+    public TextFormat getFormat()  { return _style.getFormat(); }
 
     /**
      * Returns the line style for this run.
@@ -94,12 +89,12 @@ public class RMXStringRun implements CharSequence {
     /**
      * Returns whether this run is underlined.
      */
-    public boolean isUnderlined()  { return getStyle().isUnderlined(); }
+    public boolean isUnderlined()  { return _style.isUnderlined(); }
 
     /**
      * Returns the char spacing.
      */
-    public float getCharSpacing()  { return (float) getStyle().getCharSpacing(); }
+    public float getCharSpacing()  { return (float) _style.getCharSpacing(); }
 
     /**
      * Return next run.

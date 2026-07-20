@@ -3,10 +3,8 @@
  */
 package com.reportmill.graphics;
 import com.reportmill.base.*;
-import static com.reportmill.graphics.RMTextStyle.*;
 import com.reportmill.shape.*;
 import java.util.*;
-
 import snap.geom.HPos;
 import snap.gfx.Font;
 import snap.text.*;
@@ -144,12 +142,11 @@ public class RMXString implements Cloneable, CharSequence, RMArchiver.Archivable
      */
     public void addChars(CharSequence theChars, Object... theAttrs)
     {
-        TextStyle style = _richText.getTextStyleForCharIndex(length());
+        TextStyle textStyle = _richText.getTextStyleForCharIndex(length());
         Object attr0 = theAttrs != null && theAttrs.length > 0 ? theAttrs[0] : null;
-        if (attr0 instanceof TextStyle) style = (TextStyle) attr0;
-        else if (attr0 instanceof RMTextStyle) style = ((RMTextStyle) attr0)._style;
-        else if (attr0 != null) style = style.copyForStyleValues(theAttrs);
-        addChars(theChars, style, length());
+        if (attr0 instanceof TextStyle) textStyle = (TextStyle) attr0;
+        else if (attr0 != null) textStyle = textStyle.copyForStyleValues(theAttrs);
+        addChars(theChars, textStyle, length());
     }
 
     /**
@@ -182,11 +179,9 @@ public class RMXString implements Cloneable, CharSequence, RMArchiver.Archivable
     /**
      * Replaces chars in given range, with given String, using the given attributes.
      */
-    public void replaceChars(CharSequence theChars, RMTextStyle aStyle, int aStart, int anEnd)
+    public void replaceChars(CharSequence theChars, TextStyle aStyle, int aStart, int anEnd)
     {
-        TextStyle style = null;
-        if (aStyle != null) style = aStyle._style;
-        _richText.replaceCharsWithStyle(theChars, style, aStart, anEnd);
+        _richText.replaceCharsWithStyle(theChars, aStyle, aStart, anEnd);
     }
 
     /**
@@ -289,7 +284,7 @@ public class RMXString implements Cloneable, CharSequence, RMArchiver.Archivable
      */
     public void setAttribute(Object anAttr, int aStart, int anEnd)
     {
-        String key = RMTextStyle.getStyleKey(anAttr);
+        String key = TextStyle.getStyleKey(anAttr);
         if (key != null) setAttribute(key, anAttr, aStart, anEnd);
     }
 
@@ -352,7 +347,7 @@ public class RMXString implements Cloneable, CharSequence, RMArchiver.Archivable
      */
     public void setUnderlined(boolean aFlag)
     {
-        setAttribute(UNDERLINE_KEY, aFlag ? 1 : null, 0, length());
+        setAttribute(TextStyle.Underline_Prop, aFlag ? 1 : null, 0, length());
     }
 
     /**

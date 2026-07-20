@@ -392,7 +392,7 @@ public class RMTextShape extends RMRectShape {
     {
         if (isTextEditorSet())
             getTextEditor().setCharSpacing(aValue);
-        else getXString().setAttribute(RMTextStyle.CHAR_SPACING_KEY, aValue == 0 ? null : aValue);
+        else getXString().setAttribute(TextStyle.CharSpacing_Prop, aValue == 0 ? null : aValue);
     }
 
     /**

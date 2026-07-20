@@ -522,8 +522,8 @@ public class RMArchiver {
         classMap.put("double-stroke", RMStroke.class);
         classMap.put("border-stroke", com.reportmill.graphics.RMBorderStroke.class);
         classMap.put("format", RMArchiverHpr.RMFormatStub.class);
-        classMap.put("pgraph", RMParagraph.class);
-        classMap.put("xstring", RMXString.class);
+        //classMap.put("pgraph", RMParagraph.class);
+        //classMap.put("xstring", RMXString.class);
 
         // Sorts, Grouping
         classMap.put("sort", com.reportmill.base.RMSort.class);

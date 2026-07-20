@@ -27,7 +27,7 @@ public class RMTextShapeUtils {
         // Set polygon color to run or outline color and stroke and return
         polygon.setColor(aText.getTextColor());
         Border brdr = aText.getTextBorder();
-        polygon.setStroke(brdr != null ? new RMStroke(RMColor.get(brdr.getColor()), brdr.getWidth()) : null);
+        polygon.setStroke(brdr != null ? new RMStroke(brdr.getColor(), brdr.getWidth()) : null);
         return polygon;
     }
 

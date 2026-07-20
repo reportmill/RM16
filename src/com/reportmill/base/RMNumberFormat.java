@@ -3,6 +3,8 @@
  */
 package com.reportmill.base;
 import com.reportmill.graphics.*;
+
+import java.awt.*;
 import java.text.*;
 import java.util.Locale;
 import java.util.Objects;
@@ -409,7 +411,7 @@ public class RMNumberFormat implements TextFormat, Cloneable, RMArchiver.Archiva
     {
         Number num = getNumber(anObj);
         if (num != null && num.doubleValue() < 0 && _negativeInRed)
-            return TextStyle.DEFAULT.copyForStyleValue(RMColor.red);
+            return TextStyle.DEFAULT.copyForStyleValue(Color.RED);
         return null;
     }
 

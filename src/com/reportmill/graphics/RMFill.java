@@ -15,7 +15,7 @@ import java.util.Objects;
 public class RMFill implements Cloneable, RMArchiver.Archivable {
 
     // Fill color
-    RMColor _color = RMColor.black;
+    Color _color = Color.BLACK;
 
     /**
      * Creates a plain, black fill.
@@ -27,7 +27,7 @@ public class RMFill implements Cloneable, RMArchiver.Archivable {
     /**
      * Creates a plain fill with the given color.
      */
-    public RMFill(RMColor aColor)
+    public RMFill(Color aColor)
     {
         _color = aColor;
     }
@@ -35,10 +35,7 @@ public class RMFill implements Cloneable, RMArchiver.Archivable {
     /**
      * Returns the color associated with this fill.
      */
-    public RMColor getColor()
-    {
-        return _color;
-    }
+    public Color getColor()  { return _color; }
 
     /**
      * Returns the name of the fill.
@@ -64,7 +61,7 @@ public class RMFill implements Cloneable, RMArchiver.Archivable {
     public RMFill copyForColor(Color aColor)
     {
         RMFill clone = clone();
-        clone._color = aColor != null ? RMColor.get(aColor) : _color;
+        clone._color = aColor != null ? aColor : _color;
         return clone;
     }
 
@@ -111,7 +108,7 @@ public class RMFill implements Cloneable, RMArchiver.Archivable {
     public XMLElement toXML(RMArchiver anArchiver)
     {
         XMLElement e = new XMLElement("fill");
-        if (!getColor().equals(RMColor.black)) e.add("color", "#" + getColor().toHexString());
+        if (!getColor().equals(Color.BLACK)) e.add("color", "#" + getColor().toHexString());
         return e;
     }
 
@@ -120,8 +117,8 @@ public class RMFill implements Cloneable, RMArchiver.Archivable {
      */
     public Object fromXML(RMArchiver anArchiver, XMLElement anElement)
     {
-        String color = anElement.getAttributeValue("color");
-        if (color != null) _color = new RMColor(color);
+        String colorStr = anElement.getAttributeValue("color");
+        if (colorStr != null) _color = new Color(colorStr);
         return this;
     }
 
@@ -132,5 +129,4 @@ public class RMFill implements Cloneable, RMArchiver.Archivable {
     {
         return String.format("%s: { color:%s }", getClass().getSimpleName(), getColor().toHexString());
     }
-
 }

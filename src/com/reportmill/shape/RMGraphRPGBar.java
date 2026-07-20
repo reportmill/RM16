@@ -5,7 +5,10 @@ package com.reportmill.shape;
 import com.reportmill.base.RMGroup;
 import com.reportmill.graphics.*;
 import java.util.*;
+import java.util.List;
 import snap.geom.*;
+import snap.geom.Point;
+import snap.gfx.Color;
 import snap.text.TextFormat;
 import snap.util.MathUtils;
 
@@ -162,7 +165,7 @@ class RMGraphRPGBar extends RMGraphRPG {
                     RMLineShape line = new RMLineShape();
                     double minorLineX = isVertical() ? bounds.x : lineX + (j + 1) * minorTickInterval;
                     double minorLineY = isVertical() ? lineY + (j + 1) * minorTickInterval : bounds.y;
-                    line.setStrokeColor(RMColor.lightGray);
+                    line.setStrokeColor(Color.LIGHTGRAY);
                     line.setFrame(minorLineX, minorLineY, lineW, lineH);
                     _barShape.addGridLineMinor(line);
                 }
@@ -226,7 +229,7 @@ class RMGraphRPGBar extends RMGraphRPG {
                 // Set bar color and bounds
                 int cindex = i;
                 if (_stacked && (iMax == 1 || !_meshed) || _graph.isColorItems()) cindex = j;
-                RMColor color = getColor(cindex);
+                Color color = getColor(cindex);
                 bar.setColor(color);
                 Rect barBounds = getBarBounds(i, j);
                 bar.setBounds(barBounds);

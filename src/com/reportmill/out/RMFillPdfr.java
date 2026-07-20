@@ -58,8 +58,8 @@ public class RMFillPdfr {
         String outerBounds = "", outerDomain = "", encode = "";
         for (int i = 0; i < stopCount - 1; ++i) {
             functionDict = new Hashtable<>(5);
-            RMColor c0 = aFill.getStopColor(i);
-            RMColor c1 = aFill.getStopColor(i + 1);
+            Color c0 = aFill.getStopColor(i);
+            Color c1 = aFill.getStopColor(i + 1);
             double d0 = aFill.getStopOffset(i);
             double d1 = aFill.getStopOffset(i + 1);
             functionDict.put("FunctionType", "2");

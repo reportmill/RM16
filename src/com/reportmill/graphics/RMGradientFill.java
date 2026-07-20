@@ -45,7 +45,7 @@ public class RMGradientFill extends RMFill {
     /**
      * Returns the color of the stop at the given index.
      */
-    public RMColor getStopColor(int index)  { return RMColor.get(getStop(index).color()); }
+    public Color getStopColor(int index)  { return getStop(index).color(); }
 
     /**
      * Returns the position (in the range {0-1}) for the given stop index.
@@ -70,7 +70,7 @@ public class RMGradientFill extends RMFill {
     /**
      * Returns the color associated with this fill.
      */
-    public RMColor getColor()  { return getStopColor(0); }
+    public Color getColor()  { return getStopColor(0); }
 
     /**
      * Returns the snap version of this fill.
@@ -83,7 +83,7 @@ public class RMGradientFill extends RMFill {
     public RMGradientFill copyForColor(Color aColor)
     {
         RMGradientFill clone = clone();
-        clone._color = aColor != null ? RMColor.get(aColor) : _color;
+        clone._color = aColor != null ? aColor : _color;
         GradientPaint.Stop[] stops = Arrays.copyOf(getStops(), getStopCount());
         stops[0] = new Stop(getStopOffset(0), aColor);
         clone._gradientPaint = _gradientPaint.copyForStops(stops);

@@ -3,8 +3,8 @@
  */
 package com.reportmill.shape;
 import com.reportmill.base.*;
-import com.reportmill.graphics.RMColor;
 import com.reportmill.shape.RMGraph.*;
+import snap.gfx.Color;
 import snap.util.ListUtils;
 
 import java.util.*;
@@ -30,7 +30,7 @@ abstract class RMGraphRPG {
     List<RMGraphSection> _sections;
 
     // The list of colors
-    List<RMColor> _colors;
+    List<Color> _colors;
 
     // The graph shape
     RMParentShape _graphShape;
@@ -177,7 +177,7 @@ abstract class RMGraphRPG {
     /**
      * Returns the colors.
      */
-    public List<RMColor> getColors()
+    public List<Color> getColors()
     {
         // If already set, just return
         if (_colors != null) return _colors;
@@ -189,13 +189,13 @@ abstract class RMGraphRPG {
 
         // Otherwise, get colors
         RMGraphSeries series = getSeries(0);
-        List<RMColor> colors = new ArrayList<>();
+        List<Color> colors = new ArrayList<>();
         for (int i = 0, iMax = series.getItemCount(); i < iMax; i++) {
             RMGraphSeries.Item item = series.getItem(i);
             Object obj = item.getGroup();
             Object val = RMKeyChain.getValue(obj, colorKey);
             if (val instanceof String) {
-                RMColor color = RMColor.get(val);
+                Color color = Color.get(val);
                 if (color == null)
                     color = _graph.getColor(i);
                 colors.add(color);
@@ -217,7 +217,7 @@ abstract class RMGraphRPG {
     /**
      * Returns the individual color at given index.
      */
-    public RMColor getColor(int anIndex)
+    public Color getColor(int anIndex)
     {
         return getColors().get(anIndex % getColorCount());
     }

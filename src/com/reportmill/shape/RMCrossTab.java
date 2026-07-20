@@ -4,6 +4,8 @@
 package com.reportmill.shape;
 import com.reportmill.graphics.*;
 import java.util.*;
+
+import snap.gfx.Color;
 import snap.util.*;
 
 /**
@@ -18,10 +20,10 @@ public class RMCrossTab extends RMParentShape {
     String _filterKey;
 
     // A list of columns
-    List<RMCrossTabCol> _cols = new ArrayList();
+    List<RMCrossTabCol> _cols = new ArrayList<>();
 
     // A list of rows
-    List<RMCrossTabRow> _rows = new ArrayList();
+    List<RMCrossTabRow> _rows = new ArrayList<>();
 
     // The number of header rows for table
     int _headerRowCount;
@@ -34,8 +36,8 @@ public class RMCrossTab extends RMParentShape {
     RMCrossTabCol _leftBrdrCol = new RMCrossTabCol();
 
     // The color of the header row and column
-    static RMColor HEADER_ROW_COLOR = new RMColor(.75f);
-    static RMColor HEADER_COLUMN_COLOR = new RMColor(.867f);
+    static Color HEADER_ROW_COLOR = new Color(.75f);
+    static Color HEADER_COLUMN_COLOR = new Color(.867f);
 
     /**
      * Creates a new RMCrossTab.

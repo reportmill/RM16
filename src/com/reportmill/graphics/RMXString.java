@@ -18,7 +18,7 @@ import snap.util.*;
  * <p>
  * You might use it like this:
  * <p><blockquote><pre>
- *    RMXString xstring = new RMXString("Hello World", RMColor.red);
+ *    RMXString xstring = new RMXString("Hello World", Color.RED);
  *    xstring.addAttribute(RMFont.getFont("Arial Bold", 12), 0, 5);
  *    xstring.addAttribute(RMFont.getFont("Arial BoldItalic", 12), 6, xstring.length());
  * </pre></blockquote><p>

@@ -3,6 +3,7 @@
  */
 package com.reportmill.shape;
 import com.reportmill.base.*;
+import snap.gfx.Color;
 import snap.gfx3d.Scene3D;
 import com.reportmill.graphics.*;
 import java.util.*;
@@ -76,7 +77,7 @@ class RMGraphRPGPie extends RMGraphRPG {
         // Get wedge prototype
         RMOvalShape prototype = new RMOvalShape();
         prototype.setHoleRatio(holeRatio);
-        prototype.setStrokeColor(RMColor.black);
+        prototype.setStrokeColor(Color.BLACK);
 
         // Iterate over each graph section and add individual pies
         for (int i = 0, iMax = getSectionCount(); i < iMax; i++) {
@@ -248,7 +249,7 @@ class RMGraphRPGPie extends RMGraphRPG {
 
                         // Create wedge label line shape, set StrokeColor to LightGray and add label line
                         RMLineShape line = new RMLineShape(startX, startY, endX, endY);
-                        line.setStrokeColor(RMColor.lightGray);
+                        line.setStrokeColor(Color.LIGHTGRAY);
                         _pieShape.addWedgeLabelLine(line);
                     }
 

@@ -39,7 +39,7 @@ public class RMTextStyle implements Cloneable {
     /**
      * Returns the color for this run.
      */
-    public RMColor getColor()  { return RMColor.get(_style.getColor()); }
+    public Color getColor()  { return _style.getColor(); }
 
     /**
      * Returns whether this run is underlined.

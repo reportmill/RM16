@@ -7,6 +7,7 @@ import snap.geom.Line;
 import snap.geom.Point;
 import snap.geom.Shape;
 import snap.geom.Transform;
+import snap.gfx.Color;
 import snap.util.*;
 
 /**
@@ -92,7 +93,7 @@ public class RMLineShape extends RMParentShape {
     /**
      * Override to handle arrow heads special.
      */
-    public void setStrokeColor(RMColor aColor)
+    public void setStrokeColor(Color aColor)
     {
         super.setStrokeColor(aColor);
         if (getArrowHead() != null) getArrowHead().setColor(aColor);

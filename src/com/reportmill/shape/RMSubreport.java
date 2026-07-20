@@ -17,24 +17,26 @@ import java.util.Objects;
 public class RMSubreport extends RMRectShape {
 
     // The name of the subreport
-    String _subreportName;
+    private String _subreportName;
 
     // The subreport shape
-    RMParentShape _subreportShape;
+    private RMParentShape _subreportShape;
 
     // The fill to use on top of subreport shape when painting in editor
-    GradientPaint _coverFill;
+    private GradientPaint _coverFill;
 
-    // The stroke to use on top of subreport shape when painting in editor
-    Stroke _coverStroke;
+    /**
+     * Constructor.
+     */
+    public RMSubreport()
+    {
+        super();
+    }
 
     /**
      * Returns the subreport name.
      */
-    public String getSubreportName()
-    {
-        return _subreportName;
-    }
+    public String getSubreportName()  { return _subreportName; }
 
     /**
      * Sets the subreport name.
@@ -133,8 +135,8 @@ public class RMSubreport extends RMRectShape {
     private GradientPaint getCoverFill()
     {
         if (_coverFill != null) return _coverFill;
-        RMColor c1 = new RMColor("#F7F8FC55"), c2 = new RMColor("#C5D3FF77"), c3 = new RMColor("#DEE9FF55");
-        GradientPaint.Stop stops[] = GradientPaint.getStops(0, c1, .67, c2, 1, c3);
+        Color c1 = new Color("#F7F8FC55"), c2 = new Color("#C5D3FF77"), c3 = new Color("#DEE9FF55");
+        GradientPaint.Stop[] stops = GradientPaint.getStops(0, c1, .67, c2, 1, c3);
         return _coverFill = new GradientPaint(60, stops);
     }
 
@@ -170,7 +172,7 @@ public class RMSubreport extends RMRectShape {
         e.setName("subreport");
 
         // Archive subreport name
-        if (getSubreportName() != null && getSubreportName().length() > 0)
+        if (getSubreportName() != null && !getSubreportName().isEmpty())
             e.add("subreport-name", getSubreportName());
 
         // Return xml element

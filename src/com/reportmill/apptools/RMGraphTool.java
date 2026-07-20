@@ -5,10 +5,10 @@ package com.reportmill.apptools;
 import com.reportmill.app.AttributesPanel;
 import com.reportmill.app.RMEditor;
 import com.reportmill.base.RMGrouping;
-import com.reportmill.graphics.RMColor;
 import com.reportmill.graphics.RMStroke;
 import com.reportmill.shape.*;
 import java.util.*;
+import snap.gfx.Color;
 import snap.util.*;
 import snap.view.*;
 import snap.viewx.ColorDock;
@@ -149,7 +149,7 @@ public class RMGraphTool<T extends RMGraph> extends RMTool<T> implements RMSortP
         setViewValue("ItemsLayoutList", graph.getItemsLayout());
 
         // Get the color dock, reset colors and update
-        List<RMColor> colors = graph.getColors();
+        List<Color> colors = graph.getColors();
         ColorDock cdock = getView("ColorDock", ColorDock.class);
         cdock.setColors(colors);
 
@@ -237,15 +237,15 @@ public class RMGraphTool<T extends RMGraph> extends RMTool<T> implements RMSortP
             // Get ColorDock selected index/color
             ColorDock cdock = getView("ColorDock", ColorDock.class);
             int index = cdock.getSelIndex();
-            RMColor color = RMColor.get(cdock.getColor(index));
+            Color color = cdock.getColor(index);
 
             // Get copy of graph colors and make sure they are at least as long as selected index
-            List<RMColor> colors = new ArrayList<>(graph.getColors());
-            while (colors.size() < index + 1) colors.add(RMColor.white);
+            List<Color> colors = new ArrayList<>(graph.getColors());
+            while (colors.size() < index + 1) colors.add(Color.WHITE);
 
             // Set color of selected index, remove trailing whites, and set new colors in graph
             colors.set(index, color);
-            while (colors.size() > 1 && colors.get(colors.size() - 1).equals(RMColor.white))
+            while (colors.size() > 1 && colors.get(colors.size() - 1).equals(Color.WHITE))
                 colors.remove(colors.size() - 1);
             graph.setColors(colors);
         }
@@ -484,8 +484,8 @@ public class RMGraphTool<T extends RMGraph> extends RMTool<T> implements RMSortP
         // Create new 320x240(*90%) graph
         RMGraph graph = new RMGraph();
         graph.setSize(288, 216);
-        graph.setStroke(new RMStroke()); //setFill(newRMGradientFill(newRMColor(.85f,.88f,1),newRMColor(.58f,.65f,1),90));
-        graph.setColor(RMColor.white);
+        graph.setStroke(new RMStroke()); //setFill(newRMGradientFill(new Color(.85f,.88f,1),new Color(.58f,.65f,1),90));
+        graph.setColor(Color.WHITE);
         return graph;
     }
 

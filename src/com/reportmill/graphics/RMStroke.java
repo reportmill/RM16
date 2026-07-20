@@ -13,7 +13,7 @@ import snap.util.*;
 public class RMStroke implements Cloneable, RMArchiver.Archivable {
 
     // The color
-    private RMColor _color;
+    private Color _color;
 
     // The stroke width
     private float _width;
@@ -30,7 +30,7 @@ public class RMStroke implements Cloneable, RMArchiver.Archivable {
     public RMStroke()
     {
         super();
-        _color = RMColor.black;
+        _color = Color.BLACK;
         _width = 1;
     }
 
@@ -40,7 +40,7 @@ public class RMStroke implements Cloneable, RMArchiver.Archivable {
     public RMStroke(Color aColor, double aStrokeWidth)
     {
         this();
-        _color = RMColor.get(aColor);
+        _color = aColor;
         _width = (float) aStrokeWidth;
     }
 
@@ -50,7 +50,7 @@ public class RMStroke implements Cloneable, RMArchiver.Archivable {
     public RMStroke(Color aColor, Stroke aStroke)
     {
         this();
-        _color = RMColor.get(aColor);
+        _color = aColor;
         _width = (float) aStroke.getWidth();
         if (aStroke.getDashArray() != null)
             _dashArray = Convert.doubleArrayToFloat(aStroke.getDashArray());
@@ -61,7 +61,7 @@ public class RMStroke implements Cloneable, RMArchiver.Archivable {
     /**
      * Returns the color associated with this fill.
      */
-    public RMColor getColor()  { return _color; }
+    public Color getColor()  { return _color; }
 
     /**
      * Returns the line width of this stroke.
@@ -137,7 +137,7 @@ public class RMStroke implements Cloneable, RMArchiver.Archivable {
     /**
      * Returns a duplicate stroke with new color.
      */
-    public RMStroke deriveColor(RMColor aColor)
+    public RMStroke deriveColor(Color aColor)
     {
         RMStroke s = clone();
         s._color = aColor;
@@ -220,9 +220,9 @@ public class RMStroke implements Cloneable, RMArchiver.Archivable {
         XMLElement e = new XMLElement("stroke");
 
         // Archive Color, Width, DashArray, DashPhase
-        if (!getColor().equals(RMColor.black)) e.add("color", "#" + getColor().toHexString());
+        if (!getColor().equals(Color.BLACK)) e.add("color", "#" + getColor().toHexString());
         if (_width != 1) e.add("width", _width);
-        if (getDashArrayString() != null && getDashArrayString().length() > 0)
+        if (getDashArrayString() != null && !getDashArrayString().isEmpty())
             e.add("dash-array", getDashArrayString());
         if (getDashPhase() != 0) e.add("dash-phase", getDashPhase());
         return e;
@@ -234,8 +234,8 @@ public class RMStroke implements Cloneable, RMArchiver.Archivable {
     public Object fromXML(RMArchiver anArchiver, XMLElement anElement)
     {
         // Unarchive Color
-        String color = anElement.getAttributeValue("color");
-        if (color != null) _color = new RMColor(color);
+        String colorStr = anElement.getAttributeValue("color");
+        if (colorStr != null) _color = new Color(colorStr);
 
         // Unarchive Width, DashArray, DashPhase
         if (anElement.hasAttribute("width")) _width = anElement.getAttributeFloatValue("width", 1);
@@ -245,5 +245,4 @@ public class RMStroke implements Cloneable, RMArchiver.Archivable {
         if (anElement.hasAttribute("dash-phase")) _dashPhase = anElement.getAttributeFloatValue("dash-phase");
         return this;
     }
-
 }

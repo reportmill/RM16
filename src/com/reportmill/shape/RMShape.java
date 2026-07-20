@@ -21,7 +21,7 @@ import snap.view.*;
  * Here's an example of programatically adding a watermark to a document:
  * <p><blockquote><pre>
  *   RMFont font = RMFont.getFont("Arial Bold", 72);
- *   RMColor color = new RMColor(.9f, .9f, .9f);
+ *   Color color = new Color(.9f, .9f, .9f);
  *   RMXString string = new RMXString("REPORTMILL", font, color);
  *   RMText shape = new RMText(string);
  *   myDocument.getPage(0).addChild(shape);
@@ -738,15 +738,15 @@ public class RMShape implements Cloneable, Archivable, Key.GetSet {
     /**
      * Returns the color of the shape.
      */
-    public RMColor getColor()
+    public Color getColor()
     {
-        return getFill() == null ? RMColor.black : getFill().getColor();
+        return getFill() == null ? Color.BLACK : getFill().getColor();
     }
 
     /**
      * Sets the color of the shape.
      */
-    public void setColor(RMColor aColor)
+    public void setColor(Color aColor)
     {
         // Set color
         if (aColor == null) setFill(null);
@@ -757,15 +757,15 @@ public class RMShape implements Cloneable, Archivable, Key.GetSet {
     /**
      * Returns the stroke color of the shape.
      */
-    public RMColor getStrokeColor()
+    public Color getStrokeColor()
     {
-        return getStroke() == null ? RMColor.black : getStroke().getColor();
+        return getStroke() == null ? Color.BLACK : getStroke().getColor();
     }
 
     /**
      * Sets the stroke color of the shape.
      */
-    public void setStrokeColor(RMColor aColor)
+    public void setStrokeColor(Color aColor)
     {
         if (aColor == null) setStroke(null);
         else if (getStroke() == null) setStroke(new RMStroke(aColor, 1));
@@ -785,7 +785,7 @@ public class RMShape implements Cloneable, Archivable, Key.GetSet {
      */
     public void setStrokeWidth(float aValue)
     {
-        if (getStroke() == null) setStroke(new RMStroke(RMColor.black, aValue));
+        if (getStroke() == null) setStroke(new RMStroke(Color.BLACK, aValue));
         else setStroke(getStroke().deriveWidth(aValue));
     }
 
@@ -868,12 +868,12 @@ public class RMShape implements Cloneable, Archivable, Key.GetSet {
     /**
      * Returns the text color for the shape.
      */
-    public RMColor getTextColor()  { return RMColor.black; }
+    public Color getTextColor()  { return Color.BLACK; }
 
     /**
      * Sets the text color for the shape.
      */
-    public void setTextColor(RMColor aColor)  { }
+    public void setTextColor(Color aColor)  { }
 
     /**
      * Returns whether font has been set.
@@ -1908,17 +1908,17 @@ public class RMShape implements Cloneable, Archivable, Key.GetSet {
 
                 // Handle FillColor, StrokeColor, TextColor
                 case "FillColor" -> {
-                    RMColor color = RMColor.get(value);
+                    Color color = Color.get(value);
                     if (color != null)
                         aShapeRPG.setColor(color);
                 }
                 case "StrokeColor" -> {
-                    RMColor color = RMColor.get(value);
+                    Color color = Color.get(value);
                     if (color != null)
                         aShapeRPG.setStrokeColor(color);
                 }
                 case "TextColor" -> {
-                    RMColor color = RMColor.get(value);
+                    Color color = Color.get(value);
                     if (color != null)
                         aShapeRPG.setTextColor(color);
                 }

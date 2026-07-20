@@ -223,7 +223,7 @@ public class RMTextShape extends RMRectShape {
     /**
      * Returns the color of the first character of the xstring associated with this RMText.
      */
-    public RMColor getTextColor()
+    public Color getTextColor()
     {
         return getXString().getRunForCharIndex(0).getColor();
     }
@@ -231,7 +231,7 @@ public class RMTextShape extends RMRectShape {
     /**
      * Sets the color of the characters in the XString associated with this RMText.
      */
-    public void setTextColor(RMColor aColor)
+    public void setTextColor(Color aColor)
     {
         getXString().setAttribute(aColor);
     }

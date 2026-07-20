@@ -2,9 +2,9 @@
  * Copyright (c) 2010, ReportMill Software. All rights reserved.
  */
 package com.reportmill.shape;
-import com.reportmill.graphics.RMColor;
 import snap.geom.Path2D;
 import snap.geom.Rect;
+import snap.gfx.Color;
 
 /**
  * This class generates (and represents) a RPG'd line graph area.
@@ -66,7 +66,7 @@ class RMGraphRPGLine extends RMGraphRPGBar {
             RMPolygonShape lineShape = new RMPolygonShape(path);
 
             // If area or 3D line, set fill color and stroke to black
-            RMColor color = getColor(i);
+            Color color = getColor(i);
             if (graphType == RMGraph.Type.Area || draw3D) {
                 lineShape.setColor(color);
                 lineShape.setStrokeColor(color.darker().darker());
@@ -107,7 +107,7 @@ class RMGraphRPGLine extends RMGraphRPGBar {
                 linePointShape.setBounds(lineX - inset, lineY - inset, inset * 2, inset * 2);
 
                 // Set bar color
-                RMColor col = colorItems ? getColor(j) : color;
+                Color col = colorItems ? getColor(j) : color;
                 linePointShape.setColor(col);
                 linePointShape.setStrokeColor(col.darker().darker());
 

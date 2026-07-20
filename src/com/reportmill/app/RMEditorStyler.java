@@ -263,15 +263,14 @@ public class RMEditorStyler extends Styler {
         RMTextEditor textEditor = getTextEditorForShape(aShape);
         if (textEditor != null) {
             Color color = aPaint != null ? aPaint.getColor() : null;
-            RMColor rmcolor = color != null ? RMColor.get(color) : null;
-            textEditor.setColor(rmcolor);
+            textEditor.setColor(color);
             return;
         }
 
         // Get fill for paint
         RMFill fill = null;
         if (aPaint instanceof Color)
-            fill = new RMFill(RMColor.get((Color) aPaint));
+            fill = new RMFill((Color) aPaint);
         else if (aPaint instanceof GradientPaint)
             fill = new RMGradientFill((GradientPaint) aPaint);
         else if (aPaint instanceof ImagePaint)
@@ -298,11 +297,8 @@ public class RMEditorStyler extends Styler {
     /**
      * Sets the text color current text.
      */
-    public void setTextColorForShape(RMShape aShape, Color aColor)
+    public void setTextColorForShape(RMShape aShape, Color textColor)
     {
-        // Get text color
-        RMColor textColor = RMColor.get(aColor);
-
         // Handle RMTextShape + TextEditorSet
         RMTextEditor textEditor = getTextEditorForShape(aShape);
         if (textEditor != null) {
@@ -428,7 +424,7 @@ public class RMEditorStyler extends Styler {
             return new RMBorderStroke(edgeBorder.isShowTop(), edgeBorder.isShowRight(), edgeBorder.isShowBottom(), edgeBorder.isShowLeft());
 
         // Handle normal stroke
-        RMColor color = RMColor.get(aBorder.getColor());
+        Color color = aBorder.getColor();
         Stroke borderStroke = aBorder.getStroke();
         RMStroke stroke = new RMStroke(color, borderStroke.getWidth());
         if (borderStroke.getDashArray() != null) {

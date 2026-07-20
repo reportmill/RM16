@@ -3,7 +3,7 @@
  */
 package com.reportmill.shape;
 import com.reportmill.base.*;
-import com.reportmill.graphics.RMColor;
+import snap.gfx.Color;
 import snap.gfx.Font;
 import snap.text.TextFormat;
 import snap.util.*;
@@ -161,7 +161,7 @@ public class RMGraphPartValueAxis extends RMTextShape {
     /**
      * Override to allow for ProxyShape and trigger relayout.
      */
-    public void setTextColor(RMColor aColor)
+    public void setTextColor(Color aColor)
     {
         if (getXString().isEmpty())
             getXString().addChars(" ");

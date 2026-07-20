@@ -851,7 +851,7 @@ public class RMTool<T extends RMShape> extends ViewController {
     {
         Color color = anEvent.getClipboard().getColor();
         getEditor().undoerSetUndoTitle("Set Fill Color");
-        aShape.setFill(new RMFill(RMColor.get(color)));
+        aShape.setFill(new RMFill(color));
     }
 
     /**

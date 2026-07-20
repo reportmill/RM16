@@ -70,7 +70,7 @@ public class RMTextEditor extends TextAdapter {
     /**
      * Returns the color of the current selection or cursor.
      */
-    public RMColor getColor()  { return getSelStyle().getColor(); }
+    public Color getColor()  { return getSelStyle().getColor(); }
 
     /**
      * Sets the color of the current selection or cursor.

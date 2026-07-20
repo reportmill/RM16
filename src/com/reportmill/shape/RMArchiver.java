@@ -514,7 +514,6 @@ public class RMArchiver {
         classMap.put("scene3d", RMScene3D.class);
 
         // Graphics
-        classMap.put("color", RMColor.class);
         classMap.put("fill", RMFill.class);
         classMap.put("gradient-fill", RMGradientFill.class);
         classMap.put("radial-fill", RMGradientFill.class);

@@ -41,7 +41,7 @@ public class RMRTFParser {
         // Declare return string and loop attribute variables
         RMXString result = new RMXString();
         Font font = baseFont;
-        RMColor color = null;
+        Color color = null;
         boolean underline = false;
 
         // Iterate over rtf elements
@@ -71,10 +71,8 @@ public class RMRTFParser {
                         underline = (Boolean) elem.getAttribute(attr);
 
                     // Handle foreground
-                    if (attrName == "foreground") {
-                        Color c = (Color) elem.getAttribute(attr);
-                        color = new RMColor(c.getRGB());
-                    }
+                    if (attrName == "foreground")
+                        color = (Color) elem.getAttribute(attr);
 
                     // Handle size
                     if (attrName == "size") {

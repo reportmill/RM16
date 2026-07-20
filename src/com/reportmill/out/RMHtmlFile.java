@@ -482,7 +482,7 @@ public class RMHtmlFile {
                     tspan.add("font-style", rfont.isItalic() ? "italic" : "normal");
                     tspan.add("font-weight", rfont.isBold() ? "bold" : "normal");
                     tspan.add("font-size", (int) rfont.getSize());
-                    if (!rcolor.equals(RMColor.black))
+                    if (!rcolor.equals(Color.BLACK))
                         tspan.add("fill", '#' + rcolor.toHexString());
                     tspan.setValue(str);
                     text.addElement(tspan);

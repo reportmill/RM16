@@ -74,7 +74,7 @@ public class RMGraph extends RMParentShape {
     private String _colorKey;
 
     // This list of colors this graph uses
-    private List<RMColor> _colors;
+    private List<Color> _colors;
 
     // A standin shape for editor to allow setting fill, stroke, font of component shapes
     private RMShape _proxyShape;
@@ -83,7 +83,7 @@ public class RMGraph extends RMParentShape {
     private boolean _proxyDisable;
 
     // The shared default list of colors all graphs use
-    private static List<RMColor> _defaultColors;
+    private static List<Color> _defaultColors;
 
     // Constants for Graph type
     public enum Type {Bar, BarH, Area, Line, Scatter, Pie}
@@ -426,8 +426,8 @@ public class RMGraph extends RMParentShape {
         // If legend requested, but not present, create it, configure and add to parent
         if (aFlag && legend == null && getParent() != null) {
             legend = new RMGraphLegend();
-            legend.setColor(RMColor.white);
-            legend.setStrokeColor(RMColor.black);
+            legend.setColor(Color.WHITE);
+            legend.setStrokeColor(Color.BLACK);
             legend.setEffect(new ShadowEffect(5, new Color(0, 0, 0, .65), 5, 5));
             legend.setBounds(getMaxX() + 5, getY(), 90, 40);
             getParent().addChild(legend); // Add just before area
@@ -464,7 +464,7 @@ public class RMGraph extends RMParentShape {
     public void setColorKey(String aKey)
     {
         // If value already set, just return
-        String key = aKey != null && aKey.length() > 0 ? aKey : null;
+        String key = aKey != null && !aKey.isEmpty() ? aKey : null;
         if (Objects.equals(key, getColorKey())) return;
 
         // Set value and update graph/legend
@@ -482,7 +482,7 @@ public class RMGraph extends RMParentShape {
     /**
      * Returns the specific color at the given index. Automatically wraps if index exceeds color count.
      */
-    public RMColor getColor(int anIndex)
+    public Color getColor(int anIndex)
     {
         return getColors().get(anIndex % getColorCount());
     }
@@ -490,7 +490,7 @@ public class RMGraph extends RMParentShape {
     /**
      * Returns the list of colors to be used by this graph (or the default graph colors, if null).
      */
-    public List<RMColor> getColors()
+    public List<Color> getColors()
     {
         if (_colors != null) return _colors;
         return _colors = getDefaultColors();
@@ -499,7 +499,7 @@ public class RMGraph extends RMParentShape {
     /**
      * Sets the list of colors to be used by this graph.
      */
-    public void setColors(List<RMColor> aColorList)
+    public void setColors(List<Color> aColorList)
     {
         _colors = aColorList;
         relayout();
@@ -508,23 +508,23 @@ public class RMGraph extends RMParentShape {
     /**
      * Returns the default list of colors to be used by any graph without an explicit list of colors.
      */
-    public static List<RMColor> getDefaultColors()
+    public static List<Color> getDefaultColors()
     {
         // If already set, just return
         if (_defaultColors != null) return _defaultColors;
 
         // Create DefaultColors list
-        List<RMColor> defaultColors = Arrays.asList(
-            new RMColor("#5064CD"),
-            new RMColor("#50AF64"),
-            new RMColor("#CD5050"), //new RMColor(200/255f, 0f, 0f), // Red
-            //new RMColor(0f, 200/255f, 0f), // Green //new RMColor(0f, 0f, 200/255f), // Blue
-            new RMColor(0f, 200 / 255f, 200 / 255f), // Cyan
-            new RMColor(200 / 255f, 0f, 200 / 255f), // Magenta
-            new RMColor(200 / 255f, 200 / 255f, 0f), // Yellow
-            new RMColor(255 / 255f, 127 / 255f, 0f), // Orange
-            new RMColor(127 / 255f, 0 / 255f, 127 / 255f), // Purple
-            new RMColor(153 / 255f, 102 / 255f, 51 / 255f)); // Brown
+        List<Color> defaultColors = Arrays.asList(
+            new Color("#5064CD"),
+            new Color("#50AF64"),
+            new Color("#CD5050"), //new Color(200/255f, 0f, 0f), // Red
+            //new Color(0f, 200/255f, 0f), // Green //new Color(0f, 0f, 200/255f), // Blue
+            new Color(0f, 200 / 255f, 200 / 255f), // Cyan
+            new Color(200 / 255f, 0f, 200 / 255f), // Magenta
+            new Color(200 / 255f, 200 / 255f, 0f), // Yellow
+            new Color(255 / 255f, 127 / 255f, 0f), // Orange
+            new Color(127 / 255f, 0 / 255f, 127 / 255f), // Purple
+            new Color(153 / 255f, 102 / 255f, 51 / 255f)); // Brown
 
         // Set/return
         return _defaultColors = defaultColors;
@@ -533,7 +533,7 @@ public class RMGraph extends RMParentShape {
     /**
      * Sets the default list of colors to be used by any graph without an explicit list of colors.
      */
-    public static void setDefaultColors(List<RMColor> aList)
+    public static void setDefaultColors(List<Color> aList)
     {
         _defaultColors = aList;
     }
@@ -756,15 +756,12 @@ public class RMGraph extends RMParentShape {
     /**
      * Override to allow for ProxyShape.
      */
-    public RMColor getTextColor()
-    {
-        return useProxy() ? _proxyShape.getTextColor() : super.getTextColor();
-    }
+    public Color getTextColor()  { return useProxy() ? _proxyShape.getTextColor() : super.getTextColor(); }
 
     /**
      * Override to allow for ProxyShape and trigger relayout.
      */
-    public void setTextColor(RMColor aColor)
+    public void setTextColor(Color aColor)
     {
         if (_proxyShape != null)
             _proxyShape.setTextColor(aColor);
@@ -775,10 +772,7 @@ public class RMGraph extends RMParentShape {
     /**
      * Override to allow for ProxyShape.
      */
-    public double getOpacity()
-    {
-        return useProxy() ? _proxyShape.getOpacity() : super.getOpacity();
-    }
+    public double getOpacity()  { return useProxy() ? _proxyShape.getOpacity() : super.getOpacity(); }
 
     /**
      * Override to allow for ProxyShape and trigger relayout.
@@ -794,10 +788,7 @@ public class RMGraph extends RMParentShape {
     /**
      * Override to allow for ProxyShape.
      */
-    public TextFormat getFormat()
-    {
-        return useProxy() ? _proxyShape.getFormat() : super.getFormat();
-    }
+    public TextFormat getFormat()  { return useProxy() ? _proxyShape.getFormat() : super.getFormat(); }
 
     /**
      * Override to allow for ProxyShape and trigger relayout.
@@ -976,9 +967,9 @@ public class RMGraph extends RMParentShape {
         if (anElement.hasAttribute("colors")) {
             String colorsString = anElement.getAttributeValue("colors");
             String[] colorStrings = colorsString.split("\\ ");
-            List<RMColor> colors = new ArrayList<>();
+            List<Color> colors = new ArrayList<>();
             for (String colorString : colorStrings)
-                colors.add(new RMColor(colorString));
+                colors.add(new Color(colorString));
             _colors = colors;
         }
     }

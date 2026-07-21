@@ -26,6 +26,12 @@ import snap.util.*;
  */
 public class RMTextShape extends RMRectShape {
 
+    // A text model to manage text content and style
+    TextModel _textModel;
+
+    // A text layout to manage text in shape bounds
+    TextModelX _textLayout;
+
     // The real backing store for text is an xstring
     RMXString _xstr;
 
@@ -52,9 +58,6 @@ public class RMTextShape extends RMRectShape {
 
     // The linked text shape for rendering overflow, if there is one
     RMLinkedText _linkedText;
-
-    // A text model to manage text in shape bounds
-    TextModelX _textModel;
 
     // The text editor, if one has been set
     RMTextEditor _textEditor;
@@ -84,7 +87,7 @@ public class RMTextShape extends RMRectShape {
     public RMTextShape(RMXString string)
     {
         super();
-        _xstr = string;
+        setXString(string);
     }
 
     /**
@@ -97,14 +100,12 @@ public class RMTextShape extends RMRectShape {
     }
 
     /**
-     * Returns the XString associated with this RMText.
+     * Returns the XString.
      */
     public RMXString getXString()
     {
         if (_xstr != null) return _xstr;
-        _xstr = new RMXString();
-        _xstr.getRichText().addPropChangeListener(_richTextLsnr);
-        return _xstr;
+        return _xstr = new RMXString(getTextModel());
     }
 
     /**
@@ -112,51 +113,55 @@ public class RMTextShape extends RMRectShape {
      */
     public void setXString(RMXString xString)
     {
-        // If value already set, just return
         if (xString == _xstr) return;
-
-        // Stop listening to last XString and start listening to new XString
-        if (_xstr != null)
-            _xstr.getRichText().removePropChangeListener(_richTextLsnr);
-        if (xString != null)
-            xString.getRichText().addPropChangeListener(_richTextLsnr);
-
-        // Set value and fire property change, and reset cached HeightToFit
-        firePropChange("XString", _xstr, _xstr = xString);
-        _textModel = null;
-        _textEditor = null;
-        revalidate();
-        repaint();
+        setTextModel(xString.getRichText());
+        _xstr = xString;
     }
 
     /**
-     * Returns the RichText.
+     * Returns a text model.
      */
-    public TextModel getRichText()  { return getXString().getRichText(); }
+    public TextModel getTextModel()
+    {
+        if (_textModel != null) return _textModel;
+        TextModel textModel = TextModel.createDefaultTextModel(true);
+        textModel.addPropChangeListener(_richTextLsnr);
+        return _textModel = textModel;
+    }
+
+    /**
+     * Sets the text model.
+     */
+    protected void setTextModel(TextModel textModel)
+    {
+        if (textModel == _textModel) return;
+        if (_textModel != null)
+            _textModel.removePropChangeListener(_richTextLsnr);
+        textModel.addPropChangeListener(_richTextLsnr);
+        firePropChange("TextModel", _textModel, _textModel = textModel);
+        _textLayout = null;
+        _textEditor = null;
+        _xstr = null;
+        revalidate();
+        repaint();
+    }
 
     /**
      * Returns the text layout.
      */
     public TextLayout getTextLayout()
     {
-        // If already set, just return
-        if (_textModel != null) return _textModel;
+        if (_textLayout != null) return _textLayout;
 
         // Create and set
-        RMXString xstr = getXString();
-        TextModel textModel = xstr.getRichText();
-        _textModel = new TextModelX(textModel);
-        _textModel.setWrapLines(true);
+        TextModel textModel = getTextModel();
+        _textLayout = new TextModelX(textModel);
+        _textLayout.setWrapLines(true);
         updateTextBox();
 
         // Return
-        return _textModel;
+        return _textLayout;
     }
-
-    /**
-     * Returns a text model.
-     */
-    public TextModel getTextModel()  { return getTextLayout().getTextModel(); }
 
     /**
      * Updates the text box.
@@ -167,21 +172,21 @@ public class RMTextShape extends RMRectShape {
         Insets pad = getMargin();
         double textW = Math.max(getWidth() - pad.getWidth(), 0);
         double textH = Math.max(getHeight() - pad.getHeight(), 0);
-        _textModel.setBounds(pad.left, pad.top, textW, textH);
+        _textLayout.setBounds(pad.left, pad.top, textW, textH);
 
         // Set StartCharIndex
-        _textModel.setStartCharIndex(getVisibleStart());
-        _textModel.setLinked(getLinkedText() != null);
-        _textModel.setAlignY(getAlignY());
-        _textModel.setBoundsPath(!(getPath() instanceof Rect) || getPerformsWrap() ? getPath() : null);
-        _textModel.setHyphenate(RMTextEditor.isHyphenating());
-        _textModel.setFontScale(1);
+        _textLayout.setStartCharIndex(getVisibleStart());
+        _textLayout.setLinked(getLinkedText() != null);
+        _textLayout.setAlignY(getAlignY());
+        _textLayout.setBoundsPath(!(getPath() instanceof Rect) || getPerformsWrap() ? getPath() : null);
+        _textLayout.setHyphenate(RMTextEditor.isHyphenating());
+        _textLayout.setFontScale(1);
 
         // Handle FitText: With hack to avoid text wrapping for data columns
         if (_fitText) {
             if (getHeight() < 50 && getWidth() > getHeight() * 3)
-                _textModel.setWrapLines(false);
-            _textModel.scaleTextToFit();
+                _textLayout.setWrapLines(false);
+            _textLayout.scaleTextToFit();
         }
     }
 
@@ -281,7 +286,7 @@ public class RMTextShape extends RMRectShape {
     {
         if (isTextEditorSet())
             return getTextEditor().isUnderlined();
-        return getRichText().getRunForCharIndex(0).isUnderlined();
+        return getTextModel().getRunForCharIndex(0).isUnderlined();
     }
 
     /**
@@ -291,7 +296,7 @@ public class RMTextShape extends RMRectShape {
     {
         if (isTextEditorSet())
             getTextEditor().setUnderlined(aFlag);
-        else getRichText().setTextStyleValue(TextStyle.Underline_Prop, aFlag ? 1 : 0, 0, length());
+        else getTextModel().setTextStyleValue(TextStyle.Underline_Prop, aFlag ? 1 : 0, 0, length());
     }
 
     /**
@@ -301,7 +306,7 @@ public class RMTextShape extends RMRectShape {
     {
         if (isTextEditorSet())
             return getTextEditor().getTextBorder();
-        return getRichText().getRunForCharIndex(0).getBorder();
+        return getTextModel().getRunForCharIndex(0).getBorder();
     }
 
     /**
@@ -311,7 +316,7 @@ public class RMTextShape extends RMRectShape {
     {
         if (isTextEditorSet())
             getTextEditor().setTextBorder(aBorder);
-        else getRichText().setTextStyleValue(TextStyle.Border_Prop, aBorder, 0, length());
+        else getTextModel().setTextStyleValue(TextStyle.Border_Prop, aBorder, 0, length());
     }
 
     /**
@@ -321,7 +326,7 @@ public class RMTextShape extends RMRectShape {
     {
         if (isTextEditorSet())
             return getTextEditor().getInputLineStyle().isJustify();
-        return getRichText().getLineStyleForCharIndex(0).isJustify();
+        return getTextModel().getLineStyleForCharIndex(0).isJustify();
     }
 
     /**
@@ -331,7 +336,7 @@ public class RMTextShape extends RMRectShape {
     {
         if (isTextEditorSet())
             getTextEditor().setInputLineStyle(getTextEditor().getInputLineStyle().copyForPropKeyValue(TextLineStyle.Justify_Prop, aValue));
-        else getRichText().setLineStyleValue(TextLineStyle.Justify_Prop, aValue, 0, length());
+        else getTextModel().setLineStyleValue(TextLineStyle.Justify_Prop, aValue, 0, length());
     }
 
     /**
@@ -440,7 +445,7 @@ public class RMTextShape extends RMRectShape {
     {
         if (isTextEditorSet())
             return getTextEditor().getLineSpacing();
-        return getRichText().getLineStyleForCharIndex(0).getSpacing();
+        return getTextModel().getLineStyleForCharIndex(0).getSpacing();
     }
 
     /**
@@ -450,7 +455,7 @@ public class RMTextShape extends RMRectShape {
     {
         if (isTextEditorSet())
             getTextEditor().setLineSpacing(aHeight);
-        else getRichText().setLineStyleValue(TextLineStyle.Spacing_Prop, aHeight, 0, length());
+        else getTextModel().setLineStyleValue(TextLineStyle.Spacing_Prop, aHeight, 0, length());
     }
 
     /**
@@ -460,7 +465,7 @@ public class RMTextShape extends RMRectShape {
     {
         if (isTextEditorSet())
             return getTextEditor().getLineSpacingFactor();
-        return getRichText().getLineStyleForCharIndex(0).getSpacingFactor();
+        return getTextModel().getLineStyleForCharIndex(0).getSpacingFactor();
     }
 
     /**
@@ -470,7 +475,7 @@ public class RMTextShape extends RMRectShape {
     {
         if (isTextEditorSet())
             getTextEditor().setLineSpacingFactor(aHeight);
-        else getRichText().setLineStyleValue(TextLineStyle.SpacingFactor_Prop, aHeight, 0, length());
+        else getTextModel().setLineStyleValue(TextLineStyle.SpacingFactor_Prop, aHeight, 0, length());
     }
 
     /**
@@ -480,7 +485,7 @@ public class RMTextShape extends RMRectShape {
     {
         if (isTextEditorSet())
             return getTextEditor().getLineMinHeight();
-        return getRichText().getLineStyleForCharIndex(0).getMinHeight();
+        return getTextModel().getLineStyleForCharIndex(0).getMinHeight();
     }
 
     /**
@@ -490,7 +495,7 @@ public class RMTextShape extends RMRectShape {
     {
         if (isTextEditorSet())
             getTextEditor().setLineMinHeight(aHeight);
-        else getRichText().setLineStyleValue(TextLineStyle.MinHeight_Prop, aHeight, 0, length());
+        else getTextModel().setLineStyleValue(TextLineStyle.MinHeight_Prop, aHeight, 0, length());
     }
 
     /**
@@ -500,7 +505,7 @@ public class RMTextShape extends RMRectShape {
     {
         if (isTextEditorSet())
             return getTextEditor().getLineMaxHeight();
-        return getRichText().getLineStyleForCharIndex(0).getMaxHeight();
+        return getTextModel().getLineStyleForCharIndex(0).getMaxHeight();
     }
 
     /**
@@ -510,7 +515,7 @@ public class RMTextShape extends RMRectShape {
     {
         if (isTextEditorSet())
             getTextEditor().setLineMaxHeight(aHeight);
-        else getRichText().setLineStyleValue(TextLineStyle.MaxHeight_Prop, aHeight, 0, length());
+        else getTextModel().setLineStyleValue(TextLineStyle.MaxHeight_Prop, aHeight, 0, length());
     }
 
     /**
@@ -743,7 +748,7 @@ public class RMTextShape extends RMRectShape {
         if (length() == 0) return 0; // Zero instead of getMarginLeft() + getMarginRight() so empty texts are hidden
 
         // Get text box width (from first visible char) and return that plus margin
-        double pw = getRichText().getPrefWidthForStartCharIndex(getVisibleStart());
+        double pw = getTextLayout().getPrefWidthForStartCharIndex(getVisibleStart());
         return Math.ceil(getMarginLeft() + pw + getMarginRight());
     }
 
@@ -894,7 +899,7 @@ public class RMTextShape extends RMRectShape {
     public void revalidate()
     {
         // Update text
-        if (_textModel != null)
+        if (_textLayout != null)
             updateTextBox();
 
         // Forward to linked text
@@ -914,6 +919,7 @@ public class RMTextShape extends RMRectShape {
         RMTextShape clone = (RMTextShape) super.clone();
         clone._xstr = null;
         clone._textModel = null;
+        clone._textLayout = null;
         clone._textEditor = null;
         clone._richTextLsnr = pc -> richTextDidPropChange(pc);
         if (_xstr != null)

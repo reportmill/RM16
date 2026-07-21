@@ -259,7 +259,7 @@ public class RMRTFWriter {
 
             // Append text or image for shape
             if (aShape instanceof RMTextShape textShape)
-                appendText(textShape.getRichText(), ps);
+                appendText(textShape.getTextModel(), ps);
             else appendImageBytesForShape(aShape, ps);
         }
     }

@@ -107,7 +107,7 @@ public class RMCrossTabFrame extends RMParentShape {
             for (int j = 0, jMax = ctab.getColCount(); j < jMax; j++) {
                 RMCrossTabCell cell = ctab.getCell(i, j);
                 if (cell.getRow() == i && cell.getCol() == j)
-                    cell.getRichText().scaleFonts(sx);
+                    cell.getTextModel().scaleFonts(sx);
             }
     }
 

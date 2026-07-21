@@ -376,7 +376,7 @@ public class RMViewerEvents {
      */
     private Shape getTextSelectionArea()
     {
-        TextModelX textModel = new TextModelX(true);
+        TextModelX textLayout = new TextModelX(true);
         Shape textAreaShape = new Rect();
 
         // Iterate over texts and create composite shape
@@ -387,11 +387,11 @@ public class RMViewerEvents {
             Point p2 = getViewer().convertToShape(_dragPoint.x, _dragPoint.y, text);
 
             // Configure text editor for text
-            textModel.setSourceText(text.getRichText());
-            textModel.setBounds(0, 0, text.getWidth(), text.getHeight());
+            textLayout.setSourceText(text.getTextModel());
+            textLayout.setBounds(0, 0, text.getWidth(), text.getHeight());
 
             // Get text selection for point, path for selection (int viewer coords) and add
-            TextSel sel = new TextSel(textModel, p1.x, p1.y, p2.x, p2.y, false, false);
+            TextSel sel = new TextSel(textLayout, p1.x, p1.y, p2.x, p2.y, false, false);
             Shape path = sel.getPath();
             path = getViewer().convertFromShape(path, text);
             textAreaShape = Shape.addShapes(textAreaShape, path);

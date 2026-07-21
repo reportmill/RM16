@@ -67,13 +67,13 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
     {
         // Get editor and currently selected text
         RMEditor editor = getEditor();
-        RMTextShape text = getSelectedShape();
-        if (text == null)
+        RMTextShape textShape = getSelectedShape();
+        if (textShape == null)
             return;
 
         // Get paragraph from text
         int selStart = _textView.isFocused() ? _textView.getSelStart() : 0;
-        TextLineStyle lineStyle = text.getRichText().getLineStyleForCharIndex(selStart);
+        TextLineStyle lineStyle = textShape.getTextModel().getLineStyleForCharIndex(selStart);
 
         // If editor is text editing, get paragraph from text editor instead
         RMTextEditor textEditor = editor.getTextEditor();
@@ -87,19 +87,19 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
         setViewValue("AlignFullButton", lineStyle.isJustify());
 
         // Update AlignTopButton, AlignMiddleButton, AlignBottomButton
-        setViewValue("AlignTopButton", text.getAlignY() == VPos.TOP);
-        setViewValue("AlignMiddleButton", text.getAlignY() == VPos.CENTER);
-        setViewValue("AlignBottomButton", text.getAlignY() == VPos.BOTTOM);
+        setViewValue("AlignTopButton", textShape.getAlignY() == VPos.TOP);
+        setViewValue("AlignMiddleButton", textShape.getAlignY() == VPos.CENTER);
+        setViewValue("AlignBottomButton", textShape.getAlignY() == VPos.BOTTOM);
 
         // Set TextView TextModel to text shape text model
-        _textView.setTextModel(text.getTextModel());
+        _textView.setTextModel(textShape.getTextModel());
 
         // Set TextView selection
         resetTextViewSelFromTextEditor();
 
         // Get text's background color and set in TextView if found
         Color color = null;
-        for (RMShape shape = text; color == null && shape != null; ) {
+        for (RMShape shape = textShape; color == null && shape != null; ) {
             if (shape.getFill() == null) shape = shape.getParent();
             else color = shape.getFill().getColor();
         }
@@ -107,30 +107,30 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
 
         // Get xstring font size and scale up to 12pt if any string run is smaller
         double fsize = 12;
-        for (TextLine line : text.getRichText().getLines())
+        for (TextLine line : textShape.getTextModel().getLines())
             for (TextRun run : line.getRuns())
                 fsize = Math.min(fsize, run.getFont().getSize());
         _textView.setFontScale(fsize < 12 ? 12 / fsize : 1);
 
         // Update MarginText, RoundingThumb, RoundingText
-        setViewValue("MarginText", text.getMarginString());
-        setViewValue("RoundingThumb", text.getRadius());
-        setViewValue("RoundingText", text.getRadius());
+        setViewValue("MarginText", textShape.getMarginString());
+        setViewValue("RoundingThumb", textShape.getRadius());
+        setViewValue("RoundingText", textShape.getRadius());
 
         // Update ShowBorderCheckBox, CoalesceNewlinesCheckBox, PerformWrapCheckBox
-        setViewValue("ShowBorderCheckBox", text.getDrawsSelectionRect());
-        setViewValue("CoalesceNewlinesCheckBox", text.getCoalesceNewlines());
-        setViewValue("PerformWrapCheckBox", text.getPerformsWrap());
+        setViewValue("ShowBorderCheckBox", textShape.getDrawsSelectionRect());
+        setViewValue("CoalesceNewlinesCheckBox", textShape.getCoalesceNewlines());
+        setViewValue("PerformWrapCheckBox", textShape.getPerformsWrap());
 
         // Update PaginateRadio, ShrinkRadio, GrowRadio
-        setViewValue("PaginateRadio", text.getWraps() == RMTextShape.WRAP_BASIC);
-        setViewValue("ShrinkRadio", text.getWraps() == RMTextShape.WRAP_SCALE);
-        setViewValue("GrowRadio", text.getWraps() == RMTextShape.WRAP_NONE);
+        setViewValue("PaginateRadio", textShape.getWraps() == RMTextShape.WRAP_BASIC);
+        setViewValue("ShrinkRadio", textShape.getWraps() == RMTextShape.WRAP_SCALE);
+        setViewValue("GrowRadio", textShape.getWraps() == RMTextShape.WRAP_NONE);
 
         // Update CharSpacingSpinner, LineSpacingSpinner, LineGapSpinner
-        setViewValue("CharSpacingSpinner", text.getCharSpacing());
-        setViewValue("LineSpacingSpinner", text.getLineSpacingFactor());
-        setViewValue("LineGapSpinner", text.getLineSpacing());
+        setViewValue("CharSpacingSpinner", textShape.getCharSpacing());
+        setViewValue("LineSpacingSpinner", textShape.getLineSpacingFactor());
+        setViewValue("LineGapSpinner", textShape.getLineSpacing());
 
         // If line height min not set (0), update LineHeightMinSpinner with current font size
         // If valid line height min, update LineHeightMinSpinner with line height

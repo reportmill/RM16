@@ -301,7 +301,7 @@ public class RMExcelWriter {
             // POI does something weird with empty rich texts, so toss it
             if (textShape.length() > 0) {
                 newShape = rmSheet.addNewShape(textShape, aParent);
-                ((HSSFTextbox) newShape).setString(createRichText(textShape.getRichText()));
+                ((HSSFTextbox) newShape).setString(createRichText(textShape.getTextModel()));
             }
 
             // Unless it had a fill or stroke, in which case just turn it into a rectangle

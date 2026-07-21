@@ -53,8 +53,9 @@ public class RMCrossTabCell extends RMTextShape {
      */
     public RMCrossTabCell()
     {
+        super();
         setAlignY(VPos.CENTER);
-        getRichText().setDefaultLineStyle(TextLineStyle.DEFAULT_CENTERED);
+        getTextModel().setDefaultLineStyle(TextLineStyle.DEFAULT_CENTERED);
     }
 
     /**

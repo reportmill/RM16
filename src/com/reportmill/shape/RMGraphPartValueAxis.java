@@ -40,7 +40,7 @@ public class RMGraphPartValueAxis extends RMTextShape {
     public RMGraphPartValueAxis()
     {
         super();
-        getRichText().setDefaultFont(Font.Arial10);
+        getTextModel().setDefaultFont(Font.Arial10);
     }
 
     /**

@@ -181,7 +181,7 @@ public class RMGraphLegend extends RMParentShape {
             // If text is a key, evaluate it
             if (doRPG && text.contains("@")) {
                 RMGroup group = groups.get(i);
-                label.getXString().rpgClone(graphRPG._rptOwner, group, null, false);
+                RMTextShapeUtils.rpgClone(label.getTextModel(), graphRPG._rptOwner, group, null, false);
             }
 
             // Reset label to appropriate size

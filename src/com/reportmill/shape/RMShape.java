@@ -9,6 +9,7 @@ import snap.geom.*;
 import snap.gfx.*;
 import snap.props.*;
 import snap.text.TextFormat;
+import snap.text.TextModel;
 import snap.util.*;
 import com.reportmill.shape.RMArchiver.*;
 import snap.view.*;
@@ -1851,8 +1852,10 @@ public class RMShape implements Cloneable, Archivable, Key.GetSet {
     {
         // Clone URL
         if (getURL() != null && !getURL().isEmpty() && getURL().indexOf('@') >= 0) {
-            RMXString url = new RMXString(getURL()).rpgClone(anRptOwner, null, aShapeRPG, false);
-            aShapeRPG.setURL(url.getText());
+            TextModel urlText = TextModel.createDefaultTextModel(false);
+            urlText.addChars(getURL());
+            TextModel urlTextRpg = RMTextShapeUtils.rpgClone(urlText, anRptOwner, null, aShapeRPG, false);
+            aShapeRPG.setURL(urlTextRpg.getString());
         }
 
         // Iterate over bindings and evaluate
@@ -1937,8 +1940,10 @@ public class RMShape implements Cloneable, Archivable, Key.GetSet {
     {
         // If URL has @-sign, do rpg clone in case it is page reference
         if (getURL() != null && !getURL().isEmpty() && getURL().indexOf('@') >= 0) {
-            RMXString url = new RMXString(getURL()).rpgClone(aRptOwner, userInfo, null, false);
-            setURL(url.getText());
+            TextModel urlText = TextModel.createDefaultTextModel(false);
+            urlText.addChars(getURL());
+            TextModel urlTextRpg = RMTextShapeUtils.rpgClone(urlText, aRptOwner, userInfo, null, false);
+            setURL(urlTextRpg.getString());
         }
     }
 

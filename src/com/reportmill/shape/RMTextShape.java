@@ -32,9 +32,6 @@ public class RMTextShape extends RMRectShape {
     // A text layout to manage text in shape bounds
     private TextModelX _textLayout;
 
-    // The real backing store for text is an xstring
-    private RMXString _xstr;
-
     // The text margin (if different than default)
     private Insets _margin = getMarginDefault();
 
@@ -100,15 +97,6 @@ public class RMTextShape extends RMRectShape {
     }
 
     /**
-     * Returns the XString.
-     */
-    public RMXString getXString()
-    {
-        if (_xstr != null) return _xstr;
-        return _xstr = new RMXString(getTextModel());
-    }
-
-    /**
      * Returns a text model.
      */
     public TextModel getTextModel()
@@ -131,7 +119,6 @@ public class RMTextShape extends RMRectShape {
         firePropChange("TextModel", _textModel, _textModel = textModel);
         _textLayout = null;
         _textEditor = null;
-        _xstr = null;
         revalidate();
         repaint();
     }
@@ -763,7 +750,7 @@ public class RMTextShape extends RMRectShape {
         cloneTextModel.setPropChangeEnabled(false);
 
         // Do xstring RPG (if no change due to RPG, just use normal)
-        clone.getXString().rpgClone(anRptOwner, null, clone, false);
+        RMTextShapeUtils.rpgClone(clone.getTextModel(), anRptOwner, null, clone, false);
 
         // If coalesce newlines is set, coalesce newlines
         if (getCoalesceNewlines())
@@ -827,9 +814,9 @@ public class RMTextShape extends RMRectShape {
         // Do normal shape resolve page references
         super.resolvePageReferences(aRptOwner, userInfo);
 
-        // RPG clone xstring again and set
-        RMXString xstringCloneRPG = _xstr.rpgClone(aRptOwner, userInfo, null, true);
-        setTextModel(xstringCloneRPG.getTextModel());
+        // RPG clone text again and set
+        TextModel textModelCloneRPG = RMTextShapeUtils.rpgClone(getTextModel(), aRptOwner, userInfo, null, true);
+        setTextModel(textModelCloneRPG);
     }
 
     /**
@@ -910,7 +897,6 @@ public class RMTextShape extends RMRectShape {
         clone._textModel = _textModel != null ? _textModel.copyForRange(0, length()) : null;
         clone._textLayout = null;
         clone._textEditor = null;
-        clone._xstr = null;
         clone._textModelPropChangeLsnr = clone::handleTextModelPropChange;
         //clone._textModel.addPropChangeListener(clone._richTextLsnr);
         return clone;

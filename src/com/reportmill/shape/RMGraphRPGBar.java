@@ -484,7 +484,7 @@ class RMGraphRPGBar extends RMGraphRPG {
         label.copyShape(labelAxis);
         label.setFont(labelAxis.getFont());
         label.getTextModel().setLineStyle(TextLineStyle.DEFAULT_CENTERED, 0, label.length());
-        label.getXString().rpgClone(_rptOwner, aGroup, null, false); // Do rpg on label string
+        RMTextShapeUtils.rpgClone(label.getTextModel(), _rptOwner, aGroup, null, false); // Do rpg on label string
         label.setBestSize();  // Resize label to best size
 
         // If label width greater than available width for bar, grow height
@@ -556,7 +556,7 @@ class RMGraphRPGBar extends RMGraphRPG {
         RMTextShape label = (RMTextShape) aLabel.cloneDeep();
 
         // Do rpg on new label string
-        label.getXString().rpgClone(_rptOwner, group, null, false);
+        RMTextShapeUtils.rpgClone(label.getTextModel(), _rptOwner, group, null, false);
 
         // Resize label to best size
         label.setBestSize();

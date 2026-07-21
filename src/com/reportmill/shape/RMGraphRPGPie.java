@@ -9,6 +9,8 @@ import com.reportmill.graphics.*;
 import java.util.*;
 import snap.geom.Rect;
 import snap.text.TextLineStyle;
+import snap.text.TextModel;
+import snap.text.TextStyle;
 import snap.util.MathUtils;
 
 /**
@@ -68,10 +70,11 @@ class RMGraphRPGPie extends RMGraphRPG {
         RMGraphPartLabelAxis labelAxis = graph.getLabelAxis();
 
         // Get wedge label string
-        RMXString barLabelString = null;
+        TextModel barLabelString = null;
         if (labelAxis.getShowAxisLabels()) {
             String itemKey = labelAxis.getItemKey();
-            barLabelString = new RMXString(itemKey, labelAxis.getFont());
+            barLabelString = TextModel.createDefaultTextModel(true);
+            barLabelString.addCharsWithStyle(itemKey, TextStyle.DEFAULT.copyForStyleValue(labelAxis.getFont()));
             barLabelString.setLineStyle(TextLineStyle.DEFAULT_CENTERED, 0, barLabelString.length());
         }
 
@@ -197,7 +200,7 @@ class RMGraphRPGPie extends RMGraphRPG {
 
                     // Add group
                     _rptOwner.pushDataStack(sectionItem.getGroup());
-                    RMXString string = barLabelString.rpgClone(_rptOwner, map, null, true);
+                    TextModel string = RMTextShapeUtils.rpgClone(barLabelString, _rptOwner, map, null, true);
                     _rptOwner.popDataStack();
 
                     // Get new wedge label text

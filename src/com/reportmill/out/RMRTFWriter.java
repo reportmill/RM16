@@ -9,6 +9,8 @@ import java.util.*;
 import snap.geom.Rect;
 import snap.gfx.*;
 import snap.text.TextLineStyle;
+import snap.text.TextModel;
+import snap.text.TextRun;
 import snap.util.ASCIICodec;
 
 /**
@@ -256,8 +258,8 @@ public class RMRTFWriter {
                 aShape = ((RMShapeTable.Cell) aShape).getCellShape();
 
             // Append text or image for shape
-            if (aShape instanceof RMTextShape)
-                appendText(((RMTextShape) aShape).getXString(), ps);
+            if (aShape instanceof RMTextShape textShape)
+                appendText(textShape.getRichText(), ps);
             else appendImageBytesForShape(aShape, ps);
         }
     }
@@ -362,17 +364,17 @@ public class RMRTFWriter {
         --_tableLevel;
     }
 
-    public void appendText(RMXString s, PrintStream ps)
+    public void appendText(TextModel textModel, PrintStream ps)
     {
-        String text = s.toString();
+        String text = textModel.getString();
         boolean newLineStyle = true;
 
-        // Iterate over runs
-        for (int i = 0, n = s.getRunCount(); i < n; ++i) {
-            RMXStringRun run = s.getRun(i);
+        // Iterate over text runs
+        TextRun textRun = textModel.getRunForCharIndex(0);
+        while (textRun != null) {
 
             // new line style at the start and then at each carriage return (when is \par used?)
-            if (newLineStyle || !run.getLineStyle().equals(_currentTextLineStyle)) {
+            if (newLineStyle || !textRun.getLine().getLineStyle().equals(_currentTextLineStyle)) {
 
                 // Reset line style defaults and current line style
                 ps.print("\\pard");
@@ -380,7 +382,7 @@ public class RMRTFWriter {
 
                 // we're always somewhere inside a table
                 ps.print("\\intbl\\itap" + _tableLevel);
-                TextLineStyle lineStyle = run.getLineStyle();
+                TextLineStyle lineStyle = textRun.getLine().getLineStyle();
 
                 //if any of line style settings have changed, set them
                 if (!lineStyle.equals(_currentTextLineStyle)) {
@@ -417,7 +419,7 @@ public class RMRTFWriter {
             }
 
             // Update current font
-            Font font = run.getFont();
+            Font font = textRun.getFont();
             if (_currentFont == null || !_currentFont.equals(font)) {
 
                 // Font size units are half-points.  Who comes up with this shit?
@@ -437,14 +439,14 @@ public class RMRTFWriter {
             }
 
             // Update text color
-            Color color = run.getColor();
+            Color color = textRun.getColor();
             if (!_currentColor.equals(color)) {
                 ps.print("\\cf" + getColorIndex(color));
                 _currentColor = color;
             }
 
             // Update underlining: turn on or off
-            if (_isUnderline != run.isUnderlined()) {
+            if (_isUnderline != textRun.isUnderlined()) {
                 _isUnderline = !_isUnderline;
                 ps.print("\\ul" + (_isUnderline ? "" : "0"));
             }
@@ -453,7 +455,7 @@ public class RMRTFWriter {
             ps.println();
 
             // Iterate over run characters and write them
-            for (int runCharIndex = run.start(), runCharEnd = run.end(); runCharIndex < runCharEnd; ++runCharIndex) {
+            for (int runCharIndex = textRun.getStartCharIndex(), runCharEnd = textRun.getEndCharIndex(); runCharIndex < runCharEnd; ++runCharIndex) {
                 char runChar = text.charAt(runCharIndex);
 
                 // A note about unicode escapes: The spec says that if you are emitting "\ u" unicode chars,
@@ -474,6 +476,8 @@ public class RMRTFWriter {
                 else if (runChar >= 32 || runChar == '\t')
                     ps.print(runChar);
             }
+
+            textRun = textRun.getNextInModel();
         }
     }
 

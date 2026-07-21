@@ -13,6 +13,8 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import snap.geom.Rect;
 import snap.gfx.*;
 import snap.text.TextFormat;
+import snap.text.TextModel;
+import snap.text.TextRun;
 import snap.util.*;
 
 /**
@@ -294,16 +296,16 @@ public class RMExcelWriter {
         }
 
         // Handle text
-        else if (aShape instanceof RMTextShape text) {
+        else if (aShape instanceof RMTextShape textShape) {
 
             // POI does something weird with empty rich texts, so toss it
-            if (text.length() > 0) {
-                newShape = rmSheet.addNewShape(text, aParent);
-                ((HSSFTextbox) newShape).setString(createRichText(text.getXString()));
+            if (textShape.length() > 0) {
+                newShape = rmSheet.addNewShape(textShape, aParent);
+                ((HSSFTextbox) newShape).setString(createRichText(textShape.getRichText()));
             }
 
             // Unless it had a fill or stroke, in which case just turn it into a rectangle
-            else if (text.getFill() != null || text.getStroke() != null)
+            else if (textShape.getFill() != null || textShape.getStroke() != null)
                 newShape = rmSheet.addRect(aShape, aParent);
         }
 
@@ -503,24 +505,25 @@ public class RMExcelWriter {
     }
 
     /**
-     * Converts an XString, as much as possible, to an excel rich text string
+     * Converts an TextModel, as much as possible, to an excel rich text string
      */
-    public HSSFRichTextString createRichText(RMXString anXString)
+    public HSSFRichTextString createRichText(TextModel textModel)
     {
         // If null or empty xstring, just return empty poi rich text string)
-        if (anXString == null || anXString.isEmpty())
+        if (textModel.isEmpty())
             return new HSSFRichTextString();
 
         // Create poi RichTextString
-        HSSFRichTextString hstr = new HSSFRichTextString(anXString.getText());
-        for (int i = 0, n = anXString.getRunCount(); i < n; i++) {
-            RMXStringRun run = anXString.getRun(i);
-            HSSFFont hfont = getWorkbookFont(run.getFont(), run.getColor());
-            hstr.applyFont(run.start(), run.end(), hfont);
+        HSSFRichTextString poiStr = new HSSFRichTextString(textModel.getString());
+        TextRun textRun = textModel.getRunForCharIndex(0);
+        while (textRun != null) {
+            HSSFFont hfont = getWorkbookFont(textRun.getFont(), textRun.getColor());
+            poiStr.applyFont(textRun.getStartCharIndex(), textRun.getEndCharIndex(), hfont);
+            textRun = textRun.getNextInModel();
         }
 
         // Return poi string
-        return hstr;
+        return poiStr;
     }
 
     /**

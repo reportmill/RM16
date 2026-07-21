@@ -8,6 +8,8 @@ import com.reportmill.shape.*;
 import java.util.*;
 import snap.geom.Rect;
 import snap.text.TextFormat;
+import snap.text.TextModel;
+import snap.text.TextRun;
 import snap.text.TextStyle;
 import snap.util.*;
 import snap.web.WebURL;
@@ -175,13 +177,14 @@ public class RMExtras {
             for (RMShape child : aShape.getChildren())
                 replaceFormat(child, aFormat);
 
-        // Handle Text
-        else if (aShape instanceof RMTextShape text) {
-            RMXString xstring = text.getXString();
-            for (int i = 0, iMax = xstring.getRunCount(); i < iMax; i++) {
-                RMXStringRun run = xstring.getRun(i);
-                if (run.getFormat() != null && run.getFormat().getClass() == aFormat.getClass())
-                    xstring.setAttribute(TextStyle.Format_Prop, aFormat, run.start(), run.end());
+        // Handle Text: Iterate over runs and set new format when format of same class found
+        else if (aShape instanceof RMTextShape textShape) {
+            TextModel textModel = textShape.getTextModel();
+            TextRun textRun = textModel.getRunForCharIndex(0);
+            while (textRun != null) {
+                if (textRun.getFormat() != null && textRun.getFormat().getClass() == aFormat.getClass())
+                    textModel.setTextStyleValue(TextStyle.Format_Prop, aFormat, textRun.getStartCharIndex(), textRun.getEndCharIndex());
+                textRun = textRun.getNextInModel();
             }
         }
 
@@ -329,12 +332,13 @@ public class RMExtras {
         }
 
         // Handle RMText - iterate over xstring runs and reset date format time zones
-        else if (aShape instanceof RMTextShape text) {
-            RMXString xstring = text.getXString();
-            for (int i = 0, iMax = xstring.getRunCount(); i < iMax; i++) {
-                RMXStringRun run = xstring.getRun(i);
-                if (run.getFormat() instanceof RMDateFormat dateFormat)
+        else if (aShape instanceof RMTextShape textShape) {
+            TextModel textModel = textShape.getTextModel();
+            TextRun textRun = textModel.getRunForCharIndex(0);
+            while (textRun != null) {
+                if (textRun.getFormat() instanceof RMDateFormat dateFormat)
                     dateFormat.setTimeZone(aTimeZone);
+                textRun = textRun.getNextInModel();
             }
         }
 

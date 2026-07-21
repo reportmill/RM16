@@ -11,6 +11,7 @@ import snap.geom.HPos;
 import snap.gfx.Color;
 import snap.gfx.Font;
 import snap.text.TextLineStyle;
+import snap.text.TextModel;
 import snap.text.TextStyle;
 import snap.util.*;
 
@@ -31,22 +32,22 @@ public class RMHTMLParser {
     /**
      * Returns an xstring for the given html string and a default font.
      */
-    public static RMXString parse(String html, Font baseFont, TextLineStyle textLineStyle)
+    public static TextModel parse(String html, Font baseFont, TextLineStyle textLineStyle)
     {
         // Get HTML String from HTMLParser
-        RMXString s = new HTMLParser(html, baseFont, textLineStyle).getXString();
+        TextModel textModel = new HTMLParser(html, baseFont, textLineStyle)._textModel;
 
         // Find the start of any trailing whitespace characters in string HTML string
-        int whitespaceStart = s.length();
-        while (whitespaceStart > 0 && Character.isWhitespace(s.charAt(whitespaceStart - 1)))
+        int whitespaceStart = textModel.length();
+        while (whitespaceStart > 0 && Character.isWhitespace(textModel.charAt(whitespaceStart - 1)))
             whitespaceStart--;
 
         // If there are trailing whitespace characters in string, strip them from xstring
-        if (whitespaceStart < s.length())
-            s.removeChars(whitespaceStart, s.length());
+        if (whitespaceStart < textModel.length())
+            textModel.removeChars(whitespaceStart, textModel.length());
 
         // Return string
-        return s;
+        return textModel;
     }
 
     /**
@@ -54,11 +55,11 @@ public class RMHTMLParser {
      */
     private static class HTMLParser extends HTMLEditorKit.ParserCallback {
 
-        // The xstring resulting from parsing HTML
-        RMXString _string = new RMXString();
+        // The text model resulting from parsing HTML
+        TextModel _textModel = TextModel.createDefaultTextModel(true);
 
-        // The current set of attributes (during parsing)
-        Map<String,Object> _attrs = new Hashtable<>();
+        // The current text style
+        TextStyle _textStyle = TextStyle.DEFAULT;
 
         // The current line style attributes
         TextLineStyle _textLineStyle;
@@ -78,7 +79,8 @@ public class RMHTMLParser {
         public HTMLParser(String aString, Font baseFont, TextLineStyle textLineStyle)
         {
             // Initialize attributes map, FontStack and PGraph
-            _attrs.put(TextStyle.Font_Prop, baseFont);
+            if (!_textStyle.getFont().equals(baseFont))
+                _textStyle = _textStyle.copyForStyleValue(baseFont);
             _fontStack.add(baseFont);
             _textLineStyle = textLineStyle != null ? textLineStyle : TextLineStyle.DEFAULT;
 
@@ -96,24 +98,10 @@ public class RMHTMLParser {
             }
 
             // Parse html
-            try {
-                new ParserDelegator().parse(new StringReader(aString), this, true);
-            }
+            try { new ParserDelegator().parse(new StringReader(aString), this, true); }
 
             // Catch exceptions
-            catch (Exception e) {
-                e.printStackTrace();
-            }
-
-
-        }
-
-        /**
-         * Returns the XString resulting from the parse.
-         */
-        public RMXString getXString()
-        {
-            return _string;
+            catch (Exception e) { e.printStackTrace(); }
         }
 
         /**
@@ -123,7 +111,7 @@ public class RMHTMLParser {
         {
             // Handle line break (<br>)
             if (aTag.equals(HTML.Tag.BR))
-                _string.addChars("\n");
+                _textModel.addChars("\n");
         }
 
         /**
@@ -133,29 +121,30 @@ public class RMHTMLParser {
         {
             // Handle Bold (<B> and <STRONG>)
             if (aTag.equals(HTML.Tag.B) || aTag.equals(HTML.Tag.STRONG)) {
-                Font font = (Font) _attrs.get(TextStyle.Font_Prop);
-                Font bold = font.getBold() == null ? font : font.getBold();
-                _attrs.put(TextStyle.Font_Prop, bold);
-                _fontStack.add(bold);
+                Font font = _textStyle.getFont();
+                Font boldFont = font.getBold() == null ? font : font.getBold();
+                _textStyle = _textStyle.copyForStyleValue(boldFont);
+                _fontStack.add(boldFont);
             }
 
             // Handle Italic (<I> and <EM>)
             if (aTag.equals(HTML.Tag.I) || aTag.equals(HTML.Tag.EM)) {
-                Font font = (Font) _attrs.get(TextStyle.Font_Prop);
-                Font italic = font.getItalic() == null ? font : font.getItalic();
-                _attrs.put(TextStyle.Font_Prop, italic);
-                _fontStack.add(italic);
+                Font font = _textStyle.getFont();
+                Font italicFont = font.getItalic() == null ? font : font.getItalic();
+                _textStyle = _textStyle.copyForStyleValue(italicFont);
+                _fontStack.add(italicFont);
             }
 
             // Handle Underline (<U>)
             if (aTag.equals(HTML.Tag.U))
-                _attrs.put(TextStyle.Underline_Prop, 1);
+                _textStyle = _textStyle.copyForStyleKeyValue(TextStyle.Underline_Prop, 1);
 
             // Handle List start (<UL> and <OL>)
             if (aTag.equals(HTML.Tag.UL) || aTag.equals(HTML.Tag.OL)) {
                 _listLevel++;
-                if (!_string.getRunLast().toString().endsWith("\n")) _string.addChars("\n");
-                Font font = (Font) _attrs.get(TextStyle.Font_Prop);
+                if (!_textModel.getString().endsWith("\n"))
+                    _textModel.addChars("\n");
+                Font font = _textStyle.getFont();
                 double firstIndent = _textLineStyle.getTab(_listLevel - 1);
                 double leftIndent = firstIndent + font.getStringAdvance(((char) 8226) + " ");
                 _textLineStyle = _textLineStyle.copyForIndents(firstIndent, leftIndent, _textLineStyle.getRightIndent());
@@ -163,13 +152,13 @@ public class RMHTMLParser {
 
             // Handle List item (<LI>)
             if (aTag.equals(HTML.Tag.LI))
-                _string.addChars((char) 8226 + " ", _attrs);
+                _textModel.addCharsWithStyle((char) 8226 + " ", _textStyle);
 
             // Handle FONT (<FONT face="Times, Arial" size=3 color=#FF00FF00>)
             if (aTag.equals(HTML.Tag.FONT)) {
 
                 // Get base font
-                Font font = (Font) _attrs.get(TextStyle.Font_Prop);
+                Font font = _textStyle.getFont();
 
                 // Iterate over Tag attributes to get new font
                 for (Enumeration<?> e = anAttributeSet.getAttributeNames(); e.hasMoreElements(); ) {
@@ -187,7 +176,7 @@ public class RMHTMLParser {
                             float g = Integer.decode("0x" + string.substring(3, 5)) / 255f;
                             float b = Integer.decode("0x" + string.substring(5, 7)) / 255f;
                             Color color = new Color(r, g, b);
-                            _attrs.put(TextStyle.COLOR_KEY, color);
+                            _textStyle = _textStyle.copyForStyleValue(color);
                         }
                     }
 
@@ -215,16 +204,16 @@ public class RMHTMLParser {
                 }
 
                 // Install new font
-                _attrs.put(TextStyle.Font_Prop, font);
+                _textStyle = _textStyle.copyForStyleValue(font);
                 _fontStack.add(font);
             }
 
             // Handle paragraph start (make sure it's two lines below last text)
-            if (aTag.equals(HTML.Tag.P) && !_string.isEmpty()) {
-                if (!_string.getRunLast().toString().endsWith("\n"))
-                    _string.addChars("\n");
-                if (!_string.toString().endsWith("\n\n"))
-                    _string.addChars("\n");
+            if (aTag.equals(HTML.Tag.P) && !_textModel.isEmpty()) {
+                if (!_textModel.getString().endsWith("\n"))
+                    _textModel.addChars("\n");
+                if (!_textModel.getString().endsWith("\n\n"))
+                    _textModel.addChars("\n");
             }
 
             // Handle CENTER
@@ -233,64 +222,64 @@ public class RMHTMLParser {
 
             // Handle super-scripting
             if (aTag.equals(HTML.Tag.SUP))
-                _attrs.put(TextStyle.Scripting_Prop, 1);
+                _textStyle = _textStyle.copyForStyleKeyValue(TextStyle.Scripting_Prop, 1);
 
             // Handle subscripting
             if (aTag.equals(HTML.Tag.SUB))
-                _attrs.put(TextStyle.Scripting_Prop, -1);
+                _textStyle = _textStyle.copyForStyleKeyValue(TextStyle.Scripting_Prop, -1);
         }
 
         /**
          * Called when HTML tag end is encountered.
          */
-        public void handleEndTag(HTML.Tag t, int pos)
+        public void handleEndTag(HTML.Tag htmlTag, int pos)
         {
             // Handle Bold end (</B> and </STRONG>), Italic end (</I> and </EM>), Font end (</FONT>)
-            if (t.equals(HTML.Tag.B) || t.equals(HTML.Tag.STRONG) ||
-                    t.equals(HTML.Tag.I) || t.equals(HTML.Tag.EM) || t.equals(HTML.Tag.FONT)) {
+            if (htmlTag.equals(HTML.Tag.B) || htmlTag.equals(HTML.Tag.STRONG) ||
+                    htmlTag.equals(HTML.Tag.I) || htmlTag.equals(HTML.Tag.EM) || htmlTag.equals(HTML.Tag.FONT)) {
                 if (_fontStack.size() > 1) ListUtils.removeLast(_fontStack);
                 Font font = ListUtils.getLast(_fontStack);
-                _attrs.put(TextStyle.Font_Prop, font);
-                if (t.equals(HTML.Tag.FONT))
+                _textStyle = _textStyle.copyForStyleValue(font);
+                if (htmlTag.equals(HTML.Tag.FONT))
                     _isSymbol = false;
             }
 
             // Handle Underline (<U>)
-            if (t.equals(HTML.Tag.U))
-                _attrs.put(TextStyle.Scripting_Prop, 0);
+            if (htmlTag.equals(HTML.Tag.U))
+                _textStyle = _textStyle.copyForStyleKeyValue(TextStyle.Scripting_Prop, 0);
 
             // Handle paragraph end (</P>)
-            if (t.equals(HTML.Tag.P))
-                _string.addChars("\n\n");
+            if (htmlTag.equals(HTML.Tag.P))
+                _textModel.addChars("\n\n");
 
             // Handle List item end
-            if (t.equals(HTML.Tag.LI))
-                _string.addChars("\n");
+            if (htmlTag.equals(HTML.Tag.LI))
+                _textModel.addChars("\n");
 
             // Handle List start (<UL> and <OL>)
-            if (t.equals(HTML.Tag.UL) || t.equals(HTML.Tag.OL)) {
+            if (htmlTag.equals(HTML.Tag.UL) || htmlTag.equals(HTML.Tag.OL)) {
                 _listLevel = Math.max(0, _listLevel - 1);
-                if (!_string.getRunLast().toString().endsWith("\n")) _string.addChars("\n");
-                Font font = (Font) _attrs.get(TextStyle.Font_Prop);
+                if (!_textModel.getString().endsWith("\n")) _textModel.addChars("\n");
+                Font font = _textStyle.getFont();
                 double firstIndent = _listLevel == 0 ? 0 : _textLineStyle.getTab(_listLevel - 1);
                 double leftIndent = _listLevel == 0 ? 0 : firstIndent + font.getStringAdvance(((char) 8226) + " ");
                 _textLineStyle = _textLineStyle.copyForIndents(firstIndent, leftIndent, _textLineStyle.getRightIndent());
             }
 
             // Handle CENTER
-            if (t.equals(HTML.Tag.CENTER)) {
-                if (!_string.getRunLast().toString().endsWith("\n"))
-                    _string.addChars("\n");
+            if (htmlTag.equals(HTML.Tag.CENTER)) {
+                if (!_textModel.getString().endsWith("\n"))
+                    _textModel.addChars("\n");
                 _textLineStyle = _textLineStyle.copyForAlign(HPos.LEFT);
             }
 
             // Handle super-scripting
-            if (t.equals(HTML.Tag.SUP))
-                _attrs.remove(TextStyle.Scripting_Prop);
+            if (htmlTag.equals(HTML.Tag.SUP))
+                _textStyle = _textStyle.copyForStyleKeyValue(TextStyle.Scripting_Prop, null);
 
             // Handle subscripting
-            if (t.equals(HTML.Tag.SUB))
-                _attrs.remove(TextStyle.Scripting_Prop);
+            if (htmlTag.equals(HTML.Tag.SUB))
+                _textStyle = _textStyle.copyForStyleKeyValue(TextStyle.Scripting_Prop, null);
         }
 
         /**
@@ -305,9 +294,9 @@ public class RMHTMLParser {
 
             // Add String to text
             String str = new String(data);
-            int len = _string.length();
-            _string.addChars(str, _attrs);
-            _string.setLineStyle(_textLineStyle, len, len + str.length());
+            int len = _textModel.length();
+            _textModel.addCharsWithStyle(str, _textStyle);
+            _textModel.setLineStyle(_textLineStyle, len, len + str.length());
         }
 
         /**

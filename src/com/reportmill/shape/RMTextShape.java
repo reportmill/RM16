@@ -71,26 +71,29 @@ public class RMTextShape extends RMRectShape {
     public static final byte WRAP_SCALE = 2;
 
     /**
-     * Creates an empty text instance.
+     * Constructor.
      */
     public RMTextShape()
     {
+        super();
     }
 
     /**
-     * Creates a text instance initialized with the given RMXString.
+     * Constructor.
      */
     public RMTextShape(RMXString string)
     {
+        super();
         _xstr = string;
     }
 
     /**
-     * Creates a text instance initialized with the given plain text String.
+     * Constructor.
      */
     public RMTextShape(String plainText)
     {
-        getXString().addChars(plainText);
+        super();
+        getTextModel().addChars(plainText);
     }
 
     /**
@@ -113,8 +116,10 @@ public class RMTextShape extends RMRectShape {
         if (xString == _xstr) return;
 
         // Stop listening to last XString and start listening to new XString
-        if (_xstr != null) _xstr.getRichText().removePropChangeListener(_richTextLsnr);
-        if (xString != null) xString.getRichText().addPropChangeListener(_richTextLsnr);
+        if (_xstr != null)
+            _xstr.getRichText().removePropChangeListener(_richTextLsnr);
+        if (xString != null)
+            xString.getRichText().addPropChangeListener(_richTextLsnr);
 
         // Set value and fire property change, and reset cached HeightToFit
         firePropChange("XString", _xstr, _xstr = xString);
@@ -127,26 +132,68 @@ public class RMTextShape extends RMRectShape {
     /**
      * Returns the RichText.
      */
-    public TextModel getRichText()
+    public TextModel getRichText()  { return getXString().getRichText(); }
+
+    /**
+     * Returns the text layout.
+     */
+    public TextLayout getTextLayout()
     {
-        return getXString().getRichText();
+        // If already set, just return
+        if (_textModel != null) return _textModel;
+
+        // Create and set
+        RMXString xstr = getXString();
+        TextModel textModel = xstr.getRichText();
+        _textModel = new TextModelX(textModel);
+        _textModel.setWrapLines(true);
+        updateTextBox();
+
+        // Return
+        return _textModel;
+    }
+
+    /**
+     * Returns a text model.
+     */
+    public TextModel getTextModel()  { return getTextLayout().getTextModel(); }
+
+    /**
+     * Updates the text box.
+     */
+    private void updateTextBox()
+    {
+        // Get/set text bounds
+        Insets pad = getMargin();
+        double textW = Math.max(getWidth() - pad.getWidth(), 0);
+        double textH = Math.max(getHeight() - pad.getHeight(), 0);
+        _textModel.setBounds(pad.left, pad.top, textW, textH);
+
+        // Set StartCharIndex
+        _textModel.setStartCharIndex(getVisibleStart());
+        _textModel.setLinked(getLinkedText() != null);
+        _textModel.setAlignY(getAlignY());
+        _textModel.setBoundsPath(!(getPath() instanceof Rect) || getPerformsWrap() ? getPath() : null);
+        _textModel.setHyphenate(RMTextEditor.isHyphenating());
+        _textModel.setFontScale(1);
+
+        // Handle FitText: With hack to avoid text wrapping for data columns
+        if (_fitText) {
+            if (getHeight() < 50 && getWidth() > getHeight() * 3)
+                _textModel.setWrapLines(false);
+            _textModel.scaleTextToFit();
+        }
     }
 
     /**
      * Returns the length, in characters, of the XString associated with this RMText.
      */
-    public int length()
-    {
-        return getRichText().length();
-    }
+    public int length()  { return getTextModel().length(); }
 
     /**
      * Returns the text associated with this RMText as a plain String.
      */
-    public String getText()
-    {
-        return getXString().getText();
-    }
+    public String getText()  { return getTextModel().getString(); }
 
     /**
      * Replaces the current text associated with this RMText with the given String.
@@ -159,26 +206,17 @@ public class RMTextShape extends RMRectShape {
     /**
      * Returns the first character index visible in this text.
      */
-    public int getVisibleStart()
-    {
-        return 0;
-    }
+    public int getVisibleStart()  { return 0; }
 
     /**
      * Returns the last character index visible in this text.
      */
-    public int getVisibleEnd()
-    {
-        return getTextLayout().getEndCharIndex();
-    }
+    public int getVisibleEnd()  { return getTextLayout().getEndCharIndex(); }
 
     /**
      * Returns whether all characters can be visibly rendered in text bounds.
      */
-    public boolean isAllTextVisible()
-    {
-        return !getTextLayout().isTextOutOfBounds();
-    }
+    public boolean isAllTextVisible()  { return !getTextLayout().isTextOutOfBounds(); }
 
     /**
      * Returns the font for char 0.
@@ -187,7 +225,7 @@ public class RMTextShape extends RMRectShape {
     {
         if (isTextEditorSet())
             return getTextEditor().getFont();
-        return getXString().getFontAt(0);
+        return getTextModel().getRunForCharIndex(0).getFont();
     }
 
     /**
@@ -197,7 +235,7 @@ public class RMTextShape extends RMRectShape {
     {
         if (isTextEditorSet())
             getTextEditor().setFont(aFont);
-        else getXString().setAttribute(aFont);
+        else getTextModel().setTextStyleValue(TextStyle.Font_Prop, aFont, 0, length());
     }
 
     /**
@@ -207,7 +245,7 @@ public class RMTextShape extends RMRectShape {
     {
         if (isTextEditorSet())
             return getTextEditor().getFormat();
-        return getXString().getRunForCharIndex(0).getFormat();
+        return getTextModel().getRunForCharIndex(0).getFormat();
     }
 
     /**
@@ -217,7 +255,7 @@ public class RMTextShape extends RMRectShape {
     {
         if (isTextEditorSet())
             getTextEditor().setFormat(aFormat);
-        else getXString().setAttribute(aFormat, 0, length());
+        else getTextModel().setTextStyleValue(TextStyle.Format_Prop, aFormat, 0, length());
     }
 
     /**
@@ -225,7 +263,7 @@ public class RMTextShape extends RMRectShape {
      */
     public Color getTextColor()
     {
-        return getXString().getRunForCharIndex(0).getColor();
+        return getTextModel().getRunForCharIndex(0).getColor();
     }
 
     /**
@@ -233,7 +271,7 @@ public class RMTextShape extends RMRectShape {
      */
     public void setTextColor(Color aColor)
     {
-        getXString().setAttribute(aColor);
+         getTextModel().setTextStyleValue(TextStyle.Color_Prop, aColor, 0, length());
     }
 
     /**
@@ -378,17 +416,17 @@ public class RMTextShape extends RMRectShape {
     /**
      * Returns the char spacing at char 0.
      */
-    public float getCharSpacing()
+    public double getCharSpacing()
     {
         if (isTextEditorSet())
             return getTextEditor().getCharSpacing();
-        return getXString().getRun(0).getCharSpacing();
+        return getTextModel().getRunForCharIndex(0).getCharSpacing();
     }
 
     /**
      * Sets the char spacing for the text string.
      */
-    public void setCharSpacing(float aValue)
+    public void setCharSpacing(double aValue)
     {
         if (isTextEditorSet())
             getTextEditor().setCharSpacing(aValue);
@@ -668,57 +706,6 @@ public class RMTextShape extends RMRectShape {
             _linkedText.setPreviousText(this);
         revalidate();
         repaint();
-    }
-
-    /**
-     * Returns the text layout.
-     */
-    public TextLayout getTextLayout()
-    {
-        // If already set, just return
-        if (_textModel != null) return _textModel;
-
-        // Create and set
-        RMXString xstr = getXString();
-        TextModel textModel = xstr.getRichText();
-        _textModel = new TextModelX(textModel);
-        _textModel.setWrapLines(true);
-        updateTextBox();
-
-        // Return
-        return _textModel;
-    }
-
-    /**
-     * Returns a text model.
-     */
-    public TextModel getTextModel()  { return getTextLayout().getTextModel(); }
-
-    /**
-     * Updates the text box.
-     */
-    protected void updateTextBox()
-    {
-        // Get/set text bounds
-        Insets pad = getMargin();
-        double textW = Math.max(getWidth() - pad.getWidth(), 0);
-        double textH = Math.max(getHeight() - pad.getHeight(), 0);
-        _textModel.setBounds(pad.left, pad.top, textW, textH);
-
-        // Set StartCharIndex
-        _textModel.setStartCharIndex(getVisibleStart());
-        _textModel.setLinked(getLinkedText() != null);
-        _textModel.setAlignY(getAlignY());
-        _textModel.setBoundsPath(!(getPath() instanceof Rect) || getPerformsWrap() ? getPath() : null);
-        _textModel.setHyphenate(RMTextEditor.isHyphenating());
-        _textModel.setFontScale(1);
-
-        // Handle FitText: With hack to avoid text wrapping for data columns
-        if (_fitText) {
-            if (getHeight() < 50 && getWidth() > getHeight() * 3)
-                _textModel.setWrapLines(false);
-            _textModel.scaleTextToFit();
-        }
     }
 
     /**

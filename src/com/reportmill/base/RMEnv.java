@@ -2,6 +2,7 @@ package com.reportmill.base;
 import com.reportmill.graphics.*;
 import snap.gfx.Font;
 import snap.text.TextLineStyle;
+import snap.text.TextModel;
 import java.lang.reflect.Method;
 import java.sql.ResultSet;
 import java.util.List;
@@ -18,7 +19,7 @@ public class RMEnv {
     /**
      * Returns a RichText for the given html string and a default font.
      */
-    public RMXString parseHTML(String html, Font baseFont, TextLineStyle textLineStyle)
+    public TextModel parseHTML(String html, Font baseFont, TextLineStyle textLineStyle)
     {
         return RMHTMLParser.parse(html, baseFont, textLineStyle);
     }

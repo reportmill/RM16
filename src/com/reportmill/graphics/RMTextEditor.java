@@ -105,12 +105,12 @@ public class RMTextEditor extends TextAdapter {
     /**
      * Returns the character spacing of the current selection or cursor.
      */
-    public float getCharSpacing()  { return (float) getSelTextStyle().getCharSpacing(); }
+    public double getCharSpacing()  { return getSelTextStyle().getCharSpacing(); }
 
     /**
      * Returns the character spacing of the current selection or cursor.
      */
-    public void setCharSpacing(float aValue)  { setInputAttribute(TextStyle.CharSpacing_Prop, aValue); }
+    public void setCharSpacing(double aValue)  { setInputAttribute(TextStyle.CharSpacing_Prop, aValue); }
 
     /**
      * Returns the alignment for current selection.

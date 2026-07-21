@@ -9,6 +9,7 @@ import java.util.*;
 import snap.gfx.Font;
 import snap.text.TextFormat;
 import snap.text.TextLineStyle;
+import snap.text.TextModel;
 import snap.util.*;
 
 /**
@@ -202,22 +203,6 @@ public class RMKeyChainFuncs {
      */
     public static Object html(Object aValue)
     {
-        return RMHTML(aValue);
-    }
-
-    /**
-     * Returns an xstring by interpreting rtf commands in the given string.
-     */
-    public static Object rtf(Object aValue)
-    {
-        return RMRTF(aValue);
-    }
-
-    /**
-     * Returns an xstring by interpreting html commands in the given string.
-     */
-    public static Object RMHTML(Object aValue)
-    {
         // Get default font (or if val is xstring, get its first font)
         RMXString xstr = aValue instanceof RMXString ? (RMXString) aValue : null;
         String str = xstr != null ? xstr.getText() : aValue.toString();
@@ -225,7 +210,22 @@ public class RMKeyChainFuncs {
         TextLineStyle textLineStyle = xstr != null ? xstr.getLineStyleForCharIndex(0) : TextLineStyle.DEFAULT;
 
         // Return result of parsing html from val string
-        return RMEnv.getEnv().parseHTML(str, font, textLineStyle);
+        TextModel textModel = RMEnv.getEnv().parseHTML(str, font, textLineStyle);
+        return new RMXString(textModel);
+    }
+
+    /**
+     * Returns an xstring by interpreting rtf commands in the given string.
+     */
+    public static Object rtf(Object aValue)
+    {
+        // Get default font (or if val is xstring, get its first font)
+        Font font = Font.getDefaultFont();
+        if (aValue instanceof RMXString)
+            font = ((RMXString) aValue).getFontAt(0);
+
+        // Return result of parsing rtf from val string
+        return RMEnv.getEnv().parseRTF(aValue.toString(), font);
     }
 
     /**

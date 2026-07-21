@@ -27,7 +27,7 @@ public class RMXString implements Cloneable, CharSequence, RMArchiver.Archivable
     private TextModel _richText;
 
     /**
-     * Creates an empty RMXString.
+     * Constructor.
      */
     public RMXString()
     {
@@ -35,7 +35,7 @@ public class RMXString implements Cloneable, CharSequence, RMArchiver.Archivable
     }
 
     /**
-     * Creates an empty RMXString.
+     * Constructor.
      */
     public RMXString(TextModel richText)
     {
@@ -43,7 +43,7 @@ public class RMXString implements Cloneable, CharSequence, RMArchiver.Archivable
     }
 
     /**
-     * Creates an RMXString initialized with the given String and no attributes.
+     * Constructor.
      */
     public RMXString(CharSequence theChars)
     {
@@ -52,7 +52,7 @@ public class RMXString implements Cloneable, CharSequence, RMArchiver.Archivable
     }
 
     /**
-     * Creates an RMXString initialized with the given String with all characters set to the given attributes.
+     * Constructor.
      */
     public RMXString(CharSequence theChars, Object... theAttrs)
     {
@@ -66,12 +66,9 @@ public class RMXString implements Cloneable, CharSequence, RMArchiver.Archivable
     public TextModel getRichText()  { return _richText; }
 
     /**
-     * Returns the simple String represented by this RMXString.
+     * Returns the simple String.
      */
-    public String getText()
-    {
-        return toString();
-    }
+    public String getText()  { return _richText.getString(); }
 
     /**
      * The length.
@@ -150,17 +147,6 @@ public class RMXString implements Cloneable, CharSequence, RMArchiver.Archivable
     }
 
     /**
-     * Appends the given string to the end of this XString, with the given attributes.
-     */
-    public void addChars(CharSequence theChars, Map<String,Object> theAttrs)
-    {
-        int index = length();
-        TextStyle style = _richText.getTextStyleForCharIndex(index);
-        if (theAttrs != null) style = style.copyForStyleMap(theAttrs);
-        addChars(theChars, style, index);
-    }
-
-    /**
      * Removes characters in given range.
      */
     public void removeChars(int aStart, int anEnd)
@@ -173,15 +159,7 @@ public class RMXString implements Cloneable, CharSequence, RMArchiver.Archivable
      */
     public void replaceChars(CharSequence theChars, int aStart, int anEnd)
     {
-        replaceChars(theChars, null, aStart, anEnd);
-    }
-
-    /**
-     * Replaces chars in given range, with given String, using the given attributes.
-     */
-    public void replaceChars(CharSequence theChars, TextStyle aStyle, int aStart, int anEnd)
-    {
-        _richText.replaceCharsWithStyle(theChars, aStyle, aStart, anEnd);
+        _richText.replaceCharsWithStyle(theChars, null, aStart, anEnd);
     }
 
     /**
@@ -199,68 +177,6 @@ public class RMXString implements Cloneable, CharSequence, RMArchiver.Archivable
     {
         _richText.removeChars(aStart, aEnd);
         _richText.addCharsForTextModel(xStr._richText, aStart);
-    }
-
-    /**
-     * Returns the XString head run.
-     */
-    public RMXStringRun getRun()
-    {
-        return getRun(0);
-    }
-
-    /**
-     * Returns the number of runs in this XString.
-     */
-    public int getRunCount()
-    {
-        List<TextLine> richTextLines = _richText.getLines();
-        int runCount = 0;
-        for (TextLine textLine : richTextLines)
-            runCount += textLine.getRunCount();
-        return runCount;
-    }
-
-    /**
-     * Returns the specific Run at the given index in this XString.
-     */
-    public RMXStringRun getRun(int anIndex)
-    {
-        List<TextLine> richTextLines = _richText.getLines();
-        int index = anIndex;
-        RMXStringRun run = null;
-
-        // Iterate over lines
-        for (TextLine line : richTextLines) {
-            int runCount = line.getRunCount();
-            if (index < runCount) {
-                TextRun textRun = line.getRun(index);
-                run = new RMXStringRun(this, textRun);
-                break;
-            }
-            else index -= runCount;
-        }
-
-        // Return
-        return run;
-    }
-
-    /**
-     * Returns the last run in this XString (convenience).
-     */
-    public RMXStringRun getRunLast()
-    {
-        int runCount = getRunCount();
-        return getRun(runCount - 1);
-    }
-
-    /**
-     * Returns the XString run that contains or ends at given index.
-     */
-    public RMXStringRun getRunForCharIndex(int anIndex)
-    {
-        TextRun run = _richText.getRunForCharIndex(anIndex);
-        return new RMXStringRun(this, run);
     }
 
     /**
@@ -309,7 +225,7 @@ public class RMXString implements Cloneable, CharSequence, RMArchiver.Archivable
      */
     public Font getFontAt(int anIndex)
     {
-        return getRunForCharIndex(anIndex).getFont();
+        return _richText.getRunForCharIndex(anIndex).getFont();
     }
 
     /**
@@ -429,15 +345,15 @@ public class RMXString implements Cloneable, CharSequence, RMArchiver.Archivable
     /**
      * Performs @key@ substitution on an xstring.
      */
-    public RMXString rpgClone(ReportOwner anRptOwner, Object userInfo, RMShape aShape, boolean doCopy)
+    public RMXString rpgClone(ReportOwner rptOwner, Object userInfo, RMShape aShape, boolean doCopy)
     {
         // Declare local variable for resulting out-xstring and for whether something requested a recursive RPG run
         RMXString outString = this;
         boolean redo = false;
 
         // If userInfo provided, plug it into ReportMill
-        if (userInfo != null && anRptOwner != null)
-            anRptOwner.pushDataStack(userInfo);
+        if (userInfo != null && rptOwner != null)
+            rptOwner.pushDataStack(userInfo);
 
         // Get range for first key found in string
         Range totalKeyRange = outString.nextKeyRangeAfterIndex(0, new Range());
@@ -464,13 +380,13 @@ public class RMXString implements Cloneable, CharSequence, RMArchiver.Archivable
 
                 // If keyChain hasPageReference, tell reportMill and skip this key
                 if (aShape != null && keyChain.hasPageReference()) {
-                    anRptOwner.addPageReferenceShape(aShape);
+                    rptOwner.addPageReferenceShape(aShape);
                     outString.nextKeyRangeAfterIndex(totalKeyRange.end, totalKeyRange);
                     continue;
                 }
 
                 // Get keyChain value
-                Object val = RMKeyChain.getValue(anRptOwner, keyChain);
+                Object val = RMKeyChain.getValue(rptOwner, keyChain);
 
                 // If val is list, replace with first value (or null)
                 if (val instanceof List<?> list)
@@ -556,7 +472,7 @@ public class RMXString implements Cloneable, CharSequence, RMArchiver.Archivable
 
                 // If substitution string is still null, replace it with document null-string
                 if (valString == null)
-                    valString = anRptOwner.getNullString() != null ? anRptOwner.getNullString() : "";
+                    valString = rptOwner.getNullString() != null ? rptOwner.getNullString() : "";
             }
 
             // If there wasn't a key between '@' signs, assume they wanted '@'
@@ -573,14 +489,16 @@ public class RMXString implements Cloneable, CharSequence, RMArchiver.Archivable
                 if (valString instanceof String string) {
 
                     // If string is HTML formatted text, parse into RMXString
-                    if (StringUtils.startsWithIC(string, "<html"))
-                        valString = RMEnv.getEnv().parseHTML(string, keyRun.getFont(), keyRun.getLine().getLineStyle());
+                    if (StringUtils.startsWithIC(string, "<html")) {
+                        TextModel textModel = RMEnv.getEnv().parseHTML(string, keyRun.getFont(), keyRun.getLine().getLineStyle());
+                        valString = new RMXString(textModel);
+                    }
 
-                        // If string is RTF formatted text, parse into RMXString
+                    // If string is RTF formatted text, parse into RMXString
                     else if (string.startsWith("{\\rtf"))
                         valString = RMEnv.getEnv().parseRTF(string, keyRun.getFont());
 
-                        // If string is normal string, just perform replace and update key range
+                    // If string is normal string, just perform replace and update key range
                     else {
                         outString.replaceChars(string, totalKeyRange.start, totalKeyRange.end);
                         totalKeyRange.setLength(string.length());
@@ -600,11 +518,11 @@ public class RMXString implements Cloneable, CharSequence, RMArchiver.Archivable
 
         // If userInfo was provided, remove it from ReportMill
         if (userInfo != null)
-            anRptOwner.popDataStack();
+            rptOwner.popDataStack();
 
         // If something requested a recursive RPG run, do it
         if (redo)
-            outString = outString.rpgClone(anRptOwner, userInfo, aShape, false);
+            outString = outString.rpgClone(rptOwner, userInfo, aShape, false);
 
         // Return RPG string
         return outString;

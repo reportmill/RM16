@@ -4,6 +4,7 @@
 package com.reportmill.shape;
 import com.reportmill.graphics.*;
 import snap.gfx.Font;
+import snap.text.TextModel;
 import snap.util.*;
 
 /**
@@ -46,9 +47,9 @@ public class RMLinkedText extends RMTextShape {
     }
 
     /**
-     * Returns the same xstring as previoust text.
+     * Returns the same text model as previoust text.
      */
-    public RMXString getXString()  { return getPreviousText().getXString(); }
+    public TextModel getTextModel()  { return getPreviousText().getTextModel(); }
 
     /**
      * Returns the font for char 0 of the start text.

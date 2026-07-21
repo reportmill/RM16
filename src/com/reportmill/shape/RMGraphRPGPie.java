@@ -201,7 +201,7 @@ class RMGraphRPGPie extends RMGraphRPG {
                     _rptOwner.popDataStack();
 
                     // Get new wedge label text
-                    RMTextShape label = new RMTextShape(string);
+                    RMTextShape label = new RMTextShape(string.getTextModel());
 
                     // Set stroke and fill
                     if (labelAxis.getStroke() != null) label.setStrokeColor(labelAxis.getStrokeColor());

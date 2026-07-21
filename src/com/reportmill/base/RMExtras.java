@@ -41,12 +41,11 @@ public class RMExtras {
     public static void replaceText(RMShape aShape, String aString1, String aString2)
     {
         // Handle RMTextShape
-        if (aShape instanceof RMTextShape text) {
-            RMXString xstring = text.getXString();
-            String string = xstring.getText();
+        if (aShape instanceof RMTextShape textShape) {
+            String string = textShape.getText();
             for (int i = string.indexOf(aString1); i >= 0; i = string.indexOf(aString1, i)) {
-                xstring.replaceChars(aString2, i, i + aString1.length());
-                string = xstring.getText();
+                textShape.getTextModel().replaceChars(aString2, i, i + aString1.length());
+                string = textShape.getText();
                 i += aString1.length();
             }
         }

@@ -7,6 +7,7 @@ import snap.geom.*;
 import snap.gfx.*;
 import snap.text.TextLayout;
 import snap.text.TextLine;
+import snap.text.TextModel;
 import snap.text.TextRun;
 
 /**
@@ -87,8 +88,8 @@ public class RMTextShapeUtils {
                     // If non-space character, create glyph shape
                     if (c != ' ') {
                         Rect glyphBounds = font.getCharBounds(c);
-                        RMXString gstring = aText.getXString().substring(run.getStartCharIndex() + i, run.getStartCharIndex() + i + 1);
-                        RMTextShape glyphShape = new RMTextShape(gstring);
+                        TextModel glyphTextModel = aText.getTextModel().copyForRange(run.getStartCharIndex() + i, run.getStartCharIndex() + i + 1);
+                        RMTextShape glyphShape = new RMTextShape(glyphTextModel);
                         glyphShape.setAutosizing("~-~,~-~");
 
                         textCharsShape.addChild(glyphShape);
@@ -117,5 +118,25 @@ public class RMTextShapeUtils {
         double rectW = aRect.width + textMargin.getWidth();
         double rectH = aRect.height + textMargin.getHeight();
         return new Rect(rectX, rectY, rectW, rectH);
+    }
+
+    /**
+     * Replaces any occurrence of consecutive newlines with a single newline in given text model.
+     */
+    public static void coalesceNewlines(TextModel textModel)
+    {
+        // Iterate over occurrences of adjacent newlines (from back to font) and remove redundant newline chars
+        String string = textModel.getString();
+        for (int start = string.lastIndexOf("\n\n"); start >= 0; start = string.lastIndexOf("\n\n", start)) {
+            int end = start + 1;
+            while (start > 0 && string.charAt(start - 1) == '\n')
+                start--;
+            textModel.removeChars(start, end);
+            string = textModel.getString();
+        }
+
+        // Also remove leading newline if present
+        if (!textModel.isEmpty() && textModel.charAt(0) == '\n')
+            textModel.removeChars(0, 1);
     }
 }

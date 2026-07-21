@@ -27,46 +27,46 @@ import snap.util.*;
 public class RMTextShape extends RMRectShape {
 
     // A text model to manage text content and style
-    TextModel _textModel;
+    private TextModel _textModel;
 
     // A text layout to manage text in shape bounds
-    TextModelX _textLayout;
+    private TextModelX _textLayout;
 
     // The real backing store for text is an xstring
-    RMXString _xstr;
+    private RMXString _xstr;
 
     // The text margin (if different than default)
-    Insets _margin = getMarginDefault();
+    private Insets _margin = getMarginDefault();
 
     // Vertical alignment of text
-    VPos _alignY = VPos.TOP;
+    private VPos _alignY = VPos.TOP;
 
     // Specifies how text should handle overflow during RPG (ignore it, shrink it or paginate it)
-    byte _wraps;
+    private byte _wraps;
 
     // Whether to fit text on layout
-    boolean _fitText;
+    private boolean _fitText;
 
     // Whether text should wrap around other shapes that cause wrap
-    boolean _performsWrap = false;
+    private boolean _performsWrap = false;
 
     // Whether text should eliminate empty lines during RPG
-    boolean _coalesceNewlines;
+    private boolean _coalesceNewlines;
 
     // Whether text should draw box around itself even if there's no stroke
-    boolean _drawsSelectionRect;
+    private boolean _drawsSelectionRect;
 
     // The linked text shape for rendering overflow, if there is one
-    RMLinkedText _linkedText;
+    private RMLinkedText _linkedText;
 
     // The text editor, if one has been set
-    RMTextEditor _textEditor;
+    private RMTextEditor _textEditor;
+
+    // A listener to handle text model prop changes
+    private PropChangeListener _textModelPropChangeLsnr = this::handleTextModelPropChange;
 
     // The default text margin (top=1, left=2, bottom=0, right=2)
-    static Insets _marginDefault = new Insets(1, 2, 0, 2);
-
-    // A listener to handle rich text changes
-    PropChangeListener _richTextLsnr = pc -> richTextDidPropChange(pc);
+    private static Insets MARGIN_DEFAULT = new Insets(1, 2, 0, 2);
 
     // Constants for overflow behavior during RPG
     public static final byte WRAP_NONE = 0;
@@ -84,10 +84,10 @@ public class RMTextShape extends RMRectShape {
     /**
      * Constructor.
      */
-    public RMTextShape(RMXString string)
+    public RMTextShape(TextModel textModel)
     {
         super();
-        setXString(string);
+        setTextModel(textModel);
     }
 
     /**
@@ -109,23 +109,13 @@ public class RMTextShape extends RMRectShape {
     }
 
     /**
-     * Sets the XString associated with this RMText.
-     */
-    public void setXString(RMXString xString)
-    {
-        if (xString == _xstr) return;
-        setTextModel(xString.getRichText());
-        _xstr = xString;
-    }
-
-    /**
      * Returns a text model.
      */
     public TextModel getTextModel()
     {
         if (_textModel != null) return _textModel;
         TextModel textModel = TextModel.createDefaultTextModel(true);
-        textModel.addPropChangeListener(_richTextLsnr);
+        textModel.addPropChangeListener(_textModelPropChangeLsnr);
         return _textModel = textModel;
     }
 
@@ -136,8 +126,8 @@ public class RMTextShape extends RMRectShape {
     {
         if (textModel == _textModel) return;
         if (_textModel != null)
-            _textModel.removePropChangeListener(_richTextLsnr);
-        textModel.addPropChangeListener(_richTextLsnr);
+            _textModel.removePropChangeListener(_textModelPropChangeLsnr);
+        textModel.addPropChangeListener(_textModelPropChangeLsnr);
         firePropChange("TextModel", _textModel, _textModel = textModel);
         _textLayout = null;
         _textEditor = null;
@@ -193,19 +183,19 @@ public class RMTextShape extends RMRectShape {
     /**
      * Returns the length, in characters, of the XString associated with this RMText.
      */
-    public int length()  { return getTextModel().length(); }
+    public int length()  { return _textModel!= null ? _textModel.length() : 0; }
 
     /**
      * Returns the text associated with this RMText as a plain String.
      */
-    public String getText()  { return getTextModel().getString(); }
+    public String getText()  { return _textModel != null ? _textModel.getString() : ""; }
 
     /**
      * Replaces the current text associated with this RMText with the given String.
      */
     public void setText(String aString)
     {
-        getXString().replaceChars(aString, 0, length());
+        getTextModel().replaceChars(aString, 0, length());
     }
 
     /**
@@ -347,7 +337,7 @@ public class RMTextShape extends RMRectShape {
     {
         if (isTextEditorSet())
             return getTextEditor().getAlignX();
-        return getXString().getAlignX();
+        return getTextModel().getLineStyleForCharIndex(0).getAlign();
     }
 
     /**
@@ -358,7 +348,7 @@ public class RMTextShape extends RMRectShape {
     {
         if (isTextEditorSet())
             getTextEditor().setAlignX(alignX);
-        else getXString().setAlignX(alignX);
+        else getTextModel().setLineStyleValue(TextLineStyle.Align_Prop, alignX, 0, length());
     }
 
     /**
@@ -435,7 +425,7 @@ public class RMTextShape extends RMRectShape {
     {
         if (isTextEditorSet())
             getTextEditor().setCharSpacing(aValue);
-        else getXString().setAttribute(TextStyle.CharSpacing_Prop, aValue == 0 ? null : aValue);
+        else getTextModel().setTextStyleValue(TextStyle.CharSpacing_Prop, aValue == 0 ? null : aValue, 0, length());
     }
 
     /**
@@ -539,7 +529,7 @@ public class RMTextShape extends RMRectShape {
      */
     public Insets getMarginDefault()
     {
-        return _marginDefault;
+        return MARGIN_DEFAULT;
     }
 
     /**
@@ -769,27 +759,27 @@ public class RMTextShape extends RMRectShape {
     protected RMShape rpgShape(ReportOwner anRptOwner, RMShape aParent)
     {
         RMTextShape clone = clone();
-        RMXString string = clone.getXString();
+        TextModel cloneTextModel = clone.getTextModel();
+        cloneTextModel.setPropChangeEnabled(false);
 
-        // Do xstring RPG (if no change due to RPG, just use normal) with FirePropChangeEnabled turned off
-        string.getRichText().setPropChangeEnabled(false);
-        string.rpgClone(anRptOwner, null, clone, false);
+        // Do xstring RPG (if no change due to RPG, just use normal)
+        clone.getXString().rpgClone(anRptOwner, null, clone, false);
 
         // If coalesce newlines is set, coalesce newlines
         if (getCoalesceNewlines())
-            string.coalesceNewlines();
+            RMTextShapeUtils.coalesceNewlines(cloneTextModel);
 
         // Trim line ends from end of string to prevent extra empty line height
-        int len = string.length(), end = len;
-        while (end > 0 && CharSequenceUtils.isLineEndChar(string.charAt(end - 1))) end--;
+        int len = cloneTextModel.length(), end = len;
+        while (end > 0 && CharSequenceUtils.isLineEndChar(cloneTextModel.charAt(end - 1))) end--;
         if (end != len)
-            string.removeChars(end, len);
+            cloneTextModel.removeChars(end, len);
 
         // If WRAP_SCALE, set FitText ivar
         if (getWraps() == WRAP_SCALE) clone._fitText = true;
 
-        // Enable string FirePropChangeEnabled and revalidate
-        string.getRichText().setPropChangeEnabled(true);
+        // Enable clone text prop change listeners and revalidate
+        cloneTextModel.setPropChangeEnabled(true);
         clone.revalidate();
 
         // If paginating, swap in paginated parts (disable in table row)
@@ -839,7 +829,7 @@ public class RMTextShape extends RMRectShape {
 
         // RPG clone xstring again and set
         RMXString xstringCloneRPG = _xstr.rpgClone(aRptOwner, userInfo, null, true);
-        setXString(xstringCloneRPG);
+        setTextModel(xstringCloneRPG.getTextModel());
     }
 
     /**
@@ -887,7 +877,7 @@ public class RMTextShape extends RMRectShape {
     /**
      * Override to catch XString and TextEditor changes.
      */
-    protected void richTextDidPropChange(PropChange aPC)
+    protected void handleTextModelPropChange(PropChange aPC)
     {
         _pcs.fireDeepChange(this, aPC);
         repaint();
@@ -917,13 +907,12 @@ public class RMTextShape extends RMRectShape {
     {
         // Get normal shape clone, clone XString, clear layout and return
         RMTextShape clone = (RMTextShape) super.clone();
-        clone._xstr = null;
-        clone._textModel = null;
+        clone._textModel = _textModel != null ? _textModel.copyForRange(0, length()) : null;
         clone._textLayout = null;
         clone._textEditor = null;
-        clone._richTextLsnr = pc -> richTextDidPropChange(pc);
-        if (_xstr != null)
-            clone.setXString(_xstr.clone());
+        clone._xstr = null;
+        clone._textModelPropChangeLsnr = clone::handleTextModelPropChange;
+        //clone._textModel.addPropChangeListener(clone._richTextLsnr);
         return clone;
     }
 
@@ -943,36 +932,29 @@ public class RMTextShape extends RMRectShape {
      */
     public XMLElement toXML(RMArchiver anArchiver)
     {
-        // Archive basic shape attributes and reset element name to text
-        XMLElement e = super.toXML(anArchiver);
-        e.setName("text");
+        XMLElement xml = super.toXML(anArchiver); xml.setName("text");
 
         // Archive Margin, AlignmentY
-        if (getMargin() != getMarginDefault()) e.add("margin", getMarginString());
-        if (getAlignY() != VPos.TOP) e.add("valign", getAlignYString());
+        if (getMargin() != getMarginDefault()) xml.add("margin", getMarginString());
+        if (getAlignY() != VPos.TOP) xml.add("valign", getAlignYString());
 
         // Archive Wraps, PerformsWrap
-        if (_wraps != 0) e.add("wrap", _wraps == WRAP_BASIC ? "wrap" : "shrink");
-        if (_performsWrap) e.add("WrapAround", true);
+        if (_wraps != 0) xml.add("wrap", _wraps == WRAP_BASIC ? "wrap" : "shrink");
+        if (_performsWrap) xml.add("WrapAround", true);
 
         // Archive CoalesceNewlines, DrawsSelectionRect
-        if (_coalesceNewlines) e.add("coalesce-newlines", true);
-        if (_drawsSelectionRect) e.add("draw-border", true);
+        if (_coalesceNewlines) xml.add("coalesce-newlines", true);
+        if (_drawsSelectionRect) xml.add("draw-border", true);
 
-        // Archive xstring
+        // Archive text model
         if (!(this instanceof RMLinkedText)) {
-
-            // Get the xml element for the xstring
-            XMLElement xse = anArchiver.writeObjectToXml(getXString());
-
-            // Add individual child elements to this text's xml element
-            for (int i = 0, iMax = xse.size(); i < iMax; i++)
-                e.add(xse.get(i));
+            XMLElement textModelXml = RMArchiverHpr.textModelToXML(getTextModel(), anArchiver);
+            xml.addAll(textModelXml);
         }
 
         // If linked text present, archive reference to it (it should be archived as normal part of shape hierarchy)
         if (getLinkedText() != null)
-            e.add("linked-text", anArchiver.getReference(getLinkedText()));
+            xml.add("linked-text", anArchiver.getReference(getLinkedText()));
 
         // If there is a path shape, archive path shape
         if (getPathShape() != null) {
@@ -980,15 +962,14 @@ public class RMTextShape extends RMRectShape {
             // Get path shape and an element (and add element to master element)
             RMShape pathShape = getPathShape();
             XMLElement pathShapeElement = new XMLElement("path-shape");
-            e.add(pathShapeElement);
+            xml.add(pathShapeElement);
 
             // Archive path shape to path-shape element
             XMLElement pathShapeElementZero = anArchiver.writeObjectToXml(pathShape);
             pathShapeElement.add(pathShapeElementZero);
         }
 
-        // Return element for this shape
-        return e;
+        return xml;
     }
 
     /**
@@ -1016,7 +997,7 @@ public class RMTextShape extends RMRectShape {
 
         // Unarchive xString
         if (!(this instanceof RMLinkedText))
-            getXString().fromXML(anArchiver, anElement);
+            RMArchiverHpr.textModelFromXML(getTextModel(), anArchiver, anElement);
 
         // Register for finish call
         anArchiver.getReference(anElement);
@@ -1052,6 +1033,6 @@ public class RMTextShape extends RMRectShape {
     {
         String string = super.toString();
         string = string.substring(0, string.length() - 1);
-        return string + ", \"" + getXString() + "\"]";
+        return string + ", \"" + getText() + "\"]";
     }
 }

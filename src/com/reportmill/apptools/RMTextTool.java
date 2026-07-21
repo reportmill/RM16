@@ -899,7 +899,7 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
             RMTextShape text = aShape;
             if (text.length() == 0)
                 text.setText(string);
-            else text.getXString().addChars(" " + string);
+            else text.getTextModel().addChars(" " + string);
         }
 
         // Otherwise, do normal drop

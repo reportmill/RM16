@@ -416,15 +416,14 @@ class RMGraphRPGBar extends RMGraphRPG {
 
         // Iterate over graph intervals to create axis label texts
         for (int i = 0, iMax = getIntervalCount(); i < iMax; i++) {
-            Float interval = getInterval(i);
-
-            // Get string for intervalNumber
-            String str = format.format(interval);
-            RMXString xstr = new RMXString(str, valueAxis.getFont(), valueAxis.getTextColor());
-            xstr.setLineStyle(TextLineStyle.DEFAULT_CENTERED, 0, xstr.length());
 
             // Create new text for label, copy value axis text shape attributes and size to fit
-            RMTextShape label = new RMTextShape(xstr);
+            Float interval = getInterval(i);
+            String labelText = format.format(interval);
+            RMTextShape label = new RMTextShape(labelText);
+            label.setAlignX(HPos.CENTER);
+            label.setFont(valueAxis.getFont());
+            label.setTextColor(valueAxis.getTextColor());
             label.copyShape(valueAxis);
             label.setBestSize();
 
@@ -484,7 +483,7 @@ class RMGraphRPGBar extends RMGraphRPG {
         RMTextShape label = new RMTextShape(labelAxis.getItemKey()); // Create new RMText with attributes of label axis
         label.copyShape(labelAxis);
         label.setFont(labelAxis.getFont());
-        label.getXString().setLineStyle(TextLineStyle.DEFAULT_CENTERED, 0, label.length());
+        label.getTextModel().setLineStyle(TextLineStyle.DEFAULT_CENTERED, 0, label.length());
         label.getXString().rpgClone(_rptOwner, aGroup, null, false); // Do rpg on label string
         label.setBestSize();  // Resize label to best size
 
@@ -574,8 +573,8 @@ class RMGraphRPGBar extends RMGraphRPG {
         Rect barRect = seriesItem.getBar().getFrame();
 
         // Declare variables for label position
-        double labelX = 0;
-        double labelY = 0;
+        double labelX;
+        double labelY;
 
         // Top Position
         if (aPosition == RMGraphPartSeries.LabelPos.Top) {

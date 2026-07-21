@@ -8,6 +8,8 @@ import java.util.Enumeration;
 import javax.swing.text.*;
 import javax.swing.text.rtf.RTFEditorKit;
 import snap.gfx.Font;
+import snap.text.TextModel;
+import snap.text.TextStyle;
 
 /**
  * Parses rtf data from a string and returns it as an xstring.
@@ -15,18 +17,18 @@ import snap.gfx.Font;
 public class RMRTFParser {
 
     /**
-     * Returns an xstring from the given rtf string and default font.
+     * Returns a text model from the given rtf string and default font.
      */
-    public static RMXString parse(String rtf, Font baseFont)
+    public static TextModel parse(String rtf, Font baseFont)
     {
         try { return parseRTF(rtf, baseFont); }
         catch (Exception e) { e.printStackTrace(); return null; }
     }
 
     /**
-     * Returns an xstring from the given rtf string and default font.
+     * Returns a text model from the given rtf string and default font.
      */
-    public static RMXString parseRTF(String rtf, Font baseFont) throws Exception
+    public static TextModel parseRTF(String rtf, Font baseFont) throws Exception
     {
         // Use RTFEditorKit to do the real parsing work
         EditorKit kit = new RTFEditorKit();
@@ -39,7 +41,7 @@ public class RMRTFParser {
         AbstractDocument.AbstractElement elem;
 
         // Declare return string and loop attribute variables
-        RMXString result = new RMXString();
+        TextModel textModel = TextModel.createDefaultTextModel(true);
         Font font = baseFont;
         Color color = null;
         boolean underline = false;
@@ -90,9 +92,9 @@ public class RMRTFParser {
                 }
 
                 // Create new xstring for rtf run (string, font, color, underline) and add
-                RMXString xstring = new RMXString(content, font, color);
-                xstring.setUnderlined(underline);
-                result.addString(xstring, result.length());
+                TextStyle textStyle = TextStyle.DEFAULT.copyForStyleValues(font, color);
+                if (underline) textStyle = textStyle.copyForStyleKeyValue(TextStyle.Underline_Prop, 1);
+                textModel.addCharsWithStyle(content, textStyle);
 
                 // Reset font, color & underline
                 font = baseFont;
@@ -101,7 +103,6 @@ public class RMRTFParser {
             }
         }
 
-        // Return rtf xstring
-        return result;
+        return textModel;
     }
 }

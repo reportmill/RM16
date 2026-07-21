@@ -17,7 +17,7 @@ public class RMEnv {
     private static RMEnv _shared = new RMEnv();
 
     /**
-     * Returns a RichText for the given html string and a default font.
+     * Returns a TextModel for the given html string and a default font.
      */
     public TextModel parseHTML(String html, Font baseFont, TextLineStyle textLineStyle)
     {
@@ -25,9 +25,9 @@ public class RMEnv {
     }
 
     /**
-     * Returns an xstring from the given rtf string and default font.
+     * Returns a TextModel from the given rtf string and default font.
      */
-    public RMXString parseRTF(String rtf, Font baseFont)
+    public TextModel parseRTF(String rtf, Font baseFont)
     {
         return RMRTFParser.parse(rtf, baseFont);
     }

@@ -1,10 +1,11 @@
 package com.reportmill.base;
-import com.reportmill.graphics.RMXString;
 import com.reportmill.shape.RMDocument;
 import com.reportmill.shape.RMParentShape;
 import com.reportmill.shape.RMTextShape;
 import snap.gfx.Color;
 import snap.gfx.Font;
+import snap.text.TextModel;
+import snap.text.TextStyle;
 import snap.util.*;
 
 /**
@@ -115,12 +116,14 @@ public class Voucher {
     {
         // Get attributed string with REPORTMILL in 72pt grey (with R & M in 100pt)
         Font font72 = Font.getFont("Arial Bold", 72), font100 = font72.copyForSize(100);
-        RMXString xstring = new RMXString("REPORTMILL", font72, new Color(.9));
-        xstring.setAttribute(font100, 0, 1);
-        xstring.setAttribute(font100, 6, 7); // Set R & M in 100pt
+        TextStyle textStyle = TextStyle.DEFAULT.copyForStyleValue(font72).copyForStyleValue(new Color(.9));
+        TextModel textModel = TextModel.createDefaultTextModel(true);
+        textModel.addCharsWithStyle("REPORTMILL", textStyle);
+        textModel.setTextStyleValue(TextStyle.Font_Prop, font100, 0, 1);
+        textModel.setTextStyleValue(TextStyle.Font_Prop, font100, 6, 7);
 
         // Create evalShape watermark across background
-        RMTextShape evalShape = new RMTextShape(xstring);
+        RMTextShape evalShape = new RMTextShape(textModel);
         evalShape.setFrame((aShape.getWidth() - 570) / 2, (aShape.getHeight() - 140) / 2, 570, 140);
         evalShape.setRoll(45);
         evalShape.setOpacity(.667f);
@@ -128,10 +131,11 @@ public class Voucher {
 
         // Get attributed string with bottom eval message in 12pt
         String msg = "ReportMill Evaluation - for more information go to reportmill.com.";
-        xstring = new RMXString(msg, Font.Arial12);
+        TextModel textModel2 = TextModel.createDefaultTextModel(true);
+        textModel2.addCharsWithStyle(msg, TextStyle.DEFAULT.copyForStyleValue(Font.Arial12));
 
         // Create evalShape license string in lower left corner
-        evalShape = new RMTextShape(xstring);
+        evalShape = new RMTextShape(textModel2);
         evalShape.setFrame(5, aShape.getHeight() - 20, 500, 18);
         evalShape.setURL("http://www.reportmill.com");
         aShape.addChild(evalShape);

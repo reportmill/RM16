@@ -7,6 +7,7 @@ import com.reportmill.shape.*;
 import java.util.*;
 import snap.geom.HPos;
 import snap.gfx.Font;
+import snap.text.TextStyle;
 import snap.util.*;
 import snap.web.WebURL;
 
@@ -252,11 +253,11 @@ public class Shell {
         headerRow.setHeight(205);
         headerRow.getColumn(0).setText("Hollywood Report\n\nTable of Contents");
         headerRow.getColumn(0).setAlignX(HPos.CENTER);
-        headerRow.getColumn(0).getXString().setAttribute(Font.getFont("Times Bold", 72));
-        headerRow.getColumn(0).getXString().setAttribute(Font.getFont("Times", 18), 16, 35);
+        headerRow.getColumn(0).setFont(Font.getFont("Times Bold", 72));
+        headerRow.getColumn(0).getTextModel().setTextStyleValue(TextStyle.Font_Prop, Font.getFont("Times", 18), 16, 35);
         headerRow.setVersion("Reprint");
         headerRow.getColumn(0).setText("Table of Contents (Continued)");
-        headerRow.getColumn(0).getXString().setAttribute(Font.getFont("Times", 18));
+        headerRow.getColumn(0).setFont(Font.getFont("Times", 18));
         headerRow.setHeight(30);
         headerRow.layout();
 
@@ -278,5 +279,4 @@ public class Shell {
         // Return template
         return template;
     }
-
 }

@@ -120,9 +120,9 @@ public class RMGraphLegend extends RMParentShape {
     }
 
     /**
-     * Override to layout legend.
+     * Configure legend for report.
      */
-    protected void configureRPG(RMGraphRPG graphRPG, boolean doRPG)
+    private void configureRPG(RMGraphRPG graphRPG, boolean doRPG)
     {
         // Make sure there is a graphRPG
         if (graphRPG == null) {
@@ -140,15 +140,15 @@ public class RMGraphLegend extends RMParentShape {
         boolean doPerItem = graph.isColorItems() || graph.getType() == RMGraph.Type.Pie;
 
         // Get strings and groups
-        List<String> strings = new ArrayList();
-        List<RMGroup> groups = new ArrayList();
+        List<String> strings = new ArrayList<>();
+        List<RMGroup> groups = new ArrayList<>();
 
         // If doPerItem, add for each item
         if (doPerItem) {
             RMGraphSeries series = graphRPG.getSeries(0);
             for (int i = 0, iMax = series.getItemCount(); i < iMax; i++) {
                 RMGraphSeries.Item item = series.getItem(i);
-                String text = legendText.length() > 0 ? legendText : ("Item " + (i + 1));
+                String text = !legendText.isEmpty() ? legendText : ("Item " + (i + 1));
                 strings.add(text);
                 groups.add(item._group);
             }
@@ -157,7 +157,7 @@ public class RMGraphLegend extends RMParentShape {
         // If more than one series, add item for each series
         else for (int i = 0, iMax = graphRPG.getSeriesCount(); i < iMax; i++) {
             RMGraphSeries series = graphRPG.getSeries(i);
-            String text = legendText.length() > 0 ? legendText : series.getTitle();
+            String text = !legendText.isEmpty() ? legendText : series.getTitle();
             strings.add(text);
             groups.add(series._group);
         }

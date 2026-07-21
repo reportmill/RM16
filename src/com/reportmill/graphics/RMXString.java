@@ -21,25 +21,25 @@ import snap.util.*;
  *    xstring.addAttribute(RMFont.getFont("Arial BoldItalic", 12), 6, xstring.length());
  * </pre></blockquote><p>
  */
-public class RMXString implements Cloneable, CharSequence, RMArchiver.Archivable {
+public class RMXString implements Cloneable, CharSequence {
 
     // The TextModel
-    private TextModel _richText;
+    private TextModel _textModel;
 
     /**
      * Constructor.
      */
     public RMXString()
     {
-        _richText = TextModel.createDefaultTextModel(true);
+        _textModel = TextModel.createDefaultTextModel(true);
     }
 
     /**
      * Constructor.
      */
-    public RMXString(TextModel richText)
+    public RMXString(TextModel textModel)
     {
-        _richText = richText;
+        _textModel = textModel;
     }
 
     /**
@@ -61,29 +61,29 @@ public class RMXString implements Cloneable, CharSequence, RMArchiver.Archivable
     }
 
     /**
-     * Returns the RichText.
+     * Returns the TextModel.
      */
-    public TextModel getRichText()  { return _richText; }
+    public TextModel getTextModel()  { return _textModel; }
 
     /**
      * Returns the simple String.
      */
-    public String getText()  { return _richText.getString(); }
+    public String getText()  { return _textModel.getString(); }
 
     /**
      * The length.
      */
-    public int length()  { return _richText.length(); }
+    public int length()  { return _textModel.length(); }
 
     /**
      * Returns the char at given index.
      */
-    public char charAt(int anIndex)  { return _richText.charAt(anIndex); }
+    public char charAt(int anIndex)  { return _textModel.charAt(anIndex); }
 
     /**
      * Returns a subsequence.
      */
-    public CharSequence subSequence(int aStart, int anEnd)  { return _richText.subSequence(aStart, anEnd); }
+    public CharSequence subSequence(int aStart, int anEnd)  { return _textModel.subSequence(aStart, anEnd); }
 
     /**
      * Sets the simple String represented by this RMXString.
@@ -131,7 +131,7 @@ public class RMXString implements Cloneable, CharSequence, RMArchiver.Archivable
     public void addChars(CharSequence theChars, TextStyle aStyle, int anIndex)
     {
         if (theChars.isEmpty()) return;
-        _richText.addCharsWithStyle(theChars, aStyle, anIndex);
+        _textModel.addCharsWithStyle(theChars, aStyle, anIndex);
     }
 
     /**
@@ -139,7 +139,7 @@ public class RMXString implements Cloneable, CharSequence, RMArchiver.Archivable
      */
     public void addChars(CharSequence theChars, Object... theAttrs)
     {
-        TextStyle textStyle = _richText.getTextStyleForCharIndex(length());
+        TextStyle textStyle = _textModel.getTextStyleForCharIndex(length());
         Object attr0 = theAttrs != null && theAttrs.length > 0 ? theAttrs[0] : null;
         if (attr0 instanceof TextStyle) textStyle = (TextStyle) attr0;
         else if (attr0 != null) textStyle = textStyle.copyForStyleValues(theAttrs);
@@ -151,7 +151,7 @@ public class RMXString implements Cloneable, CharSequence, RMArchiver.Archivable
      */
     public void removeChars(int aStart, int anEnd)
     {
-        _richText.removeChars(aStart, anEnd);
+        _textModel.removeChars(aStart, anEnd);
     }
 
     /**
@@ -159,7 +159,7 @@ public class RMXString implements Cloneable, CharSequence, RMArchiver.Archivable
      */
     public void replaceChars(CharSequence theChars, int aStart, int anEnd)
     {
-        _richText.replaceCharsWithStyle(theChars, null, aStart, anEnd);
+        _textModel.replaceCharsWithStyle(theChars, null, aStart, anEnd);
     }
 
     /**
@@ -167,7 +167,7 @@ public class RMXString implements Cloneable, CharSequence, RMArchiver.Archivable
      */
     public void addString(RMXString xStr, int anIndex)
     {
-        _richText.addCharsForTextModel(xStr._richText, anIndex);
+        _textModel.addCharsForTextModel(xStr._textModel, anIndex);
     }
 
     /**
@@ -175,8 +175,8 @@ public class RMXString implements Cloneable, CharSequence, RMArchiver.Archivable
      */
     public void replaceString(RMXString xStr, int aStart, int aEnd)
     {
-        _richText.removeChars(aStart, aEnd);
-        _richText.addCharsForTextModel(xStr._richText, aStart);
+        _textModel.removeChars(aStart, aEnd);
+        _textModel.addCharsForTextModel(xStr._textModel, aStart);
     }
 
     /**
@@ -184,7 +184,7 @@ public class RMXString implements Cloneable, CharSequence, RMArchiver.Archivable
      */
     public TextRun getRunForCharRange(int startIndex, int endIndex)
     {
-        return _richText.getRunForCharRange(startIndex, endIndex);
+        return _textModel.getRunForCharRange(startIndex, endIndex);
     }
 
     /**
@@ -217,7 +217,7 @@ public class RMXString implements Cloneable, CharSequence, RMArchiver.Archivable
      */
     public void setAttribute(String aKey, Object aVal, int aStart, int aEnd)
     {
-        _richText.setTextStyleValue(aKey, aVal, aStart, aEnd);
+        _textModel.setTextStyleValue(aKey, aVal, aStart, aEnd);
     }
 
     /**
@@ -225,7 +225,7 @@ public class RMXString implements Cloneable, CharSequence, RMArchiver.Archivable
      */
     public Font getFontAt(int anIndex)
     {
-        return _richText.getRunForCharIndex(anIndex).getFont();
+        return _textModel.getRunForCharIndex(anIndex).getFont();
     }
 
     /**
@@ -233,7 +233,7 @@ public class RMXString implements Cloneable, CharSequence, RMArchiver.Archivable
      */
     public TextLineStyle getLineStyleForCharIndex(int anIndex)
     {
-        TextLine line = _richText.getLineForCharIndex(anIndex);
+        TextLine line = _textModel.getLineForCharIndex(anIndex);
         return line.getLineStyle();
     }
 
@@ -242,7 +242,7 @@ public class RMXString implements Cloneable, CharSequence, RMArchiver.Archivable
      */
     public void setLineStyle(TextLineStyle lineStyle, int aStart, int anEnd)
     {
-        _richText.setLineStyle(lineStyle, aStart, anEnd);
+        _textModel.setLineStyle(lineStyle, aStart, anEnd);
     }
 
     /**
@@ -254,61 +254,12 @@ public class RMXString implements Cloneable, CharSequence, RMArchiver.Archivable
     }
 
     /**
-     * Returns the horizontal alignment of the first paragraph of the xstring.
-     */
-    public HPos getAlignX()  { return getLineStyleForCharIndex(0).getAlign(); }
-
-    /**
-     * Sets the horizontal alignment of the xstring.
-     */
-    public void setAlignX(HPos alignX)
-    {
-        _richText.setLineStyleValue(TextLineStyle.Align_Prop, alignX, 0, length());
-    }
-
-    /**
      * Returns an XString for given char range.
      */
     public RMXString substring(int aStart, int aEnd)
     {
-        TextModel richTextCopy = _richText.copyForRange(aStart, aEnd);
+        TextModel richTextCopy = _textModel.copyForRange(aStart, aEnd);
         return new RMXString(richTextCopy);
-    }
-
-    /**
-     * Replaces any occurrence of consecutive newlines with a single newline.
-     */
-    public void coalesceNewlines()
-    {
-        // Iterate over occurrences of adjacent newlines (from back to font) and remove redundant newline chars
-        String string = toString();
-        for (int start = string.lastIndexOf("\n\n"); start >= 0; start = string.lastIndexOf("\n\n", start)) {
-            int end = start + 1;
-            while (start > 0 && string.charAt(start - 1) == '\n') start--;
-            removeChars(start, end);
-            string = toString();
-        }
-
-        // Also remove leading newline if present
-        if (length() > 0 && charAt(0) == '\n')
-            removeChars(0, 1);
-    }
-
-    /**
-     * XML archival.
-     */
-    public XMLElement toXML(RMArchiver anArchiver)
-    {
-        return RMArchiverHpr.textModelToXML(_richText, anArchiver);
-    }
-
-    /**
-     * XML unarchival.
-     */
-    public RMXString fromXML(RMArchiver anArch, XMLElement anElmt)
-    {
-        RMArchiverHpr.textModelFromXML(_richText, anArch, anElmt);
-        return this;
     }
 
     /**
@@ -319,7 +270,7 @@ public class RMXString implements Cloneable, CharSequence, RMArchiver.Archivable
         if (anObj == this) return true;
         RMXString other = anObj instanceof RMXString ? (RMXString) anObj : null;
         if (other == null) return false;
-        return other._richText.equals(_richText);
+        return other._textModel.equals(_textModel);
     }
 
     /**
@@ -330,7 +281,7 @@ public class RMXString implements Cloneable, CharSequence, RMArchiver.Archivable
         RMXString clone;
         try { clone = (RMXString) super.clone(); }
         catch (Exception e) { throw new RuntimeException(e); }
-        clone._richText = _richText.copyForRange(0, _richText.length());
+        clone._textModel = _textModel.copyForRange(0, _textModel.length());
         return clone;
     }
 
@@ -339,7 +290,7 @@ public class RMXString implements Cloneable, CharSequence, RMArchiver.Archivable
      */
     public String toString()
     {
-        return _richText.getString();
+        return _textModel.getString();
     }
 
     /**
@@ -495,8 +446,10 @@ public class RMXString implements Cloneable, CharSequence, RMArchiver.Archivable
                     }
 
                     // If string is RTF formatted text, parse into RMXString
-                    else if (string.startsWith("{\\rtf"))
-                        valString = RMEnv.getEnv().parseRTF(string, keyRun.getFont());
+                    else if (string.startsWith("{\\rtf")) {
+                        TextModel textModel = RMEnv.getEnv().parseRTF(string, keyRun.getFont());
+                        valString = new RMXString(textModel);
+                    }
 
                     // If string is normal string, just perform replace and update key range
                     else {

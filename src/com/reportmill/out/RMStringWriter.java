@@ -3,6 +3,8 @@
  */
 package com.reportmill.out;
 import com.reportmill.shape.*;
+
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
@@ -15,16 +17,9 @@ public class RMStringWriter {
      */
     public static byte[] delimitedAsciiBytes(RMDocument aDoc, String fieldDelim, String recordDelim, boolean quoteFields)
     {
-        // Generate delimited string
-        String s = delimitedString(aDoc, fieldDelim, recordDelim, quoteFields);
-
-        // Return bytes
-        try {
-            return s.getBytes("ISO-8859-1");
-        } catch (Exception e) {
-            System.err.println(e);
-            return null;
-        }
+        String delimitedString = delimitedString(aDoc, fieldDelim, recordDelim, quoteFields);
+        try { return delimitedString.getBytes(StandardCharsets.ISO_8859_1); }
+        catch (Exception e) { System.err.println(e.getMessage()); return null; }
     }
 
     /**
@@ -58,16 +53,12 @@ public class RMStringWriter {
             // Get sorted children
             List<RMShape> children = RMShapeUtils.getShapesSortedByFrameX(aShape.getChildren());
 
-            // Iterate over children
-            for (int i = 0, iMax = children.size(); i < iMax; i++) {
-                RMShape child = children.get(i);
-
-                // Handle text children
-                if (child instanceof RMTextShape) {
-                    RMTextShape text = (RMTextShape) child;
+            // Iterate over children and write text shapes
+            for (RMShape child : children) {
+                if (child instanceof RMTextShape textShape) {
                     if (quoteFields)
-                        aSB.append('\"').append(text.getXString().getText()).append('\"').append(fieldD);
-                    else aSB.append(text.getXString().getText()).append(fieldD);
+                        aSB.append('\"').append(textShape.getText()).append('\"').append(fieldD);
+                    else aSB.append(textShape.getText()).append(fieldD);
                 }
             }
 
@@ -78,18 +69,17 @@ public class RMStringWriter {
         }
 
         // Handle RMCrossTab
-        else if (aShape instanceof RMCrossTab) {
-            RMCrossTab table = (RMCrossTab) aShape;
+        else if (aShape instanceof RMCrossTab crossTab) {
 
             // Iterate over rows
-            for (int i = 0, iMax = table.getRowCount(); i < iMax; i++) {
-                RMCrossTabRow row = table.getRow(i);
+            for (int i = 0, iMax = crossTab.getRowCount(); i < iMax; i++) {
+                RMCrossTabRow row = crossTab.getRow(i);
 
                 // Iterate over row cells and add cell string plus field delimiter
                 for (int j = 0, jMax = row.getCellCount(); j < jMax; j++)
                     if (quoteFields)
-                        aSB.append('\"').append(row.getCell(j).getXString().getText()).append('\"').append(fieldD);
-                    else aSB.append(row.getCell(j).getXString().getText()).append(fieldD);
+                        aSB.append('\"').append(row.getCell(j).getText()).append('\"').append(fieldD);
+                    else aSB.append(row.getCell(j).getText()).append(fieldD);
 
                 // Trim last field delimiter and add record delimiter
                 aSB.delete(aSB.length() - fieldD.length(), aSB.length());
@@ -101,5 +91,4 @@ public class RMStringWriter {
         else for (int i = 0, iMax = aShape.getChildCount(); i < iMax; i++)
                 appendDelimited(aSB, aShape.getChild(i), fieldD, recD, quoteFields);
     }
-
 }

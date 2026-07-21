@@ -132,8 +132,8 @@ public class RMGraphPartValueAxis extends RMTextShape {
      */
     public void setFont(Font aFont)
     {
-        if (getXString().isEmpty() && !_unarchiving)
-            getXString().addChars(" ");
+        if (getTextModel().isEmpty() && !_unarchiving)
+            getTextModel().addChars(" ");
         super.setFont(aFont);
         relayoutParent();
     }
@@ -152,8 +152,8 @@ public class RMGraphPartValueAxis extends RMTextShape {
      */
     public void setFormat(TextFormat aFormat)
     {
-        if (getXString().isEmpty())
-            getXString().addChars(" ");
+        if (getTextModel().isEmpty())
+            getTextModel().addChars(" ");
         super.setFormat(aFormat);
         relayoutParent();
     }
@@ -163,8 +163,8 @@ public class RMGraphPartValueAxis extends RMTextShape {
      */
     public void setTextColor(Color aColor)
     {
-        if (getXString().isEmpty())
-            getXString().addChars(" ");
+        if (getTextModel().isEmpty())
+            getTextModel().addChars(" ");
         super.setTextColor(aColor);
         relayoutParent();
     }

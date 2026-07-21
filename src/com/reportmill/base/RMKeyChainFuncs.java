@@ -10,6 +10,7 @@ import snap.gfx.Font;
 import snap.text.TextFormat;
 import snap.text.TextLineStyle;
 import snap.text.TextModel;
+import snap.text.TextStyle;
 import snap.util.*;
 
 /**
@@ -203,15 +204,14 @@ public class RMKeyChainFuncs {
      */
     public static Object html(Object aValue)
     {
-        // Get default font (or if val is xstring, get its first font)
-        RMXString xstr = aValue instanceof RMXString ? (RMXString) aValue : null;
-        String str = xstr != null ? xstr.getText() : aValue.toString();
-        Font font = xstr != null ? xstr.getFontAt(0) : Font.getDefaultFont();
-        TextLineStyle textLineStyle = xstr != null ? xstr.getLineStyleForCharIndex(0) : TextLineStyle.DEFAULT;
+        // Get default font (or if val is text model, get its first font)
+        TextModel textModel = aValue instanceof TextModel ? (TextModel) aValue : null;
+        String str = textModel != null ? textModel.getString() : aValue.toString();
+        Font font = textModel != null ? textModel.getRunForCharIndex(0).getFont() : Font.getDefaultFont();
+        TextLineStyle textLineStyle = textModel != null ? textModel.getLineStyleForCharIndex(0) : TextLineStyle.DEFAULT;
 
         // Return result of parsing html from val string
-        TextModel textModel = RMEnv.getEnv().parseHTML(str, font, textLineStyle);
-        return new RMXString(textModel);
+        return RMEnv.getEnv().parseHTML(str, font, textLineStyle);
     }
 
     /**
@@ -221,22 +221,8 @@ public class RMKeyChainFuncs {
     {
         // Get default font (or if val is xstring, get its first font)
         Font font = Font.getDefaultFont();
-        if (aValue instanceof RMXString)
-            font = ((RMXString) aValue).getFontAt(0);
-
-        // Return result of parsing rtf from val string
-        return RMEnv.getEnv().parseRTF(aValue.toString(), font);
-    }
-
-    /**
-     * Returns an xstring by interpreting rtf commands in the given string.
-     */
-    public static Object RMRTF(Object aValue)
-    {
-        // Get default font (or if val is xstring, get its first font)
-        Font font = Font.getDefaultFont();
-        if (aValue instanceof RMXString)
-            font = ((RMXString) aValue).getFontAt(0);
+        if (aValue instanceof TextModel textModel)
+            font = textModel.getRunForCharIndex(0).getFont();
 
         // Return result of parsing rtf from val string
         return RMEnv.getEnv().parseRTF(aValue.toString(), font);
@@ -386,12 +372,12 @@ public class RMKeyChainFuncs {
     public static Object RMAllFonts(Object aSize)
     {
         int size = MathUtils.clamp(Convert.intValue(aSize), 8, 80);
-        RMXString string = new RMXString();
+        TextModel textModel = TextModel.createDefaultTextModel(true);
         for (String fontName : Font.getFontNames()) {
             Font font = Font.getFont(fontName, size);
-            string.addChars(fontName + "\n", font);
+            textModel.addCharsWithStyle(fontName + "\n", TextStyle.DEFAULT.copyForStyleValue(font));
         }
-        return string;
+        return textModel;
     }
 
     /**

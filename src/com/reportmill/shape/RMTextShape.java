@@ -206,7 +206,7 @@ public class RMTextShape extends RMRectShape {
     public Font getFont()
     {
         if (isTextEditorSet())
-            return getTextEditor().getFont();
+            return getTextEditor().getSelFont();
         return getTextModel().getRunForCharIndex(0).getFont();
     }
 
@@ -216,7 +216,7 @@ public class RMTextShape extends RMRectShape {
     public void setFont(Font aFont)
     {
         if (isTextEditorSet())
-            getTextEditor().setFont(aFont);
+            getTextEditor().setSelFont(aFont);
         else getTextModel().setTextStyleValue(TextStyle.Font_Prop, aFont, 0, length());
     }
 
@@ -226,7 +226,7 @@ public class RMTextShape extends RMRectShape {
     public TextFormat getFormat()
     {
         if (isTextEditorSet())
-            return getTextEditor().getFormat();
+            return getTextEditor().getSelFormat();
         return getTextModel().getRunForCharIndex(0).getFormat();
     }
 
@@ -236,7 +236,7 @@ public class RMTextShape extends RMRectShape {
     public void setFormat(TextFormat aFormat)
     {
         if (isTextEditorSet())
-            getTextEditor().setFormat(aFormat);
+            getTextEditor().setSelFormat(aFormat);
         else getTextModel().setTextStyleValue(TextStyle.Format_Prop, aFormat, 0, length());
     }
 
@@ -262,7 +262,7 @@ public class RMTextShape extends RMRectShape {
     public boolean isUnderlined()
     {
         if (isTextEditorSet())
-            return getTextEditor().isUnderlined();
+            return getTextEditor().isSelUnderlined();
         return getTextModel().getRunForCharIndex(0).isUnderlined();
     }
 
@@ -272,7 +272,7 @@ public class RMTextShape extends RMRectShape {
     public void setUnderlined(boolean aFlag)
     {
         if (isTextEditorSet())
-            getTextEditor().setUnderlined(aFlag);
+            getTextEditor().setSelUnderlined(aFlag);
         else getTextModel().setTextStyleValue(TextStyle.Underline_Prop, aFlag ? 1 : 0, 0, length());
     }
 
@@ -282,7 +282,7 @@ public class RMTextShape extends RMRectShape {
     public Border getTextBorder()
     {
         if (isTextEditorSet())
-            return getTextEditor().getTextBorder();
+            return getTextEditor().getSelBorder();
         return getTextModel().getRunForCharIndex(0).getBorder();
     }
 
@@ -292,7 +292,7 @@ public class RMTextShape extends RMRectShape {
     public void setTextBorder(Border aBorder)
     {
         if (isTextEditorSet())
-            getTextEditor().setTextBorder(aBorder);
+            getTextEditor().setSelBorder(aBorder);
         else getTextModel().setTextStyleValue(TextStyle.Border_Prop, aBorder, 0, length());
     }
 
@@ -302,7 +302,7 @@ public class RMTextShape extends RMRectShape {
     public boolean isJustify()
     {
         if (isTextEditorSet())
-            return getTextEditor().getInputLineStyle().isJustify();
+            return getTextEditor().getSelLineStyle().isJustify();
         return getTextModel().getLineStyleForCharIndex(0).isJustify();
     }
 
@@ -312,7 +312,7 @@ public class RMTextShape extends RMRectShape {
     public void setJustify(boolean aValue)
     {
         if (isTextEditorSet())
-            getTextEditor().setInputLineStyle(getTextEditor().getInputLineStyle().copyForPropKeyValue(TextLineStyle.Justify_Prop, aValue));
+            getTextEditor().setSelLineStyle(getTextEditor().getSelLineStyle().copyForPropKeyValue(TextLineStyle.Justify_Prop, aValue));
         else getTextModel().setLineStyleValue(TextLineStyle.Justify_Prop, aValue, 0, length());
     }
 
@@ -323,7 +323,7 @@ public class RMTextShape extends RMRectShape {
     public HPos getAlignX()
     {
         if (isTextEditorSet())
-            return getTextEditor().getAlignX();
+            return getTextEditor().getSelAlignX();
         return getTextModel().getLineStyleForCharIndex(0).getAlign();
     }
 
@@ -334,7 +334,7 @@ public class RMTextShape extends RMRectShape {
     public void setAlignX(HPos alignX)
     {
         if (isTextEditorSet())
-            getTextEditor().setAlignX(alignX);
+            getTextEditor().setSelAlignX(alignX);
         else getTextModel().setLineStyleValue(TextLineStyle.Align_Prop, alignX, 0, length());
     }
 
@@ -401,7 +401,7 @@ public class RMTextShape extends RMRectShape {
     public double getCharSpacing()
     {
         if (isTextEditorSet())
-            return getTextEditor().getCharSpacing();
+            return getTextEditor().getSelCharSpacing();
         return getTextModel().getRunForCharIndex(0).getCharSpacing();
     }
 
@@ -411,7 +411,7 @@ public class RMTextShape extends RMRectShape {
     public void setCharSpacing(double aValue)
     {
         if (isTextEditorSet())
-            getTextEditor().setCharSpacing(aValue);
+            getTextEditor().setSelCharSpacing(aValue);
         else getTextModel().setTextStyleValue(TextStyle.CharSpacing_Prop, aValue == 0 ? null : aValue, 0, length());
     }
 
@@ -421,7 +421,7 @@ public class RMTextShape extends RMRectShape {
     public double getLineSpacing()
     {
         if (isTextEditorSet())
-            return getTextEditor().getLineSpacing();
+            return getTextEditor().getSelLineSpacing();
         return getTextModel().getLineStyleForCharIndex(0).getSpacing();
     }
 
@@ -431,7 +431,7 @@ public class RMTextShape extends RMRectShape {
     public void setLineSpacing(double aHeight)
     {
         if (isTextEditorSet())
-            getTextEditor().setLineSpacing(aHeight);
+            getTextEditor().setSelLineSpacing(aHeight);
         else getTextModel().setLineStyleValue(TextLineStyle.Spacing_Prop, aHeight, 0, length());
     }
 
@@ -441,7 +441,7 @@ public class RMTextShape extends RMRectShape {
     public double getLineSpacingFactor()
     {
         if (isTextEditorSet())
-            return getTextEditor().getLineSpacingFactor();
+            return getTextEditor().getSelLineSpacingFactor();
         return getTextModel().getLineStyleForCharIndex(0).getSpacingFactor();
     }
 
@@ -451,7 +451,7 @@ public class RMTextShape extends RMRectShape {
     public void setLineSpacingFactor(double aHeight)
     {
         if (isTextEditorSet())
-            getTextEditor().setLineSpacingFactor(aHeight);
+            getTextEditor().setSelLineSpacingFactor(aHeight);
         else getTextModel().setLineStyleValue(TextLineStyle.SpacingFactor_Prop, aHeight, 0, length());
     }
 
@@ -461,7 +461,7 @@ public class RMTextShape extends RMRectShape {
     public double getLineMinHeight()
     {
         if (isTextEditorSet())
-            return getTextEditor().getLineMinHeight();
+            return getTextEditor().getSelLineMinHeight();
         return getTextModel().getLineStyleForCharIndex(0).getMinHeight();
     }
 
@@ -471,7 +471,7 @@ public class RMTextShape extends RMRectShape {
     public void setLineMinHeight(double aHeight)
     {
         if (isTextEditorSet())
-            getTextEditor().setLineMinHeight(aHeight);
+            getTextEditor().setSelLineMinHeight(aHeight);
         else getTextModel().setLineStyleValue(TextLineStyle.MinHeight_Prop, aHeight, 0, length());
     }
 
@@ -481,7 +481,7 @@ public class RMTextShape extends RMRectShape {
     public double getLineMaxHeight()
     {
         if (isTextEditorSet())
-            return getTextEditor().getLineMaxHeight();
+            return getTextEditor().getSelLineMaxHeight();
         return getTextModel().getLineStyleForCharIndex(0).getMaxHeight();
     }
 
@@ -491,7 +491,7 @@ public class RMTextShape extends RMRectShape {
     public void setLineMaxHeight(double aHeight)
     {
         if (isTextEditorSet())
-            getTextEditor().setLineMaxHeight(aHeight);
+            getTextEditor().setSelLineMaxHeight(aHeight);
         else getTextModel().setLineStyleValue(TextLineStyle.MaxHeight_Prop, aHeight, 0, length());
     }
 

@@ -78,7 +78,7 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
         // If editor is text editing, get paragraph from text editor instead
         RMTextEditor textEditor = editor.getTextEditor();
         if (textEditor != null)
-            lineStyle = textEditor.getInputLineStyle();
+            lineStyle = textEditor.getSelLineStyle();
 
         // Update AlignLeftButton, AlignCenterButton, AlignRightButton, AlignFullButton
         setViewValue("AlignLeftButton", !lineStyle.isJustify() && lineStyle.getAlign() == HPos.LEFT);

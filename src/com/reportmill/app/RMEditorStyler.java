@@ -206,7 +206,7 @@ public class RMEditorStyler extends Styler {
         // Handle RMTextShape + TextEditorSet
         RMTextEditor textEditor = getTextEditorForShape(aShape);
         if (textEditor != null)
-            return textEditor.getTextBorder();
+            return textEditor.getSelBorder();
 
         // Convert stroke
         RMStroke stroke = aShape.getStroke();
@@ -221,7 +221,7 @@ public class RMEditorStyler extends Styler {
         // Handle RMTextShape + TextEditorSet
         RMTextEditor textEditor = getTextEditorForShape(aShape);
         if (textEditor != null) {
-            textEditor.setTextBorder(aBorder);
+            textEditor.setSelBorder(aBorder);
             return;
         }
 
@@ -242,7 +242,7 @@ public class RMEditorStyler extends Styler {
         // Handle RMTextShape + TextEditorSet
         RMTextEditor textEditor = getTextEditorForShape(aShape);
         if (textEditor != null)
-            return textEditor.getColor();
+            return textEditor.getSelColor();
 
         // Get shape fill, convert and return
         RMFill shapeFill = aShape.getFill();
@@ -263,7 +263,7 @@ public class RMEditorStyler extends Styler {
         RMTextEditor textEditor = getTextEditorForShape(aShape);
         if (textEditor != null) {
             Color color = aPaint != null ? aPaint.getColor() : null;
-            textEditor.setColor(color);
+            textEditor.setSelColor(color);
             return;
         }
 
@@ -285,12 +285,9 @@ public class RMEditorStyler extends Styler {
      */
     public Color getTextColorForShape(RMShape aShape)
     {
-        // Handle RMTextShape + TextEditorSet
         RMTextEditor textEditor = getTextEditorForShape(aShape);
         if (textEditor != null)
-            return textEditor.getColor();
-
-        // Return
+            return textEditor.getSelColor();
         return aShape.getTextColor();
     }
 
@@ -302,7 +299,7 @@ public class RMEditorStyler extends Styler {
         // Handle RMTextShape + TextEditorSet
         RMTextEditor textEditor = getTextEditorForShape(aShape);
         if (textEditor != null) {
-            textEditor.setColor(textColor);
+            textEditor.setSelColor(textColor);
             return;
         }
 
@@ -318,7 +315,7 @@ public class RMEditorStyler extends Styler {
         // Handle RMTextShape + TextEditorSet
         RMTextEditor textEditor = getTextEditorForShape(aShape);
         if (textEditor != null)
-            return textEditor.getTextBorder();
+            return textEditor.getSelBorder();
 
         // Handle RMTextShape
         if (aShape instanceof RMTextShape)
@@ -337,7 +334,7 @@ public class RMEditorStyler extends Styler {
         RMTextEditor textEditor = getTextEditorForShape(aShape);
         if (textEditor != null) {
             setUndoTitle("Make Outlined");
-            textEditor.setTextBorder(aBorder);
+            textEditor.setSelBorder(aBorder);
             return;
         }
 
@@ -356,7 +353,7 @@ public class RMEditorStyler extends Styler {
         // Handle RMTextShape + TextEditorSet
         RMTextEditor textEditor = getTextEditorForShape(aShape);
         if (textEditor != null)
-            return textEditor.getFont();
+            return textEditor.getSelFont();
 
         // Return shape font
         return aShape.getFont();
@@ -370,7 +367,7 @@ public class RMEditorStyler extends Styler {
         // Handle RMTextShape + TextEditorSet
         RMTextEditor textEditor = getTextEditorForShape(aShape);
         if (textEditor != null) {
-            textEditor.setFont(aFont);
+            textEditor.setSelFont(aFont);
             return;
         }
 

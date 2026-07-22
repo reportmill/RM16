@@ -760,7 +760,7 @@ public class RMEditorUtils {
         anEditor.undoerSetUndoTitle("Make Superscript");
         RMTextEditor ted = anEditor.getTextEditor();
         if (ted != null)
-            ted.setSuperscript();
+            ted.setSelSuperscript();
     }
 
     /**
@@ -771,7 +771,7 @@ public class RMEditorUtils {
         anEditor.undoerSetUndoTitle("Make Subscript");
         RMTextEditor ted = anEditor.getTextEditor();
         if (ted != null)
-            ted.setSubscript();
+            ted.setSelSubscript();
     }
 
     /**

@@ -25,7 +25,7 @@ public class RMSpellCheckPanel extends SpellCheckPanel {
     public RMSpellCheckPanel()
     {
         super();
-        SpellCheck.setSharedClass(RMSpellCheck.class);;
+        SpellCheck.setSharedClass(RMSpellCheck.class);
     }
 
     /**
@@ -70,7 +70,7 @@ public class RMSpellCheckPanel extends SpellCheckPanel {
     protected void replaceChars(String aString)
     {
         RMTextEditor textEditor = _editor.getTextEditor();
-        textEditor.replace(aString);
+        textEditor.replaceChars(aString);
     }
 
     /**

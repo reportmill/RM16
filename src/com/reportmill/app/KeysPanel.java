@@ -19,52 +19,52 @@ import snap.view.*;
 public class KeysPanel extends RMEditorPane.SupportPane {
 
     // The KeysPanel browser
-    BrowserView _keysBrowser;
+    private BrowserView<KeyNode> _keysBrowser;
 
     // The current entity for the keys browser
-    Entity _entity = new Entity("Bogus");
+    private Entity _entity = new Entity("Bogus");
 
     // The current root items for the keys browser
-    List<KeyNode> _rootItems;
+    private List<KeyNode> _rootItems;
 
     // The icon for a "to-many" branch
-    static Image _doubleArrowImage;
+    private static Image _doubleArrowImage;
 
     // The Drag and Drop key
-    String _dragKey;
+    private String _dragKey;
 
     // Whether to show built in keys
-    boolean _showBuiltIn = false;
+    private boolean _showBuiltIn = false;
 
     // The KeysTable
-    TableView _keysTable;
+    private TableView<Map<String,Object>> _keysTable;
 
     // The KeysTable key
-    String _keysTableKey = "";
+    private String _keysTableKey = "";
 
     // Contants aggregate keys
-    static final String _aggregateKeys[] = {"total", "average", "count", "countDeep", "max", "min"};
+    private static final String[] _aggregateKeys = {"total", "average", "count", "countDeep", "max", "min"};
 
     // Constants for heritage keys
-    static final String _heritageKeys[] = {"Running", "Remaining", "Up"};
+    private static final String[] _heritageKeys = {"Running", "Remaining", "Up"};
 
     // Constants for built-in keys
-    static final String _builtInKeys[] = {"Date", "Page", "PageMax", "Page of PageMax",
+    private static final String[] _builtInKeys = {"Date", "Page", "PageMax", "Page of PageMax",
             "PageBreak", "PageBreakMax", "PageBreakPage", "PageBreakPageMax", "Row"};
 
     // Shared built-in key nodes
-    static List<KeyNode> _builtInKeyNodes;
+    private static List<KeyNode> _builtInKeyNodes;
 
     // Current active KeysPanel
-    static KeysPanel _active;
+    private static KeysPanel _active;
 
     /**
-     * Creates a new KeysPanel.
+     * Constructor.
      */
     public KeysPanel(RMEditorPane anEP)
     {
         super(anEP);
-        _builtInKeyNodes = new ArrayList();
+        _builtInKeyNodes = new ArrayList<>();
         for (String key : _builtInKeys) _builtInKeyNodes.add(new KeyNode(key));
     }
 
@@ -103,23 +103,22 @@ public class KeysPanel extends RMEditorPane.SupportPane {
     /**
      * Returns the items for key path entity.
      */
-    public List getKeyPathItems(String aKey)
+    public List<Map<String,Object>> getKeyPathItems(String aKey)
     {
         // Get full list key from selected shape and browser
         RMShape selShape = getSelectedShape();
-        String kprfx = selShape.getDatasetKey();
-        String ksfx = getKeysBrowserPath();
-        String key = kprfx != null ? (kprfx + '.' + ksfx) : ksfx;
+        String keyPrefix = selShape.getDatasetKey();
+        String keySuffix = getKeysBrowserPath();
+        String key = keyPrefix != null ? (keyPrefix + '.' + keySuffix) : keySuffix;
 
         // Get Editor.Datasource dataset (just return if null)
         RMEditor editor = getEditor();
-        RMDataSource dsrc = editor.getDataSource();
-        if (dsrc == null) return null;
-        Map dset = dsrc.getDataset();
+        RMDataSource dataSource = editor.getDataSource();
+        if (dataSource == null) return null;
+        Map<String,Object> dataset = dataSource.getDataset();
 
-        // Get List
-        List items = RMKeyChain.getListValue(dset, key);
-        return items;
+        // Return list
+        return RMKeyChain.getListValue(dataset, key);
     }
 
     /**
@@ -135,7 +134,7 @@ public class KeysPanel extends RMEditorPane.SupportPane {
      */
     public boolean isSelectedLeaf()
     {
-        KeyNode node = (KeyNode) _keysBrowser.getSelItem();
+        KeyNode node = _keysBrowser.getSelItem();
         return node != null && !node.isParent();
     }
 
@@ -144,7 +143,7 @@ public class KeysPanel extends RMEditorPane.SupportPane {
      */
     public boolean isSelectedToMany()
     {
-        KeyNode node = (KeyNode) _keysBrowser.getSelItem();
+        KeyNode node = _keysBrowser.getSelItem();
         return node != null && node._isToMany;
     }
 
@@ -157,7 +156,7 @@ public class KeysPanel extends RMEditorPane.SupportPane {
         _keysBrowser = getView("KeysBrowser", BrowserView.class);
         _keysBrowser.setResolver(new KeysBrowserResolver());
         _keysBrowser.setRowHeight(20);
-        _keysBrowser.setCellConfigure(c -> configureKeysBrowserCell((ListCell) c));
+        _keysBrowser.setCellConfigure(this::configureKeysBrowserCell);
 
         // Register KeysBrowser for click, drag
         _keysBrowser.addEventHandler(this::handleKeysBrowserMouseRelease, MouseRelease);
@@ -172,7 +171,7 @@ public class KeysPanel extends RMEditorPane.SupportPane {
     {
         // Get selected shape and shape tool
         RMShape selShape = getSelectedShape();
-        RMTool tool = getEditor().getTool(selShape);
+        RMTool<?> tool = getEditor().getTool(selShape);
 
         // Get entity from tool/shape and set in browser
         Entity entity = !_showBuiltIn ? tool.getDatasetEntity(selShape) : null;
@@ -224,7 +223,7 @@ public class KeysPanel extends RMEditorPane.SupportPane {
 
             // If leaf click for RMText, add key
             else if (isSelectedLeaf() && editor.getTextEditor() != null)
-                editor.getTextEditor().replace(getKeyPath());
+                editor.getTextEditor().replaceChars(getKeyPath());
         }
     }
 
@@ -280,7 +279,7 @@ public class KeysPanel extends RMEditorPane.SupportPane {
     /**
      * Called to configure KeysBrowser cell: Make aggregate keys bold and .
      */
-    public void configureKeysBrowserCell(ListCell<KeyNode> aCell)
+    private void configureKeysBrowserCell(ListCell<KeyNode> aCell)
     {
         KeyNode knode = aCell.getItem();
         if (knode != null && knode._special) aCell.setFont(_keysBrowser.getFont().getBold());
@@ -312,7 +311,7 @@ public class KeysPanel extends RMEditorPane.SupportPane {
 
             // Create table if needed
             if (_keysTable == null) {
-                _keysTable = new TableView();
+                _keysTable = new TableView<>();
                 _keysTable.setGrowHeight(true);
                 _keysTable.setShowHeader(true);
                 _keysTable.setFont(Font.Arial12);
@@ -349,14 +348,14 @@ public class KeysPanel extends RMEditorPane.SupportPane {
         List<Property> attrs = entity.getAttributes();
         for (Property prop : attrs) {
             if (prop.isRelation()) continue;
-            TableCol col = new TableCol();
+            TableCol<Map<String,Object>> col = new TableCol<>();
             col.setHeaderText(prop.getName());
             col.setItemKey(prop.getName());
             _keysTable.addCol(col);
         }
 
         // Get/set items
-        List items = getKeyPathItems(key);
+        List<Map<String,Object>> items = getKeyPathItems(key);
         _keysTable.setItems(items);
     }
 
@@ -412,39 +411,17 @@ public class KeysPanel extends RMEditorPane.SupportPane {
     /**
      * An inner class to provide data for keys browser.
      */
-    static class KeysBrowserResolver extends TreeResolver<KeyNode> {
+    private static class KeysBrowserResolver extends TreeResolver<KeyNode> {
 
-        /**
-         * Returns the parent of given item.
-         */
-        public KeyNode getParent(KeyNode anItem)
-        {
-            return anItem._parent;
-        }
-
-        /**
-         * Returns whether given browser node is a leaf.
-         */
-        public boolean isParent(KeyNode anItem)
-        {
-            return anItem.isParent();
-        }
-
-        /**
-         * Returns the specific child of the given browser node at the given index.
-         */
-        public List<KeyNode> getChildren(KeyNode anItem)
-        {
-            return anItem.getChildren();
-        }
-
-        // The text of given item
-        public String getText(KeyNode anItem)
-        {
-            return anItem.getKey();
-        }
-
-        // The branch icon of given item
+        @Override
+        public KeyNode getParent(KeyNode anItem)  { return anItem._parent; }
+        @Override
+        public boolean isParent(KeyNode anItem)  { return anItem.isParent(); }
+        @Override
+        public List<KeyNode> getChildren(KeyNode anItem)  { return anItem.getChildren(); }
+        @Override
+        public String getText(KeyNode anItem)  { return anItem.getKey(); }
+        @Override
         public Image getBranchImage(KeyNode anItem)
         {
             return anItem._isToMany ? getDoubleArrowImage() : null;
@@ -466,7 +443,7 @@ public class KeysPanel extends RMEditorPane.SupportPane {
         Property _prop;
 
         // Node children
-        List _children;
+        List<KeyNode> _children;
 
         // Whether node is "to-many"
         boolean _isToMany;
@@ -495,34 +472,29 @@ public class KeysPanel extends RMEditorPane.SupportPane {
         /**
          * Returns the node key.
          */
-        public String getKey()
-        {
-            return _key;
-        }
+        public String getKey()  { return _key; }
 
         /**
          * Returns whether node is a parent.
          */
-        public boolean isParent()
-        {
-            return _prop != null && _prop.isRelation() || _special;
-        }
+        public boolean isParent()  { return _prop != null && _prop.isRelation() || _special; }
 
         /**
          * Returns the list of children for this node.
          */
         public List<KeyNode> getChildren()
         {
-            return _children != null ? _children : (_children = createChildren());
+            if (_children != null) return _children;
+            return _children = createChildren();
         }
 
         /**
          * Creates the list of children for this node.
          */
-        protected List<KeyNode> createChildren()
+        private List<KeyNode> createChildren()
         {
             // Create children list and get entity for node
-            List children = new ArrayList();
+            List<KeyNode> children = new ArrayList<>();
             Entity entity = getEntity();
             if (entity == null) return children;
 
@@ -545,21 +517,21 @@ public class KeysPanel extends RMEditorPane.SupportPane {
 
             // Add aggregate keys
             if (getShowAggregates())
-                for (int i = 0; i < _aggregateKeys.length; i++) {
-                    KeyNode child = new KeyNode(this, _aggregateKeys[i], null);
+                for (String aggregateKey : _aggregateKeys) {
+                    KeyNode child = new KeyNode(this, aggregateKey, null);
                     children.add(child);
                     child._special = true;
                 }
 
             // If Root, add heritage keys
-            if (_parent == null)
-                for (int i = 0; i < _heritageKeys.length; i++) {
-                    KeyNode child = new KeyNode(this, _heritageKeys[i], null);
+            if (_parent == null) {
+                for (String heritageKey : _heritageKeys) {
+                    KeyNode child = new KeyNode(this, heritageKey, null);
                     children.add(child);
                     child._special = true;
                 }
+            }
 
-            // Return list of child nodes
             return children;
         }
 
@@ -585,10 +557,6 @@ public class KeysPanel extends RMEditorPane.SupportPane {
         }
 
         // Returns node as string
-        public String toString()
-        {
-            return _key;
-        }
+        public String toString()  { return _key;  }
     }
-
 }

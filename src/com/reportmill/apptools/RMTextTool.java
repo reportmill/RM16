@@ -10,7 +10,6 @@ import snap.geom.*;
 import snap.gfx.*;
 import snap.props.PropChange;
 import snap.props.PropChangeListener;
-import snap.text.TextLineStyle;
 import snap.text.TextModel;
 import snap.text.TextLine;
 import snap.text.TextRun;
@@ -65,31 +64,24 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
     @Override
     protected void resetUI()
     {
-        // Get editor and currently selected text
-        RMEditor editor = getEditor();
+        // Get currently selected text
         RMTextShape textShape = getSelectedShape();
         if (textShape == null)
             return;
 
-        // Get paragraph from text
-        int selStart = _textView.isFocused() ? _textView.getSelStart() : 0;
-        TextLineStyle lineStyle = textShape.getTextModel().getLineStyleForCharIndex(selStart);
-
-        // If editor is text editing, get paragraph from text editor instead
-        RMTextEditor textEditor = editor.getTextEditor();
-        if (textEditor != null)
-            lineStyle = textEditor.getSelLineStyle();
-
         // Update AlignLeftButton, AlignCenterButton, AlignRightButton, AlignFullButton
-        setViewValue("AlignLeftButton", !lineStyle.isJustify() && lineStyle.getAlign() == HPos.LEFT);
-        setViewValue("AlignCenterButton", !lineStyle.isJustify() && lineStyle.getAlign() == HPos.CENTER);
-        setViewValue("AlignRightButton", !lineStyle.isJustify() && lineStyle.getAlign() == HPos.RIGHT);
-        setViewValue("AlignFullButton", lineStyle.isJustify());
+        boolean isJustify = textShape.isJustify();
+        HPos alignX = textShape.getAlignX();
+        setViewValue("AlignLeftButton", !isJustify && alignX == HPos.LEFT);
+        setViewValue("AlignCenterButton", !isJustify && alignX == HPos.CENTER);
+        setViewValue("AlignRightButton", !isJustify && alignX == HPos.RIGHT);
+        setViewValue("AlignFullButton", isJustify);
 
         // Update AlignTopButton, AlignMiddleButton, AlignBottomButton
-        setViewValue("AlignTopButton", textShape.getAlignY() == VPos.TOP);
-        setViewValue("AlignMiddleButton", textShape.getAlignY() == VPos.CENTER);
-        setViewValue("AlignBottomButton", textShape.getAlignY() == VPos.BOTTOM);
+        VPos alignY = textShape.getAlignY();
+        setViewValue("AlignTopButton", alignY == VPos.TOP);
+        setViewValue("AlignMiddleButton", alignY == VPos.CENTER);
+        setViewValue("AlignBottomButton", alignY == VPos.BOTTOM);
 
         // Set TextView TextModel to text shape text model
         _textView.setTextModel(textShape.getTextModel());
@@ -152,51 +144,51 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
     {
         // Get editor, currently selected text shape and text shapes (just return if null)
         RMEditor editor = getEditor();
-        RMTextShape text = getSelectedShape();
-        if (text == null)
+        RMTextShape textShape = getSelectedShape();
+        if (textShape == null)
             return;
 
         // Register repaint for texts
-        List<RMTextShape> texts = (List<RMTextShape>) getSelectedShapes();
-        texts.forEach(RMTextShape::repaint);
+        List<RMTextShape> textShapes = (List<RMTextShape>) getSelectedShapes();
+        textShapes.forEach(RMTextShape::repaint);
 
         // Handle AlignLeftButton, AlignCenterButton, AlignRightButton, AlignFullButton, AlignTopButton, AlignMiddleButton
         if (anEvent.equals("AlignLeftButton")) RMEditorUtils.setAlignmentX(editor, HPos.LEFT);
         if (anEvent.equals("AlignCenterButton")) RMEditorUtils.setAlignmentX(editor, HPos.CENTER);
         if (anEvent.equals("AlignRightButton")) RMEditorUtils.setAlignmentX(editor, HPos.RIGHT);
-        if (anEvent.equals("AlignFullButton")) RMEditorUtils.setJustify(editor, true);
-        if (anEvent.equals("AlignTopButton")) for (RMTextShape txt : texts) txt.setAlignY(VPos.TOP);
-        if (anEvent.equals("AlignMiddleButton")) for (RMTextShape txt : texts) txt.setAlignY(VPos.CENTER);
-        if (anEvent.equals("AlignBottomButton")) for (RMTextShape txt : texts) txt.setAlignY(VPos.BOTTOM);
+        if (anEvent.equals("AlignFullButton")) setJustify(editor, true);
+        if (anEvent.equals("AlignTopButton")) textShapes.forEach(txt -> txt.setAlignY(VPos.TOP));
+        if (anEvent.equals("AlignMiddleButton")) textShapes.forEach(txt -> txt.setAlignY(VPos.CENTER));
+        if (anEvent.equals("AlignBottomButton")) textShapes.forEach(txt -> txt.setAlignY(VPos.BOTTOM));
 
         // If RoundingThumb or RoundingText, make sure shapes have stroke
         if (anEvent.equals("RoundingThumb") || anEvent.equals("RoundingText"))
-            for (RMTextShape t : texts) t.setStroke(new RMStroke());
+            for (RMTextShape t : textShapes) t.setStroke(new RMStroke());
 
         // Handle MarginText, RoundingThumb, RoundingText
-        if (anEvent.equals("MarginText")) for (RMTextShape txt : texts) txt.setMarginString(anEvent.getStringValue());
-        if (anEvent.equals("RoundingThumb")) for (RMTextShape txt : texts) txt.setRadius(anEvent.getFloatValue());
-        if (anEvent.equals("RoundingText")) for (RMTextShape txt : texts) txt.setRadius(anEvent.getFloatValue());
+        if (anEvent.equals("MarginText")) textShapes.forEach(txt -> txt.setMarginString(anEvent.getStringValue()));
+        if (anEvent.equals("RoundingThumb")) textShapes.forEach(txt -> txt.setRadius(anEvent.getFloatValue()));
+        if (anEvent.equals("RoundingText")) textShapes.forEach(txt -> txt.setRadius(anEvent.getFloatValue()));
 
         // Handle ShowBorderCheckBox, CoalesceNewlinesCheckBox, PerformWrapCheckBox
         if (anEvent.equals("ShowBorderCheckBox"))
-            for (RMTextShape txt : texts) txt.setDrawsSelectionRect(anEvent.getBoolValue());
+            textShapes.forEach(txt -> txt.setDrawsSelectionRect(anEvent.getBoolValue()));
         if (anEvent.equals("CoalesceNewlinesCheckBox"))
-            for (RMTextShape txt : texts) txt.setCoalesceNewlines(anEvent.getBoolValue());
+            textShapes.forEach(txt -> txt.setCoalesceNewlines(anEvent.getBoolValue()));
         if (anEvent.equals("PerformWrapCheckBox"))
-            for (RMTextShape txt : texts) txt.setPerformsWrap(anEvent.getBoolValue());
+            textShapes.forEach(txt -> txt.setPerformsWrap(anEvent.getBoolValue()));
 
         // Handle PaginateRadio, ShrinkRadio, GrowRadio
-        if (anEvent.equals("PaginateRadio")) for (RMTextShape txt : texts) txt.setWraps(RMTextShape.WRAP_BASIC);
-        if (anEvent.equals("ShrinkRadio")) for (RMTextShape txt : texts) txt.setWraps(RMTextShape.WRAP_SCALE);
-        if (anEvent.equals("GrowRadio")) for (RMTextShape txt : texts) txt.setWraps(RMTextShape.WRAP_NONE);
+        if (anEvent.equals("PaginateRadio")) textShapes.forEach(txt -> txt.setWraps(RMTextShape.WRAP_BASIC));
+        if (anEvent.equals("ShrinkRadio")) textShapes.forEach(txt -> txt.setWraps(RMTextShape.WRAP_SCALE));
+        if (anEvent.equals("GrowRadio")) textShapes.forEach(txt -> txt.setWraps(RMTextShape.WRAP_NONE));
 
         // Handle CharSpacingSpinner, LineSpacingSpinner, LineSpacingSingleButton, LineSpacingDoubleButton, LineGapSpinner
-        if (anEvent.equals("CharSpacingSpinner")) RMTextTool.setCharSpacing(editor, anEvent.getFloatValue());
-        if (anEvent.equals("LineSpacingSpinner")) RMTextTool.setLineSpacing(editor, anEvent.getFloatValue());
-        if (anEvent.equals("LineSpacingSingleButton")) RMTextTool.setLineSpacing(editor, 1);
-        if (anEvent.equals("LineSpacingDoubleButton")) RMTextTool.setLineSpacing(editor, 2);
-        if (anEvent.equals("LineGapSpinner")) RMTextTool.setLineGap(editor, anEvent.getFloatValue());
+        if (anEvent.equals("CharSpacingSpinner")) setCharSpacing(editor, anEvent.getFloatValue());
+        if (anEvent.equals("LineSpacingSpinner")) setLineSpacing(editor, anEvent.getFloatValue());
+        if (anEvent.equals("LineSpacingSingleButton")) setLineSpacing(editor, 1);
+        if (anEvent.equals("LineSpacingDoubleButton")) setLineSpacing(editor, 2);
+        if (anEvent.equals("LineGapSpinner")) setLineGap(editor, anEvent.getFloatValue());
 
         // Handle LineHeightMinSpinner, LineHeightMaxSpinner
         //if(anEvent.equals("LineHeightMinSpinner")) setLineHeightMin(editor, Math.max(anEvent.getFloatValue(), 0));
@@ -204,12 +196,12 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
         //    float val = anEvent.getFloatValue(); if(val>=999) val = Float.MAX_VALUE; setLineHeightMax(editor, val); }
 
         // Handle MakeMinWidthMenuItem, MakeMinHeightMenuItem
-        if (anEvent.equals("MakeMinWidthMenuItem")) for (RMTextShape txt : texts) txt.setWidth(txt.getBestWidth());
-        if (anEvent.equals("MakeMinHeightMenuItem")) for (RMTextShape txt : texts) txt.setHeight(txt.getBestHeight());
+        if (anEvent.equals("MakeMinWidthMenuItem")) textShapes.forEach(txt -> txt.setWidth(txt.getBestWidth()));
+        if (anEvent.equals("MakeMinHeightMenuItem")) textShapes.forEach(txt -> txt.setHeight(txt.getBestHeight()));
 
         // Handle TurnToPathMenuItem
         if (anEvent.equals("TurnToPathMenuItem"))
-            for (RMTextShape text1 : texts) {
+            for (RMTextShape text1 : textShapes) {
                 RMShape textPathShape = RMTextShapeUtils.getTextPathShape(text1);
                 RMParentShape parent = text1.getParent();
                 parent.addChild(textPathShape, text1.indexOf());
@@ -219,7 +211,7 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
 
         // Handle TurnToCharsShapeMenuItem
         if (anEvent.equals("TurnToCharsShapeMenuItem"))
-            for (RMTextShape text1 : texts) {
+            for (RMTextShape text1 : textShapes) {
                 RMShape textCharsShape = RMTextShapeUtils.getTextCharsShape(text1);
                 RMParentShape parent = text1.getParent();
                 parent.addChild(textCharsShape, text1.indexOf());
@@ -231,14 +223,14 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
         if (anEvent.equals("LinkedTextMenuItem")) {
 
             // Get linked text identical to original text and add to text's parent
-            RMLinkedText linkedText = new RMLinkedText(text);
-            text.getParent().addChild(linkedText);
+            RMLinkedText linkedText = new RMLinkedText(textShape);
+            textShape.getParent().addChild(linkedText);
 
             // Shift linked text down if there's room, otherwise right, otherwise just offset by quarter inch
-            if (text.getFrameMaxY() + 18 + text.getFrame().height * .75 < text.getParent().getHeight())
-                linkedText.offsetXY(0, text.getHeight() + 18);
-            else if (text.getFrameMaxX() + 18 + text.getFrame().width * .75 < text.getParent().getWidth())
-                linkedText.offsetXY(text.getWidth() + 18, 0);
+            if (textShape.getFrameMaxY() + 18 + textShape.getFrame().height * .75 < textShape.getParent().getHeight())
+                linkedText.offsetXY(0, textShape.getHeight() + 18);
+            else if (textShape.getFrameMaxX() + 18 + textShape.getFrame().width * .75 < textShape.getParent().getWidth())
+                linkedText.offsetXY(textShape.getWidth() + 18, 0);
             else linkedText.offsetXY(18, 18);
 
             // Select and repaint new linked text
@@ -1005,6 +997,17 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
                 "Fusce lectus proin, neque cr as eget, integer quam facilisi a adipiscing posuere. Imper diet sem sapien. " +
                 "Pretium natoque nibh, tristique odio eligendi odio molestie mas sa. Volutpat justo fringilla rut rum augue. " +
                 "Lao reet ulla mcorper molestie.";
+    }
+
+    /**
+     * Sets whether selected shape is justified.
+     */
+    private static void setJustify(RMEditor anEditor, boolean aValue)
+    {
+        anEditor.undoerSetUndoTitle("Justify change");
+        for (RMShape shape : anEditor.getSelectedOrSuperSelectedShapes())
+            if (shape instanceof RMTextShape textShape)
+                textShape.setJustify(aValue);
     }
 
     /**

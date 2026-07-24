@@ -362,7 +362,7 @@ public class RMEditorUtils {
 
         // Get selectedShapes sorted by minXInParentBounds
         List<RMShape> shapes = RMShapeUtils.getShapesSortedByFrameX(anEditor.getSelectedShapes());
-        float spaceBetweenShapes = 0;
+        double spaceBetweenShapes = 0;
 
         // Calculate average space between shapes
         for (int i = 1, iMax = shapes.size(); i < iMax; i++)
@@ -393,7 +393,7 @@ public class RMEditorUtils {
 
         // Get selectedShapes sorted by minXInParentBounds
         List<RMShape> shapes = RMShapeUtils.getShapesSortedByFrameY(anEditor.getSelectedShapes());
-        float spaceBetweenShapes = 0;
+        double spaceBetweenShapes = 0;
 
         // Calculate average space between shapes
         for (int i = 1, iMax = shapes.size(); i < iMax; i++)
@@ -729,17 +729,6 @@ public class RMEditorUtils {
         anEditor.undoerSetUndoTitle("Make Underlined");
         for (RMShape shape : anEditor.getSelectedOrSuperSelectedShapes())
             shape.setUnderlined(!shape.isUnderlined());
-    }
-
-    /**
-     * Sets whether selected shape is justified.
-     */
-    public static void setJustify(RMEditor anEditor, boolean aValue)
-    {
-        anEditor.undoerSetUndoTitle("Justify change");
-        for (RMShape shape : anEditor.getSelectedOrSuperSelectedShapes())
-            if (shape instanceof RMTextShape textShape)
-                textShape.setJustify(aValue);
     }
 
     /**

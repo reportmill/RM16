@@ -55,7 +55,6 @@
     <MenuItem Name="AlignLeftMenuItem" Text="Align Left" Shortcut="meta [" />
     <MenuItem Name="AlignCenterMenuItem" Text="Align Center" Shortcut="meta \" />
     <MenuItem Name="AlignRightMenuItem" Text="Align Right" Shortcut="meta ]" />
-    <MenuItem Name="AlignFullMenuItem" Text="Align Full" />
     <MenuItem Name="SuperscriptMenuItem" Text="Superscript" />
     <MenuItem Name="SubscriptMenuItem" Text="Subscript" />
   </Menu>

@@ -155,8 +155,6 @@ public class RMEditorPaneMenuBar extends RMEditorPane.SupportPane {
             RMEditorUtils.setAlignmentX(editor, HPos.CENTER);
         if (anEvent.equals("AlignRightMenuItem"))
             RMEditorUtils.setAlignmentX(editor, HPos.RIGHT);
-        if (anEvent.equals("AlignFullMenuItem"))
-            RMEditorUtils.setJustify(editor, true);
         if (anEvent.equals("SuperscriptMenuItem")) RMEditorUtils.setSuperscript(editor);
         if (anEvent.equals("SubscriptMenuItem")) RMEditorUtils.setSubscript(editor);
 

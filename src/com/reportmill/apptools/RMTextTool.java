@@ -35,9 +35,6 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
     // Whether current mouse drag should be moving table column
     private boolean _moveTableColumn;
 
-    // A Listener for super selected TextShape TextModel PropChange
-    private PropChangeListener _textShapeTextModelPropChangeLsnr = this::handleTextShapeTextModelPropChange;
-
     /**
      * Constructor.
      */
@@ -56,6 +53,7 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
         _textView = getView("TextView", TextView.class);
         _textView.setRichText(true);
         _textView.addPropChangeListener(pc -> handleTextViewSelectionChange(), TextArea.Selection_Prop);
+        _textView.getTextAdapter().addTextModelPropChangeListener(this::handleTextShapeTextModelPropChange);
     }
 
     /**
@@ -558,15 +556,6 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
     }
 
     /**
-     * Override to start listening to text shape text changes.
-     */
-    @Override
-    public void handleShapeBecameSuperSelected(T textShape)
-    {
-        textShape.getTextModel().addPropChangeListener(_textShapeTextModelPropChangeLsnr);
-    }
-
-    /**
      * Override to stop listening to text shape text changes.
      */
     @Override
@@ -578,12 +567,8 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
             textShape.removeFromParent();
 
         // Stop listening to changes to TextShape RichText
-        textShape.getTextModel().removePropChangeListener(_textShapeTextModelPropChangeLsnr);
         _updatingSize = false;
         _updatingMinHeight = 0;
-
-        // Set text editor's text shape to null
-        textShape.clearTextEditor();
     }
 
     /**

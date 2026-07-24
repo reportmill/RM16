@@ -485,7 +485,8 @@ public class RMEditorPane extends RMViewerPane {
             runLater(() -> {
                 DialogBox dialogBox = new DialogBox("Error Reading File");
                 dialogBox.setErrorMessage(msg);
-                dialogBox.showMessageDialog(getUI());
+                View parentView = !WindowView.getOpenWindows().isEmpty() ? WindowView.getOpenWindows().get(0).getRootView() : null;
+                dialogBox.showMessageDialog(parentView);
             });
         }
 

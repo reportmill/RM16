@@ -59,9 +59,6 @@ public class RMTextShape extends RMRectShape {
     // The text editor, if one has been set
     private RMTextEditor _textEditor;
 
-    // A listener to handle text model prop changes
-    private PropChangeListener _textModelPropChangeLsnr = this::handleTextModelPropChange;
-
     // The default text margin (top=1, left=2, bottom=0, right=2)
     private static Insets MARGIN_DEFAULT = new Insets(1, 2, 0, 2);
 
@@ -84,7 +81,8 @@ public class RMTextShape extends RMRectShape {
     public RMTextShape(TextModel textModel)
     {
         super();
-        setTextModel(textModel);
+        _textModel = textModel;
+        textModel.addPropChangeListener(this::handleTextModelPropChange);
     }
 
     /**
@@ -103,24 +101,8 @@ public class RMTextShape extends RMRectShape {
     {
         if (_textModel != null) return _textModel;
         TextModel textModel = TextModel.createDefaultTextModel(true);
-        textModel.addPropChangeListener(_textModelPropChangeLsnr);
+        textModel.addPropChangeListener(this::handleTextModelPropChange);
         return _textModel = textModel;
-    }
-
-    /**
-     * Sets the text model.
-     */
-    protected void setTextModel(TextModel textModel)
-    {
-        if (textModel == _textModel) return;
-        if (_textModel != null)
-            _textModel.removePropChangeListener(_textModelPropChangeLsnr);
-        textModel.addPropChangeListener(_textModelPropChangeLsnr);
-        firePropChange("TextModel", _textModel, _textModel = textModel);
-        _textLayout = null;
-        _textEditor = null;
-        revalidate();
-        repaint();
     }
 
     /**
@@ -129,14 +111,10 @@ public class RMTextShape extends RMRectShape {
     public TextLayout getTextLayout()
     {
         if (_textLayout != null) return _textLayout;
-
-        // Create and set
         TextModel textModel = getTextModel();
         _textLayout = new TextModelX(textModel);
         _textLayout.setWrapLines(true);
         updateTextBox();
-
-        // Return
         return _textLayout;
     }
 
@@ -712,14 +690,6 @@ public class RMTextShape extends RMRectShape {
     }
 
     /**
-     * Clears the text editor.
-     */
-    public void clearTextEditor()
-    {
-        _textEditor = null;
-    }
-
-    /**
      * Override to compute from RMTextLayout.
      */
     protected double getPrefWidthImpl(double aHeight)
@@ -799,28 +769,25 @@ public class RMTextShape extends RMRectShape {
         setAlignY(VPos.TOP);
 
         // Get linked texts until all text visible
-        RMTextShape text = this;
-        while (!text.isAllTextVisible()) {
-            text = new RMLinkedText(text);
-            pages.add(text);
+        RMTextShape textShape = this;
+        while (!textShape.isAllTextVisible()) {
+            textShape = new RMLinkedText(textShape);
+            pages.add(textShape);
         }
 
         // Restore alignment on last text and return list
-        text.setAlignY(alignY);
+        textShape.setAlignY(alignY);
         return pages;
     }
 
     /**
      * Re-does the RPG clone to resolve any @Page@ keys (assumed to be present in userInfo).
      */
+    @Override
     protected void resolvePageReferences(ReportOwner aRptOwner, Object userInfo)
     {
-        // Do normal shape resolve page references
         super.resolvePageReferences(aRptOwner, userInfo);
-
-        // RPG clone text again and set
-        TextModel textModelCloneRPG = RMTextShapeUtils.rpgClone(getTextModel(), aRptOwner, userInfo, null, true);
-        setTextModel(textModelCloneRPG);
+        RMTextShapeUtils.rpgClone(getTextModel(), aRptOwner, userInfo, null, false);
     }
 
     /**
@@ -901,8 +868,6 @@ public class RMTextShape extends RMRectShape {
         clone._textModel = _textModel != null ? _textModel.copyForRange(0, length()) : null;
         clone._textLayout = null;
         clone._textEditor = null;
-        clone._textModelPropChangeLsnr = clone::handleTextModelPropChange;
-        //clone._textModel.addPropChangeListener(clone._richTextLsnr);
         return clone;
     }
 

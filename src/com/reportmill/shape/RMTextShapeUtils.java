@@ -143,7 +143,6 @@ public class RMTextShapeUtils {
             textModel.removeChars(0, 1);
     }
 
-
     /**
      * Performs @key@ substitution on an xstring.
      */

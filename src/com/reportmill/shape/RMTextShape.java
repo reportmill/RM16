@@ -226,7 +226,7 @@ public class RMTextShape extends RMRectShape {
     public TextFormat getFormat()
     {
         if (isTextEditorSet())
-            return getTextEditor().getSelFormat();
+            return getTextEditor().getSelTextStyle().getFormat();
         return getTextModel().getRunForCharIndex(0).getFormat();
     }
 
@@ -236,7 +236,7 @@ public class RMTextShape extends RMRectShape {
     public void setFormat(TextFormat aFormat)
     {
         if (isTextEditorSet())
-            getTextEditor().setSelFormat(aFormat);
+            getTextEditor().setTextFormatSmart(aFormat);
         else getTextModel().setTextStyleValue(TextStyle.Format_Prop, aFormat, 0, length());
     }
 
@@ -245,6 +245,8 @@ public class RMTextShape extends RMRectShape {
      */
     public Color getTextColor()
     {
+        if (isTextEditorSet())
+            return getTextEditor().getSelColor();
         return getTextModel().getRunForCharIndex(0).getColor();
     }
 
@@ -253,6 +255,8 @@ public class RMTextShape extends RMRectShape {
      */
     public void setTextColor(Color aColor)
     {
+        if (isTextEditorSet())
+            getTextEditor().setSelColor(aColor);
          getTextModel().setTextStyleValue(TextStyle.Color_Prop, aColor, 0, length());
     }
 

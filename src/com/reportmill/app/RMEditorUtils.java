@@ -6,13 +6,13 @@ import com.reportmill.apptools.*;
 import com.reportmill.graphics.*;
 import com.reportmill.shape.*;
 import java.util.*;
-
 import snap.geom.HPos;
 import snap.geom.Point;
 import snap.geom.Shape;
 import snap.geom.Size;
 import snap.gfx.*;
 import snap.text.TextFormat;
+import snap.text.TextStyle;
 import snap.util.ListUtils;
 
 /**
@@ -758,9 +758,9 @@ public class RMEditorUtils {
     public static void setSuperscript(RMEditor anEditor)
     {
         anEditor.undoerSetUndoTitle("Make Superscript");
-        RMTextEditor ted = anEditor.getTextEditor();
-        if (ted != null)
-            ted.setSelSuperscript();
+        RMTextEditor textEditor = anEditor.getTextEditor();
+        if (textEditor != null)
+            textEditor.setSelTextStyleValue(TextStyle.Scripting_Prop, textEditor.getSelTextStyle().getScripting() == 0 ? 1 : 0);
     }
 
     /**
@@ -769,9 +769,9 @@ public class RMEditorUtils {
     public static void setSubscript(RMEditor anEditor)
     {
         anEditor.undoerSetUndoTitle("Make Subscript");
-        RMTextEditor ted = anEditor.getTextEditor();
-        if (ted != null)
-            ted.setSelSubscript();
+        RMTextEditor textEditor = anEditor.getTextEditor();
+        if (textEditor != null)
+            textEditor.setSelTextStyleValue(TextStyle.Scripting_Prop, textEditor.getSelTextStyle().getScripting() == 0 ? -1 : 0);
     }
 
     /**

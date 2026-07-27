@@ -264,7 +264,7 @@ public class RMPDFShape extends RMRectShape {
             return;
         }
         Rect ibounds = getImageBounds();
-        aPntr.clip(getPath());
+        aPntr.clip(getBoundsShape());
         pd.paint(aPntr, ibounds.x, ibounds.y, ibounds.width, ibounds.height);
     }
 

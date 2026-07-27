@@ -74,7 +74,8 @@ public class RMGraphLegend extends RMParentShape {
     /**
      * Override to reset sample legend items if no children.
      */
-    public void setParent(RMParentShape aPar)
+    @Override
+    protected void setParent(RMParentShape aPar)
     {
         super.setParent(aPar);
         if (getChildCount() == 0) resetItems();

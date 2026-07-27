@@ -264,7 +264,7 @@ public class RMImageShape extends RMRectShape {
         }
 
         // Clip to bounds
-        Shape clipPath = getPath();
+        Shape clipPath = getBoundsShape();
         aPntr.clip(clipPath);
 
         // Draw image transformed to bounds

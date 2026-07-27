@@ -103,8 +103,8 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
 
         // Update MarginText, RoundingThumb, RoundingText
         setViewValue("MarginText", textShape.getMarginString());
-        setViewValue("RoundingThumb", textShape.getRadius());
-        setViewValue("RoundingText", textShape.getRadius());
+        setViewValue("RoundingThumb", textShape.getBorderRadius());
+        setViewValue("RoundingText", textShape.getBorderRadius());
 
         // Update ShowBorderCheckBox, CoalesceNewlinesCheckBox, PerformWrapCheckBox
         setViewValue("ShowBorderCheckBox", textShape.getDrawsSelectionRect());
@@ -162,7 +162,7 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
             case "MarginText" -> textShapes.forEach(txt -> txt.setMarginString(anEvent.getStringValue()));
             case "RoundingThumb", "RoundingText" -> {
                 textShapes.forEach(t -> t.setStroke(new RMStroke()));
-                textShapes.forEach(txt -> txt.setRadius(anEvent.getFloatValue()));
+                textShapes.forEach(txt -> txt.setBorderRadius(anEvent.getFloatValue()));
             }
 
             // Handle ShowBorderCheckBox, CoalesceNewlinesCheckBox, PerformWrapCheckBox
@@ -745,7 +745,7 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
         aPntr.save();
         aPntr.setColor(getEditor().isSuperSelected(aText) ? new Color(.9f, .4f, .4f) : Color.LIGHTGRAY);
         aPntr.setStroke(Stroke.Stroke1.copyForDashes(3, 2));
-        Shape path = aText.getPath().copyForBounds(aText.getBoundsInside());
+        Shape path = aText.getBoundsShape().copyForBounds(aText.getBoundsInside());
         path = getEditor().convertFromShape(path, aText);
         aPntr.setAntialiasing(false);
         aPntr.draw(path);

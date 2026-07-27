@@ -78,7 +78,7 @@ public class RMOvalShape extends RMShape {
     /**
      * Returns the (oval) path for this shape.
      */
-    public Shape getPath()
+    public Shape getBoundsShape()
     {
         return new Arc(0, 0, getWidth(), getHeight(), _start, _sweep, _holeRatio);
     }

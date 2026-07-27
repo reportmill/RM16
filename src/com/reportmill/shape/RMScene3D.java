@@ -219,7 +219,7 @@ public class RMScene3D extends RMParentShape {
 
             // If text draws fill or stroke, add child for background
             if (text.getFill() != null || text.getStroke() != null) {
-                RMShape background = new RMPolygonShape(aShape.getPath()); // Create background shape from text
+                RMShape background = new RMPolygonShape(aShape.getBoundsShape()); // Create background shape from text
                 background.copyShape(aShape);
                 addShapesForRMShape(background, z1 + .1f, z2, smoothSides); // Add background shape
             }
@@ -264,7 +264,7 @@ public class RMScene3D extends RMParentShape {
     private Shape getShapePathFlatInScene(RMShape aShape)
     {
         // Get flat path
-        Shape shapePath = aShape.getPath();
+        Shape shapePath = aShape.getBoundsShape();
         Shape shapePathFlat = shapePath.getFlattenedShape();
 
         // Transform to parent (scene)

@@ -257,7 +257,7 @@ public class RMHtmlFile {
             XMLElement pathXML = null;
             if (fill != null || stroke != null || effect != null) {
                 pathXML = new XMLElement("path");
-                pathXML.add("d", new SVGPathMaker().append(aShape.getPath()).toString());
+                pathXML.add("d", new SVGPathMaker().append(aShape.getBoundsShape()).toString());
                 anXML.addElement(pathXML);
 
                 // Do fill

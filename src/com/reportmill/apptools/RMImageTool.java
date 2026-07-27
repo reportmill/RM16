@@ -41,8 +41,8 @@ public class RMImageTool<T extends RMImageShape> extends RMTool<T> {
         setViewValue("PreserveRatioCheckBox", imgShp.getPreserveRatio());
 
         // Reset RoundingThumb and RoundingText
-        setViewValue("RoundingThumb", imgShp.getRadius());
-        setViewValue("RoundingText", imgShp.getRadius());
+        setViewValue("RoundingThumb", imgShp.getBorderRadius());
+        setViewValue("RoundingText", imgShp.getBorderRadius());
 
         // Reset TypeLabel
         if (img == null) setViewValue("TypeLabel", "");
@@ -87,7 +87,7 @@ public class RMImageTool<T extends RMImageShape> extends RMTool<T> {
             imgShp.undoerSetUndoTitle("Rounding Change");
             float value = anEvent.getFloatValue();
             for (RMImageShape im : images) {
-                im.setRadius(value);
+                im.setBorderRadius(value);
                 if (im.getStroke() == null)
                     im.setStroke(new RMStroke());
             }

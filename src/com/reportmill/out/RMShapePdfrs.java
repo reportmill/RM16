@@ -4,8 +4,6 @@
 package com.reportmill.out;
 import com.reportmill.graphics.*;
 import com.reportmill.shape.*;
-import java.util.*;
-import snap.geom.Insets;
 import snap.geom.Rect;
 import snap.geom.Shape;
 import snap.gfx.*;
@@ -79,8 +77,8 @@ public class RMShapePdfrs {
             pdfPage.gsave();
 
             // Apply clip if needed
-            if (anImageShape.getRadius() > .001) {
-                Shape path = anImageShape.getPath();
+            if (anImageShape.getBorderRadius() > .001) {
+                Shape path = anImageShape.getBoundsShape();
                 pdfPage.writePath(path);
                 pdfPage.append("W n ");
             }

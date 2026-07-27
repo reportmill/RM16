@@ -28,7 +28,6 @@ public class RMLinkedText extends RMTextShape {
      */
     public RMLinkedText(RMTextShape aText)
     {
-        // Copy basic attributes of previous text and set linked text
         copyShape(aText);
         aText.setLinkedText(this);
     }
@@ -67,9 +66,9 @@ public class RMLinkedText extends RMTextShape {
     /**
      * Overrides shape method to rewire linked text linked list.
      */
-    public void setParent(RMParentShape aShape)
+    @Override
+    protected void setParent(RMParentShape aShape)
     {
-        // Do normal set parent
         super.setParent(aShape);
 
         // If removing from share hierarchy, rewire text chain
@@ -84,14 +83,12 @@ public class RMLinkedText extends RMTextShape {
      */
     public XMLElement toXML(RMArchiver anArchiver)
     {
-        // Archive basic shape attributes and reset element name
         XMLElement e = super.toXML(anArchiver);
         e.setName("linked-text");
 
         // Add xref id (someday this may happen automatically, just by having source text reference us)
         e.add("xref", anArchiver.getReference(this));
 
-        // Return element
         return e;
     }
 }

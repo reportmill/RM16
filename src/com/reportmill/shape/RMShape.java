@@ -49,19 +49,22 @@ public class RMShape implements Cloneable, Archivable, Key.GetSet {
     double[] _rss;
 
     // The stroke for this shape
-    RMStroke _stroke = null;
+    private RMStroke _stroke = null;
+
+    // Rounding radius
+    private double _borderRadius = 0;
 
     // The fill for this shape
-    RMFill _fill = null;
+    private RMFill _fill = null;
 
     // The effect for this shape
-    Effect _effect = null;
+    private Effect _effect = null;
 
     // The opacity of shape
-    double _opacity = 1;
+    private double _opacity = 1;
 
     // Whether this shape is visible
-    boolean _visible = true;
+    private boolean _visible = true;
 
     // The parent of this shape
     RMParentShape _parent = null;
@@ -350,26 +353,17 @@ public class RMShape implements Cloneable, Archivable, Key.GetSet {
     /**
      * Returns the width of the rect that fully encloses the shape in parent coords.
      */
-    public double getFrameWidth()
-    {
-        return isRSS() ? getFrame().width : getWidth();
-    }
+    public double getFrameWidth()  { return isRSS() ? getFrame().width : getWidth(); }
 
     /**
      * Returns the height of the rect that fully encloses the shape in parent coords.
      */
-    public double getFrameHeight()
-    {
-        return isRSS() ? getFrame().height : getHeight();
-    }
+    public double getFrameHeight()  { return isRSS() ? getFrame().height : getHeight(); }
 
     /**
      * Returns the origin of the shape's bounds rect in parent coords.
      */
-    public Point getFrameXY()
-    {
-        return isRSS() ? getFrame().getXY() : getXY();
-    }
+    public Point getFrameXY()  { return isRSS() ? getFrame().getXY() : getXY(); }
 
     /**
      * Sets a shape's origin such that its bounds rect (in parent coords) has origin at the given point.
@@ -448,26 +442,17 @@ public class RMShape implements Cloneable, Archivable, Key.GetSet {
     /**
      * Returns the max X of the shape's frame.
      */
-    public double getFrameMaxX()
-    {
-        return isRSS() ? getFrame().getMaxX() : getMaxX();
-    }
+    public double getFrameMaxX()  { return isRSS() ? getFrame().getMaxX() : getMaxX(); }
 
     /**
      * Returns the max Y of the shape's frame.
      */
-    public double getFrameMaxY()
-    {
-        return isRSS() ? getFrame().getMaxY() : getMaxY();
-    }
+    public double getFrameMaxY()  { return isRSS() ? getFrame().getMaxY() : getMaxY(); }
 
     /**
      * Returns the origin point of the shape in parent's coords.
      */
-    public Point getXYP()
-    {
-        return localToParent(0, 0);
-    }
+    public Point getXYP()  { return localToParent(0, 0); }
 
     /**
      * Sets the origin point of the shape to the given X and Y in parent's coords.
@@ -683,6 +668,21 @@ public class RMShape implements Cloneable, Archivable, Key.GetSet {
     }
 
     /**
+     * Returns the fill for this shape.
+     */
+    public RMFill getFill()  { return _fill; }
+
+    /**
+     * Sets the fill for this shape.
+     */
+    public void setFill(RMFill aFill)
+    {
+        if (Objects.equals(getFill(), aFill)) return;
+        repaint();
+        firePropChange(Fill_Prop, _fill, _fill = aFill);
+    }
+
+    /**
      * Returns the stroke for this shape.
      */
     public RMStroke getStroke()  { return _stroke; }
@@ -700,24 +700,21 @@ public class RMShape implements Cloneable, Archivable, Key.GetSet {
     /**
      * Sets the stroke for this shape, with an option to turn on drawsStroke.
      */
-    public void setStroke(Color aColor, double aWidth)
-    {
-        setStroke(new RMStroke(aColor, aWidth));
-    }
+    public void setStroke(Color aColor, double aWidth)  { setStroke(new RMStroke(aColor, aWidth)); }
 
     /**
-     * Returns the fill for this shape.
+     * Returns the rounding radius for the rectangle.
      */
-    public RMFill getFill()  { return _fill; }
+    public double getBorderRadius()  { return _borderRadius; }
 
     /**
-     * Sets the fill for this shape.
+     * Sets the rounding radius for the rectangle.
      */
-    public void setFill(RMFill aFill)
+    public void setBorderRadius(double aValue)
     {
-        if (Objects.equals(getFill(), aFill)) return;
+        if (getBorderRadius() == aValue) return;
         repaint();
-        firePropChange(Fill_Prop, _fill, _fill = aFill);
+        firePropChange("Radius", _borderRadius, _borderRadius = aValue);
     }
 
     /**
@@ -739,10 +736,7 @@ public class RMShape implements Cloneable, Archivable, Key.GetSet {
     /**
      * Returns the color of the shape.
      */
-    public Color getColor()
-    {
-        return getFill() == null ? Color.BLACK : getFill().getColor();
-    }
+    public Color getColor()  { return getFill() == null ? Color.BLACK : getFill().getColor(); }
 
     /**
      * Sets the color of the shape.
@@ -1038,23 +1032,22 @@ public class RMShape implements Cloneable, Archivable, Key.GetSet {
     /**
      * Returns the shape's path.
      */
-    public Shape getPath()
+    public Shape getBoundsShape()
     {
+        if (getBorderRadius() > 0.0001)
+            return new RoundRect(0, 0, getWidth(), getHeight(), getBorderRadius());
         return new Rect(0, 0, getWidth(), getHeight());
     }
 
     /**
      * Returns the parent of this shape.
      */
-    public RMParentShape getParent()
-    {
-        return _parent;
-    }
+    public RMParentShape getParent()  { return _parent; }
 
     /**
      * Sets the parent of this shape (called automatically by addChild()).
      */
-    public void setParent(RMParentShape aShape)
+    protected void setParent(RMParentShape aShape)
     {
         _parent = aShape;
     }
@@ -1079,10 +1072,7 @@ public class RMShape implements Cloneable, Archivable, Key.GetSet {
     /**
      * Returns the index of this child in its parent.
      */
-    public int indexOf()
-    {
-        return _parent != null ? _parent.indexOfChild(this) : -1;
-    }
+    public int indexOf()  { return _parent != null ? _parent.indexOfChild(this) : -1; }
 
     /**
      * Returns the child count.
@@ -1110,34 +1100,22 @@ public class RMShape implements Cloneable, Archivable, Key.GetSet {
     /**
      * Returns the RMDocument ancestor of this shape.
      */
-    public RMDocument getDoc()
-    {
-        return _parent != null ? _parent.getDoc() : null;
-    }
+    public RMDocument getDoc()  { return _parent != null ? _parent.getDoc() : null; }
 
     /**
      * Returns the RMDocument ancestor of this shape.
      */
-    public RMDocument getDocument()
-    {
-        return getDoc();
-    }
+    public RMDocument getDocument()  { return getDoc(); }
 
     /**
      * Returns the RMPage ancestor of this shape (or null if not there).
      */
-    public RMParentShape getPageShape()
-    {
-        return _parent != null ? _parent.getPageShape() : (RMParentShape) this;
-    }
+    public RMParentShape getPageShape()  { return _parent != null ? _parent.getPageShape() : (RMParentShape) this; }
 
     /**
      * Returns the undoer for this shape (or null if not there).
      */
-    public Undoer getUndoer()
-    {
-        return _parent != null ? _parent.getUndoer() : null;
-    }
+    public Undoer getUndoer()  { return _parent != null ? _parent.getUndoer() : null; }
 
     /**
      * Undoer convenience - sets title of next registered undo.
@@ -1169,34 +1147,22 @@ public class RMShape implements Cloneable, Archivable, Key.GetSet {
     /**
      * Editor method - returns whether this shape is at the top level (usually RMPage).
      */
-    public boolean isRoot()
-    {
-        return getAncestorCount() < 2;
-    }
+    public boolean isRoot()  { return getAncestorCount() < 2; }
 
     /**
      * Returns the number of ancestors (from this shape's parent up to the document).
      */
-    public int getAncestorCount()
-    {
-        return _parent != null ? getParent().getAncestorCount() + 1 : 0;
-    }
+    public int getAncestorCount()  { return _parent != null ? getParent().getAncestorCount() + 1 : 0; }
 
     /**
      * Returns true if given shape is one of this shape's ancestors.
      */
-    public boolean isAncestor(RMShape aShape)
-    {
-        return aShape == _parent || (_parent != null && _parent.isAncestor(aShape));
-    }
+    public boolean isAncestor(RMShape aShape)  { return aShape == _parent || (_parent != null && _parent.isAncestor(aShape)); }
 
     /**
      * Returns true if given shape is one of this shape's descendants.
      */
-    public boolean isDescendant(RMShape aShape)
-    {
-        return aShape != null && aShape.isAncestor(this);
-    }
+    public boolean isDescendant(RMShape aShape)  { return aShape != null && aShape.isAncestor(this); }
 
     /**
      * Converts a point from local to parent.
@@ -1222,34 +1188,22 @@ public class RMShape implements Cloneable, Archivable, Key.GetSet {
     /**
      * Converts a point from local to parent.
      */
-    public Point localToParent(Point aPoint)
-    {
-        return localToParent(aPoint.x, aPoint.y);
-    }
+    public Point localToParent(Point aPoint)  { return localToParent(aPoint.x, aPoint.y); }
 
     /**
      * Converts a point from local to given parent.
      */
-    public Point localToParent(Point aPoint, RMShape aPar)
-    {
-        return localToParent(aPoint.x, aPoint.y, aPar);
-    }
+    public Point localToParent(Point aPoint, RMShape aPar)  { return localToParent(aPoint.x, aPoint.y, aPar); }
 
     /**
      * Converts a shape from local to parent.
      */
-    public Shape localToParent(Shape aShape)
-    {
-        return aShape.copyForTransform(getLocalToParent());
-    }
+    public Shape localToParent(Shape aShape)  { return aShape.copyForTransform(getLocalToParent()); }
 
     /**
      * Converts a point from local to given parent.
      */
-    public Shape localToParent(Shape aShape, RMShape aPar)
-    {
-        return aShape.copyForTransform(getLocalToParent(aPar));
-    }
+    public Shape localToParent(Shape aShape, RMShape aPar)  { return aShape.copyForTransform(getLocalToParent(aPar)); }
 
     /**
      * Converts a point from parent to local.
@@ -1615,7 +1569,7 @@ public class RMShape implements Cloneable, Archivable, Key.GetSet {
             return false;
 
         // Get shape in bounds rect and return whether shape intersects point
-        Shape path = getPath();
+        Shape path = getBoundsShape();
         return path.contains(aPoint.x, aPoint.y, lineWidth);
     }
 
@@ -1636,7 +1590,7 @@ public class RMShape implements Cloneable, Archivable, Key.GetSet {
             return false;
 
         // Get shape in bounds and return whether shape intersects given path
-        Shape path = getPath();
+        Shape path = getBoundsShape();
         return path.intersectsShape(aPath, lineWidth);
     }
 
@@ -2144,14 +2098,14 @@ public class RMShape implements Cloneable, Archivable, Key.GetSet {
         // Paint fill
         if (fill != null) { //getFill().paint(aPntr, this);
             aPntr.setPaint(fill.snap().copyForRect(getBoundsInside()));
-            aPntr.fill(getPath());
+            aPntr.fill(getBoundsShape());
         }
 
         // Paint stroke
         if (stroke != null && !isStrokeOnTop()) { //getStroke().paint(aPntr, this);
             aPntr.setPaint(stroke.getColor());
             aPntr.setStroke(stroke.snap());
-            Shape path = getPath(), spath = stroke.getStrokePath(path);
+            Shape path = getBoundsShape(), spath = stroke.getStrokePath(path);
             aPntr.draw(spath);
         }
     }
@@ -2177,7 +2131,7 @@ public class RMShape implements Cloneable, Archivable, Key.GetSet {
         if (stroke != null && isStrokeOnTop()) { //getStroke().paint(aPntr, this);
             aPntr.setPaint(stroke.getColor());
             aPntr.setStroke(stroke.snap());
-            Shape path = getPath(), spath = stroke.getStrokePath(path);
+            Shape path = getBoundsShape(), spath = stroke.getStrokePath(path);
             aPntr.draw(spath);
         }
     }
@@ -2346,9 +2300,10 @@ public class RMShape implements Cloneable, Archivable, Key.GetSet {
         if (getSkewX() != 0) e.add("skewx", getSkewX());
         if (getSkewY() != 0) e.add("skewy", getSkewY());
 
-        // Archive Stroke, Fill, Effect
-        if (getStroke() != null) e.add(anArchiver.writeObjectToXml(getStroke()));
+        // Archive Fill, Stroke, BorderRadius, Effect
         if (getFill() != null) e.add(anArchiver.writeObjectToXml(getFill()));
+        if (getStroke() != null) e.add(anArchiver.writeObjectToXml(getStroke()));
+        if (getBorderRadius() != 0) e.add("radius", getBorderRadius());                   // Archive Radius
         if (getEffect() != null) e.add("effect", getEffect().codeString());
 
         // Archive font
@@ -2402,17 +2357,19 @@ public class RMShape implements Cloneable, Archivable, Key.GetSet {
         setSkewX(anElement.getAttributeFloatValue("skewx", 0));
         setSkewY(anElement.getAttributeFloatValue("skewy", 0));
 
-        // Unarchive Stroke
-        for (int i = anArchiver.indexOf(anElement, RMStroke.class); i >= 0; i = -1) {
-            RMStroke stroke = (RMStroke) anArchiver.readObjectFromXml(anElement.get(i));
-            setStroke(stroke);
-        }
-
         // Unarchive Fill
         for (int i = anArchiver.indexOf(anElement, RMFill.class); i >= 0; i = -1) {
             RMFill fill = (RMFill) anArchiver.readObjectFromXml(anElement.get(i));
             setFill(fill);
         }
+
+        // Unarchive Stroke, BorderRadius
+        for (int i = anArchiver.indexOf(anElement, RMStroke.class); i >= 0; i = -1) {
+            RMStroke stroke = (RMStroke) anArchiver.readObjectFromXml(anElement.get(i));
+            setStroke(stroke);
+        }
+        if (anElement.hasAttribute("radius"))
+            setBorderRadius(anElement.getAttributeFloatValue("radius")); // Unarchive Radius
 
         // Unarchive Effect
         if (anElement.hasAttribute("effect"))

@@ -30,7 +30,7 @@ public class RMFillPdfr {
 
             // Handle color fill
         else {
-            Shape path = aShape.getPath();
+            Shape path = aShape.getBoundsShape();
             SnapPaintPdfr.writeShapeFill(path, aFill.getColor(), aWriter);
         }
     }
@@ -41,7 +41,7 @@ public class RMFillPdfr {
     public static void writeGradientFill(RMShape aShape, RMGradientFill aFill, PDFWriter aWriter)
     {
         // Get shape path and PDF page and write path
-        Shape path = aShape.getPath();
+        Shape path = aShape.getBoundsShape();
         PDFPageWriter pdfPage = aWriter.getPageWriter();
         pdfPage.writePath(path);
 
@@ -157,7 +157,7 @@ public class RMFillPdfr {
      */
     public static void writeImageFill(RMShape aShape, RMImageFill anImageFill, RMPDFWriter aWriter)
     {
-        writeImageFill(anImageFill, aShape.getPath(), aShape.getBoundsInside(), aWriter);
+        writeImageFill(anImageFill, aShape.getBoundsShape(), aShape.getBoundsInside(), aWriter);
     }
 
     /**

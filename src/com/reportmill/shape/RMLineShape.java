@@ -35,7 +35,7 @@ public class RMLineShape extends RMParentShape {
     /**
      * Returns the line path.
      */
-    public Shape getPath()
+    public Shape getBoundsShape()
     {
         double x1 = _width < 0 ? -_width : 0, y1 = _height < 0 ? -_height : 0;
         double x2 = _width > 0 ? _width : 0, y2 = _height > 0 ? _height : 0;

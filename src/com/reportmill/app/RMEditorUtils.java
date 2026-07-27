@@ -534,7 +534,7 @@ public class RMEditorUtils {
         }
 
         // Create new polygon shape for SelShape and set path
-        Shape selShapePath = selShape.getPath();
+        Shape selShapePath = selShape.getBoundsShape();
         RMPolygonShape polygonShape = new RMPolygonShape(selShapePath);
         polygonShape.copyShape(selShape);
 

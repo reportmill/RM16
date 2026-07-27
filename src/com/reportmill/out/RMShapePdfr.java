@@ -145,7 +145,7 @@ public class RMShapePdfr<T extends RMShape> {
     protected void writeShapeStroke(RMShape aShape, RMPDFWriter aWriter)
     {
         RMStroke stroke = aShape.getStroke();
-        Shape path = aShape.getPath(), spath = stroke.getStrokePath(path);
+        Shape path = aShape.getBoundsShape(), spath = stroke.getStrokePath(path);
         SnapPaintPdfr.writeShapeStroke(spath, stroke.snap(), stroke.getColor(), aWriter);
     }
 

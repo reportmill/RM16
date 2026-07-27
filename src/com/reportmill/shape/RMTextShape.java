@@ -22,7 +22,7 @@ import snap.util.*;
  *   text.setSizeToFit();
  * </pre></blockquote>
  */
-public class RMTextShape extends RMRectShape {
+public class RMTextShape extends RMShape {
 
     // A text model to manage text content and style
     private TextModel _textModel;
@@ -131,7 +131,7 @@ public class RMTextShape extends RMRectShape {
         _textLayout.setStartCharIndex(getVisibleStart());
         _textLayout.setLinked(getLinkedText() != null);
         _textLayout.setAlignY(getAlignY());
-        _textLayout.setBoundsPath(!(getPath() instanceof Rect) || getPerformsWrap() ? getPath() : null);
+        _textLayout.setBoundsPath(!(getBoundsShape() instanceof Rect) || getPerformsWrap() ? getBoundsShape() : null);
         _textLayout.setHyphenate(RMTextEditor.isHyphenating());
         _textLayout.setFontScale(1);
 
@@ -575,16 +575,16 @@ public class RMTextShape extends RMRectShape {
      * Overrides shape implementation to get clip path.
      */
     @Override
-    public Shape getPath()
+    public Shape getBoundsShape()
     {
         // If text doesn't perform wrap or parent is null, return normal path in bounds
         if (!getPerformsWrap() || getParent() == null)
-            return getPathShape() != null ? getPathShape().getPath().copyForBounds(getBoundsInside()) : super.getPath();
+            return getPathShape() != null ? getPathShape().getBoundsShape().copyForBounds(getBoundsInside()) : super.getBoundsShape();
 
         // Get peers who cause wrap (if none, just return super path in bounds)
         List<RMShape> peersWhoCauseWrap = getPeersWhoCauseWrap();
         if (peersWhoCauseWrap == null)
-            return getPathShape() != null ? getPathShape().getPath().copyForBounds(getBoundsInside()) : super.getPath();
+            return getPathShape() != null ? getPathShape().getBoundsShape().copyForBounds(getBoundsInside()) : super.getBoundsShape();
 
         // Add this text to list
         peersWhoCauseWrap.add(0, this);
@@ -629,15 +629,6 @@ public class RMTextShape extends RMRectShape {
         firePropChange("PathShape", _pathShape, _pathShape = aShape);
         revalidate();
         repaint();
-    }
-
-    /**
-     * Overrides rectangle implementation to potentially clear path shape.
-     */
-    public void setRadius(float aValue)
-    {
-        super.setRadius(aValue);
-        setPathShape(null);
     }
 
     /**

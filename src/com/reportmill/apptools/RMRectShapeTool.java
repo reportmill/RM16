@@ -32,8 +32,8 @@ public class RMRectShapeTool<T extends RMRectShape> extends RMTool<T> {
         if (rect == null) return;
 
         // Update RoundingThumb and RoundingText
-        setViewValue("RoundingThumb", rect.getRadius());
-        setViewValue("RoundingText", rect.getRadius());
+        setViewValue("RoundingThumb", rect.getBorderRadius());
+        setViewValue("RoundingText", rect.getBorderRadius());
     }
 
     /**
@@ -51,7 +51,7 @@ public class RMRectShapeTool<T extends RMRectShape> extends RMTool<T> {
             rect.undoerSetUndoTitle("Rounding Change");
             float value = anEvent.getFloatValue();
             for (RMRectShape r : rects) {
-                r.setRadius(value);
+                r.setBorderRadius(value);
                 if (r.getStroke() == null)
                     r.setStroke(new RMStroke());
             }

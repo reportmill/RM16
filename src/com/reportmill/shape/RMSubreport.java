@@ -3,7 +3,6 @@
  */
 package com.reportmill.shape;
 import com.reportmill.base.RMKeyChain;
-import com.reportmill.graphics.*;
 import snap.geom.Rect;
 import snap.geom.Shape;
 import snap.gfx.*;
@@ -14,7 +13,7 @@ import java.util.Objects;
 /**
  * A shape to reference another template.
  */
-public class RMSubreport extends RMRectShape {
+public class RMSubreport extends RMShape {
 
     // The name of the subreport
     private String _subreportName;
@@ -31,6 +30,7 @@ public class RMSubreport extends RMRectShape {
     public RMSubreport()
     {
         super();
+        setBorderRadius(3);
     }
 
     /**
@@ -102,7 +102,7 @@ public class RMSubreport extends RMRectShape {
         // Paint rect on top
         Rect bnds = getBoundsInside();
         aPntr.setPaint(getCoverFill().copyForRect(bnds));
-        aPntr.fill(getPath());
+        aPntr.fill(getBoundsShape());
         aPntr.setPaint(Color.DARKGRAY);
         aPntr.draw(bnds);
 
@@ -114,19 +114,11 @@ public class RMSubreport extends RMRectShape {
     }
 
     /**
-     * Override to make rounding a constant of 3.
-     */
-    public float getRadius()
-    {
-        return 3;
-    }
-
-    /**
      * Returns clip shape for shape.
      */
     public Shape getClipShape()
     {
-        return getPath();
+        return getBoundsShape();
     }
 
     /**
@@ -167,16 +159,14 @@ public class RMSubreport extends RMRectShape {
      */
     public XMLElement toXML(RMArchiver anArchiver)
     {
-        // Do normal version and reset name
-        XMLElement e = super.toXML(anArchiver);
-        e.setName("subreport");
+        XMLElement xml = super.toXML(anArchiver);
+        xml.setName("subreport");
 
         // Archive subreport name
         if (getSubreportName() != null && !getSubreportName().isEmpty())
-            e.add("subreport-name", getSubreportName());
+            xml.add("subreport-name", getSubreportName());
 
-        // Return xml element
-        return e;
+        return xml;
     }
 
     /**
@@ -184,15 +174,12 @@ public class RMSubreport extends RMRectShape {
      */
     public RMSubreport fromXML(RMArchiver anArchiver, XMLElement anElement)
     {
-        // Do normal version
         super.fromXML(anArchiver, anElement);
 
         // Unarchive subreport name
         if (anElement.hasAttribute("subreport-name"))
             setSubreportName(anElement.getAttributeValue("subreport-name"));
 
-        // Return this subreport
         return this;
     }
-
 }

@@ -9,7 +9,6 @@ import java.util.List;
 import snap.geom.*;
 import snap.gfx.*;
 import snap.props.PropChange;
-import snap.props.PropChangeListener;
 import snap.text.TextModel;
 import snap.text.TextLine;
 import snap.text.TextRun;
@@ -566,7 +565,8 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
                 getEditor().getSelectTool().getDragMode() == RMSelectTool.DragMode.None)
             textShape.removeFromParent();
 
-        // Stop listening to changes to TextShape RichText
+        // Clear text editor and updating vars
+        textShape.clearTextEditor();
         _updatingSize = false;
         _updatingMinHeight = 0;
     }

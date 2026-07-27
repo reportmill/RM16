@@ -690,6 +690,17 @@ public class RMTextShape extends RMRectShape {
     }
 
     /**
+     * Clears the text editor.
+     */
+    public void clearTextEditor()
+    {
+        if (_textEditor != null) {
+            _textEditor.detachAdapterFromTextModel();
+            _textEditor = null;
+        }
+    }
+
+    /**
      * Override to compute from RMTextLayout.
      */
     protected double getPrefWidthImpl(double aHeight)

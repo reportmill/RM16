@@ -215,7 +215,7 @@ public class RMEditorEvents extends RMViewerEvents {
 
             // If T key, swap in linked text
         else if (keyChar == 't')
-            ((RMTextTool<?>) editor.getTool(RMTextShape.class)).convertToText(editor.getSelectedShape(), "test");
+            ((RMTextTool<?>) editor.getTool(RMTextShape.class)).convertShapeToTextShape(editor.getSelectedShape(), "test");
 
             // Otherwise, set consume to false
         else return;

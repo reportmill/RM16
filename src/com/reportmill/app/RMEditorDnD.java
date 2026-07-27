@@ -113,7 +113,7 @@ class RMEditorDnD {
         _editor.getWindow().toFront();
 
         // Forward drop to last over shape
-        _editor.getTool(_lastOverShape).drop(_lastOverShape, anEvent);
+        _editor.getTool(_lastOverShape).handleDragDropEvent(_lastOverShape, anEvent);
 
         // Formally complete drop
         anEvent.dropComplete();  //(true);

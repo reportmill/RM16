@@ -295,13 +295,13 @@ public class RMCrossTabCellTool<T extends RMCrossTabCell> extends RMTextTool<T> 
     /**
      * Override normal implementation to handle KeysPanel drop.
      */
-    public void drop(T aCell, ViewEvent anEvent)
+    public void handleDragDropEvent(T aCell, ViewEvent anEvent)
     {
         // If KeysPanel is dragging, add key to text
         if (KeysPanel.getDragKey() != null) {
 
             // Do normal text version to add drop string to text
-            super.drop(aCell, anEvent);
+            super.handleDragDropEvent(aCell, anEvent);
 
             // Get the string
             String string = anEvent.getClipboard().getString(); //ClipboardUtils.getString(anEvent.getTransferable());
@@ -314,7 +314,7 @@ public class RMCrossTabCellTool<T extends RMCrossTabCell> extends RMTextTool<T> 
         }
 
         // Otherwise do normal version
-        else super.drop(aCell, anEvent);
+        else super.handleDragDropEvent(aCell, anEvent);
     }
 
 }

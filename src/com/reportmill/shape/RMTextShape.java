@@ -5,11 +5,9 @@ package com.reportmill.shape;
 import com.reportmill.graphics.*;
 import java.util.*;
 import java.util.List;
-
 import snap.geom.*;
 import snap.gfx.*;
 import snap.props.PropChange;
-import snap.props.PropChangeListener;
 import snap.text.*;
 import snap.util.*;
 
@@ -554,8 +552,10 @@ public class RMTextShape extends RMRectShape {
     /**
      * Override to revalidate.
      */
+    @Override
     public void setWidth(double aValue)
     {
+        if (aValue == getWidth()) return;
         super.setWidth(aValue);
         revalidate();
     }
@@ -563,8 +563,10 @@ public class RMTextShape extends RMRectShape {
     /**
      * Override to revalidate.
      */
+    @Override
     public void setHeight(double aValue)
     {
+        if (aValue == getHeight()) return;
         super.setHeight(aValue);
         revalidate();
     }
@@ -572,6 +574,7 @@ public class RMTextShape extends RMRectShape {
     /**
      * Overrides shape implementation to get clip path.
      */
+    @Override
     public Shape getPath()
     {
         // If text doesn't perform wrap or parent is null, return normal path in bounds
@@ -600,19 +603,8 @@ public class RMTextShape extends RMRectShape {
      */
     private List<RMShape> getPeersWhoCauseWrap()
     {
-        List<RMShape> list = null;
-
-        // Iterate over children and add any that intersect frame
-        for (int i = 0, iMax = getParent().getChildCount(); i < iMax; i++) {
-            RMShape child = getParent().getChild(i);
-            if (child != this && child.getFrame().intersectsShape(getFrame())) {
-                if (list == null) list = new ArrayList<>();
-                list.add(child);
-            }
-        }
-
-        // Return
-        return list;
+        Rect frame = getFrame();
+        return ListUtils.filter(getParent().getChildren(), child -> child != this && child.getFrame().intersectsShape(frame));
     }
 
     /**
@@ -624,10 +616,7 @@ public class RMTextShape extends RMRectShape {
     /**
      * Returns the shape that provides the path for this text to wrap text to.
      */
-    public RMShape getPathShape()
-    {
-        return _pathShape;
-    }
+    public RMShape getPathShape()  { return _pathShape; }
 
     RMShape _pathShape;
 
@@ -654,10 +643,7 @@ public class RMTextShape extends RMRectShape {
     /**
      * Returns the linked text for this text (if any).
      */
-    public RMLinkedText getLinkedText()
-    {
-        return _linkedText;
-    }
+    public RMLinkedText getLinkedText()  { return _linkedText; }
 
     /**
      * Sets the linked text for this text (if any).
@@ -675,10 +661,7 @@ public class RMTextShape extends RMRectShape {
     /**
      * Returns whether there is a text editor.
      */
-    public boolean isTextEditorSet()
-    {
-        return _textEditor != null;
-    }
+    public boolean isTextEditorSet()  { return _textEditor != null; }
 
     /**
      * Returns the text editor.
@@ -769,7 +752,7 @@ public class RMTextShape extends RMRectShape {
     /**
      * Paginates this text by creating linked texts to show all text and returns a list of this text and the linked texts.
      */
-    protected List<RMTextShape> paginate()
+    private List<RMTextShape> paginate()
     {
         // Create pages list with this text in it
         List<RMTextShape> pages = new ArrayList<>();
@@ -804,6 +787,7 @@ public class RMTextShape extends RMRectShape {
     /**
      * Creates a shape suitable for the "remainder" portion of a divideShape call (just a clone by default).
      */
+    @Override
     protected RMShape createDivideShapeRemainder(byte anEdge)
     {
         return anEdge == 0 ? new RMLinkedText(this) : clone();
@@ -812,19 +796,18 @@ public class RMTextShape extends RMRectShape {
     /**
      * Editor method - indicates that this shape can be super selected.
      */
+    @Override
     public boolean superSelectable()  { return true; }
 
     /**
      * Editor method.
      */
-    public boolean isStructured()
-    {
-        return _parent instanceof RMTableRow && ((RMTableRow) _parent).isStructured();
-    }
+    public boolean isStructured()  { return _parent instanceof RMTableRow tableRow && tableRow.isStructured(); }
 
     /**
      * Paints a text shape.
      */
+    @Override
     protected void paintShape(Painter aPntr)
     {
         // Paint normal background
@@ -846,7 +829,7 @@ public class RMTextShape extends RMRectShape {
     /**
      * Override to catch XString and TextEditor changes.
      */
-    protected void handleTextModelPropChange(PropChange aPC)
+    private void handleTextModelPropChange(PropChange aPC)
     {
         _pcs.fireDeepChange(this, aPC);
         repaint();
@@ -855,7 +838,7 @@ public class RMTextShape extends RMRectShape {
     /**
      * Override to do home-brew layout.
      */
-    public void revalidate()
+    void revalidate()
     {
         // Update text
         if (_textLayout != null)
@@ -872,6 +855,7 @@ public class RMTextShape extends RMRectShape {
     /**
      * Standard clone implementation.
      */
+    @Override
     public RMTextShape clone()
     {
         // Get normal shape clone, clone XString, clear layout and return
@@ -995,6 +979,7 @@ public class RMTextShape extends RMRectShape {
     /**
      * Standard toSring implementation.
      */
+    @Override
     public String toString()
     {
         String string = super.toString();

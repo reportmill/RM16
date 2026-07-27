@@ -26,10 +26,10 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
     private RMShape _downShape;
 
     // Whether editor should resize RMText whenever text changes
-    private boolean _updatingSize = false;
+    private boolean _updatingSize;
 
     // The minimum height of the RMText when editor text editor is updating size
-    private double _updatingMinHeight = 0;
+    private double _updatingMinHeight;
 
     // Whether current mouse drag should be moving table column
     private boolean _moveTableColumn;
@@ -141,98 +141,96 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
     {
         // Get editor, currently selected text shape and text shapes (just return if null)
         RMEditor editor = getEditor();
-        RMTextShape textShape = getSelectedShape();
-        if (textShape == null)
-            return;
+        RMTextShape textShape = getSelectedShape(); if (textShape == null) return;
 
         // Register repaint for texts
         List<RMTextShape> textShapes = (List<RMTextShape>) getSelectedShapes();
         textShapes.forEach(RMTextShape::repaint);
 
-        // Handle AlignLeftButton, AlignCenterButton, AlignRightButton, AlignFullButton, AlignTopButton, AlignMiddleButton
-        if (anEvent.equals("AlignLeftButton")) RMEditorUtils.setAlignmentX(editor, HPos.LEFT);
-        if (anEvent.equals("AlignCenterButton")) RMEditorUtils.setAlignmentX(editor, HPos.CENTER);
-        if (anEvent.equals("AlignRightButton")) RMEditorUtils.setAlignmentX(editor, HPos.RIGHT);
-        if (anEvent.equals("AlignFullButton")) setJustify(editor, true);
-        if (anEvent.equals("AlignTopButton")) textShapes.forEach(txt -> txt.setAlignY(VPos.TOP));
-        if (anEvent.equals("AlignMiddleButton")) textShapes.forEach(txt -> txt.setAlignY(VPos.CENTER));
-        if (anEvent.equals("AlignBottomButton")) textShapes.forEach(txt -> txt.setAlignY(VPos.BOTTOM));
+        switch (anEvent.getName()) {
 
-        // If RoundingThumb or RoundingText, make sure shapes have stroke
-        if (anEvent.equals("RoundingThumb") || anEvent.equals("RoundingText"))
-            for (RMTextShape t : textShapes) t.setStroke(new RMStroke());
+            // Handle AlignLeftButton, AlignCenterButton, AlignRightButton, AlignFullButton, AlignTopButton, AlignMiddleButton
+            case "AlignLeftButton" -> RMEditorUtils.setAlignmentX(editor, HPos.LEFT);
+            case "AlignCenterButton" -> RMEditorUtils.setAlignmentX(editor, HPos.CENTER);
+            case "AlignRightButton" -> RMEditorUtils.setAlignmentX(editor, HPos.RIGHT);
+            case "AlignFullButton" -> setJustify(editor, true);
+            case "AlignTopButton" -> textShapes.forEach(txt -> txt.setAlignY(VPos.TOP));
+            case "AlignMiddleButton" -> textShapes.forEach(txt -> txt.setAlignY(VPos.CENTER));
+            case "AlignBottomButton" -> textShapes.forEach(txt -> txt.setAlignY(VPos.BOTTOM));
 
-        // Handle MarginText, RoundingThumb, RoundingText
-        if (anEvent.equals("MarginText")) textShapes.forEach(txt -> txt.setMarginString(anEvent.getStringValue()));
-        if (anEvent.equals("RoundingThumb")) textShapes.forEach(txt -> txt.setRadius(anEvent.getFloatValue()));
-        if (anEvent.equals("RoundingText")) textShapes.forEach(txt -> txt.setRadius(anEvent.getFloatValue()));
-
-        // Handle ShowBorderCheckBox, CoalesceNewlinesCheckBox, PerformWrapCheckBox
-        if (anEvent.equals("ShowBorderCheckBox"))
-            textShapes.forEach(txt -> txt.setDrawsSelectionRect(anEvent.getBoolValue()));
-        if (anEvent.equals("CoalesceNewlinesCheckBox"))
-            textShapes.forEach(txt -> txt.setCoalesceNewlines(anEvent.getBoolValue()));
-        if (anEvent.equals("PerformWrapCheckBox"))
-            textShapes.forEach(txt -> txt.setPerformsWrap(anEvent.getBoolValue()));
-
-        // Handle PaginateRadio, ShrinkRadio, GrowRadio
-        if (anEvent.equals("PaginateRadio")) textShapes.forEach(txt -> txt.setWraps(RMTextShape.WRAP_BASIC));
-        if (anEvent.equals("ShrinkRadio")) textShapes.forEach(txt -> txt.setWraps(RMTextShape.WRAP_SCALE));
-        if (anEvent.equals("GrowRadio")) textShapes.forEach(txt -> txt.setWraps(RMTextShape.WRAP_NONE));
-
-        // Handle CharSpacingSpinner, LineSpacingSpinner, LineSpacingSingleButton, LineSpacingDoubleButton, LineGapSpinner
-        if (anEvent.equals("CharSpacingSpinner")) setCharSpacing(editor, anEvent.getFloatValue());
-        if (anEvent.equals("LineSpacingSpinner")) setLineSpacing(editor, anEvent.getFloatValue());
-        if (anEvent.equals("LineSpacingSingleButton")) setLineSpacing(editor, 1);
-        if (anEvent.equals("LineSpacingDoubleButton")) setLineSpacing(editor, 2);
-        if (anEvent.equals("LineGapSpinner")) setLineGap(editor, anEvent.getFloatValue());
-
-        // Handle LineHeightMinSpinner, LineHeightMaxSpinner
-        //if(anEvent.equals("LineHeightMinSpinner")) setLineHeightMin(editor, Math.max(anEvent.getFloatValue(), 0));
-        //if(anEvent.equals("LineHeightMaxSpinner")) {
-        //    float val = anEvent.getFloatValue(); if(val>=999) val = Float.MAX_VALUE; setLineHeightMax(editor, val); }
-
-        // Handle MakeMinWidthMenuItem, MakeMinHeightMenuItem
-        if (anEvent.equals("MakeMinWidthMenuItem")) textShapes.forEach(txt -> txt.setWidth(txt.getBestWidth()));
-        if (anEvent.equals("MakeMinHeightMenuItem")) textShapes.forEach(txt -> txt.setHeight(txt.getBestHeight()));
-
-        // Handle TurnToPathMenuItem
-        if (anEvent.equals("TurnToPathMenuItem"))
-            for (RMTextShape text1 : textShapes) {
-                RMShape textPathShape = RMTextShapeUtils.getTextPathShape(text1);
-                RMParentShape parent = text1.getParent();
-                parent.addChild(textPathShape, text1.indexOf());
-                parent.removeChild(text1);
-                editor.setSelectedShape(textPathShape);
+            // Handle MarginText, RoundingThumb, RoundingText
+            case "MarginText" -> textShapes.forEach(txt -> txt.setMarginString(anEvent.getStringValue()));
+            case "RoundingThumb", "RoundingText" -> {
+                textShapes.forEach(t -> t.setStroke(new RMStroke()));
+                textShapes.forEach(txt -> txt.setRadius(anEvent.getFloatValue()));
             }
 
-        // Handle TurnToCharsShapeMenuItem
-        if (anEvent.equals("TurnToCharsShapeMenuItem"))
-            for (RMTextShape text1 : textShapes) {
-                RMShape textCharsShape = RMTextShapeUtils.getTextCharsShape(text1);
-                RMParentShape parent = text1.getParent();
-                parent.addChild(textCharsShape, text1.indexOf());
-                parent.removeChild(text1);
-                editor.setSelectedShape(textCharsShape);
+            // Handle ShowBorderCheckBox, CoalesceNewlinesCheckBox, PerformWrapCheckBox
+            case "ShowBorderCheckBox" -> textShapes.forEach(txt -> txt.setDrawsSelectionRect(anEvent.getBoolValue()));
+            case "CoalesceNewlinesCheckBox" -> textShapes.forEach(txt -> txt.setCoalesceNewlines(anEvent.getBoolValue()));
+            case "PerformWrapCheckBox" -> textShapes.forEach(txt -> txt.setPerformsWrap(anEvent.getBoolValue()));
+
+            // Handle PaginateRadio, ShrinkRadio, GrowRadio
+            case "PaginateRadio" -> textShapes.forEach(txt -> txt.setWraps(RMTextShape.WRAP_BASIC));
+            case "ShrinkRadio" -> textShapes.forEach(txt -> txt.setWraps(RMTextShape.WRAP_SCALE));
+            case "GrowRadio" -> textShapes.forEach(txt -> txt.setWraps(RMTextShape.WRAP_NONE));
+
+            // Handle CharSpacingSpinner, LineSpacingSpinner, LineSpacingSingleButton, LineSpacingDoubleButton, LineGapSpinner
+            case "CharSpacingSpinner" -> setCharSpacing(editor, anEvent.getFloatValue());
+            case "LineSpacingSpinner" -> setLineSpacing(editor, anEvent.getFloatValue());
+            case "LineSpacingSingleButton" -> setLineSpacing(editor, 1);
+            case "LineSpacingDoubleButton" -> setLineSpacing(editor, 2);
+            case "LineGapSpinner" -> setLineGap(editor, anEvent.getFloatValue());
+
+            // Handle LineHeightMinSpinner, LineHeightMaxSpinner
+            //if(anEvent.equals("LineHeightMinSpinner")) setLineHeightMin(editor, Math.max(anEvent.getFloatValue(), 0));
+            //if(anEvent.equals("LineHeightMaxSpinner")) {
+            //    float val = anEvent.getFloatValue(); if(val>=999) val = Float.MAX_VALUE; setLineHeightMax(editor, val); }
+
+            // Handle MakeMinWidthMenuItem, MakeMinHeightMenuItem
+            case "MakeMinWidthMenuItem" -> textShapes.forEach(txt -> txt.setWidth(txt.getBestWidth()));
+            case "MakeMinHeightMenuItem" -> textShapes.forEach(txt -> txt.setHeight(txt.getBestHeight()));
+
+            // Handle TurnToPathMenuItem
+            case "TurnToPathMenuItem" -> {
+                for (RMTextShape text1 : textShapes) {
+                    RMShape textPathShape = RMTextShapeUtils.getTextPathShape(text1);
+                    RMParentShape parent = text1.getParent();
+                    parent.addChild(textPathShape, text1.indexOf());
+                    parent.removeChild(text1);
+                    editor.setSelectedShape(textPathShape);
+                }
             }
 
-        // Handle LinkedTextMenuItem
-        if (anEvent.equals("LinkedTextMenuItem")) {
+            // Handle TurnToCharsShapeMenuItem
+            case "TurnToCharsShapeMenuItem" -> {
+                for (RMTextShape text1 : textShapes) {
+                    RMShape textCharsShape = RMTextShapeUtils.getTextCharsShape(text1);
+                    RMParentShape parent = text1.getParent();
+                    parent.addChild(textCharsShape, text1.indexOf());
+                    parent.removeChild(text1);
+                    editor.setSelectedShape(textCharsShape);
+                }
+            }
 
-            // Get linked text identical to original text and add to text's parent
-            RMLinkedText linkedText = new RMLinkedText(textShape);
-            textShape.getParent().addChild(linkedText);
+            // Handle LinkedTextMenuItem
+            case "LinkedTextMenuItem" -> {
 
-            // Shift linked text down if there's room, otherwise right, otherwise just offset by quarter inch
-            if (textShape.getFrameMaxY() + 18 + textShape.getFrame().height * .75 < textShape.getParent().getHeight())
-                linkedText.offsetXY(0, textShape.getHeight() + 18);
-            else if (textShape.getFrameMaxX() + 18 + textShape.getFrame().width * .75 < textShape.getParent().getWidth())
-                linkedText.offsetXY(textShape.getWidth() + 18, 0);
-            else linkedText.offsetXY(18, 18);
+                // Get linked text identical to original text and add to text's parent
+                RMLinkedText linkedText = new RMLinkedText(textShape);
+                textShape.getParent().addChild(linkedText);
 
-            // Select and repaint new linked text
-            editor.setSelectedShape(linkedText);
-            linkedText.repaint();
+                // Shift linked text down if there's room, otherwise right, otherwise just offset by quarter inch
+                if (textShape.getFrameMaxY() + 18 + textShape.getFrame().height * .75 < textShape.getParent().getHeight())
+                    linkedText.offsetXY(0, textShape.getHeight() + 18);
+                else if (textShape.getFrameMaxX() + 18 + textShape.getFrame().width * .75 < textShape.getParent().getWidth())
+                    linkedText.offsetXY(textShape.getWidth() + 18, 0);
+                else linkedText.offsetXY(18, 18);
+
+                // Select and repaint new linked text
+                editor.setSelectedShape(linkedText);
+                linkedText.repaint();
+            }
         }
     }
 
@@ -297,6 +295,7 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
     /**
      * Overrides standard tool method to deselect any currently editing text.
      */
+    @Override
     public void activateTool()
     {
         if (getEditor().getSuperSelectedShape() instanceof RMTextShape)
@@ -306,6 +305,7 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
     /**
      * Event handling - overridden to install text cursor.
      */
+    @Override
     public void mouseMoved(ViewEvent anEvent)
     {
         getEditor().setCursor(Cursor.TEXT);
@@ -314,6 +314,7 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
     /**
      * Event handling - overridden to install text cursor.
      */
+    @Override
     public void mouseMoved(T aShape, ViewEvent anEvent)
     {
         if (getEditor().getShapeAtPoint(anEvent.getPoint()) instanceof RMTextShape) {
@@ -325,6 +326,7 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
     /**
      * Handles mouse pressed for text tool. Special support to super select any text hit by tool mouse pressed.
      */
+    @Override
     public void mousePressed(ViewEvent anEvent)
     {
         // Register all selectedShapes dirty because their handles will probably need to be wiped out
@@ -353,6 +355,7 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
      * Handles mouse dragged for tool. If user doesn't really drag, then default text box should align the base line
      * of the text about the pressed point. If they do really drag, then text box should be the rect they drag out.
      */
+    @Override
     public void mouseDragged(ViewEvent anEvent)
     {
         // If shape wasn't created in mouse down, just return
@@ -387,6 +390,7 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
     /**
      * Event handling for text tool mouse loop.
      */
+    @Override
     public void mouseReleased(ViewEvent e)
     {
         // Get event point in shape parent coords
@@ -403,9 +407,9 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
             }
 
             // If hit shape is Rectangle, Oval or Polygon, swap for RMText and return
-            else if (shouldConvertToText(_downShape)) {
+            else if (shouldConvertShapeToTextShape(_downShape)) {
                 _shape.removeFromParent();
-                convertToText(_downShape, null);
+                convertShapeToTextShape(_downShape, null);
             }
         }
 
@@ -419,6 +423,7 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
     /**
      * Event handling for shape editing (just forwards to text editor).
      */
+    @Override
     public void handleShapeMouseEvent(T textShape, ViewEvent anEvent)
     {
         // Handle KeyEvent
@@ -462,6 +467,7 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
     /**
      * Key event handling for super selected text.
      */
+    @Override
     public void processKeyEvent(T aTextShape, ViewEvent anEvent)
     {
         // If tab was pressed and text is structured table row column, forward selection onto next column
@@ -574,33 +580,32 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
     /**
      * Handle changes to Selected TextShape.TextModel
      */
-    protected void handleTextShapeTextModelPropChange(PropChange aPC)
+    private void handleTextShapeTextModelPropChange(PropChange propChange)
     {
-        // If updating size, reset text width & height to accommodate text
-        if (_updatingSize) {
+        if (_updatingSize)
+            runLater(this::updateTextShapeSizeToFitText);
+    }
 
-            // Get TextShape
-            RMTextShape textShape = getSelectedShape();
-            if (textShape == null)
-                return;
+    /**
+     * Called to update text shape size to fit text.
+     */
+    private void updateTextShapeSizeToFitText()
+    {
+        // Get preferred text shape width
+        RMTextShape textShape = getSelectedShape(); if (textShape == null) return;
+        double maxWidth = _updatingMinHeight == 0 ? textShape.getParent().getWidth() - textShape.getX() : textShape.getWidth();
+        double prefWidth = textShape.getPrefWidth();
+        if (prefWidth > maxWidth)
+            prefWidth = maxWidth;
 
-            // Get preferred text shape width
-            double maxWidth = _updatingMinHeight == 0 ? textShape.getParent().getWidth() - textShape.getX() :
-                    textShape.getWidth();
-            double prefWidth = textShape.getPrefWidth();
-            if (prefWidth > maxWidth)
-                prefWidth = maxWidth;
+        // If width gets updated, get & set pref width (make sure it doesn't go beyond page border)
+        if (_updatingMinHeight == 0)
+            textShape.setWidth(prefWidth);
 
-            // If width gets updated, get & set desired width (make sure it doesn't go beyond page border)
-            if (_updatingMinHeight == 0)
-                textShape.setWidth(prefWidth);
-
-            // If PrefHeight or current height is greater than UpdatingMinHeight (which won't be zero if user drew a
-            //  text box to enter text), set Height to PrefHeight
-            double prefHeight = textShape.getPrefHeight();
-            if (prefHeight > _updatingMinHeight || textShape.getHeight() > _updatingMinHeight)
-                textShape.setHeight(Math.max(prefHeight, _updatingMinHeight));
-        }
+        // If PrefHeight or current height is greater than UpdatingMinHeight, set Height to PrefHeight
+        double prefHeight = textShape.getPrefHeight();
+        if (prefHeight > _updatingMinHeight || textShape.getHeight() > _updatingMinHeight)
+            textShape.setHeight(Math.max(prefHeight, _updatingMinHeight));
     }
 
     /**
@@ -612,26 +617,21 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
 
         // Iterator over selected shapes and see if any has an overflow indicator box that was hit
         for (RMShape shape : selectedShapes) {
-            RMTextShape text = (RMTextShape) shape;
+            RMTextShape textShape = (RMTextShape) shape;
 
             // If no linked text and not painting text indicator, just continue
-            if (text.getLinkedText() == null && !isPaintingTextLinkIndicator(text)) continue;
+            if (textShape.getLinkedText() == null && !isPaintingTextLinkIndicator(textShape)) continue;
 
-            // Get point in text coords
-            Point point = getEditor().convertToShape(anEvent.getX(), anEvent.getY(), text);
+            // Get point in text shape coords
+            Point pointInShape = getEditor().convertToShape(anEvent.getX(), anEvent.getY(), textShape);
 
             // If pressed was in overflow indicator box, add linked text (or select existing one)
-            if (point.x >= text.getWidth() - 20 && point.x <= text.getWidth() - 10 && point.y >= text.getHeight() - 5) {
-
-                // If no linkedText, add it
-                if (text.getLinkedText() == null)
+            if (pointInShape.x >= textShape.getWidth() - 20 && pointInShape.x <= textShape.getWidth() - 10 &&
+                pointInShape.y >= textShape.getHeight() - 5) {
+                if (textShape.getLinkedText() == null)
                     fireActionEventForObject("LinkedTextMenuItem", anEvent);
-
-                    // Otherwise select it
-                else getEditor().setSelectedShape(text.getLinkedText());
-
-                // Return true so SelectTool goes to DragModeNone
-                return true;
+                else getEditor().setSelectedShape(textShape.getLinkedText());
+                return true; // Return true so SelectTool goes to DragModeNone
             }
         }
 
@@ -690,6 +690,7 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
     /**
      * Overrides tool tooltip method to return text string if some chars aren't visible.
      */
+    @Override
     public String getToolTip(T aTextShape, ViewEvent anEvent)
     {
         // If all text is visible and greater than 8 pt, return null
@@ -708,6 +709,7 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
     /**
      * Paints selected shape indicator, like handles (and maybe a text linking indicator).
      */
+    @Override
     public void paintHandles(T aText, Painter aPntr, boolean isSuperSelected)
     {
         // Paint bounds rect (maybe)
@@ -769,7 +771,7 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
     /**
      * Returns whether to paint text link indicator.
      */
-    public boolean isPaintingTextLinkIndicator(RMTextShape aText)
+    private static boolean isPaintingTextLinkIndicator(RMTextShape aText)
     {
         // If text is child of table row, return false
         if (aText.getParent() instanceof RMTableRow) return false;
@@ -790,7 +792,7 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
     /**
      * Paints the text link indicator.
      */
-    public void paintTextLinkIndicator(RMTextShape aText, Painter aPntr)
+    private void paintTextLinkIndicator(RMTextShape aText, Painter aPntr)
     {
         // Turn off anti-aliasing
         aPntr.setAntialiasing(false);
@@ -857,6 +859,7 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
     /**
      * Overrides Tool implementation to accept KeysPanel drags.
      */
+    @Override
     public boolean acceptsDrag(T aShape, ViewEvent anEvent)
     {
         // If KeysPanel is dragging, return true
@@ -868,7 +871,8 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
     /**
      * Override normal implementation to handle KeysPanel drop.
      */
-    public void drop(T aShape, ViewEvent anEvent)
+    @Override
+    public void handleDragDropEvent(T aShape, ViewEvent anEvent)
     {
         // If a keys panel drop, add key to text
         if (KeysPanel.getDragKey() != null) {
@@ -880,23 +884,25 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
         }
 
         // Otherwise, do normal drop
-        else super.drop(aShape, anEvent);
+        else super.handleDragDropEvent(aShape, anEvent);
     }
 
     /**
      * Returns the shape class that this tool edits.
      */
+    @Override
     public Class getShapeClass()  { return RMTextShape.class; }
 
     /**
      * Returns the name of this tool to be displayed by inspector.
      */
+    @Override
     public String getWindowTitle()  { return "Text Inspector"; }
 
     /**
      * Returns whether text tool should convert to text.
      */
-    public boolean shouldConvertToText(RMShape aShape)
+    private static boolean shouldConvertShapeToTextShape(RMShape aShape)
     {
         if (aShape instanceof RMImageShape) return false;
         if (aShape instanceof RMPDFShape) return false;
@@ -908,25 +914,25 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
     /**
      * Converts a shape to a text shape.
      */
-    public void convertToText(RMShape aShape, String aString)
+    public void convertShapeToTextShape(RMShape aShape, String aString)
     {
         // If shape is null, just return
         if (aShape == null) return;
 
         // Get text shape for given shape (if given shape is text, just use it)
-        RMTextShape text = aShape instanceof RMTextShape ? (RMTextShape) aShape : new RMTextShape();
+        RMTextShape textShape = aShape instanceof RMTextShape ? (RMTextShape) aShape : new RMTextShape();
 
         // Copy attributes of given shape
-        if (text != aShape)
-            text.copyShape(aShape);
+        if (textShape != aShape)
+            textShape.copyShape(aShape);
 
         // Copy path of given shape
-        if (text != aShape)
-            text.setPathShape(aShape);
+        if (textShape != aShape)
+            textShape.setPathShape(aShape);
 
         // Swap this shape in for original
-        if (text != aShape) {
-            aShape.getParent().addChild(text, aShape.indexOf());
+        if (textShape != aShape) {
+            aShape.getParent().addChild(textShape, aShape.indexOf());
             aShape.getParent().removeChild(aShape);
         }
 
@@ -936,10 +942,10 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
 
         // If aString is non-null, install in text
         if (aString != null)
-            text.setText(aString);
+            textShape.setText(aString);
 
         // Select new shape
-        getEditor().setSuperSelectedShape(text);
+        getEditor().setSuperSelectedShape(textShape);
     }
 
     /**
@@ -973,15 +979,16 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
      */
     private static String getTestString()
     {
-        return "Leo vitae diam est luctus, ornare massa mauris urna, vitae sodales et ut facilisis dignissim, " +
-                "imperdiet in diam, quis que ad ipiscing nec posuere feugiat ante velit. Viva mus leo quisque. Neque mi vitae, " +
-                "nulla cras diam fusce lacus, nibh pellentesque libero. " +
-                "Dolor at venenatis in, ac in quam purus diam mauris massa, dolor leo vehicula at commodo. Turpis condimentum " +
-                "varius aliquet accumsan, sit nullam eget in turpis augue, vel tristique, fusce metus id consequat orci " +
-                "penatibus. Ipsum vehicula euismod aliquet, pharetra. " +
-                "Fusce lectus proin, neque cr as eget, integer quam facilisi a adipiscing posuere. Imper diet sem sapien. " +
-                "Pretium natoque nibh, tristique odio eligendi odio molestie mas sa. Volutpat justo fringilla rut rum augue. " +
-                "Lao reet ulla mcorper molestie.";
+        return """
+            Leo vitae diam est luctus, ornare massa mauris urna, vitae sodales et ut facilisis dignissim, \
+            imperdiet in diam, quis que ad ipiscing nec posuere feugiat ante velit. Viva mus leo quisque. Neque mi vitae, \
+            nulla cras diam fusce lacus, nibh pellentesque libero. \
+            Dolor at venenatis in, ac in quam purus diam mauris massa, dolor leo vehicula at commodo. Turpis condimentum \
+            varius aliquet accumsan, sit nullam eget in turpis augue, vel tristique, fusce metus id consequat orci \
+            penatibus. Ipsum vehicula euismod aliquet, pharetra. \
+            Fusce lectus proin, neque cr as eget, integer quam facilisi a adipiscing posuere. Imper diet sem sapien. \
+            Pretium natoque nibh, tristique odio eligendi odio molestie mas sa. Volutpat justo fringilla rut rum augue. \
+            Lao reet ulla mcorper molestie.""";
     }
 
     /**
@@ -1002,8 +1009,8 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
     {
         anEditor.undoerSetUndoTitle("Char Spacing Change");
         for (RMShape shape : anEditor.getSelectedOrSuperSelectedShapes())
-            if (shape instanceof RMTextShape)
-                ((RMTextShape) shape).setCharSpacing(aValue);
+            if (shape instanceof RMTextShape textShape)
+                textShape.setCharSpacing(aValue);
     }
 
     /**
@@ -1013,8 +1020,8 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
     {
         anEditor.undoerSetUndoTitle("Line Spacing Change");
         for (RMShape shape : anEditor.getSelectedOrSuperSelectedShapes())
-            if (shape instanceof RMTextShape)
-                ((RMTextShape) shape).setLineSpacingFactor(aHeight);
+            if (shape instanceof RMTextShape textShape)
+                textShape.setLineSpacingFactor(aHeight);
     }
 
     /**
@@ -1024,8 +1031,8 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
     {
         anEditor.undoerSetUndoTitle("Line Gap Change");
         for (RMShape shape : anEditor.getSelectedOrSuperSelectedShapes())
-            if (shape instanceof RMTextShape)
-                ((RMTextShape) shape).setLineSpacing(aHeight);
+            if (shape instanceof RMTextShape textShape)
+                textShape.setLineSpacing(aHeight);
     }
 
     /**
@@ -1035,8 +1042,8 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
     {
         anEditor.undoerSetUndoTitle("Min Line Height Change");
         for (RMShape shape : anEditor.getSelectedOrSuperSelectedShapes())
-            if (shape instanceof RMTextShape)
-                ((RMTextShape) shape).setLineMinHeight(aHeight);
+            if (shape instanceof RMTextShape textShape)
+                textShape.setLineMinHeight(aHeight);
     }
 
     /**
@@ -1046,7 +1053,7 @@ public class RMTextTool<T extends RMTextShape> extends RMTool<T> {
     {
         anEditor.undoerSetUndoTitle("Max Line Height Change");
         for (RMShape shape : anEditor.getSelectedOrSuperSelectedShapes())
-            if (shape instanceof RMTextShape)
-                ((RMTextShape) shape).setLineMaxHeight(aHeight);
+            if (shape instanceof RMTextShape textShape)
+                textShape.setLineMaxHeight(aHeight);
     }
 }

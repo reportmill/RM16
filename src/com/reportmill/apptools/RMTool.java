@@ -820,7 +820,7 @@ public class RMTool<T extends RMShape> extends ViewController {
     /**
      * Notifies tool that something was dropped on one of its shapes with drag and drop.
      */
-    public void drop(T aShape, ViewEvent anEvent)
+    public void handleDragDropEvent(T aShape, ViewEvent anEvent)
     {
         // If a binding key drop, apply binding
         if (KeysPanel.getDragKey() != null)

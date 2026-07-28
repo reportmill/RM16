@@ -195,7 +195,7 @@ public class WelcomePanel extends ViewController {
         filePanel.setActionHandler(e -> WelcomePanel.this.fireActionEventForObject("OpenButton", e));
 
         // Add PropChangeListener
-        filePanel.addPropChangeListener(pc -> filePanelDidPropChange(pc));
+        filePanel.addPropChangeListener(this::handleFilePanelPropChange);
 
         // Return
         return filePanel;
@@ -204,13 +204,13 @@ public class WelcomePanel extends ViewController {
     /**
      * Called when FilePanel does prop change.
      */
-    private void filePanelDidPropChange(PropChange aPC)
+    private void handleFilePanelPropChange(PropChange propChange)
     {
-        String propName = aPC.getPropName();
+        String propName = propChange.getPropName();
 
         // Handle SelSite change:
         if (propName.equals(FilePanel.SelSite_Prop)) {
-            WebSite selSite = _filePanel.getSelSite();;
+            WebSite selSite = _filePanel.getSelSite();
             boolean minimize = !(selSite instanceof RecentFilesSite);
             _welcomePanelAnim.setMinimized(minimize);
         }

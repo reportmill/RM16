@@ -252,8 +252,8 @@ public class RMParentShape extends RMShape implements PropChange.DoChange {
 
         // If child listeners not yet set, create/add for children
         if (_childPCL == null) {
-            _childPCL = pc -> childDidPropChange(pc);
-            _childDCL = (lsnr, pc) -> childDidDeepChange(lsnr, pc);
+            _childPCL = this::handleChildPropChange;
+            _childDCL = this::handleChildDeepChange;
             for (RMShape child : getChildren()) {
                 child.addPropChangeListener(_childPCL);
                 child.addDeepChangeListener(_childDCL);
@@ -283,18 +283,12 @@ public class RMParentShape extends RMShape implements PropChange.DoChange {
     /**
      * Property change listener implementation to forward changes on to deep listeners.
      */
-    void childDidPropChange(PropChange aPC)
-    {
-        _pcs.fireDeepChange(this, aPC);
-    }
+    private void handleChildPropChange(PropChange propChange)  { _pcs.fireDeepChange(this, propChange); }
 
     /**
      * Deep property change listener implementation to forward deep changes to deep listeners.
      */
-    void childDidDeepChange(Object aLsnr, PropChange aPC)
-    {
-        _pcs.fireDeepChange(aLsnr, aPC);
-    }
+    private void handleChildDeepChange(Object aLsnr, PropChange propChange)  { _pcs.fireDeepChange(aLsnr, propChange); }
 
     /**
      * Sets shape layout to invalid and requests deferred layout.
@@ -355,7 +349,7 @@ public class RMParentShape extends RMShape implements PropChange.DoChange {
     /**
      * Lays out children deep.
      */
-    protected void layoutDeepImpl()
+    private void layoutDeepImpl()
     {
         for (RMShape child : getChildren())
             if (child instanceof RMParentShape parentShape) {

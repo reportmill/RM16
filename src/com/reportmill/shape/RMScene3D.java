@@ -40,7 +40,7 @@ public class RMScene3D extends RMParentShape {
         _scene = new Scene3D();
         _camera = _scene.getCamera();
         _camera.setRenderer(new Renderer2D(_camera));
-        _camera.addPropChangeListener(pc -> cameraDidPropChange(pc));
+        _camera.addPropChangeListener(this::handleCameraPropChange);
     }
 
     /**
@@ -182,9 +182,9 @@ public class RMScene3D extends RMParentShape {
     /**
      * Called when camera changes to trigger repaint.
      */
-    protected void cameraDidPropChange(PropChange aPC)
+    protected void handleCameraPropChange(PropChange propChange)
     {
-        _pcs.fireDeepChange(this, aPC);
+        _pcs.fireDeepChange(this, propChange);
         repaint();
     }
 
@@ -214,18 +214,17 @@ public class RMScene3D extends RMParentShape {
     protected void addShapesForRMShape(RMShape aShape, double z1, double z2, boolean smoothSides)
     {
         // If aShape is text, add shape3d for background and add shape3d for char path shape
-        if (aShape instanceof RMTextShape) {
-            RMTextShape text = (RMTextShape) aShape;
+        if (aShape instanceof RMTextShape textShape) {
 
             // If text draws fill or stroke, add child for background
-            if (text.getFill() != null || text.getStroke() != null) {
+            if (textShape.getFill() != null || textShape.getStroke() != null) {
                 RMShape background = new RMPolygonShape(aShape.getBoundsShape()); // Create background shape from text
                 background.copyShape(aShape);
                 addShapesForRMShape(background, z1 + .1f, z2, smoothSides); // Add background shape
             }
 
             // Get shape for char paths and add shape3d for char path shape
-            RMShape charsShape = RMTextShapeUtils.getTextPathShape(text);
+            RMShape charsShape = RMTextShapeUtils.getTextPathShape(textShape);
             addShapesForRMShape(charsShape, z1, z1, smoothSides);
             return;
         }

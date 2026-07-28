@@ -332,9 +332,9 @@ class RMGraphRPGBar3D extends RMScene3D implements RMGraphRPGBar.BarGraphShape {
      * Override to set sides visible.
      */
     @Override
-    protected void cameraDidPropChange(PropChange aPC)
+    protected void handleCameraPropChange(PropChange propChange)
     {
-        super.cameraDidPropChange(aPC);
+        super.handleCameraPropChange(propChange);
         resetSidesVisible();
     }
 

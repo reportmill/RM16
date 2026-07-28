@@ -226,17 +226,18 @@ public class RMGraph extends RMParentShape {
      */
     private Type getGraphTypeForString(String aString)
     {
-        switch (aString) {
-            case "bar": return Type.Bar;
-            case "hbar": return Type.BarH;
-            case "area": return Type.Area;
-            case "line": return Type.Line;
-            case "scatter": return Type.Scatter;
-            case "pie": return Type.Pie;
-            default:
+        return switch (aString) {
+            case "bar" -> Type.Bar;
+            case "hbar" -> Type.BarH;
+            case "area" -> Type.Area;
+            case "line" -> Type.Line;
+            case "scatter" -> Type.Scatter;
+            case "pie" -> Type.Pie;
+            default -> {
                 System.err.println("RMGraph.getGraphTypeForString: Unknown type string: " + aString);
-                return Type.Bar;
-        }
+                yield Type.Bar;
+            }
+        };
     }
 
     /**
@@ -369,15 +370,15 @@ public class RMGraph extends RMParentShape {
         p3d.setYaw(8);
         p3d.setPitch(11);
         p3d.setFocalLength(8 * 72);
-        p3d.getCamera().addPropChangeListener(pc -> props3dDidPropChange());
-        p3d.addPropChangeListener(pc -> props3dDidPropChange());
+        p3d.getCamera().addPropChangeListener(pc -> handle3dPropChange());
+        p3d.addPropChangeListener(pc -> handle3dPropChange());
         return _3d = p3d;
     }
 
     /**
      * Called when Graph RMScene3D changes (camera + depth props) to sync with visible RMScene3D.
      */
-    private void props3dDidPropChange()
+    private void handle3dPropChange()
     {
         RMShape firstChild = getChildCount() > 0 ? getChild(0) : null;
         RMScene3D props3D = firstChild instanceof RMScene3D ? (RMScene3D) firstChild : null;
@@ -627,12 +628,13 @@ public class RMGraph extends RMParentShape {
     {
         _proxyDisable = true;
         RMGraph.Type type = getType();
-        RMParentShape rpg = null;
-        if (type == RMGraph.Type.Bar || type == RMGraph.Type.BarH)
-            rpg = new RMGraphRPGBar(this, anRptOwner).getGraphShape();
-        else if (type == RMGraph.Type.Pie) rpg = new RMGraphRPGPie(this, anRptOwner).getGraphShape();
-        else rpg = new RMGraphRPGLine(this, anRptOwner).getGraphShape(); // Type Area, Line, Scatter
-        if (!isSample) rpgBindings(anRptOwner, rpg);
+        RMParentShape rpg = switch (type) {
+            case Bar, BarH -> new RMGraphRPGBar(this, anRptOwner).getGraphShape();
+            case Pie -> new RMGraphRPGPie(this, anRptOwner).getGraphShape();
+            default -> new RMGraphRPGLine(this, anRptOwner).getGraphShape();
+        };
+        if (!isSample)
+            rpgBindings(anRptOwner, rpg);
         _proxyDisable = false;
         return rpg;
     }
@@ -840,8 +842,8 @@ public class RMGraph extends RMParentShape {
         e.add("type", getGraphTypeString());
 
         // Archive DatasetKey, FilterKey
-        if (_datasetKey != null && _datasetKey.length() > 0) e.add("list-key", _datasetKey);
-        if (_filterKey != null && _filterKey.length() > 0) e.add("filter-key", _filterKey);
+        if (_datasetKey != null && !_datasetKey.isEmpty()) e.add("list-key", _datasetKey);
+        if (_filterKey != null && !_filterKey.isEmpty()) e.add("filter-key", _filterKey);
 
         // Archive keys
         for (int i = 0, iMax = getKeyCount(); i < iMax; i++)
@@ -918,7 +920,7 @@ public class RMGraph extends RMParentShape {
         if (anElement.hasAttribute("keys")) {
             String kstring = anElement.getAttributeValue("keys");
             String[] keys = kstring.split(",");
-            for (String key : keys) if (key.trim().length() > 0) addKey(key.trim());
+            for (String key : keys) if (!key.trim().isEmpty()) addKey(key.trim());
         }
 
         // Unarchive Grouping (Legacy: load from <grouping> child element)

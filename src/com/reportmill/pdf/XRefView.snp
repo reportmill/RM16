@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ColView Font="Arial 12" FillWidth="true">
+  <RowView PrefHeight="50" Padding="5,16,5,16">
+    <Label Name="NameLabel" Font="Arial Bold 32" />
+  </RowView>
+  <TabView Name="TabView" GrowHeight="true">
+    <ScrollView Title="Graphics">
+      <BoxView>
+        <ImageView Name="ImageView" />
+      </BoxView>
+    </ScrollView>
+    <SplitView Name="BrowserSplit" Vertical="true" Title="Structure">
+      <BoxView Padding="8,4,4,4" FillWidth="true" FillHeight="true">
+        <BrowserView Name="BrowserView" PrefHeight="360" />
+      </BoxView>
+    </SplitView>
+  </TabView>
+</ColView>

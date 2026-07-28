@@ -4,11 +4,11 @@
 package com.reportmill.out;
 import com.reportmill.graphics.*;
 import com.reportmill.shape.*;
+import com.reportmill.pdf.*;
+import com.reportmill.pdf.write.*;
 import snap.geom.Rect;
 import snap.geom.Shape;
 import snap.gfx.*;
-import snappdf.*;
-import snappdf.write.*;
 
 /**
  * A class to hold RMShapePdfr subclasses for RMPage, RMTextShape, RMImageShape.

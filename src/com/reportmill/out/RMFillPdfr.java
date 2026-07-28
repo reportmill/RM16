@@ -4,15 +4,15 @@
 package com.reportmill.out;
 import com.reportmill.graphics.*;
 import com.reportmill.shape.RMShape;
+import com.reportmill.pdf.*;
+import com.reportmill.pdf.write.PDFPageWriter;
+import com.reportmill.pdf.write.SnapPaintPdfr;
 import java.util.*;
 import snap.geom.Point;
 import snap.geom.Rect;
 import snap.geom.Shape;
 import snap.geom.Transform;
 import snap.gfx.*;
-import snappdf.*;
-import snappdf.write.PDFPageWriter;
-import snappdf.write.SnapPaintPdfr;
 
 /**
  * Utility methods to write PDF for RMFill.

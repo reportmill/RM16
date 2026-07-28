@@ -4,9 +4,9 @@
 package com.reportmill.out;
 import com.reportmill.graphics.*;
 import com.reportmill.shape.*;
+import com.reportmill.pdf.write.*;
 import snap.geom.Rect;
 import snap.geom.Shape;
-import snappdf.write.*;
 
 /**
  * This class writes PDF for RMShape.

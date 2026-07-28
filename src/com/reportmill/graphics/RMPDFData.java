@@ -8,8 +8,8 @@ import snap.geom.Rect;
 import snap.geom.Transform;
 import snap.util.*;
 import snap.web.WebURL;
-import snappdf.*;
 import snap.gfx.*;
+import com.reportmill.pdf.*;
 
 /**
  * Provides info for an encapsulated PDF (a PDF used as an image).
@@ -26,7 +26,7 @@ public class RMPDFData implements Cloneable {
     Image _image;
 
     // The original file bytes
-    byte _bytes[];
+    byte[] _bytes;
 
     // The image page index (if from multi-page image type like PDF)
     int _pageIndex;
@@ -41,7 +41,7 @@ public class RMPDFData implements Cloneable {
     PDFFile _pdfFile;
 
     // The cache used to hold application instances
-    static List<WeakReference<RMPDFData>> _cache = new ArrayList();
+    static List<WeakReference<RMPDFData>> _cache = new ArrayList<>();
 
     /**
      * Returns the original source for the image (byte[], File, InputStream or whatever).
@@ -253,15 +253,12 @@ public class RMPDFData implements Cloneable {
     /**
      * Returns whether PDF image reader can read files with given extension.
      */
-    public static boolean canRead(String anExt)
-    {
-        return anExt != null && anExt.toLowerCase().equals("pdf");
-    }
+    public static boolean canRead(String anExt)  { return anExt != null && anExt.equalsIgnoreCase("pdf"); }
 
     /**
      * Returns whether PDF image reader can read the file provided in the byte array.
      */
-    public static boolean canRead(byte data[])
+    public static boolean canRead(byte[] data)
     {
         // Return true if first 5 bytes are "%PDF-"
         if (data == null || data.length < 10) return false;
@@ -298,15 +295,14 @@ public class RMPDFData implements Cloneable {
         }
 
         // Get bytes for source
-        byte bytes[] = url != null ? url.getBytes() : SnapUtils.getBytes(aSource);
+        byte[] bytes = url != null ? url.getBytes() : SnapUtils.getBytes(aSource);
         if (bytes == null)
             return null;
 
         // Create new ImageData, add to cache (as WeakReference) and return
         RMPDFData idata = new RMPDFData();
         idata.setSource(url != null ? url : bytes, 0);
-        _cache.add(new WeakReference(idata));
+        _cache.add(new WeakReference<>(idata));
         return idata;
     }
-
 }

@@ -6,10 +6,10 @@ import com.reportmill.base.ReportMill;
 import com.reportmill.base.Voucher;
 import com.reportmill.graphics.*;
 import com.reportmill.shape.*;
+import com.reportmill.pdf.*;
+import com.reportmill.pdf.write.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import snappdf.*;
-import snappdf.write.*;
 
 /**
  * PDF Writer.

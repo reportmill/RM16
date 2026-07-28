@@ -887,7 +887,7 @@ public class RMTool<T extends RMShape> extends ViewController {
             getEditorPane().setDataSource(aFile.getSourceURL(), aPoint.x, aPoint.y);
 
             // If image file, add image shape
-        else if (Image.canRead(ext))
+        else if (Image.canReadImageType(ext))
             runLater(() -> dropImageFile(aShape, aFile, aPoint));
 
             // If PDF file, add image shape

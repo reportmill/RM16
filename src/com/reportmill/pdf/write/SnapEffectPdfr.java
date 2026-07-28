@@ -107,7 +107,7 @@ public class SnapEffectPdfr {
         Effect eff = aView.getEffect();
         Rect bnds = aView.getBoundsLocal(); //aShape.getBoundsStrokedDeep();
         PainterDVR pntr = new PainterDVR();
-        ViewUtils.paintAll(aView, pntr); //paintShapeAll
+        ViewUtils.paintView(aView, pntr); //paintShapeAll
         if (eff instanceof BlurEffect) return ((BlurEffect) eff).getBlurImage(pntr, bnds);
         if (eff instanceof EmbossEffect) return ((EmbossEffect) eff).getEmbossImage(pntr, bnds);
         if (eff instanceof ReflectEffect) return ((ReflectEffect) eff).getReflectImage(pntr, bnds);

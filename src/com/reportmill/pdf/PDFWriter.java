@@ -150,7 +150,7 @@ public class PDFWriter extends PDFWriterBase {
         if (_pfile.getAuthor() == null) _pfile.setAuthor("Snap User");
 
         // Set PDF file creator
-        String version = "SnapPDF 1.0";
+        String version = "ReportMill 16";
         String build = ", Build: " + SnapUtils.getBuildInfo();
         String jvm = ", JVM: " + System.getProperty("java.version");
         _pfile.setCreator(version + build + jvm);

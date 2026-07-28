@@ -13,10 +13,7 @@ import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Implementation of the Adobe Standard security handler using the Sun security extensions for md5 & rc4.
@@ -24,7 +21,7 @@ import java.util.Set;
 public class PDFSecurityHandler implements PDFCodec {
 
     // The encryption key, calculated once per file
-    byte _encryption_key[];
+    byte[] _encryption_key;
 
     // The RC4 or AES decryption cipher
     Cipher _decrypter;
@@ -42,11 +39,11 @@ public class PDFSecurityHandler implements PDFCodec {
     boolean _encrypt_metadata;
 
     // fileID bytes - Used to calculate key in rev 2&3, but also used in password authentication in rev 3 and greater
-    byte _fileID[];
+    byte[] _fileID;
 
     // Used in standard security handler to pad out passwords smaller than 32 bytes.
     // Declared as an array of ints so we can specify them in hex without casting. From the PDF 1.6 spec, p. 100
-    static final int PASSWORDPAD[] = {
+    static final int[] PASSWORDPAD = {
             0x28, 0xbf, 0x4e, 0x5e, 0x4e, 0x75, 0x8a, 0x41, 0x64, 0x00, 0x4e, 0x56, 0xff, 0xfa, 0x01, 0x08,
             0x2e, 0x2e, 0x00, 0xb6, 0xd0, 0x68, 0x3e, 0x80, 0x2f, 0x0c, 0xa9, 0xfe, 0x64, 0x53, 0x69, 0x7a
     };
@@ -69,15 +66,8 @@ public class PDFSecurityHandler implements PDFCodec {
     public static PDFSecurityHandler getInstance(Map encryptionDict, List<String> fileID, double pdfversion)
     {
         // Get security handler instance
-        String hname = (String) encryptionDict.get("Filter");
-        Class hclass = hname.equals("/Standard") ? PDFSecurityHandler.class : null;
-        PDFSecurityHandler handler;
-        try {
-            handler = (PDFSecurityHandler) hclass.newInstance();
-        }
-        catch (Exception e) {
-            throw new PDFException("Couldn't create security manager : " + hname + " - " + e);
-        }
+        //String handlerName = (String) encryptionDict.get("Filter");
+        PDFSecurityHandler handler = new PDFSecurityHandler(); // Should check handlerName.equals("/Standard")
 
         // Now try to initialize it with a null password. If it throws badpassword exception, bring up a panel.
         // Probably should let the manager in on this, since it could be passwords, certificates, whatnot.
@@ -113,21 +103,14 @@ public class PDFSecurityHandler implements PDFCodec {
             if (pdfversion < 1.6)
                 _decrypter = null;  // use our own arcfour implementation instead of Cipher.getInstance("ARCFOUR");
 
-                // "CBC" specifies cipher block chaining. decrypter will need to be initialized with
-                // an IvParameterSpec and an initialization vector from the first 16 bytes of the stream.
+            // "CBC" specifies cipher block chaining. decrypter will need to be initialized with
+            // an IvParameterSpec and an initialization vector from the first 16 bytes of the stream.
             else _decrypter = Cipher.getInstance("AES/CBC");
         }
 
         // Catch excpetions
-        catch (NumberFormatException nfe) {
-            throw new PDFException("Error getting pdf file version");
-        }
-        catch (NoSuchAlgorithmException nsae) {
-            throw new PDFException(nsae);
-        }
-        catch (NoSuchPaddingException nspe) {
-            throw new PDFException(nspe);
-        }
+        catch (NumberFormatException nfe) { throw new PDFException("Error getting pdf file version"); }
+        catch (NoSuchAlgorithmException | NoSuchPaddingException e) { throw new PDFException(e); }
 
         // Will throw an exception if can't authenticate
         authenticateUserPassword(PDFSecurityHandler.getBytesForEncryptionEntry(encryptDict, "U"));
@@ -137,14 +120,14 @@ public class PDFSecurityHandler implements PDFCodec {
      * throws an exception if authentication fails
      * uEntry is the value of /U in the encryption dictionary, and the key is assumed to have already been calculated.
      */
-    void authenticateUserPassword(byte uEntry[]) throws PDFBadPasswordException
+    void authenticateUserPassword(byte[] uEntry) throws PDFBadPasswordException
     {
         // This is an error in the file, not a password mismatch
         if (uEntry.length != PASSWORDPAD.length)
             throw new PDFException("Illegal value in encryption dictionary");
 
         // Get bytes for encrypted user password and throw exception if not equal the /U entry from the dictionary
-        byte encrypted[] = getUserPasswordEntryBytes();
+        byte[] encrypted = getUserPasswordEntryBytes();
         for (int i = 0; i < encrypted.length; ++i)
             if (encrypted[i] != uEntry[i])
                 throw new PDFBadPasswordException("User password incorrect");
@@ -153,7 +136,7 @@ public class PDFSecurityHandler implements PDFCodec {
     /**
      * Initialization for encryption.  Sets parameters to revision=3, 128 bit keys.
      */
-    public void setEncryptionParameters(byte fileID[], String ownerP, String userP, int permissionFlags)
+    public void setEncryptionParameters(byte[] fileID, String ownerP, String userP, int permissionFlags)
     {
         // make a local copy of the fileID
         _fileID = copyOf(fileID, fileID.length);
@@ -164,7 +147,7 @@ public class PDFSecurityHandler implements PDFCodec {
         _encrypt_metadata = true;
 
         // calculate /O entry
-        byte oBytes[] = getOwnerPasswordEntryBytes(ownerP, userP);
+        byte[] oBytes = getOwnerPasswordEntryBytes(ownerP, userP);
 
         // Initialize the security handler by calculating the encryption key
         _encryption_key = getEncryptionKey(oBytes, userP, 16);
@@ -205,11 +188,11 @@ public class PDFSecurityHandler implements PDFCodec {
         _encrypt_metadata = obj instanceof Boolean ? (Boolean) obj : true;
 
         // Set FileId
-        if (fileID.size() > 0)
+        if (!fileID.isEmpty())
             _fileID = PDFUtils.bytesForASCIIHex(fileID.get(0));
 
         // Pull the /O entry out of the dictionary as an array of bytes
-        byte oEntry[] = PDFSecurityHandler.getBytesForEncryptionEntry(encrypt, "O");
+        byte[] oEntry = PDFSecurityHandler.getBytesForEncryptionEntry(encrypt, "O");
 
         // supports 40-128 bit keys
         if (keybytes >= 5 && keybytes <= 16 && (_revision == 2 || _revision == 3))
@@ -221,7 +204,7 @@ public class PDFSecurityHandler implements PDFCodec {
     /**
      * Uses algorithm 3.2 from pdf spec to generate a key from the file.
      */
-    public byte[] getEncryptionKey(byte oEntry[], String uPass, int keyLen)
+    public byte[] getEncryptionKey(byte[] oEntry, String uPass, int keyLen)
     {
         // Create MD5 MessageDigest to generate hash value
         MessageDigest md5;
@@ -233,7 +216,7 @@ public class PDFSecurityHandler implements PDFCodec {
         }
 
         // Step 1 + 2: fill buffer with user password padded to 32 bytes and append to MD5
-        byte upad[] = pad(uPass);
+        byte[] upad = pad(uPass);
         md5.update(upad);
 
         // Step 3: append owner password entry to MD5
@@ -254,7 +237,7 @@ public class PDFSecurityHandler implements PDFCodec {
                 md5.update((byte) 0xff);
 
         // Step 7: finish the hash
-        byte ekey[] = md5.digest();
+        byte[] ekey = md5.digest();
 
         // Step 8: revision 3 only: rehash 50 times (seems like overkill)
         if (_revision >= 3) for (int i = 0; i < 50; i++) {
@@ -273,7 +256,7 @@ public class PDFSecurityHandler implements PDFCodec {
      */
     public String getUserPasswordEntry()
     {
-        byte uentry[] = getUserPasswordEntryBytes();
+        byte[] uentry = getUserPasswordEntryBytes();
         return getPDFStringForBytes(uentry);
     }
 
@@ -282,7 +265,7 @@ public class PDFSecurityHandler implements PDFCodec {
      */
     public String getOwnerPasswordEntry(String ownerP, String userP)
     {
-        byte oentry[] = getOwnerPasswordEntryBytes(ownerP, userP);
+        byte[] oentry = getOwnerPasswordEntryBytes(ownerP, userP);
         return getPDFStringForBytes(oentry);
     }
 
@@ -292,10 +275,10 @@ public class PDFSecurityHandler implements PDFCodec {
     public byte[] getUserPasswordEntryBytes()
     {
         // Get encryption key
-        byte encryptKey[] = _encryption_key;
+        byte[] encryptKey = _encryption_key;
 
         // Get the full padding string
-        byte pad[] = pad(null), uentry[];
+        byte[] pad = pad(null), uentry;
 
         // Revision 2: RC4 the 32 byte padding string with the encryption key (which was calculated using user password)
         if (_revision == 2) {
@@ -308,12 +291,8 @@ public class PDFSecurityHandler implements PDFCodec {
 
             // Step 1 + 2: Create MD5 MessageDigest to generate hash value and append padded user password
             MessageDigest md5;
-            try {
-                md5 = MessageDigest.getInstance("MD5");
-            }
-            catch (NoSuchAlgorithmException e) {
-                throw new PDFException(e);
-            }
+            try { md5 = MessageDigest.getInstance("MD5"); }
+            catch (NoSuchAlgorithmException e) { throw new PDFException(e); }
             md5.update(pad);
 
             // Step 3: Append FileID
@@ -406,54 +385,45 @@ public class PDFSecurityHandler implements PDFCodec {
     /**
      * Decrypt.
      */
-    public Object decryptDeep(Object o)
+    public Object decryptDeep(Object encryptedObj)
     {
         // Handle PDFStream
-        if (o instanceof PDFStream) {
-            PDFStream oStream = (PDFStream) o;
+        if (encryptedObj instanceof PDFStream oStream) {
             oStream._dict = (Map) decryptDeep(oStream._dict);  // decrypt stream dictionary (recursive)
-            if (_decrypter == null) arcfour_decrypt(oStream.getBytes());  // decrypt stream in place
-            else {
-            }  // Use cipher for AES
+            if (_decrypter == null)  // decrypt stream in place
+                arcfour_decrypt(oStream.getBytes());
+            //else { }  // Use cipher for AES
         }
 
         // Handle Map: decrypt the keys and other crap (recursive)
-        else if (o instanceof Map) {
-            Map map = (Map) o;
-            Map newMap = new Hashtable(map.size());
-            o = newMap;
+        else if (encryptedObj instanceof Map map) {
+            Map newMap = new HashMap<>(map.size());
+            encryptedObj = newMap;
             for (Map.Entry entry : (Set<Map.Entry>) map.entrySet())
                 newMap.put(entry.getKey(), decryptDeep(entry.getValue()));
         }
 
         // Handle List: decrypt list members
-        else if (o instanceof List) {
-            List list = (List) o;
+        else if (encryptedObj instanceof List list) {
             for (int i = 0, n = list.size(); i < n; ++i)
                 list.set(i, decryptDeep(list.get(i)));
         }
 
         // Handle String: See comment above about PDFCharStream. will strings have () and <>?  probably
-        else if (o instanceof String) {
-            String str = (String) o;
+        else if (encryptedObj instanceof String str) {
             if (str.charAt(0) != '/') {
                 int buflen = str.length();
-                byte stbuf[] = new byte[buflen];
+                byte[] stbuf = new byte[buflen];
                 for (int i = 0; i < buflen; ++i) stbuf[i] = (byte) (str.charAt(i) & 0xff);
                 if (_decrypter == null) arcfour_decrypt(stbuf);
-                else {
-                } // use cipher for AES
-                try {
-                    o = new String(stbuf, "US-ASCII");
-                }  // once it's decrypted, it should be in ascii
-                catch (UnsupportedEncodingException uee) {
-                    throw new PDFException(uee);
-                }
+                //else { } // use cipher for AES
+                try { encryptedObj = new String(stbuf, "US-ASCII"); }  // once it's decrypted, it should be in ascii
+                catch (UnsupportedEncodingException uee) { throw new PDFException(uee); }
             }
         }
 
         // Return decrypted object
-        return o;
+        return encryptedObj;
     }
 
     /**
@@ -461,15 +431,8 @@ public class PDFSecurityHandler implements PDFCodec {
      */
     public void startDecrypt(int objNum, int generationNum)
     {
-        try {
-            startDecryptImpl(objNum, generationNum);
-        }
-        catch (NoSuchAlgorithmException e) {
-            throw new PDFException("Error decrypting file" + e);
-        }
-        catch (InvalidKeyException e) {
-            throw new PDFException("Error decrypting file" + e);
-        }
+        try { startDecryptImpl(objNum, generationNum); }
+        catch (NoSuchAlgorithmException | InvalidKeyException e) { throw new PDFException("Error decrypting file" + e); }
     }
 
     /**
@@ -494,7 +457,7 @@ public class PDFSecurityHandler implements PDFCodec {
         }
 
         // Read the new object key into our pre-allocated buffer (with potential zero pad)
-        byte md_digest[] = md.digest(), keybuf[] = _decrypter_key.getKeyBuffer();
+        byte[] md_digest = md.digest(), keybuf = _decrypter_key.getKeyBuffer();
         for (int i = 0; i < keybuf.length; ++i)
             keybuf[i] = i < md_digest.length ? md_digest[i] : 0;
 
@@ -521,7 +484,7 @@ public class PDFSecurityHandler implements PDFCodec {
             throw new PDFException("Illegal value in encryption dictionary");
 
         // Get converted bytes
-        byte conversionbytes[] = new byte[slen - 2];
+        byte[] conversionbytes = new byte[slen - 2];
         int blen = 0;
         for (int i = 1; i < slen - 1; ++i) {
             char c = s.charAt(i);
@@ -534,7 +497,7 @@ public class PDFSecurityHandler implements PDFCodec {
 
         // Return truncated array (unless already right size)
         if (blen == slen - 2) return conversionbytes;
-        byte finalbytes[] = new byte[blen];
+        byte[] finalbytes = new byte[blen];
         System.arraycopy(conversionbytes, 0, finalbytes, 0, blen);
         return finalbytes;
     }
@@ -542,9 +505,9 @@ public class PDFSecurityHandler implements PDFCodec {
     /**
      * Inverse of above
      */
-    public static String getPDFStringForBytes(byte buf[])
+    public static String getPDFStringForBytes(byte[] buf)
     {
-        return new StringBuffer(buf.length).append('<').append(ASCIICodec.encodeHex(buf)).append('>').toString();
+        return '<' + ASCIICodec.encodeHex(buf) + '>';
     }
 
     /**
@@ -556,7 +519,7 @@ public class PDFSecurityHandler implements PDFCodec {
         // characters in password fields. TODO: unclear how unicode passwords are handled.
         int plen = aPW != null ? aPW.length() : 0;
         if (plen > 32) plen = 32;
-        byte buffer[] = new byte[32];
+        byte[] buffer = new byte[32];
         for (int i = 0; i < plen; i++) buffer[i] = (byte) aPW.charAt(i);
         for (int i = plen; i < 32; i++) buffer[i] = (byte) PASSWORDPAD[i - plen];
         return buffer;

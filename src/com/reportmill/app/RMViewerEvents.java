@@ -354,7 +354,7 @@ public class RMViewerEvents {
     private void findTextShapes(RMParentShape aParent, Shape aPath, List<RMTextShape> aList)
     {
         // Get list of hit shapes
-        List<RMShape> shapes = aParent.getChildrenIntersecting(aPath);
+        List<RMShape> shapes = aParent.getChildrenIntersectingShape(aPath);
 
         // Iterate over shapes
         for (RMShape shape : shapes) {

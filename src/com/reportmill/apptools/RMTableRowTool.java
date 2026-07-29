@@ -355,7 +355,7 @@ public class RMTableRowTool<T extends RMTableRow> extends RMParentShapeTool<T> {
 
             // Get the point and child at point
             Point point = editor.convertToShape(anEvent.getX(), anEvent.getY(), aTableRow);
-            RMShape child = aTableRow.getChildContaining(point);
+            RMShape child = aTableRow.getChildContainingPoint(point);
 
             // If child was hit, super select it and resend event
             if (child != null) {

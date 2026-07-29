@@ -395,7 +395,7 @@ public class RMSelectTool extends RMTool {
         }
 
         // Returns the children of the super-selected shape that intersect selection path
-        return superShape.getChildrenIntersecting(path);
+        return superShape.getChildrenIntersectingShape(path);
     }
 
     /**

@@ -215,7 +215,7 @@ public class RMViewer extends ParentView {
         // If we need to goDeep (and there was a top level hit shape), recurse until shape is found
         while (goDeep && shape instanceof RMParentShape) {
             parent = (RMParentShape) shape;
-            RMShape shp = parent.getChildContaining(point2);
+            RMShape shp = parent.getChildContainingPoint(point2);
             if (shp != null) {
                 shape = shp;
                 point2 = shape.parentToLocal(point2);

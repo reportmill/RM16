@@ -577,7 +577,7 @@ public class RMEditor extends RMViewer {
 
             // If shape childrenSuperSelImmd and shape hitByPt, see if any shape children qualify (otherwise use parent)
             if (parent.childrenSuperSelectImmediately() && parent.contains(parent.parentToLocal(aPoint, null))) {
-                RMShape childShape = parent.getChildContaining(parent.parentToLocal(aPoint, null));
+                RMShape childShape = parent.getChildContainingPoint(parent.parentToLocal(aPoint, null));
                 if (childShape != null && getTool(childShape).getAcceptsChildren(childShape))
                     parent = (RMParentShape) childShape;
                 else parent = parent.getParent();

@@ -12,13 +12,13 @@ import snap.geom.Rect;
 public class RMShapeTable {
 
     // The columns
-    List<Double> _cols = new ArrayList();
+    List<Double> _cols = new ArrayList<>();
 
     // The rows
-    List<Double> _rows = new ArrayList();
+    List<Double> _rows = new ArrayList<>();
 
     // The cells
-    Cell _cells[][];
+    Cell[][] _cells;
 
     // Cells within this horizontal or vertical distance are considered to be aligned.
     static final double CELL_ALIGNMENT_TOLERANCE = .5;
@@ -68,16 +68,16 @@ public class RMShapeTable {
      * topLevel is a common ancestor of all the shapes (usually the RMPage)
      * minTableRect, if non-null, specifies a minimum size and origin for the final table.
      */
-    public static RMShapeTable createTable(List<RMShape> theShapes, RMShape topLevel, Rect minTableRect)
+    public static RMShapeTable createTable(List<? extends RMShape> theShapes, RMShape topLevel, Rect minTableRect)
     {
         // Get number of shapes (just return if no shapes and no min-table rect)
         int shapeCount = theShapes.size();
         if (shapeCount == 0 && minTableRect == null) return null;
 
         int arraySizes = 2 * shapeCount + (minTableRect != null ? 2 : 0);
-        double rowStarts[] = new double[arraySizes];
-        double colStarts[] = new double[arraySizes];
-        Rect cellRects[] = new Rect[shapeCount];
+        double[] rowStarts = new double[arraySizes];
+        double[] colStarts = new double[arraySizes];
+        Rect[] cellRects = new Rect[shapeCount];
         Rect bounds, maxBounds = null;
 
         // Iterate over shapes: Fill row & column boundary arrays   (beware of roll/scale/skew)
@@ -121,8 +121,8 @@ public class RMShapeTable {
         Arrays.sort(colStarts);
 
         // Remove duplicates
-        int numRowBoundaries = uniqueArray(rowStarts, CELL_ALIGNMENT_TOLERANCE);
-        int numColBoundaries = uniqueArray(colStarts, CELL_ALIGNMENT_TOLERANCE);
+        int numRowBoundaries = uniqueArray(rowStarts);
+        int numColBoundaries = uniqueArray(colStarts);
 
         // If no rows or boundaries were defined, just return
         if (numRowBoundaries < 2 || numColBoundaries < 2)
@@ -130,7 +130,7 @@ public class RMShapeTable {
 
         int numRows = numRowBoundaries - 1;
         int numCols = numColBoundaries - 1;
-        Cell cells[][] = new Cell[numRows][numCols];
+        Cell[][] cells = new Cell[numRows][numCols];
 
         // Walk through converted rects and assign row-column spans
         for (int i = 0; i < shapeCount; i++) {
@@ -185,7 +185,7 @@ public class RMShapeTable {
             newCell.setVals(row, col, rowspan, colspan);
 
             // Set the cell's frame and add it to the table
-            newCell.setFrame(colStarts[col] - maxBounds.getX(), rowStarts[row] - maxBounds.getY(),
+            newCell.setFrame(colStarts[col] - maxBounds.x, rowStarts[row] - maxBounds.y,
                     colStarts[col + colspan] - colStarts[col], rowStarts[row + rowspan] - rowStarts[row]);
         }
 
@@ -210,13 +210,13 @@ public class RMShapeTable {
      * Elements are considered to be duplicates if they are within the specified tolerance of each other.
      * Returns the number of unique entries in the array.
      */
-    static int uniqueArray(double array[], double tolerance)
+    private static int uniqueArray(double[] array)
     {
         int n = array.length;
         if (n == 0) return 0;
         int last_unique_entry = 0;
         for (int i = 1; i < n; i++)
-            if (Math.abs(array[i] - array[last_unique_entry]) > tolerance)
+            if (Math.abs(array[i] - array[last_unique_entry]) > CELL_ALIGNMENT_TOLERANCE)
                 array[++last_unique_entry] = array[i];
         return last_unique_entry + 1;
     }
@@ -225,7 +225,7 @@ public class RMShapeTable {
      * Like the Arrays.binarySearch(), but allows you to specify a starting range
      * in the array as well as a floating-point tolerance for equality comparisons.
      */
-    static int binarySearch(double array[], int first, int last, double value, double tolerance)
+    private static int binarySearch(double[] array, int first, int last, double value, double tolerance)
     {
         // Iterate while first is less than last
         while (first <= last) {
@@ -243,7 +243,7 @@ public class RMShapeTable {
      * Creates RMCells for any empty (null) cells.
      * Tries to coalesce neighboring empty cells into rectangular regions.
      */
-    static void fillInCells(Cell cells[][], double rowStarts[], double colStarts[], Rect maxBounds)
+    static void fillInCells(Cell[][] cells, double[] rowStarts, double[] colStarts, Rect maxBounds)
     {
         // Iterate over cells
         for (int row = 0, rowCount = cells.length; row < rowCount; row++) {

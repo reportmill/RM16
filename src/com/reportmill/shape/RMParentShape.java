@@ -220,26 +220,23 @@ public class RMParentShape extends RMShape implements PropChange.DoChange {
      */
     public <T extends RMShape> List<T> getChildrenWithClass(Class<T> aClass)
     {
-        return getChildrenWithClass(aClass, new ArrayList<>());
+        List<T> childList = new ArrayList<>();
+        findChildrenWithClass(aClass, childList);
+        return childList;
     }
 
     /**
      * Adds all the shapes in the shape hierarchy of a particular class to the list.
-     * Returns the list as a convenience.
      */
-    public <T extends RMShape> List<T> getChildrenWithClass(Class<T> aClass, List aList)
+    private <T extends RMShape> void findChildrenWithClass(Class<T> aClass, List<T> childList)
     {
         // Iterate over children and add children with class
-        for (int i = 0, iMax = getChildCount(); i < iMax; i++) {
-            RMShape child = getChild(i);
+        for (RMShape child : getChildren()) {
             if (aClass.isInstance(child))
-                aList.add(child);
-            else if (child instanceof RMParentShape)
-                ((RMParentShape) child).getChildrenWithClass(aClass, aList);
+                childList.add(aClass.cast(child));
+            else if (child instanceof RMParentShape parentShape)
+                parentShape.findChildrenWithClass(aClass, childList);
         }
-
-        // Return list
-        return aList;
     }
 
     /**
@@ -385,6 +382,7 @@ public class RMParentShape extends RMShape implements PropChange.DoChange {
     /**
      * Override to trigger layout.
      */
+    @Override
     public void setWidth(double aValue)
     {
         super.setWidth(aValue);
@@ -394,6 +392,7 @@ public class RMParentShape extends RMShape implements PropChange.DoChange {
     /**
      * Override to trigger layout.
      */
+    @Override
     public void setHeight(double aValue)
     {
         super.setHeight(aValue);
@@ -403,14 +402,14 @@ public class RMParentShape extends RMShape implements PropChange.DoChange {
     /**
      * Returns the first (top) shape hit by the point given in this shape's coords.
      */
-    public RMShape getChildContaining(Point aPoint)
+    public RMShape getChildContainingPoint(Point aPoint)
     {
         // Iterate over children
         for (int i = getChildCount() - 1; i >= 0; i--) {
             RMShape child = getChild(i);
-            if (!child.isHittable()) continue; // Get current loop child
-            Point point = child.parentToLocal(aPoint); // Get point converted to child
-            if (child.contains(point)) // If child contains point, return child
+            if (!child.isHittable()) continue;
+            Point pointInChild = child.parentToLocal(aPoint);
+            if (child.contains(pointInChild))
                 return child;
         }
 
@@ -421,7 +420,7 @@ public class RMParentShape extends RMShape implements PropChange.DoChange {
     /**
      * Returns the child shapes hit by the path given in this shape's coords.
      */
-    public List<RMShape> getChildrenIntersecting(Shape aPath)
+    public List<RMShape> getChildrenIntersectingShape(Shape aShape)
     {
         List<RMShape> hitShapes = new ArrayList<>();
 
@@ -433,12 +432,12 @@ public class RMParentShape extends RMShape implements PropChange.DoChange {
             if (!child.isHittable()) continue;
 
             // If child frame doesn't intersect path, just continue
-            if (!child.getFrame().intersectsRect(aPath.getBounds()))
+            if (!child.getFrame().intersectsRect(aShape.getBounds()))
                 continue;
 
             // Get path converted to child and if child intersects path, add child to hit list
-            Shape path = child.parentToLocal(aPath);
-            if (child.intersects(path))
+            Shape pathInChild = child.parentToLocal(aShape);
+            if (child.intersects(pathInChild))
                 hitShapes.add(child);
         }
 
@@ -576,7 +575,6 @@ public class RMParentShape extends RMShape implements PropChange.DoChange {
             }
         }
 
-        // Return parent
         return parent;
     }
 

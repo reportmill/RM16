@@ -382,7 +382,7 @@ public class RMTableTool<T extends RMTable> extends RMParentShapeTool<T> impleme
 
         // If table isn't super selected, forward to TableRow and return
         if (!isSuperSelected(aTable)) {
-            RMTableRow tableRow = (RMTableRow) aTable.getChildContaining(point); // Get hit table row
+            RMTableRow tableRow = (RMTableRow) aTable.getChildContainingPoint(point); // Get hit table row
             if (tableRow != null && tableRow.isStructured()) // If table row is structured
                 getTool(tableRow).handleShapeMouseEvent(tableRow, anEvent);
             return;
@@ -392,7 +392,7 @@ public class RMTableTool<T extends RMTable> extends RMParentShapeTool<T> impleme
         if (editor.getSuperSelectedShape() != aTable) return;
 
         // If point hit's table row, just return
-        if (aTable.getChildContaining(point) != null) return;
+        if (aTable.getChildContainingPoint(point) != null) return;
 
         // Since we are the editor super selected shape, consume event to indicate we'll handle events
         anEvent.consume();

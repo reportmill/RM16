@@ -198,7 +198,7 @@ public class RMCrossTabTool<T extends RMCrossTab> extends RMTool<T> {
 
             // Get the event point in crosstab coords and cell under point
             Point point = getEditor().convertToShape(anEvent.getX(), anEvent.getY(), aCTab);
-            RMShape piece = aCTab.getChildContaining(point);
+            RMShape piece = aCTab.getChildContainingPoint(point);
 
             // Clear divider
             _divider = null;

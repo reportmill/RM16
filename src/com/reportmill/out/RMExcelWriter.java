@@ -36,9 +36,6 @@ public class RMExcelWriter {
     // The currently selected cell in the sheet
     HSSFCell _activeCell;
 
-    // Whether to show gridlines 
-    boolean _showsAllGridlines = false;
-
     /**
      * Creates a basic excel writer.
      */
@@ -72,19 +69,14 @@ public class RMExcelWriter {
      */
     public HSSFWorkbook getWorkbook(RMDocument aDoc)
     {
-        // Create a new workbook
         _workbook = new HSSFWorkbook();
 
         // Validate and resolve page references in aDoc
         aDoc.layoutDeep();
         aDoc.resolvePageReferences();
 
-        // Allocate the array of shapes that ultimately will become the spreadsheet
-        List<RMShape> sheetShapes = new ArrayList<>();
-
         // Iterate through pages and have each one append XLS
-        for (int i = 0, iMax = aDoc.getPageCount(); i < iMax; i++) {
-            RMPage page = aDoc.getPage(i);
+        for (RMPage page : aDoc.getPages()) {
 
             // Create a new sheet for each explicit page
             RMExcelSheet sheet = new RMExcelSheet(_workbook.createSheet());
@@ -106,8 +98,7 @@ public class RMExcelWriter {
             }
 
             // First, reorder the shapes so that shapes that define rows & columns will be processed first.
-            sheetShapes.clear();
-            getSheetShapes(page, sheetShapes);
+            List<RMTextShape> sheetShapes = getSheetShapes(page);
 
             // Get the enclosing rect of all the shapes
             Rect childrenRect = getBoundsOfExcelChildren(page);
@@ -128,60 +119,42 @@ public class RMExcelWriter {
             append(sheet, null, page);
 
             // Set per-sheet options
-            sheet.getSheet().setDisplayGridlines(getShowsGridlines(i));
+            sheet.getSheet().setDisplayGridlines(false);
         }
 
-        // Return workbook
         return _workbook;
-    }
-
-    /**
-     * Returns whether gridlines will be shown in Excel sheets.
-     */
-    public boolean getShowsAllGridlines()
-    {
-        return _showsAllGridlines;
-    }
-
-    /**
-     * Sets whether gridlines will be shown in Excel sheets.
-     */
-    public void setShowsAllGridlines(boolean aValue)
-    {
-        _showsAllGridlines = aValue;
-    }
-
-    /**
-     * Returns whether gridlines are shown for given page number. If you have multiple pages but only want
-     * gridlines for certain pages, subclass RMExcelWriter and override this method.
-     */
-    public boolean getShowsGridlines(int aPage)
-    {
-        return _showsAllGridlines;
     }
 
     /**
      * Returns true if this shape should become a fixed spreadsheet cell.
      * Also returns true if all of the shape's children will be spreadsheet cells.
      */
-    public boolean isSheetShape(RMShape aShape)
+    public boolean isSheetShape(RMShape aShape)  { return aShape instanceof RMTableRowRPG || aShape instanceof RMCrossTab; }
+
+    /**
+     * Returns the list of text shapes which define the row/column structure of the spreadsheet.
+     */
+    private List<RMTextShape> getSheetShapes(RMShape aShape)
     {
-        return aShape instanceof RMTableRowRPG || aShape instanceof RMCrossTab;
+        List<RMTextShape> sheetShapesList = new ArrayList<>();
+        findSheetShapes(aShape, sheetShapesList);
+        return sheetShapesList;
     }
 
     /**
-     * Searches through the hierarchy for tables & cells which will define the
-     * row/column structure of the spreadsheet and adds them to the list.
+     * Searches for text shapes which define the row/column structure of the spreadsheet and adds to list.
      */
-    private void getSheetShapes(RMShape aShape, List<RMShape> sheetShapesList)
+    private void findSheetShapes(RMShape aShape, List<RMTextShape> sheetShapesList)
     {
-        // Save away all RMTexts inside a sheetshape (note that RMCells are RMText subclasses)
-        if (isSheetShape(aShape))
-            ((RMParentShape) aShape).getChildrenWithClass(RMTextShape.class, sheetShapesList);
+        // If shape is sheet shape, add all its text shape children to the list
+        if (isSheetShape(aShape)) {
+            List<RMTextShape> textShapes = ((RMParentShape) aShape).getChildrenWithClass(RMTextShape.class);
+            sheetShapesList.addAll(textShapes);
+        }
 
-            // Recurse for every child
-        else for (int i = 0, n = aShape.getChildCount(); i < n; ++i)
-            getSheetShapes(aShape.getChild(i), sheetShapesList);
+        // Recurse for every child
+        else for (RMShape child : aShape.getChildren())
+            findSheetShapes(child, sheetShapesList);
     }
 
     /**

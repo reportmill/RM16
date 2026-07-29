@@ -33,10 +33,10 @@ public class RMPolygonShape extends RMParentShape {
     /**
      * Returns the path for this polygon shape.
      */
+    @Override
     public Path2D getBoundsShape()
     {
-        Rect boundsInside = getBoundsInside();
-        return _path.copyForBounds(boundsInside);
+        return _path.copyForBounds(0, 0, getWidth(), getHeight());
     }
 
     /**

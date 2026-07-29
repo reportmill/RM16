@@ -44,7 +44,7 @@ public class RMPolygonShapeTool<T extends RMPolygonShape> extends RMTool<T> {
     {
         // Get current PathView and path
         RMPolygonShape polygonShape = getSelectedShape();
-        Path2D path = polygonShape.getBoundsShape();
+        Shape path = polygonShape.getBoundsShape();
 
         // Update PathText
         setViewText("PathText", path.getSvgString());

@@ -1,14 +1,22 @@
 {
     "bin": {"rm16": "jdeploy-bundle/jdeploy.js"},
     "author": "ReportMill Software, Inc.",
+    "name": "reportmill16",
     "description": "A report designer and framework for Java",
+    "files": ["jdeploy-bundle"],
     "main": "index.js",
     "preferGlobal": true,
-    "repository": "",
-    "version": "2025.2.18",
+    "scripts": {"test": "echo \"Error: no test specified\" && exit 1"},
+    "version": "2026.7.30",
     "jdeploy": {
-        "jdk": false,
-        "javaVersion": "21",
+        "jdk": true,
+        "fallbackToUniversal": false,
+        "publishTargets": [{
+            "name": "github: github",
+            "type": "GITHUB",
+            "url": "https://github.com/reportmill/RM16"
+        }],
+        "javaVersion": "25",
         "documentTypes": [{
             "editor": true,
             "extension": "rpt",
@@ -16,9 +24,10 @@
             "mimetype": "application/reportmill"
         }],
         "urlSchemes": ["reportmill:open"],
-        "jar": "build/libs/ReportMill16-2025.02.jar",
-        "javafx": false,
-        "title": "RMStudio16"
+        "jar": "build/libs/ReportMill16-2026.07.jar",
+        "title": "RMStudio16",
+        "downloadPage": {"platforms": ["all"]},
+        "platformBundlesEnabled": false
     },
     "dependencies": {
         "command-exists-promise": "^2.0.2",
@@ -27,9 +36,5 @@
         "yauzl": "^2.10.0",
         "shelljs": "^0.8.4"
     },
-    "license": "",
-    "name": "reportmill16",
-    "files": ["jdeploy-bundle"],
-    "scripts": {"test": "echo \"Error: no test specified\" && exit 1"},
     "homepage": "https://reportmill.com"
 }

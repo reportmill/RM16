@@ -49,10 +49,18 @@ public class PDFWriterText {
                 break;
 
             // Iterate over runs and write
-            TextRun[] runs = line.getRuns();
-            for (TextRun run : runs) {
-                writeRun(aWriter, textLayout, line, run, lastRun);
-                lastRun = run;
+            TextRun[] lineRuns = line.getRuns();
+            for (TextRun lineRun : lineRuns) {
+                if (lineRun.hasInnerTabs()) {
+                    for (TextRun tabRun : lineRun.getTabRuns()) {
+                        writeRun(aWriter, textLayout, line, tabRun, lastRun);
+                        lastRun = tabRun;
+                    }
+                }
+                else {
+                    writeRun(aWriter, textLayout, line, lineRun, lastRun);
+                    lastRun = lineRun;
+                }
             }
         }
 

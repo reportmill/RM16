@@ -25,38 +25,38 @@ public class RMEditor extends RMViewer {
     // The EditorPane (if set)
     private RMEditorPane _editorPane;
 
-    // Whether we're really editing
-    private boolean  _editing = true;
+    // Whether editor is really editing
+    private boolean _editing = true;
 
     // The Styler
-    private RMEditorStyler  _styler;
+    private RMEditorStyler _styler;
 
     // List of currently selected shapes
-    protected List<RMShape>  _selShapes = new ArrayList<>();
+    protected List<RMShape> _selShapes = new ArrayList<>();
 
     // List of super selected shapes (all ancestors of selected shapes)
-    private List<RMShape>  _superSelShapes = new ArrayList<>();
+    private List<RMShape> _superSelShapes = new ArrayList<>();
 
     // The last shape that was copied to the clipboard (used for smart paste)
-    protected RMShape  _lastCopyShape;
+    protected RMShape _lastCopyShape;
 
     // The last shape that was pasted from the clipboard (used for smart paste)
-    protected RMShape  _lastPasteShape;
+    protected RMShape _lastPasteShape;
 
     // A helper class to handle drag and drop
-    private RMEditorDnD  _dragHelper = createDragHelper();
+    private RMEditorDnD _dragHelper = new RMEditorDnD(this);
 
     // A shape to be drawn if set to drag-over shape during drag and drop
-    protected Shape  _dragShape;
+    protected Shape _dragShape;
 
     // The select tool
-    private RMSelectTool  _selectTool;
+    private RMSelectTool _selectTool;
 
     // Map of tool instances by shape class
-    private Map<Class<?>,RMTool<RMShape>>  _tools = new HashMap<>();
+    private Map<Class<?>,RMTool<RMShape>> _tools = new HashMap<>();
 
     // The current editor tool
-    private RMTool<?>  _currentTool = getSelectTool();
+    private RMTool<?> _currentTool = getSelectTool();
 
     // Icon for XML image
     private static Image _xmlImage = Image.getImageForClassResource(RMEditor.class, "DS_XML.png");
@@ -120,9 +120,9 @@ public class RMEditor extends RMViewer {
     /**
      * Creates the Painter.Props object to provide shape selection information.
      */
-    protected RMShapePaintProps createShapePaintProps()
+    protected RMShapePaintHelper createShapePaintProps()
     {
-        return new EditorShapePainterProps();
+        return new EditorShapePainterHelper();
     }
 
     /**
@@ -132,14 +132,6 @@ public class RMEditor extends RMViewer {
     {
         RMShape shp = getSuperSelectedShape();
         return shp instanceof RMTextShape ? ((RMTextShape) shp).getTextEditor() : null;
-    }
-
-    /**
-     * Creates the shapes helper.
-     */
-    protected RMEditorDnD createDragHelper()
-    {
-        return new RMEditorDnD(this);
     }
 
     /**
@@ -486,15 +478,10 @@ public class RMEditor extends RMViewer {
             // Iterate up shape hierarchy
             while (ssShape != getSelPage() && ssShape.getParent() != null) {
 
-                // Get child of parent hit point point
+                // If child of parent hit by point not equal to original shape, change shapeAtPoint
                 RMShape hitChild = getChildShapeAtPoint(ssShape.getParent(), pnt);
-
-                // If child not equal to original shape, change shapeAtPoint
-                if (hitChild != ssShape) {
-                    superSelShape = ssShape.getParent();
+                if (hitChild != ssShape)
                     shapeAtPoint = hitChild;
-                    point = pnt;
-                }
 
                 // Update loop shape/point variables
                 ssShape = ssShape.getParent();
@@ -878,15 +865,6 @@ public class RMEditor extends RMViewer {
     }
 
     /**
-     * Resets the currently selected tool.
-     */
-    public void resetCurrentTool()
-    {
-        _currentTool.deactivateTool();
-        _currentTool.activateTool();
-    }
-
-    /**
      * Override viewer method to reset selected shapes on page change.
      */
     public void setSelPageIndex(int anIndex)
@@ -1135,14 +1113,7 @@ public class RMEditor extends RMViewer {
      */
     protected void handleShapeDeepChange(Object aShape, PropChange propChange)
     {
-        // If deep change for EditorTextEditor, just return since it registers Undo itself (with better coalesce)
-        //if(getTextEditor()!=null && getTextEditor().getTextShape()==aShape &&
-        //    (anEvent.getSource() instanceof RMXString || anEvent.getSource() instanceof RMXStringRun)) return;
-
-        // Add undo change
         addUndoChange(propChange);
-
-        // Reset EditorPane UI
         resetEditorPaneLater();
     }
 
@@ -1151,22 +1122,20 @@ public class RMEditor extends RMViewer {
      */
     protected void addUndoChange(PropChange propChange)
     {
-        // Get undoer (just return if null)
-        Undoer undoer = getUndoer();
-        if (undoer == null) return;
+        Undoer undoer = getUndoer(); if (undoer == null) return;
 
         // Handle some changes special
-        String pname = propChange.getPropName();
-        if (pname == RMGraph.ProxyShape_Prop) {
+        String propName = propChange.getPropName();
+        if (propName == RMGraph.ProxyShape_Prop) {
             resetEditorPaneOnMouseUp();
             return;
         }
 
         // If no undos and change is RMDocument.SelectedPage or RMTableGroup.MainTable, just return
         if (!undoer.hasUndos()) {
-            if (pname == RMDocument.SelPageIndex_Prop) return;
-            if (pname == "MainTable") return;
-            if (pname == "Version") return;
+            if (propName == RMDocument.SelPageIndex_Prop) return;
+            if (propName == "MainTable") return;
+            if (propName == "Version") return;
         }
 
         // If no changes yet, set selected objects
@@ -1183,7 +1152,7 @@ public class RMEditor extends RMViewer {
     /**
      * Saves Undo Changes.
      */
-    protected void saveUndoerChanges()
+    private void saveUndoerChanges()
     {
         // Get undoer
         Undoer undoer = getUndoer();
@@ -1204,27 +1173,29 @@ public class RMEditor extends RMViewer {
     /**
      * Saves undo changes after a delay.
      */
-    protected void saveUndoerChangesLater()
+    private void saveUndoerChangesLater()
     {
         // If runnable already set, just return
         if (_saveChangesRun != null) return;
-        _saveChangesRun = _scrShared;
+        _saveChangesRun = SAVE_CHANGES_RUN;
 
         // If MouseDown, run on mouse up, otherwise run later
-        if (ViewUtils.isMouseDown()) ViewUtils.runOnMouseUp(_saveChangesRun);
-        else getEnv().runLater(_saveChangesRun);
+        if (ViewUtils.isMouseDown())
+            ViewUtils.runOnMouseUp(_saveChangesRun);
+        else runLater(_saveChangesRun);
     }
 
     // A Runnable for runLater(saveUndoerChanges())
-    private Runnable _saveChangesRun, _scrShared = () -> {
+    private Runnable _saveChangesRun;
+    private final Runnable SAVE_CHANGES_RUN = () -> {
         saveUndoerChanges();
         _saveChangesRun = null;
     };
 
     /**
-     * A RMShapePaintProps subclass for editor.
+     * A paint helper subclass for editor.
      */
-    private class EditorShapePainterProps extends RMShapePaintProps {
+    private class EditorShapePainterHelper extends RMShapePaintHelper {
 
         /**
          * Returns whether painting is for editor.

@@ -2030,7 +2030,7 @@ public class RMShape implements Cloneable, Archivable, Key.GetSet {
 
         // If shape is semi-transparent, apply composite
         if (getOpacityDeep() != 1) {
-            RMShapePaintProps props = RMShapePaintProps.get(aPntr);
+            RMShapePaintHelper props = RMShapePaintHelper.get();
             double op = props.isEditing() ? Math.max(.15, getOpacityDeep()) : getOpacityDeep();
             aPntr.setOpacity(op);
         }

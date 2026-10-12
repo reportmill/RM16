@@ -29,19 +29,19 @@ import snap.web.WebURL;
 public class RMViewer extends ParentView {
 
     // The shape viewer uses to manage real root of shapes
-    RMViewerShape _vshape = new RMViewerShape(this);
+    private RMViewerShape _viewerShape = new RMViewerShape(this);
 
     // The Zoom mode
-    ZoomMode _zoomMode = ZoomMode.ZoomAsNeeded;
+    private ZoomMode _zoomMode = ZoomMode.ZoomAsNeeded;
 
     // Zoom factor
-    double _zoomFactor = 1;
+    private double _zoomFactor = 1;
 
     // The previous zoom factor (for toggle zoom)
-    double _lastZoomFactor = 1;
+    private double _lastZoomFactor = 1;
 
     // The helper class that handles events for viewer
-    RMViewerEvents _events = createEvents();
+    private RMViewerEvents _events = createEvents();
 
     // Zoom modes
     public enum ZoomMode { ZoomToFit, ZoomAsNeeded, ZoomToFactor }
@@ -64,18 +64,12 @@ public class RMViewer extends ParentView {
     /**
      * Returns the viewer shape.
      */
-    public RMViewerShape getViewerShape()
-    {
-        return _vshape;
-    }
+    public RMViewerShape getViewerShape()  { return _viewerShape; }
 
     /**
      * Returns the document associated with this viewer.
      */
-    public RMDocument getDoc()
-    {
-        return _vshape.getDoc();
-    }
+    public RMDocument getDoc()  { return _viewerShape.getDoc(); }
 
     /**
      * Sets the document associated with this viewer.
@@ -87,7 +81,7 @@ public class RMViewer extends ParentView {
         if (aDoc == doc) return;
 
         // Set new document and fire property change
-        _vshape.setDoc(aDoc);
+        _viewerShape.setDoc(aDoc);
         firePropChange(Content_Prop, doc, aDoc);
 
         // Set ZoomToFitFactor and relayout/repaint (for possible size change)
@@ -116,42 +110,27 @@ public class RMViewer extends ParentView {
     /**
      * Returns whether viewer is really doing editing.
      */
-    public boolean isEditing()
-    {
-        return false;
-    }
+    public boolean isEditing()  { return false; }
 
     /**
      * Returns whether editor is preview (or viewer) mode.
      */
-    public boolean isPreview()
-    {
-        return !isEditing();
-    }
+    public boolean isPreview()  { return !isEditing(); }
 
     /**
      * Returns the page count.
      */
-    public int getPageCount()
-    {
-        return getDoc().getPageCount();
-    }
+    public int getPageCount()  { return getDoc().getPageCount(); }
 
     /**
      * Returns the currently selected page shape.
      */
-    public RMPage getSelPage()
-    {
-        return getDoc().getSelPage();
-    }
+    public RMPage getSelPage()  { return getDoc().getSelPage(); }
 
     /**
      * Returns the index of the current visible document page.
      */
-    public int getSelPageIndex()
-    {
-        return getDoc().getSelPageIndex();
-    }
+    public int getSelPageIndex()  { return getDoc().getSelPageIndex(); }
 
     /**
      * Sets the page of viewer's document that is visible (by index).
@@ -164,18 +143,12 @@ public class RMViewer extends ParentView {
     /**
      * Selects the next page.
      */
-    public void pageForward()
-    {
-        setSelPageIndex(getSelPageIndex() + 1);
-    }
+    public void pageForward()  { setSelPageIndex(getSelPageIndex() + 1); }
 
     /**
      * Selects the previous page.
      */
-    public void pageBack()
-    {
-        setSelPageIndex(getSelPageIndex() - 1);
-    }
+    public void pageBack()  { setSelPageIndex(getSelPageIndex() - 1); }
 
     /**
      * Returns the bounds of the viewer document.
@@ -203,36 +176,32 @@ public class RMViewer extends ParentView {
         Point point = convertToShape(aPoint.x, aPoint.y, parent);
 
         // Iterate over children to find shape hit by point
-        RMShape shape = null;
+        RMShape shapeAtPoint = null;
         Point point2 = null;
-        for (int i = parent.getChildCount(); i > 0 && shape == null; i--) {
+        for (int i = parent.getChildCount(); i > 0 && shapeAtPoint == null; i--) {
             RMShape child = parent.getChild(i - 1);
             point2 = child.parentToLocal(point);
             if (child.contains(point2))
-                shape = child;
+                shapeAtPoint = child;
         }
 
         // If we need to goDeep (and there was a top level hit shape), recurse until shape is found
-        while (goDeep && shape instanceof RMParentShape) {
-            parent = (RMParentShape) shape;
+        while (goDeep && shapeAtPoint instanceof RMParentShape) {
+            parent = (RMParentShape) shapeAtPoint;
             RMShape shp = parent.getChildContainingPoint(point2);
             if (shp != null) {
-                shape = shp;
-                point2 = shape.parentToLocal(point2);
+                shapeAtPoint = shp;
+                point2 = shapeAtPoint.parentToLocal(point2);
             } else break;
         }
 
-        // Return hit shape
-        return shape;
+        return shapeAtPoint;
     }
 
     /**
      * Returns the viewer's zoom factor (1 by default).
      */
-    public double getZoomFactor()
-    {
-        return _zoomFactor;
-    }
+    public double getZoomFactor()  { return _zoomFactor; }
 
     /**
      * Sets the viewer's zoom factor (1 for 100%).
@@ -277,10 +246,7 @@ public class RMViewer extends ParentView {
     /**
      * Returns the ZoomMode (ZoomToFit, ZoomIfNeeded, ZoomToFactor).
      */
-    public ZoomMode getZoomMode()
-    {
-        return _zoomMode;
-    }
+    public ZoomMode getZoomMode()  { return _zoomMode; }
 
     /**
      * Sets the ZoomMode.
@@ -295,31 +261,34 @@ public class RMViewer extends ParentView {
     /**
      * Returns whether viewer is set to ZoomToFactor.
      */
-    public boolean isZoomToFactor()
-    {
-        return getZoomMode() == ZoomMode.ZoomToFactor;
-    }
+    public boolean isZoomToFactor()  { return getZoomMode() == ZoomMode.ZoomToFactor; }
 
     /**
      * Returns the zoom factor for the given mode at the current viewer size.
      */
-    public double getZoomFactor(ZoomMode aMode)
+    public double getZoomFactor(ZoomMode zoomMode)
     {
         // If ZoomToFactor, just return ZoomFactor
-        if (aMode == ZoomMode.ZoomToFactor) return getZoomFactor();
+        if (zoomMode == ZoomMode.ZoomToFactor) return getZoomFactor();
 
         // Get ideal size and current size (if size is zero, return 1)
-        double pw = _vshape.getPrefWidth(), ph = _vshape.getPrefHeight();
-        double width = getWidth(), height = getHeight();
-        if (width == 0 || height == 0) return 1;
+        double prefW = _viewerShape.getPrefWidth();
+        double prefH = _viewerShape.getPrefHeight();
+        double viewW = getWidth();
+        double viewH = getHeight();
+        if (viewW == 0 || viewH == 0)
+            return 1;
 
         // If ZoomAsNeeded and IdealSize is less than size, return
-        if (aMode == ZoomMode.ZoomAsNeeded && pw <= width && ph <= height) return 1;
-        if (aMode == ZoomMode.ZoomToFit && pw == width && ph == height) return 1;
+        if (zoomMode == ZoomMode.ZoomAsNeeded && prefW <= viewW && prefH <= viewH)
+            return 1;
+        if (zoomMode == ZoomMode.ZoomToFit && prefW == viewW && prefH == viewH)
+            return 1;
 
         // Otherwise get ratio of parent size to ideal size (with some gutter added in) and return smaller axis
-        double zw = width / (pw + 8f), zh = height / (ph + 8f);
-        return Math.min(zw, zh);
+        double zoomX = viewW / (prefW + 8f);
+        double zoomY = viewH / (prefH + 8f);
+        return Math.min(zoomX, zoomY);
     }
 
     /**
@@ -407,30 +376,24 @@ public class RMViewer extends ParentView {
     /**
      * Creates the object that is actually responsible for paining shapes in the viewer.
      */
-    protected RMShapePaintProps createShapePaintProps()
-    {
-        return null;
-    }
+    protected RMShapePaintHelper createShapePaintProps()  { return null; }
 
     /**
      * Override to paint viewer shapes and page, margin, grid, etc.
      */
     public void paintFront(Painter aPntr)
     {
-        RMShapePaintProps props = createShapePaintProps();
-        if (props != null) aPntr.setProps(props);
-        RMShapeUtils.paintShape(aPntr, _vshape, null, 1); //getZoomFactor();
-        if (props != null) aPntr.setProps(null);
+        RMShapePaintHelper props = createShapePaintProps();
+        if (props != null) RMShapePaintHelper.set(props);
+        RMShapeUtils.paintShape(aPntr, _viewerShape, null, 1); //getZoomFactor();
+        if (props != null) RMShapePaintHelper.set(null);
         getEvents().paint(aPntr); // Have event helper paint above
     }
 
     /**
      * Returns the event helper for the viewer (handles mouse and keyboard input).
      */
-    public RMViewerEvents getEvents()
-    {
-        return _events;
-    }
+    public RMViewerEvents getEvents()  { return _events; }
 
     /**
      * Creates a default event helper.
@@ -453,7 +416,7 @@ public class RMViewer extends ParentView {
      */
     protected double computePrefWidth(double aH)
     {
-        double pw = _vshape.getPrefWidth();
+        double pw = _viewerShape.getPrefWidth();
         if (isZoomToFactor()) pw *= getZoomFactor();
         return pw;
     }
@@ -463,7 +426,7 @@ public class RMViewer extends ParentView {
      */
     protected double computePrefHeight(double aW)
     {
-        double ph = _vshape.getPrefHeight();
+        double ph = _viewerShape.getPrefHeight();
         if (isZoomToFactor()) ph *= getZoomFactor();
         return ph;
     }
@@ -474,17 +437,14 @@ public class RMViewer extends ParentView {
     protected void layoutImpl()
     {
         setZoomToFitFactor();
-        _vshape.setBounds(0, 0, getWidth(), getHeight());
-        _vshape.layoutDeep();
+        _viewerShape.setBounds(0, 0, getWidth(), getHeight());
+        _viewerShape.layoutDeep();
     }
 
     /**
      * Returns the undoer associated with the viewer's document.
      */
-    public Undoer getUndoer()
-    {
-        return _vshape.getUndoer();
-    }
+    public Undoer getUndoer()  { return _viewerShape.getUndoer(); }
 
     /**
      * Sets the title of the next registered undo in the viewer's documents's undoer (convenience).
@@ -498,10 +458,7 @@ public class RMViewer extends ParentView {
     /**
      * Returns whether undos exist in the viewer's documents's undoer (convenience).
      */
-    public boolean undoerHasUndos()
-    {
-        return getUndoer() != null && getUndoer().hasUndos();
-    }
+    public boolean undoerHasUndos()  { return getUndoer() != null && getUndoer().hasUndos(); }
 
     /**
      * Called when a shape needs repaint.
@@ -600,5 +557,4 @@ public class RMViewer extends ParentView {
             RMShapeUtils.paintShape(pntr, page, null, 1);
         }
     }
-
 }

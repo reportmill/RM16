@@ -141,7 +141,7 @@ public class RMCrossTabFrame extends RMParentShape {
         super.paintShape(aPntr);
 
         // If not editing, just return
-        RMShapePaintProps props = RMShapePaintProps.get(aPntr);
+        RMShapePaintHelper props = RMShapePaintHelper.get();
         if (!props.isEditing()) return;
 
         // Get path for CrossTab: Iterate over columns to define horizontal corner piece

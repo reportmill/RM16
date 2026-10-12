@@ -470,7 +470,7 @@ public class RMTable extends RMParentShape {
     {
         // Call normal paintShape (just return if not editing)
         super.paintShape(aPntr);
-        RMShapePaintProps props = RMShapePaintProps.get(aPntr);
+        RMShapePaintHelper props = RMShapePaintHelper.get();
         if (!props.isEditing()) return;
 
         // Get table bounds and fill table base rect with light gray
@@ -584,7 +584,7 @@ public class RMTable extends RMParentShape {
         super.paintShapeOver(aPntr);
 
         // If table already draws stroke or if not editing, just return
-        if (getStroke() != null || !RMShapePaintProps.isEditing(aPntr)) return;
+        if (getStroke() != null || !RMShapePaintHelper.get().isEditing()) return;
 
         // Draw rect with antialiasing off
         aPntr.setColor(Color.DARKGRAY);
@@ -623,8 +623,8 @@ public class RMTable extends RMParentShape {
         e.setName("table");
 
         // Archive DatasetKey, FilterKey
-        if (_datasetKey != null && _datasetKey.length() > 0) e.add("list-key", _datasetKey);
-        if (_filterKey != null && _filterKey.length() > 0) e.add("filter-key", _filterKey);
+        if (_datasetKey != null && !_datasetKey.isEmpty()) e.add("list-key", _datasetKey);
+        if (_filterKey != null && !_filterKey.isEmpty()) e.add("filter-key", _filterKey);
 
         // Archive PageBreakGroupIndex, StartingPageBreak, ColumnCount, ColumnSpacing
         if (_pageBreakGroupIndex >= 0) e.add("pagebreak", _pageBreakGroupIndex);

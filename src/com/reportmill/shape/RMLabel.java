@@ -28,7 +28,7 @@ public class RMLabel extends RMParentShape {
         super.paintShape(aPntr);
 
         // Table bands should draw a red band around thier perimeter when it is selected
-        RMShapePaintProps props = RMShapePaintProps.get(aPntr);
+        RMShapePaintHelper props = RMShapePaintHelper.get();
         if (props.isSelected(this) || props.isSuperSelected(this)) {
             Rect bounds = getBoundsInside();
             bounds.inset(2, 2);

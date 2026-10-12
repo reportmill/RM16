@@ -298,7 +298,7 @@ public class RMTableGroup extends RMParentShape {
     {
         // Do normal version (just return if not editing)
         super.paintShapeOver(aPntr);
-        if (!RMShapePaintProps.isEditing(aPntr)) return;
+        if (!RMShapePaintHelper.get().isEditing()) return;
 
         // Draw TableGroup button
         aPntr.drawButton(1, getHeight() - 18, 100, 18, false);

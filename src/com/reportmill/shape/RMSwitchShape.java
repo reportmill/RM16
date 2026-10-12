@@ -215,7 +215,7 @@ public class RMSwitchShape extends RMParentShape {
     protected void paintShape(Painter aPntr)
     {
         // If switch shape doesn't draw a stroke, draw a light one to indicate its bounds
-        if (getClass() == RMSwitchShape.class && getStroke() == null && RMShapePaintProps.isEditing(aPntr)) {
+        if (getClass() == RMSwitchShape.class && getStroke() == null && RMShapePaintHelper.get().isEditing()) {
             aPntr.setColor(Color.LIGHTGRAY);
             aPntr.setStroke(Stroke.Stroke1);
             aPntr.draw(getBoundsInside());

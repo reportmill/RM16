@@ -394,7 +394,7 @@ public class RMSpringShape extends RMParentShape {
             return;
 
         // Paint dashed box around bounds
-        RMShapePaintProps props = RMShapePaintProps.get(aPntr);
+        RMShapePaintHelper props = RMShapePaintHelper.get();
         if (props.isEditing() && getStroke() == null && getFill() == null && getEffect() == null &&
                 (props.isSelected(this) || props.isSuperSelected(this))) {
             aPntr.setColor(Color.LIGHTGRAY);

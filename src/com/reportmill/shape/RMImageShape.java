@@ -256,7 +256,7 @@ public class RMImageShape extends RMRectShape {
         // Get image (use empty placeholder image if null and editing)
         Image img = getImage();
         if (img == null) {
-            if (!RMShapePaintProps.isEditing(aPntr))
+            if (!RMShapePaintHelper.get().isEditing())
                 return;
             img = RMImageFill.getEmptyImage();
             if (img == null)

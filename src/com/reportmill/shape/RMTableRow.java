@@ -475,7 +475,7 @@ public class RMTableRow extends RMSwitchShape {
     {
         // Do normal version (just return if not editing)
         super.paintShape(aPntr);
-        if (!RMShapePaintProps.isEditing(aPntr) || !isStructured()) return;
+        if (!RMShapePaintHelper.get().isEditing() || !isStructured()) return;
 
         // Iterate over children sorted by X and draw divider lines
         aPntr.setColor(Color.DARKGRAY);

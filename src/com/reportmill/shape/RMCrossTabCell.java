@@ -252,7 +252,7 @@ public class RMCrossTabCell extends RMTextShape {
         super.paintShape(aPntr);
 
         // If cell has grouping, paint corner grouping indicator
-        RMShapePaintProps props = RMShapePaintProps.get(aPntr);
+        RMShapePaintHelper props = RMShapePaintHelper.get();
         if (props.isEditing() && (isRowHeader() || isColHeader())) {
             double x = Math.round(getMaxX()) - getX();
             double y = Math.round(getY()) - getY();

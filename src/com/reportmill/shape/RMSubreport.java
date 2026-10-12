@@ -86,7 +86,7 @@ public class RMSubreport extends RMShape {
     public void paintShape(Painter aPntr)
     {
         // If not editing, just paint subreport shape and return (shouldn't happen)
-        if (!RMShapePaintProps.isEditing(aPntr)) {
+        if (!RMShapePaintHelper.get().isEditing()) {
             if (getSubreportShape() != null) getSubreportShape().paint(aPntr);
             return;
         }

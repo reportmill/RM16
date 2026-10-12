@@ -455,7 +455,7 @@ public class RMPage extends RMParentShape {
         }
 
         // Draw grid if needed
-        if (getDocument().getShowGrid() && RMShapePaintProps.isEditing(aPntr)) {
+        if (getDocument().getShowGrid() && RMShapePaintHelper.get().isEditing()) {
 
             // Get grid spacing (corrected for zoom factor) and document's min x and y
             double gs = getDocument().getGridSpacing();
@@ -473,7 +473,7 @@ public class RMPage extends RMParentShape {
         }
 
         // If Draw Margin is requested and editing, draw margin
-        if (getDocument().getShowMargin() && RMShapePaintProps.isEditing(aPntr)) {
+        if (getDocument().getShowMargin() && RMShapePaintHelper.get().isEditing()) {
             aPntr.setColor(new Color(9 / 15f)); // marginColor = new Color(9/15f, 9/15f, 9/15f)
             aPntr.draw(getDocument().getMarginRect());
         }
